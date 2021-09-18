@@ -1,6 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>vim快捷键快速参考</title>
+    <url>/blog/2021/09/17/vim%E5%BF%AB%E6%8D%B7%E9%94%AE/</url>
+    <content><![CDATA[<h1 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dw</td>
+<td>删除一个词</td>
+</tr>
+<tr>
+<td>dgg</td>
+<td>删除至文件开头</td>
+</tr>
+<tr>
+<td>dG</td>
+<td>删除至文件末尾</td>
+</tr>
+<tr>
+<td>dd</td>
+<td>删除当前行</td>
+</tr>
+</tbody></table>
+<h1 id="复制粘贴"><a href="#复制粘贴" class="headerlink" title="复制粘贴"></a>复制粘贴</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>yy</td>
+<td>复制当前行</td>
+</tr>
+<tr>
+<td>p（小写）</td>
+<td>在当前行之后粘贴</td>
+</tr>
+<tr>
+<td>P（大写）</td>
+<td>在当前行之前粘贴</td>
+</tr>
+</tbody></table>
+<h1 id="撤销-恢复"><a href="#撤销-恢复" class="headerlink" title="撤销/恢复"></a>撤销/恢复</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>u</td>
+<td>撤销</td>
+</tr>
+<tr>
+<td>ctrl+r</td>
+<td>恢复</td>
+</tr>
+</tbody></table>
+<h1 id="搜索和替换"><a href="#搜索和替换" class="headerlink" title="搜索和替换"></a>搜索和替换</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>/text</td>
+<td>在文档后面部分搜索text</td>
+</tr>
+<tr>
+<td>?text</td>
+<td>在文档前面部分搜索text</td>
+</tr>
+<tr>
+<td>n</td>
+<td>移动到后一个搜索结果</td>
+</tr>
+<tr>
+<td>N</td>
+<td>移动到前一个搜索结果</td>
+</tr>
+<tr>
+<td>:%s/origin/replace/g</td>
+<td>将所有origin替换为replace</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>软件</category>
+        <category>使用</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL8允许远程访问</title>
     <url>/blog/2020/11/23/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/</url>
     <content><![CDATA[<h2 id="一、Ubuntu安装MySQL8"><a href="#一、Ubuntu安装MySQL8" class="headerlink" title="一、Ubuntu安装MySQL8"></a>一、Ubuntu安装MySQL8</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apt install mysql-server</span><br></pre></td></tr></table></figure>
@@ -3756,8 +3857,8 @@ short --> int --> long --> float --> double</pre>
         <category>配置</category>
       </categories>
       <tags>
-        <tag>spring-boot</tag>
         <tag>idea</tag>
+        <tag>spring-boot</tag>
       </tags>
   </entry>
   <entry>

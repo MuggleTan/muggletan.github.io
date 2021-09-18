@@ -23,7 +23,7 @@
 <script id="hexo-configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    hostname: new URL('http://192.168.1.101/blog').hostname,
+    hostname: new URL('http://muggletan.github.io').hostname,
     root: '/blog/',
     scheme: 'Pisces',
     version: '7.7.1',
@@ -53,32 +53,32 @@
   <meta name="description" content="面向对象与面向过程 面向过程(POP) 与 面向对象(OOP)  二者都是一种思想，面向对象是相对于面向过程而言的。面向过程，强调的 是功能行为，以函数为最小单位，考虑怎么做。面向对象，将功能封装进对 象，强调具备了功能的对象，以类&#x2F;对象为最小单位，考虑谁来做。  面向对象更加强调运用人类在日常的思维逻辑中采用的思想方法与原则，如 抽象、分类、继承、聚合、多态等。 面向对象：Object Orie">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java基础知识总结（中）">
-<meta property="og:url" content="http://192.168.1.101/blog/2020/04/15/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/index.html">
+<meta property="og:url" content="http://muggletan.github.io/2020/04/15/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/index.html">
 <meta property="og:site_name" content="这边风景独好">
 <meta property="og:description" content="面向对象与面向过程 面向过程(POP) 与 面向对象(OOP)  二者都是一种思想，面向对象是相对于面向过程而言的。面向过程，强调的 是功能行为，以函数为最小单位，考虑怎么做。面向对象，将功能封装进对 象，强调具备了功能的对象，以类&#x2F;对象为最小单位，考虑谁来做。  面向对象更加强调运用人类在日常的思维逻辑中采用的思想方法与原则，如 抽象、分类、继承、聚合、多态等。 面向对象：Object Orie">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/YxauQKcO3TyLqmM.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/JD1uqrjePf5HURc.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/sSNBGoyAzTU2xbp.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/RuJgS4FkPxGONo2.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/FoCkBhuLtl5Vyjf.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/1zWEMB2Iki7o6my.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/2ARmBoaSXKpV5Zr.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/XCNFBZkxrmYtuJP.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/PHC8ReFzDhMfXwj.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/DHXK67YzpVJeOEm.webp">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/hDmlsInjw7HBKuN.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/KiTxoUjIpfJaCrN.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/tS2914seKCUnAOl.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/YxauQKcO3TyLqmM.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/JD1uqrjePf5HURc.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/sSNBGoyAzTU2xbp.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/RuJgS4FkPxGONo2.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/FoCkBhuLtl5Vyjf.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/1zWEMB2Iki7o6my.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/2ARmBoaSXKpV5Zr.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/XCNFBZkxrmYtuJP.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/PHC8ReFzDhMfXwj.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/DHXK67YzpVJeOEm.webp">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/hDmlsInjw7HBKuN.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/KiTxoUjIpfJaCrN.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/tS2914seKCUnAOl.png">
 <meta property="article:published_time" content="2020-04-15T15:08:33.000Z">
 <meta property="article:modified_time" content="2020-11-23T07:13:18.851Z">
 <meta property="article:author" content="Steven Tan">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://192.168.1.101/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/YxauQKcO3TyLqmM.png">
+<meta name="twitter:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/YxauQKcO3TyLqmM.png">
 
-<link rel="canonical" href="http://192.168.1.101/blog/2020/04/15/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/">
+<link rel="canonical" href="http://muggletan.github.io/2020/04/15/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/">
 
 
 <script id="page-configurations">
@@ -229,7 +229,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://192.168.1.101/blog/2020/04/15/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/04/15/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/blog/./images/avatar.png">
@@ -1003,7 +1003,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://192.168.1.101/blog/2020/04/15/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/" title="Java基础知识总结（中）">http://192.168.1.101/blog/2020/04/15/Java基础知识总结（中）/</a>
+    <a href="http://muggletan.github.io/2020/04/15/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/" title="Java基础知识总结（中）">http://muggletan.github.io/2020/04/15/Java基础知识总结（中）/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -1113,14 +1113,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/blog/archives/">
         
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/blog/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -1206,8 +1206,8 @@
   <div class="beian">
     
     
-    &copy; 
-    <span itemprop="copyrightYear">2020</span>
+    &copy; 2020 – 
+    <span itemprop="copyrightYear">2021</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>

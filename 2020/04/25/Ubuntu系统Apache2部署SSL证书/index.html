@@ -23,7 +23,7 @@
 <script id="hexo-configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    hostname: new URL('http://192.168.1.101/blog').hostname,
+    hostname: new URL('http://muggletan.github.io').hostname,
     root: '/blog/',
     scheme: 'Pisces',
     version: '7.7.1',
@@ -53,22 +53,22 @@
   <meta name="description" content="本文档为您介绍了如何在Ubuntu系统以及Apache2中安装阿里云SSL证书。 环境准备操作系统：Ubuntu Web服务器：Apache 2 前提条件 已从SSL证书控制台下载Apache服务器证书。 已安装Open SSL。  操作步骤 运行以下命令在apache2目录下创建ssl目录。 1mkdir &#x2F;etc&#x2F;apache2&#x2F;ssl  运行以下命令将下载的阿里">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ubuntu系统Apache2部署SSL证书">
-<meta property="og:url" content="http://192.168.1.101/blog/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/index.html">
+<meta property="og:url" content="http://muggletan.github.io/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/index.html">
 <meta property="og:site_name" content="这边风景独好">
 <meta property="og:description" content="本文档为您介绍了如何在Ubuntu系统以及Apache2中安装阿里云SSL证书。 环境准备操作系统：Ubuntu Web服务器：Apache 2 前提条件 已从SSL证书控制台下载Apache服务器证书。 已安装Open SSL。  操作步骤 运行以下命令在apache2目录下创建ssl目录。 1mkdir &#x2F;etc&#x2F;apache2&#x2F;ssl  运行以下命令将下载的阿里">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/znDyZLWRAsv2f4t.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/XESFU87K4QfY92A.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/4Rn27NQuZgTDoFK.png">
-<meta property="og:image" content="http://192.168.1.101/blog/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/13p6Xtfh49s8VQi.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/znDyZLWRAsv2f4t.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/XESFU87K4QfY92A.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/4Rn27NQuZgTDoFK.png">
+<meta property="og:image" content="http://muggletan.github.io/blog/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/13p6Xtfh49s8VQi.png">
 <meta property="article:published_time" content="2020-04-25T10:09:31.000Z">
 <meta property="article:modified_time" content="2020-11-23T07:13:18.858Z">
 <meta property="article:author" content="Steven Tan">
 <meta property="article:tag" content="服务器">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://192.168.1.101/blog/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/znDyZLWRAsv2f4t.png">
+<meta name="twitter:image" content="http://muggletan.github.io/blog/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/znDyZLWRAsv2f4t.png">
 
-<link rel="canonical" href="http://192.168.1.101/blog/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/">
+<link rel="canonical" href="http://muggletan.github.io/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/">
 
 
 <script id="page-configurations">
@@ -219,7 +219,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://192.168.1.101/blog/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/blog/./images/avatar.png">
@@ -397,7 +397,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://192.168.1.101/blog/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/" title="Ubuntu系统Apache2部署SSL证书">http://192.168.1.101/blog/2020/04/25/Ubuntu系统Apache2部署SSL证书/</a>
+    <a href="http://muggletan.github.io/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/" title="Ubuntu系统Apache2部署SSL证书">http://muggletan.github.io/2020/04/25/Ubuntu系统Apache2部署SSL证书/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -506,14 +506,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/blog/archives/">
         
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/blog/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -599,8 +599,8 @@
   <div class="beian">
     
     
-    &copy; 
-    <span itemprop="copyrightYear">2020</span>
+    &copy; 2020 – 
+    <span itemprop="copyrightYear">2021</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
