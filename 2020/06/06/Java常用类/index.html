@@ -57,19 +57,19 @@
 <meta property="og:site_name" content="这边风景独好">
 <meta property="og:description" content="字符串相关的类String类String类的特性 String类是字符串类，java中所有的字符串字面值，都作为此类的示例实现。 String类是一个final类，不可用继承，定义的变量是常量，定义之后也不能改变。 String对象的字符内容是存储在一个字符数组value[]中的。    String str1 &#x3D; “abc”;与String str2 &#x3D; new String(“abc”);的区">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606144906113.png">
-<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606145317796.png">
-<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606145604487.png">
-<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606145948843.png">
-<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606150430936.png">
-<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606180019262.png">
+<meta property="og:image" content="http://muggletan.github.io/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606144906113.png">
+<meta property="og:image" content="http://muggletan.github.io/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606145317796.png">
+<meta property="og:image" content="http://muggletan.github.io/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606145604487.png">
+<meta property="og:image" content="http://muggletan.github.io/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606145948843.png">
+<meta property="og:image" content="http://muggletan.github.io/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606150430936.png">
+<meta property="og:image" content="http://muggletan.github.io/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606180019262.png">
 <meta property="article:published_time" content="2020-06-06T06:35:43.000Z">
-<meta property="article:modified_time" content="2020-11-23T07:13:18.836Z">
+<meta property="article:modified_time" content="2021-09-18T13:37:52.230Z">
 <meta property="article:author" content="Steven Tan">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://muggletan.github.io/blog/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606144906113.png">
+<meta name="twitter:image" content="http://muggletan.github.io/images/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/image-20200606144906113.png">
 
 <link rel="canonical" href="http://muggletan.github.io/2020/06/06/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/">
 
@@ -252,7 +252,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-23 15:13:18" itemprop="dateModified" datetime="2020-11-23T15:13:18+08:00">2020-11-23</time>
+                <time title="修改时间：2021-09-18 21:37:52" itemprop="dateModified" datetime="2021-09-18T21:37:52+08:00">2021-09-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -323,7 +323,7 @@
 <li>String类是一个final类，不可用继承，定义的变量是常量，定义之后也不能改变。</li>
 <li>String对象的字符内容是存储在一个字符数组value[]中的。</li>
 </ul>
-<img src="/blog/images/Java常用类/image-20200606144906113.png" alt="image-20200606144906113" style="zoom:80%;" />
+<img src="/images/Java常用类/image-20200606144906113.png" alt="image-20200606144906113" style="zoom:80%;" />
 
 <p>String str1 = “abc”;与String str2 = new String(“abc”);的区别？</p>
 <ul>
@@ -332,20 +332,20 @@
 </ul>
 <a id="more"></a>
 
-<img src="/blog/images/Java常用类/image-20200606145317796.png" alt="image-20200606145317796" style="zoom:80%;" />
+<img src="/images/Java常用类/image-20200606145317796.png" alt="image-20200606145317796" style="zoom:80%;" />
 
 <p>字符串对象的存储：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">"javaEE"</span>;</span><br><span class="line">String s2 = <span class="string">"javaEE"</span>;</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"javaEE"</span>);</span><br><span class="line">String s4 = <span class="keyword">new</span> String(<span class="string">"javaEE"</span>);</span><br><span class="line">System.out.println(s1 == s2);<span class="comment">//true</span></span><br><span class="line">System.out.println(s1 == s3);<span class="comment">//false</span></span><br><span class="line">System.out.println(s1 == s4);<span class="comment">//false</span></span><br><span class="line">System.out.println(s3 == s4);<span class="comment">//false</span></span><br></pre></td></tr></table></figure>
 
-<img src="/blog/images/Java常用类/image-20200606145604487.png" alt="image-20200606145604487" style="zoom:80%;" />
+<img src="/images/Java常用类/image-20200606145604487.png" alt="image-20200606145604487" style="zoom:80%;" />
 
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Person p1 = <span class="keyword">new</span> Person(<span class="string">"Tom"</span>,<span class="number">12</span>);</span><br><span class="line">Person p2 = <span class="keyword">new</span> Person(<span class="string">"Tom"</span>,<span class="number">12</span>);</span><br><span class="line">System.out.println(p1.name == p2.name);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
 
-<img src="/blog/images/Java常用类/image-20200606145948843.png" alt="image-20200606145948843" style="zoom:80%;" />
+<img src="/images/Java常用类/image-20200606145948843.png" alt="image-20200606145948843" style="zoom:80%;" />
 
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">"hello"</span>;</span><br><span class="line">String s2 = <span class="string">"world"</span>;</span><br><span class="line">String s3 = <span class="string">"hello"</span> + <span class="string">"world"</span>;</span><br><span class="line">String s4 = s1 + <span class="string">"world"</span>;</span><br><span class="line">String s5 = s1 + s2;</span><br><span class="line">String s6 = (s1 + s2).intern();</span><br><span class="line">System.out.println(s3 == s4);<span class="comment">//false</span></span><br><span class="line">System.out.println(s3 == s5);<span class="comment">//false</span></span><br><span class="line">System.out.println(s4 == s5);<span class="comment">//false</span></span><br><span class="line">System.out.println(s3 == s6);<span class="comment">//true</span></span><br></pre></td></tr></table></figure>
 
-<img src="/blog/images/Java常用类/image-20200606150430936.png" alt="image-20200606150430936" style="zoom:80%;" />
+<img src="/images/Java常用类/image-20200606150430936.png" alt="image-20200606150430936" style="zoom:80%;" />
 
 <p>通过上面这些例子，可以总结出来：</p>
 <ol>
@@ -457,7 +457,7 @@
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String s = <span class="keyword">new</span> String(<span class="string">"我喜欢学习"</span>);</span><br><span class="line">StringBuffer buffer = <span class="keyword">new</span> StringBuffer(<span class="string">"我喜欢学习"</span>);</span><br><span class="line">buffer.append(<span class="string">"数学"</span>);</span><br></pre></td></tr></table></figure>
 
-<img src="/blog/images/Java常用类/image-20200606180019262.png" alt="image-20200606180019262" style="zoom:80%;" />
+<img src="/images/Java常用类/image-20200606180019262.png" alt="image-20200606180019262" style="zoom:80%;" />
 
 <h3 id="StringBuffer类的常用方法"><a href="#StringBuffer类的常用方法" class="headerlink" title="StringBuffer类的常用方法"></a>StringBuffer类的常用方法</h3><ul>
 <li><p>StringBuffer append(XXX)  提供了很多重载的append()方法,用于进行字符串拼接</p>

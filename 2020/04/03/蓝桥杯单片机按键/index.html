@@ -57,13 +57,13 @@
 <meta property="og:site_name" content="这边风景独好">
 <meta property="og:description" content="蓝桥杯这块板子有矩阵按键和独立按键，可以根据换跳帽来切换，下面简单介绍一下这两种按键的程序和基本的原理。 其他51的板子原理也基本相同，下面的代码也可以参考。  独立按键相对于矩阵按键，独立按键简单很多，就只有四个按钮，判断四个按键哪个被按下的情况较为简单 独立按键的写法也不止一种，这里就介绍两种 方法一：实现比较简单，就是一个个判断，检测到为低电平的话就判断按键按下了。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://muggletan.github.io/blog/images/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E6%8C%89%E9%94%AE/OlN6gpyH14z89KR.png">
+<meta property="og:image" content="http://muggletan.github.io/images/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E6%8C%89%E9%94%AE/OlN6gpyH14z89KR.png">
 <meta property="article:published_time" content="2020-04-03T12:23:47.000Z">
-<meta property="article:modified_time" content="2020-11-23T07:13:18.875Z">
+<meta property="article:modified_time" content="2021-09-18T13:37:52.260Z">
 <meta property="article:author" content="Steven Tan">
 <meta property="article:tag" content="蓝桥杯">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://muggletan.github.io/blog/images/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E6%8C%89%E9%94%AE/OlN6gpyH14z89KR.png">
+<meta name="twitter:image" content="http://muggletan.github.io/images/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E6%8C%89%E9%94%AE/OlN6gpyH14z89KR.png">
 
 <link rel="canonical" href="http://muggletan.github.io/2020/04/03/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E6%8C%89%E9%94%AE/">
 
@@ -246,7 +246,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-23 15:13:18" itemprop="dateModified" datetime="2020-11-23T15:13:18+08:00">2020-11-23</time>
+                <time title="修改时间：2021-09-18 21:37:52" itemprop="dateModified" datetime="2021-09-18T21:37:52+08:00">2021-09-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -330,7 +330,7 @@
 
 <h2 id="矩阵按键"><a href="#矩阵按键" class="headerlink" title="矩阵按键"></a>矩阵按键</h2><p>相对于独立按键来说，矩阵按键相对是要复杂一点，这里就介绍一种方法</p>
 <h3 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h3><p>这个方法和上面独立按键的方法2实现的思路差不多。因为51单片机的资源很有限，所以这里用了八个引脚来实现一个4×4的矩阵按键。这里对照一下原理图：</p>
-<img src="/blog/images/蓝桥杯单片机按键/OlN6gpyH14z89KR.png" alt="image.png" style="zoom: 67%;" />
+<img src="/images/蓝桥杯单片机按键/OlN6gpyH14z89KR.png" alt="image.png" style="zoom: 67%;" />
 
 <p>第一步：列扫描，先将P3的低四位置为0，高四位置为1，但是这款单片机的P36和P37被P42和P44代替了，所以P42和P44要单独位定义，然后将其置为1。初始值设置完之后就要进行检测了，因为P3的低四位为0，所以当按键按下时接到对应列的那条线会被拉到低电平P44对应的是第一列，其他参照上面的原理图以此类推。</p>
 <p>第二部：行扫描，反过来，将P3的低四位置为1，高两位以及P42和P44置为0，哪一行的按键被按下对应行的值会被置为0，这一步和上面独立按键的扫描相似。</p>

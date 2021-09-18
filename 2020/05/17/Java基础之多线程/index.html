@@ -57,15 +57,15 @@
 <meta property="og:site_name" content="这边风景独好">
 <meta property="og:description" content="程序、进程、线程的基本概念程序（program）是为完成特定任务、用某种语言编写的一组指令的集合。即指一段静态的代码，静态对象。 进程（process）是程序的一次执行过程，或是正在运行的一个程序。是一个动态 的过程：有它自身的产生、存在和消亡的过程。  如：运行中的QQ，运行中的MP3播放器  程序是静态的，进程是动态的  进程作为资源分配的单位，系统在运行时会为每个进程分配不同的内存区域">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B/image-20200518193548122.png">
-<meta property="og:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B/image-20200518203236660.png">
+<meta property="og:image" content="http://muggletan.github.io/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B/image-20200518193548122.png">
+<meta property="og:image" content="http://muggletan.github.io/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B/image-20200518203236660.png">
 <meta property="article:published_time" content="2020-05-17T13:56:32.000Z">
-<meta property="article:modified_time" content="2020-11-23T07:13:18.838Z">
+<meta property="article:modified_time" content="2021-09-18T13:37:52.221Z">
 <meta property="article:author" content="Steven Tan">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://muggletan.github.io/blog/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B/image-20200518193548122.png">
+<meta name="twitter:image" content="http://muggletan.github.io/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B/image-20200518193548122.png">
 
 <link rel="canonical" href="http://muggletan.github.io/2020/05/17/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
 
@@ -248,7 +248,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-23 15:13:18" itemprop="dateModified" datetime="2020-11-23T15:13:18+08:00">2020-11-23</time>
+                <time title="修改时间：2021-09-18 21:37:52" itemprop="dateModified" datetime="2021-09-18T21:37:52+08:00">2021-09-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -404,7 +404,7 @@
 <li>阻塞：在某种特殊情况下，被人为挂起或执行输入输出操作时，让出 CPU 并临时中止自己的执行，进入阻塞状态 </li>
 <li>死亡：线程完成了它的全部工作或线程被提前强制性地中止或出现异常导致结束</li>
 </ul>
-<img src="/blog/images/Java基础之多线程/image-20200518193548122.png" alt="image-20200518193548122" style="zoom:80%;" />
+<img src="/images/Java基础之多线程/image-20200518193548122.png" alt="image-20200518193548122" style="zoom:80%;" />
 
 <h1 id="线程的同步"><a href="#线程的同步" class="headerlink" title="线程的同步"></a>线程的同步</h1><p>多个线程操作同一个共享的数据会出现线程的安全问题，为了解决这一问题，就引入了线程的同步</p>
 <p>比如：如果两个人同时操作一个银行账户，进行取钱操作，如果账户里面有一千元，甲要取1000，乙也要取1000，如果甲进入到取钱的操作里面（进入取钱之前有个判断，如果取的钱小于账户余额才能进入），但是还没有按下最后的取钱按钮（账户余额还是没变），这个时候乙也进入到取钱的页面了（现在余额还是1000，所以可以进入），最后两个人都按下取钱的按钮，银行账户就会出现-1000元的情况。显然，这是不合理的。</p>
@@ -413,7 +413,7 @@
 
 <p>以上这种写法也是存在线程不安全问题，举一个最简单的情况，当tick为1时，如果线程1进入到if判断里面，但是还没有执行tick–，这个时候线程2也是可以进入到if判断里面的，但是最后输出的时候就会出现票号为0的票。如果在线程1还没将tick–之前，线程3也进入到if里面了，那最后会输出一个-1号票，这就是线程的不安全问题。</p>
 <p>用个图来直观的表示：</p>
-<img src="/blog/images/Java基础之多线程/image-20200518203236660.png" alt="image-20200518203236660" style="zoom:80%;" />
+<img src="/images/Java基础之多线程/image-20200518203236660.png" alt="image-20200518203236660" style="zoom:80%;" />
 
 <p>很显然，这里出现的线程安全问题是因为：当多条语句在操作同一个线程共享数据时，一个线程对多条语句只执行了一部分，还没有执行完，另一个线程参与进来执行。导致共享数据的错误。</p>
 <p>要解决这个问题也很简单，就是在同一个时间内只让一个线程操作与共享数据相关的代码，在这部分代码没执行完之前，其他进程不能执行这部分代码。</p>

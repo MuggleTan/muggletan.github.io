@@ -57,13 +57,13 @@
 <meta property="og:site_name" content="这边风景独好">
 <meta property="og:description" content="为了让自己的spring boot项目能被域名直接访问，而不是IP:端口号的形式访问，需要用到反向代理，简单来讲就是把一个程序运行的地址映射到域名上，实现直接用域名访问。网上很多教程都是针对nignx的，而我用的是apache，也不想折腾把apache换成nignx，找了很久才找到一个可以用的，这里记录一下，方便下次使用。  1.开启Apache的代理模块在确保Apache安装好之后，通过a2e">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://muggletan.github.io/blog/images/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/image-20200723085537548.png">
+<meta property="og:image" content="http://muggletan.github.io/images/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/image-20200723085537548.png">
 <meta property="article:published_time" content="2020-07-23T00:41:27.000Z">
-<meta property="article:modified_time" content="2020-11-23T07:13:18.824Z">
+<meta property="article:modified_time" content="2021-09-18T13:37:52.217Z">
 <meta property="article:author" content="Steven Tan">
 <meta property="article:tag" content="服务器">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://muggletan.github.io/blog/images/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/image-20200723085537548.png">
+<meta name="twitter:image" content="http://muggletan.github.io/images/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/image-20200723085537548.png">
 
 <link rel="canonical" href="http://muggletan.github.io/2020/07/23/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/">
 
@@ -246,7 +246,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-23 15:13:18" itemprop="dateModified" datetime="2020-11-23T15:13:18+08:00">2020-11-23</time>
+                <time title="修改时间：2021-09-18 21:37:52" itemprop="dateModified" datetime="2021-09-18T21:37:52+08:00">2021-09-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -314,14 +314,14 @@
 <a id="more"></a>
 
 <h1 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2.修改配置文件"></a>2.修改配置文件</h1><p>切换到 <code>/etc/apache2/sites-enabled</code> 目录下，打开需要修改网站对应的配置</p>
-<img src="/blog/images/Apache配置反向代理/image-20200723085537548.png" alt="image-20200723085537548" style="zoom:80%;" />
+<img src="/images/Apache配置反向代理/image-20200723085537548.png" alt="image-20200723085537548" style="zoom:80%;" />
 
 <p>没有的话就新建一个对应的配置文件，文件的名字是二级域名的前缀.conf，比如我的域名是steventan.top，</p>
 <p>那么test.conf对应的网站是test.steventan.top，这个好像也只是一个命名的习惯，不一样也没多大问题，这样主要是方便管理。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">  ServerName autoclock.steventan.top <span class="comment">#这里填代理服务器的IP或域名</span></span><br><span class="line">  ProxyRequests off <span class="comment">#off表示开启反向代理  on表示开启正向代理</span></span><br><span class="line">  ProxyPass / http://localhost:8080/  <span class="comment">#被代理的网站，中间的那个/千万别少了，少了的话重启报错</span></span><br><span class="line">  ProxyPassReverse / http://localhost:8080/  <span class="comment">#被代理的网站</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment"># RewriteEngine on</span></span><br><span class="line">  <span class="comment"># RewriteCond   %&#123;HTTPS&#125; !=on</span></span><br><span class="line">  <span class="comment"># RewriteRule   ^(.*)  https://%&#123;SERVER_NAME&#125;$1 [L,R]</span></span><br><span class="line"></span><br><span class="line">  ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">  CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
 
 <p>上面的配置是将本地的8080端口运行的程序映射到autoclock.steventan.top这个域名上，这就达到了我的目的，服务器上运行的spring boot项目，能通过域名直接在公网访问。</p>
-<h1 id="3-重启apache生效配置"><a href="#3-重启apache生效配置" class="headerlink" title="3.重启apache生效配置"></a>3.重启apache生效配置</h1><p>通过<code>service apache2 restart</code> 重启Apache，让配置文件生效。 zm</p>
+<h1 id="3-重启apache生效配置"><a href="#3-重启apache生效配置" class="headerlink" title="3.重启apache生效配置"></a>3.重启apache生效配置</h1><p>通过<code>service apache2 restart</code> 重启Apache，让配置文件生效。 </p>
 
     </div>
 
