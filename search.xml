@@ -5,7 +5,7 @@
     <url>/2021/09/19/Nginx%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<h1 id="前后端分离项目的部署配置"><a href="#前后端分离项目的部署配置" class="headerlink" title="前后端分离项目的部署配置"></a>前后端分离项目的部署配置</h1><p>Nginx就非常离谱，也不知道为什么，前端静态资源也需要单独配置，而且这配置方式还非常的离谱，贴一下配置文件</p>
 <p>配置文件路径<code>/etc/nginx/sites-enabled</code></p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;   			#监听80端口</span><br><span class="line">    server_name	10.100.128.8;   #监听访问的host</span><br><span class="line"></span><br><span class="line">    location /EleLabSys/ &#123;</span><br><span class="line">    root   /var/www/html/;</span><br><span class="line">    try_files $uri $uri/ EleLabSys/;	#此处非常离谱，是经过不断尝试出来的，必须要写在这个地方才行</span><br><span class="line">    index  index.html index.htm;</span><br><span class="line">  &#125;</span><br><span class="line">  # 后端api代理还比较正常</span><br><span class="line">  location /prod-api/ &#123;</span><br><span class="line">    proxy_set_header Host $http_host;</span><br><span class="line">    proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">    proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    proxy_pass http://localhost:8080/;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;   			#监听80端口</span><br><span class="line">    server_name	10.100.128.8;   #监听访问的host</span><br><span class="line"></span><br><span class="line">    location /EleLabSys/ &#123;</span><br><span class="line">    root   /var/www/html/;</span><br><span class="line">    try_files $uri $uri/ EleLabSys/;	#此处非常离谱，是经过不断尝试出来的，子文件夹必须要写在这个地方才行</span><br><span class="line">    index  index.html index.htm;</span><br><span class="line">  &#125;</span><br><span class="line">  # 后端api代理还比较正常</span><br><span class="line">  location /prod-api/ &#123;</span><br><span class="line">    proxy_set_header Host $http_host;</span><br><span class="line">    proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">    proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    proxy_pass http://localhost:8080/;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>具体是什么原因导致的暂且不深究。。。</p>
 <p>等有空再研究</p>
@@ -3884,8 +3884,8 @@ short --> int --> long --> float --> double</pre>
         <category>配置</category>
       </categories>
       <tags>
-        <tag>spring-boot</tag>
         <tag>idea</tag>
+        <tag>spring-boot</tag>
       </tags>
   </entry>
   <entry>
