@@ -1,3 +1,4 @@
+http://muggletan.github.io/2021/09/19/Nginx%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/
 http://muggletan.github.io/2021/09/17/vim%E5%BF%AB%E6%8D%B7%E9%94%AE/
 http://muggletan.github.io/2020/11/23/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/
 http://muggletan.github.io/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/
@@ -17,4 +18,3 @@ http://muggletan.github.io/2020/05/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB
 http://muggletan.github.io/2020/05/06/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8B%EF%BC%89/
 http://muggletan.github.io/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/
 http://muggletan.github.io/2020/04/29/%E8%84%9A%E6%9C%AC%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2hexo/
-http://muggletan.github.io/2020/04/26/MySQL%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%BD%E6%95%B0/
