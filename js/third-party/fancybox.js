@@ -15,7 +15,7 @@ document.addEventListener('page:loaded', () => {
       $imageWrapLink.attr('data-fancybox', 'default').attr('rel', 'default');
     }
 
-    const imageTitle = $image.attr('title') || $image.attr('alt');
+    // const imageTitle = $image.attr('title') || $image.attr('alt');
     if (imageTitle) {
       // Do not append image-caption if pandoc has already created a figcaption
       if (!$imageWrapLink.next('figcaption').length) {

@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="git是一个前几年兴起的很好用的版本管理工具，用了半年多了体验还是很不错了，也是现在比较主流的版本管理工具。现在分享一下git的基操，但是最好是要理解好这些命令的作用，否则后果可能很严重（手动滑稽），我自己就有过这样的经历。另外，最好是有Linux的命令基础，没有的话理解起来很吃力。  基本配置配置全局的邮箱和用户名12git config --global user.name&#x3D;&quot;">
 <meta property="og:type" content="article">
@@ -307,7 +307,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <img src="/images/git的基本使用/HjQNKBory3xwiJv.jpg" alt="git.jpg" style="zoom:50%;" />
+        <img data-src="/images/git的基本使用/HjQNKBory3xwiJv.jpg" alt="git.jpg" style="zoom:50%;" />
 
 <blockquote>
 <p>git是一个前几年兴起的很好用的版本管理工具，用了半年多了体验还是很不错了，也是现在比较主流的版本管理工具。现在分享一下git的基操，但是最好是要理解好这些命令的作用，否则后果可能很严重（手动滑稽），我自己就有过这样的经历。另外，最好是有Linux的命令基础，没有的话理解起来很吃力。</p>
@@ -317,25 +317,25 @@
 <p>这个也可以在c盘用户的根目录下面打开<code>.gitconfig</code>文件进行配置</p>
 <span id="more"></span>
 
-<img src="/images/git的基本使用/mbg5o7HP3jOErcf.png" alt="image.png" style="zoom: 50%;" />
+<img data-src="/images/git的基本使用/mbg5o7HP3jOErcf.png" alt="image.png" style="zoom: 50%;" />
 
-<img src="/images/git的基本使用/Wy3QFZUBHwsOLcJ.png" alt="image.png" style="zoom: 50%;" />
+<img data-src="/images/git的基本使用/Wy3QFZUBHwsOLcJ.png" alt="image.png" style="zoom: 50%;" />
 
 <p><strong>命令里面不加global就只是对当前仓库的配置</strong></p>
 <h3 id="生成ssh秘钥对"><a href="#生成ssh秘钥对" class="headerlink" title="生成ssh秘钥对"></a>生成ssh秘钥对</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -f 秘钥名称 -C <span class="string">&#x27;注册邮箱&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <p>在用户根目录下会生成一个.ssh的文件夹</p>
 <p>开始里面会有两个文件,后缀是<code>.pub</code>的是公钥,另一个是私钥</p>
-<img src="/images/git的基本使用/FWH2QwClGYJgdpt.png" alt="image.png" style="zoom: 50%;" />
+<img data-src="/images/git的基本使用/FWH2QwClGYJgdpt.png" alt="image.png" style="zoom: 50%;" />
 
 <p>用记事本或者其他的编辑器打开这个文件，复制其全部内容，以GitHub为例：点击<code>new ssh key</code></p>
-<p><img src="/images/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/mEh4VgXdPOrCbkx.png"></p>
+<p><img data-src="/images/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/mEh4VgXdPOrCbkx.png"></p>
 <p>将其粘贴到Key的框框中，手动打码（嘿嘿嘿），然后点击add ssh key就大功告成了</p>
-<p><img src="/images/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/y25IoJunEg41TXW.png"></p>
+<p><img data-src="/images/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/y25IoJunEg41TXW.png"></p>
 <p>然后在git bash中输入</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/PE3MsvfSURqHyc2.png"></p>
+<p><img data-src="/images/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/PE3MsvfSURqHyc2.png"></p>
 <p>如果是这样就表示，添加成功了（只要GitHub上没提示有问题，其实一般都没有问题，这一步可以跳过）</p>
 <h2 id="git上传GitHub的基本步骤"><a href="#git上传GitHub的基本步骤" class="headerlink" title="git上传GitHub的基本步骤"></a>git上传GitHub的基本步骤</h2><h3 id="第一步、创建一个仓库或者clone一个仓库"><a href="#第一步、创建一个仓库或者clone一个仓库" class="headerlink" title="第一步、创建一个仓库或者clone一个仓库"></a>第一步、创建一个仓库或者clone一个仓库</h3><p>从远程仓库clone项目</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 仓库地址</span><br></pre></td></tr></table></figure>
@@ -351,7 +351,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
 
 <p><code>.</code>表示当前文件夹下面的所有文件和文件夹，但是踩过一个坑，<strong>git不会将空文件夹加入索引</strong>，要添加就要在那个空文件夹下面随便放一个文件可以是<code>.gitignore</code></p>
-<p>可以参考对应的官方文档：<img src="/images/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/QDTdRA357Sqz8Jo.png"></p>
+<p>可以参考对应的官方文档：<img data-src="/images/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/QDTdRA357Sqz8Jo.png"></p>
 <h3 id="第三步、将索引中的文件提交到本地的版本库"><a href="#第三步、将索引中的文件提交到本地的版本库" class="headerlink" title="第三步、将索引中的文件提交到本地的版本库"></a>第三步、将索引中的文件提交到本地的版本库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m<span class="string">&#x27;提交的信息&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <p>引号里面一般是写这次提交修复了什么问题，或者增加了什么功能</p>
@@ -359,7 +359,7 @@
 
 <p>远程仓库在本地的名字随便取什么都行，不知道取什么名字的话就origin吧</p>
 <p>远程仓库的地址打开github的页面复制 </p>
-<img src="/images/git的基本使用/cINP5TOfSA2Qo83.png" alt="image.png" style="zoom:50%;" />
+<img data-src="/images/git的基本使用/cINP5TOfSA2Qo83.png" alt="image.png" style="zoom:50%;" />
 
 <h3 id="第五步、从远程仓库同步版本库信息"><a href="#第五步、从远程仓库同步版本库信息" class="headerlink" title="第五步、从远程仓库同步版本库信息"></a>第五步、从远程仓库同步版本库信息</h3><p><strong>如果是第一次建立仓库，远程仓库没有东西，可以跳过这步</strong></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull 上一步自己给远程仓库取得名字 分支名</span><br></pre></td></tr></table></figure>
@@ -377,7 +377,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard 版本哈希值</span><br></pre></td></tr></table></figure>
 
 <p>举个栗子：</p>
-<img src="/images/git的基本使用/aDfrmI7inANe14X.png" alt="image.png" style="zoom:67%;" />
+<img data-src="/images/git的基本使用/aDfrmI7inANe14X.png" alt="image.png" style="zoom:67%;" />
 
 
 
@@ -513,6 +513,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   

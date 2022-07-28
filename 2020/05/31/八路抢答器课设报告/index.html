@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="好久没更新过博客了，之前一段时间及比较忙，快要期末了，考试要准备，课程设计要做，中间还水了个自动打卡的脚本，闲下来的时间比较少（可能是打游戏去了），就一直没更新吧，上一次更新是两三周之前，虽然不存在什么有人催更的问题（滑稽），但是自己心里还是不舒服，于是就来水一篇博客。  1、 基本功能 抢答器系统提供八路抢答，分别代表八支队伍，分别用按钮S1-S8表示，最先按下按钮的队伍对应的LED灯会亮起来">
 <meta property="og:type" content="article">
@@ -313,7 +313,7 @@
 
 <h1 id="2、方案设计"><a href="#2、方案设计" class="headerlink" title="2、方案设计"></a>2、方案设计</h1><p>电路分为两个主要的模块——抢答模块和计时模块，报警电路穿插在这两个模块之间，配合两个电路的特点，能够达到报警的效果。</p>
 <p>具体结构框图如图1所示：</p>
-<img src="/images/八路抢答器课设报告/image-20200531153300891.png" alt="图1" style="zoom:80%;" />
+<img data-src="/images/八路抢答器课设报告/image-20200531153300891.png" alt="图1" style="zoom:80%;" />
 
 
 
@@ -322,7 +322,7 @@
 <p>当有一个队伍已经抢答成功，那么八个D触发器的输出经过两个四输入与非门之后，有一个与非的结果为高电平，再将两者或非，结果就为低电平，此时再有队伍按下抢答按钮就无效，LED灯的亮灭不会发生改变。</p>
 <p>D触发器的时钟输入是由八个按钮的电平相或得到，只要有一个队伍在抢答有效的时间内按下按钮，并且在此之前没有其他队伍按下抢答按钮，就会产生一个上升沿；若已有队伍抢答成功，再有队伍按下按钮，电平不会发生变化，时钟不会检测到上升沿。</p>
 <p>清零效果的实现主要是利用D触发器的 ~CLR端，清零按钮默认是高电平状态，当按下之后会出现一个低电平的信号，输送给 ~CLR端，达到清零效果。</p>
- <img src="/images/八路抢答器课设报告/image-20200531153428970.png" alt="图2" style="zoom:80%;" />
+ <img data-src="/images/八路抢答器课设报告/image-20200531153428970.png" alt="图2" style="zoom:80%;" />
 
 
 
@@ -331,7 +331,7 @@
 <p>计时模块的“开关”主要是用74LS73芯片中的JK触发器构成的一个T触发器来实现的，JK触发器的时钟信号是由前面的清零按钮控制，按下清零按钮之后会产生一个下降沿，触发器的输出发生翻转，也就模拟了开关状态的改变。当计时器十位数字为3时，也就是30秒的计时时间到了，74LS73这时Q1和Q2都为高电平，将其接到74LS00的与非门上面，与非的结果为0。再将这个与非的结果和上面JK触发器输出的电平相与得到计时模块的总开关，只要这两者有一个为低电平，总开关就是断开的，计时模块停止工作。比如：当计时器到了30秒的时候74LS73输出Q1和Q2与非的结果为0，此时，计时模块停止工作，数码管显示停留在30秒的时候。计时模块有一个LED指示灯，当“开关”接通时，指示灯亮，当计时到达30秒或者还未开始抢答时，指示灯熄灭。</p>
 <p>​    计时的时钟脉冲是由前面抢答模块的D触发器输出四个四个相与非，再将两个与非的结果或非和74LS73的Q1、Q2或非的结果以及一个1HZ的方波信号三个信号相与的结果，只要有一个条件不满足，计数器就会停止计数。比如：已有人抢答成功，那么第一个条件不满足，计时器停止计数；计时器计时到了30秒，那么第二个条件不满足，计数器停止计数。</p>
 <p>​    计时模块的报警电路有两部分，一个是计时时间到了30秒，蜂鸣器报警，另一个是抢答开始，蜂鸣器发出报警。第一部分蜂鸣器的高电平端口接到计时模块的电源上，低电平端口接到74LS73输出结果相与非后的端口，计时到了30秒时，74LS73输出结果相与非后的结果为0，高低电平端口有电位差，蜂鸣器发出报警声，同时计时模块的“开关”会断开，所以蜂鸣器的高电平端口也会变为低电平，所以蜂鸣器只会短暂报警。第二部分蜂鸣器的高电平端口接到计时模块的JK触发器的输出端，低电平端口接清零按钮的输出。初始状况蜂鸣器高低电平的电位差为-5V，在按下开始抢答按钮的一瞬间，点位差变成5V蜂鸣器会发出短暂报警声。</p>
- <img src="/images/八路抢答器课设报告/image-20200531153526098.png" alt="图3" style="zoom:80%;" />
+ <img data-src="/images/八路抢答器课设报告/image-20200531153526098.png" alt="图3" style="zoom:80%;" />
 
 <h1 id="4、主要元器件的选择"><a href="#4、主要元器件的选择" class="headerlink" title="4、主要元器件的选择"></a>4、主要元器件的选择</h1><p>此八路抢答系统主要由两块74LS175、两块74LS73一块74LS20、一块74LS00、一块74161芯片以及若干非门和与门组成。</p>
 <p>所有元器件列表：</p>
@@ -400,14 +400,14 @@
 </tr>
 </tbody></table>
 <p>74LS175引脚和逻辑功能表：</p>
-<p>   <img src="/images/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/image-20200531153551489.png" alt="image-20200531153551489"></p>
-<p><img src="/images/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/image-20200531153558547.png" alt="image-20200531153558547"></p>
+<p>   <img data-src="/images/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/image-20200531153551489.png" alt="image-20200531153551489"></p>
+<p><img data-src="/images/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/image-20200531153558547.png" alt="image-20200531153558547"></p>
 <p>74LS73引脚和逻辑图：</p>
-<p>   <img src="/images/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/image-20200531153605422.png" alt="image-20200531153605422"></p>
-<p><img src="/images/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/image-20200531153611215.png" alt="image-20200531153611215"></p>
+<p>   <img data-src="/images/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/image-20200531153605422.png" alt="image-20200531153605422"></p>
+<p><img data-src="/images/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/image-20200531153611215.png" alt="image-20200531153611215"></p>
 <p>74161引脚和逻辑图：</p>
-<p>   <img src="/images/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/image-20200531153618898.png" alt="image-20200531153618898"></p>
-<p><img src="/images/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/image-20200531153622958.png" alt="image-20200531153622958"></p>
+<p>   <img data-src="/images/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/image-20200531153618898.png" alt="image-20200531153618898"></p>
+<p><img data-src="/images/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/image-20200531153622958.png" alt="image-20200531153622958"></p>
 <h1 id="5、调试结果及分析"><a href="#5、调试结果及分析" class="headerlink" title="5、调试结果及分析"></a>5、调试结果及分析</h1><h2 id="5-1调试中存在的问题"><a href="#5-1调试中存在的问题" class="headerlink" title="5.1调试中存在的问题"></a>5.1调试中存在的问题</h2><p>1.多个队伍同时按下抢答按钮会显示都抢答成功</p>
 <p>造成这一结果的原因，一方面可能是仿真电路的时间步长和实际的时间步长不一致，仿真需要实时的计，算运行的比实际电路要慢很多，就造成了第一个按下的信号还没反馈回去，第二个按下按钮队伍的信号也一起发出来了，最后就出现多个队伍对应的LED亮起；另一方面可能是反馈回给按钮的信号延迟太高，比第一个按下按钮的队伍和第二个按下按钮的队伍的时间差还要长，也是导致第一次按下按钮信号没反馈回去，第二次的信号就发出去了。这种情况就是电路设计的问题了，但是受条件限制，无法搭建实际的电路，只能用仿真调试，具体的原因也无法进一步探究。</p>
 <p>2.蜂鸣器不响（只能响一个）</p>
@@ -542,6 +542,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   

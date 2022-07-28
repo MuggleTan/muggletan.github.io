@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="蓝桥杯这块板子有矩阵按键和独立按键，可以根据换跳帽来切换，下面简单介绍一下这两种按键的程序和基本的原理。 其他51的板子原理也基本相同，下面的代码也可以参考。  独立按键相对于矩阵按键，独立按键简单很多，就只有四个按钮，判断四个按键哪个被按下的情况较为简单 独立按键的写法也不止一种，这里就介绍两种 方法一：实现比较简单，就是一个个判断，检测到为低电平的话就判断按键按下了。">
 <meta property="og:type" content="article">
@@ -315,7 +315,7 @@
 
 <h2 id="矩阵按键"><a href="#矩阵按键" class="headerlink" title="矩阵按键"></a>矩阵按键</h2><p>相对于独立按键来说，矩阵按键相对是要复杂一点，这里就介绍一种方法</p>
 <h3 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h3><p>这个方法和上面独立按键的方法2实现的思路差不多。因为51单片机的资源很有限，所以这里用了八个引脚来实现一个4×4的矩阵按键。这里对照一下原理图：</p>
-<img src="/images/蓝桥杯单片机按键/OlN6gpyH14z89KR.png" alt="image.png" style="zoom: 67%;" />
+<img data-src="/images/蓝桥杯单片机按键/OlN6gpyH14z89KR.png" alt="image.png" style="zoom: 67%;" />
 
 <p>第一步：列扫描，先将P3的低四位置为0，高四位置为1，但是这款单片机的P36和P37被P42和P44代替了，所以P42和P44要单独位定义，然后将其置为1。初始值设置完之后就要进行检测了，因为P3的低四位为0，所以当按键按下时接到对应列的那条线会被拉到低电平P44对应的是第一列，其他参照上面的原理图以此类推。</p>
 <p>第二部：行扫描，反过来，将P3的低四位置为1，高两位以及P42和P44置为0，哪一行的按键被按下对应行的值会被置为0，这一步和上面独立按键的扫描相似。</p>
@@ -450,6 +450,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   

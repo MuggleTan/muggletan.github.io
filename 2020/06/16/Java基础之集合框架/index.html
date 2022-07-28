@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="Java 集合框架概述 一方面， 面向对象语言对事物的体现都是以对象的形式，为了方便对多个对象的操作，就要对对象进行存储。另一方面，使用Array存储对象方面具有一些弊端，而Java 集合就像一种容器，可以动态地把多个对象的引用放入容器中。   数组在内存中存储方面的特点： ​	数组初始化之后，长度就确定了，不能更改了 ​	数组声明的类型，就决定了元素初始化时候的类型  数组在存储方面的弊端： ​">
 <meta property="og:type" content="article">
@@ -330,10 +330,10 @@
 <span id="more"></span>
 
 <p>Collection接口继承树：</p>
-<img src="/images/Java基础之集合框架/image-20200617143455167.png" alt="image-20200617143455167" style="zoom:67%;" />
+<img data-src="/images/Java基础之集合框架/image-20200617143455167.png" alt="image-20200617143455167" style="zoom:67%;" />
 
 <p>Map接口继承树：</p>
-<img src="/images/Java基础之集合框架/image-20200617143554774.png" alt="image-20200617143554774" style="zoom:67%;" />
+<img data-src="/images/Java基础之集合框架/image-20200617143554774.png" alt="image-20200617143554774" style="zoom:67%;" />
 
 <h1 id="Collection接口"><a href="#Collection接口" class="headerlink" title="Collection接口"></a>Collection接口</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ol>
 <li>Collection 接口是 List、Set 和 Queue 接口的父接口，该接口里定义的方法既可用于操作 Set 集合，也可用于操作 List 和 Queue 集合。</li>
@@ -391,7 +391,7 @@
 </li>
 </ul>
 <h4 id="Iterator接口中的方法"><a href="#Iterator接口中的方法" class="headerlink" title="Iterator接口中的方法"></a>Iterator接口中的方法</h4><p>Collection集合常用下图所示方法遍历:</p>
-<img src="/images/Java基础之集合框架/image-20200617152119103.png" alt="image-20200617152119103" style="zoom:67%;" />
+<img data-src="/images/Java基础之集合框架/image-20200617152119103.png" alt="image-20200617152119103" style="zoom:67%;" />
 
 <ol>
 <li>boolean hasNext()  判断迭代器是否还有下一个元素</li>
@@ -452,7 +452,7 @@
 <p>源码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span>&lt;E&gt; &#123;</span><br><span class="line">  E item;</span><br><span class="line">  Node&lt;E&gt; next;</span><br><span class="line">  Node&lt;E&gt; prev;</span><br><span class="line">  Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</span><br><span class="line">    <span class="built_in">this</span>.item = element;</span><br><span class="line">    <span class="built_in">this</span>.next = next;</span><br><span class="line">    <span class="built_in">this</span>.prev = prev;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<img src="/images/Java基础之集合框架/image-20200617204129667.png" alt="image-20200617204129667" style="zoom:67%;" />
+<img data-src="/images/Java基础之集合框架/image-20200617204129667.png" alt="image-20200617204129667" style="zoom:67%;" />
 
 <h3 id="List-实现类之三：Vector"><a href="#List-实现类之三：Vector" class="headerlink" title="List 实现类之三：Vector"></a>List 实现类之三：Vector</h3><p>Vector 是一个古老的集合，JDK1.0就有了。大多数操作与ArrayList相同，区别之处在于Vector是线程安全的。</p>
 <p>新增方法:</p>
@@ -490,12 +490,12 @@
 <p>​		如果两个元素的哈希值不相等，那么就可以通过链表的方式将添加的元素和原来有的元素链接起来；如果两个元素的哈希值相等，就要调用equals() 方法比较两个元素是否一样了。</p>
 <p>​		如果equals() 方法返回true，则添加失败，如果返回false，则添加成功，该元素通过链表的方式和原来链接的元素链接在一起。</p>
 <p>HashSet的底层实现实际上是HashMap，如下图所示：</p>
-<img src="/images/Java基础之集合框架/image-20200618104823685.png" alt="image-20200618104823685" style="zoom:80%;" />
+<img data-src="/images/Java基础之集合框架/image-20200618104823685.png" alt="image-20200618104823685" style="zoom:80%;" />
 
 <h3 id="Set实现类之二：LinkedHashSet"><a href="#Set实现类之二：LinkedHashSet" class="headerlink" title="Set实现类之二：LinkedHashSet"></a>Set实现类之二：LinkedHashSet</h3><h4 id="概述-3"><a href="#概述-3" class="headerlink" title="概述"></a>概述</h4><p>LinkedHashSet 是 HashSet 的子类</p>
 <p>LinkedHashSet 根据元素的 hashCode 值来决定元素的存储位置，但它同时使用双向链表维护元素的次序，<strong>这使得元素看起来是以插入顺序保存的</strong>。</p>
 <p>LinkedHashSet插入性能略低于 HashSet，但在迭代访问 Set 里的全部元素时有很好的性能。</p>
-<img src="/images/Java基础之集合框架/image-20200618105842213.png" alt="image-20200618105842213" style="zoom:80%;" />
+<img data-src="/images/Java基础之集合框架/image-20200618105842213.png" alt="image-20200618105842213" style="zoom:80%;" />
 
 <h3 id="Set实现类之三：TreeSet"><a href="#Set实现类之三：TreeSet" class="headerlink" title="Set实现类之三：TreeSet"></a>Set实现类之三：TreeSet</h3><h4 id="概述-4"><a href="#概述-4" class="headerlink" title="概述"></a>概述</h4><p>TreeSet 是 SortedSet 接口的实现类，TreeSet 可以确保集合元素处于排序状态。TreeSet底层使用红黑树结构存储数据。</p>
 <p>新增的方法如下： (了解) </p>
@@ -509,7 +509,7 @@
 <li>SortedSet headSet(toElement) </li>
 <li>SortedSet tailSet(fromElement)</li>
 </ul>
-<img src="/images/Java基础之集合框架/image-20200618110742069.png" alt="image-20200618110742069" style="zoom:80%;" />
+<img data-src="/images/Java基础之集合框架/image-20200618110742069.png" alt="image-20200618110742069" style="zoom:80%;" />
 
 <h4 id="自然排序"><a href="#自然排序" class="headerlink" title="自然排序"></a>自然排序</h4><p>TreeSet 会调用集合元素的 compareTo(Object obj) 方法来比较元素之间的大小关系，然后将集合元素按升序(默认情况)排列。</p>
 <p>注意：如果要把一个对象添加到TreeSet中，则该对象的类必须实现Comparable接口。实现 Comparable 的类必须实现 compareTo(Object obj) 方法，两个对象即通过 compareTo(Object obj) 方法的返回值来比较大小。</p>
@@ -529,7 +529,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">HashSet</span> <span class="variable">set</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HashSet</span>();</span><br><span class="line"><span class="type">Person</span> <span class="variable">p1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="number">1001</span>,<span class="string">&quot;AA&quot;</span>);</span><br><span class="line"><span class="type">Person</span> <span class="variable">p2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="number">1002</span>,<span class="string">&quot;BB&quot;</span>);</span><br><span class="line">set.add(p1);</span><br><span class="line">set.add(p2);</span><br><span class="line">p1.name = <span class="string">&quot;CC&quot;</span>;</span><br><span class="line">set.remove(p1);</span><br><span class="line">System.out.println(set);<span class="comment">//输出两个</span></span><br><span class="line">set.add(<span class="keyword">new</span> <span class="title class_">Person</span>(<span class="number">1001</span>,<span class="string">&quot;CC&quot;</span>));</span><br><span class="line">System.out.println(set);<span class="comment">//输出三个</span></span><br><span class="line">set.add(<span class="keyword">new</span> <span class="title class_">Person</span>(<span class="number">1001</span>,<span class="string">&quot;AA&quot;</span>));</span><br><span class="line">System.out.println(set);<span class="comment">//输出四个</span></span><br></pre></td></tr></table></figure>
 
 <h1 id="Map接口"><a href="#Map接口" class="headerlink" title="Map接口"></a>Map接口</h1><p>Map接口继承树：</p>
-<img src="/images/Java基础之集合框架/image-20200618153453173.png" alt="image-20200618153453173" style="zoom:67%;" />
+<img data-src="/images/Java基础之集合框架/image-20200618153453173.png" alt="image-20200618153453173" style="zoom:67%;" />
 
 <h2 id="概述-5"><a href="#概述-5" class="headerlink" title="概述"></a>概述</h2><ul>
 <li><p>Map与Collection并列存在。用于保存具有映射关系的数据:key-value&gt;</p>
@@ -568,9 +568,9 @@
 </ul>
 <h3 id="HashMap的存储结构"><a href="#HashMap的存储结构" class="headerlink" title="HashMap的存储结构"></a>HashMap的存储结构</h3><p>JDK 7及以前版本：HashMap是数组+链表结构(即为链地址法) </p>
 <p>JDK 8版本发布以后：HashMap是数组+链表+红黑树实现。</p>
-<img src="/images/Java基础之集合框架/image-20200619171812979.png" alt="image-20200619171812979" style="zoom:80%;" />
+<img data-src="/images/Java基础之集合框架/image-20200619171812979.png" alt="image-20200619171812979" style="zoom:80%;" />
 
-<img src="/images/Java基础之集合框架/image-20200619171905874.png" alt="image-20200619171905874" style="zoom:80%;" />
+<img data-src="/images/Java基础之集合框架/image-20200619171905874.png" alt="image-20200619171905874" style="zoom:80%;" />
 
 <h3 id="HashMap源码中的重要常量"><a href="#HashMap源码中的重要常量" class="headerlink" title="HashMap源码中的重要常量"></a>HashMap源码中的重要常量</h3><p>DEFAULT_INITIAL_CAPACITY : HashMap的默认容量，16 </p>
 <p>MAXIMUM_CAPACITY： HashMap的最大支持容量，2^30^</p>
@@ -801,6 +801,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   
