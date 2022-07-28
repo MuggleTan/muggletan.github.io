@@ -2876,46 +2876,6 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode第一天</title>
-    <url>/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/</url>
-    <content><![CDATA[<blockquote>
-<p>LeetCode第350题</p>
-<p>给定两个数组，编写一个函数来计算它们的交集。</p>
-<p>示例 1：</p>
-<p>输入：nums1 &#x3D; [1,2,2,1], nums2 &#x3D; [2,2]<br>输出：[2,2]<br>示例 2:</p>
-<p>输入：nums1 &#x3D; [4,9,5], nums2 &#x3D; [9,4,9,8,4]<br>输出：[4,9]</p>
-<p>说明：</p>
-<p>输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。<br>我们可以不考虑输出结果的顺序。</p>
-<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii">https://leetcode-cn.com/problems/intersection-of-two-arrays-ii</a></p>
-</blockquote>
-<p>方法一：</p>
-<p>用哈希表映射，先把较短的那个数组遍历，存入哈希表中，键是数组中元素的值，值是数组中元素出现的次数<br>再遍历另外一个数组，从哈希表中找这个数组中的值，看是否存在，存在就将其存入新造的数组中，再将哈希表中该键对应的值减一，如果值减到了0，就将这个键移除去，否则将这个键对应的值减一，在存入哈希表中。</p>
-<span id="more"></span>
-
-<p>这个方法LeetCode上的一张图看的明明白白：</p>
-<p><img src="/images/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/350_fig1.gif" alt="fig1"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect1(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  <span class="keyword">if</span> (nums1.length &gt; nums2.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> intersect1(nums2, nums1);</span><br><span class="line">  &#125;</span><br><span class="line">  Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums1) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>;</span><br><span class="line">    map.put(num, count);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[nums2.length];</span><br><span class="line">  <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums2) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      arr[index++] = num;</span><br><span class="line">      <span class="keyword">if</span> (count != <span class="number">1</span>) &#123;</span><br><span class="line">        map.put(num, --count);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        map.remove(num);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>方法二：</p>
-<p>先对两个数组进行排序，然后设置两个指针来遍历这两个数组。将比较结果较小的那个数组的指针后移，如果两数相等，则将两个数组的指针都向后移，并将这个数存入新造好的数组。遍历直到有一个指针到了数组的结尾，结束遍历。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect2(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  Arrays.sort(nums1);</span><br><span class="line">  Arrays.sort(nums2);</span><br><span class="line">  <span class="type">int</span> <span class="variable">len1</span> <span class="operator">=</span> nums1.length, len2 = nums2.length;</span><br><span class="line">  <span class="type">int</span> <span class="variable">index1</span> <span class="operator">=</span> <span class="number">0</span>, index2 = <span class="number">0</span>, index = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[Math.min(len1, len2)];</span><br><span class="line">  <span class="keyword">while</span> (index1 &lt; len1 &amp;&amp; index2 &lt; len2) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums1[index1] &lt; nums2[index2]) &#123;</span><br><span class="line">      index1++;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums1[index1] &gt; nums2[index2]) &#123;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      arr[index++] = nums1[index1];</span><br><span class="line">      index1++;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>结语</p>
-<p>如果 nums2的元素存储在磁盘上，磁盘内存是有限的，并且你不能一次加载所有的元素到内存中。那么就无法高效地对 nums2进行排序，因此推荐使用方法一而不是方法二。在方法一中，nums2 只关系到查询操作，因此每次读取nums2中的一部分数据，并进行处理即可。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>算法</category>
-        <category>LeetCode</category>
-      </categories>
-      <tags>
-        <tag>LeetCode</tag>
-        <tag>算法</tag>
-        <tag>数据结构</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>linux中的权限管理</title>
     <url>/2020/05/15/Linux%E4%B8%AD%E7%9A%84%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h1 id="文件基本权限"><a href="#文件基本权限" class="headerlink" title="文件基本权限"></a>文件基本权限</h1><p>首先看一下Linux中的文件权限，可以用ll命令或者带-l的ls命令查看</p>
@@ -3029,6 +2989,46 @@
       </categories>
       <tags>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode第一天</title>
+    <url>/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/</url>
+    <content><![CDATA[<blockquote>
+<p>LeetCode第350题</p>
+<p>给定两个数组，编写一个函数来计算它们的交集。</p>
+<p>示例 1：</p>
+<p>输入：nums1 &#x3D; [1,2,2,1], nums2 &#x3D; [2,2]<br>输出：[2,2]<br>示例 2:</p>
+<p>输入：nums1 &#x3D; [4,9,5], nums2 &#x3D; [9,4,9,8,4]<br>输出：[4,9]</p>
+<p>说明：</p>
+<p>输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。<br>我们可以不考虑输出结果的顺序。</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii">https://leetcode-cn.com/problems/intersection-of-two-arrays-ii</a></p>
+</blockquote>
+<p>方法一：</p>
+<p>用哈希表映射，先把较短的那个数组遍历，存入哈希表中，键是数组中元素的值，值是数组中元素出现的次数<br>再遍历另外一个数组，从哈希表中找这个数组中的值，看是否存在，存在就将其存入新造的数组中，再将哈希表中该键对应的值减一，如果值减到了0，就将这个键移除去，否则将这个键对应的值减一，在存入哈希表中。</p>
+<span id="more"></span>
+
+<p>这个方法LeetCode上的一张图看的明明白白：</p>
+<p><img src="/images/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/350_fig1.gif" alt="fig1"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect1(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  <span class="keyword">if</span> (nums1.length &gt; nums2.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> intersect1(nums2, nums1);</span><br><span class="line">  &#125;</span><br><span class="line">  Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums1) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>;</span><br><span class="line">    map.put(num, count);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[nums2.length];</span><br><span class="line">  <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums2) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      arr[index++] = num;</span><br><span class="line">      <span class="keyword">if</span> (count != <span class="number">1</span>) &#123;</span><br><span class="line">        map.put(num, --count);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        map.remove(num);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法二：</p>
+<p>先对两个数组进行排序，然后设置两个指针来遍历这两个数组。将比较结果较小的那个数组的指针后移，如果两数相等，则将两个数组的指针都向后移，并将这个数存入新造好的数组。遍历直到有一个指针到了数组的结尾，结束遍历。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect2(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  Arrays.sort(nums1);</span><br><span class="line">  Arrays.sort(nums2);</span><br><span class="line">  <span class="type">int</span> <span class="variable">len1</span> <span class="operator">=</span> nums1.length, len2 = nums2.length;</span><br><span class="line">  <span class="type">int</span> <span class="variable">index1</span> <span class="operator">=</span> <span class="number">0</span>, index2 = <span class="number">0</span>, index = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[Math.min(len1, len2)];</span><br><span class="line">  <span class="keyword">while</span> (index1 &lt; len1 &amp;&amp; index2 &lt; len2) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums1[index1] &lt; nums2[index2]) &#123;</span><br><span class="line">      index1++;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums1[index1] &gt; nums2[index2]) &#123;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      arr[index++] = nums1[index1];</span><br><span class="line">      index1++;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>结语</p>
+<p>如果 nums2的元素存储在磁盘上，磁盘内存是有限的，并且你不能一次加载所有的元素到内存中。那么就无法高效地对 nums2进行排序，因此推荐使用方法一而不是方法二。在方法一中，nums2 只关系到查询操作，因此每次读取nums2中的一部分数据，并进行处理即可。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>LeetCode</tag>
+        <tag>算法</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -3280,6 +3280,70 @@
       </tags>
   </entry>
   <entry>
+    <title>Ubuntu系统Apache2部署SSL证书</title>
+    <url>/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/</url>
+    <content><![CDATA[<p>本文档为您介绍了如何在Ubuntu系统以及Apache2中安装阿里云SSL证书。</p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>操作系统：Ubuntu</p>
+<p>Web服务器：Apache 2</p>
+<h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><ul>
+<li>已从<a href="https://yundunnext.console.aliyun.com/?p=cas#/overview/cn-hangzhou">SSL证书控制台</a>下载Apache服务器证书。</li>
+<li>已安装Open SSL。</li>
+</ul>
+<h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><ol>
+<li><p>运行以下命令在apache2目录下创建ssl目录。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行以下命令将下载的阿里云证书文件复制到ssl目录中。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp -r YourDomainName_public.crt /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp -r YourDomainName_chain.crt /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp -r YourDomainName.key /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+</li>
+<li><p>运行以下命令启用SSL模块。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo a2enmod ssl</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/znDyZLWRAsv2f4t.png" alt="image.png"></p>
+<p>SSL模块启用后可执行<code>ls /etc/apache2/sites-available</code>查看目录下生成的default-ssl.conf文件。</p>
+<p><strong>说明：</strong> 443端口是网络浏览端口，主要用于HTTPS服务。SSL模块启用后会自动放行443端口。若443端口未自动放行，可执行<code>vi /etc/apache2/ports.conf</code>并添加<code>Listen 443</code>手动放行。</p>
+</li>
+<li><p>运行以下命令修改SSL配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/apache2/sites-available/YourDomainName-ssl.conf</span><br></pre></td></tr></table></figure>
+
+<p>在default-ssl.conf文件中找到以下参数进行修改后保存并退出。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;IfModules mod_ssl.c&gt;</span><br><span class="line">&lt;VirtualHost *:443&gt;  </span><br><span class="line">ServerName   <span class="comment">#修改为证书绑定的域名www.YourDomainName.com。</span></span><br><span class="line">SSLCertificateFile /etc/apache2/ssl/www.YourDomainName_public.crt   </span><br><span class="line"><span class="comment">#将/etc/apache2/ssl/www.YourDomainName.com_public.crt替换为证书文件路径+证书文件名。</span></span><br><span class="line">SSLCertificateKeyFile /etc/ssl/apache2/www.YourDomainName.com.key   </span><br><span class="line"><span class="comment">#将/etc/apache2/ssl/www.YourDomainName.com.key替换为证书秘钥文件路径+证书秘钥文件名。</span></span><br><span class="line">SSLCertificateChainFile /etc/apache2/ssl/www.YourDomainName.com_chain.crt  </span><br><span class="line"><span class="comment">#将/etc/apache2/ssl/www.YourDomainName.com_chain.crt替换为证书链文件路径+证书链文件名。</span></span><br><span class="line">						</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/XESFU87K4QfY92A.png" alt="image.png"></p>
+<p>&#x2F;sites-available：该目录存放的是可用的虚拟主机；&#x2F;sites-enabled：该目录存放的是已经启用的虚拟主机。</p>
+<p><strong>说明：</strong> default-ssl.conf文件可能存放在&#x2F;etc&#x2F;apache2&#x2F;sites-available或&#x2F;etc&#x2F;apache2&#x2F;sites-enabled目录中。</p>
+</li>
+<li><p>运行以下命令把default-ssl.conf映射至&#x2F;etc&#x2F;apache2&#x2F;sites-enabled文件夹中建立软链接、实现二者之间的自动关联。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ln -s /etc/apache2/sites-available/YourDomainName-ssl.conf /etc/apache2/sites-enabled/YourDomainName-ssl.conf</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行以下命令重新加载Apache 2配置文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/apache2 force-reload</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/4Rn27NQuZgTDoFK.png" alt="image.png"></p>
+</li>
+<li><p>运行以下命令重启Apache 2服务。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/apache2 restart</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/13p6Xtfh49s8VQi.png" alt="image.png"></p>
+</li>
+</ol>
+<h2 id="后续操作"><a href="#后续操作" class="headerlink" title="后续操作"></a>后续操作</h2><p>Apache 2服务重启成功后，您可在浏览器中输入<a href="https://www.yourdomainname.com验证证书安装结果.浏览器地址栏显示绿色的小锁标识说明证书安装成功./">https://www.YourDomainName.com验证证书安装结果。浏览器地址栏显示绿色的小锁标识说明证书安装成功。</a></p>
+<p><a href="https://help.aliyun.com/document_detail/102450.html?spm=a2c4g.11186623.2.16.641a5d990B7ZJl#title-8vo-dzo-1in">原文地址</a></p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker的基本使用</title>
     <url>/2020/03/28/docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<p><img src="/images/docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/z6JqkpsQT2orBhE.png" alt="docker.jpg"></p>
@@ -3378,70 +3442,6 @@
       </categories>
       <tags>
         <tag>docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ubuntu系统Apache2部署SSL证书</title>
-    <url>/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/</url>
-    <content><![CDATA[<p>本文档为您介绍了如何在Ubuntu系统以及Apache2中安装阿里云SSL证书。</p>
-<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>操作系统：Ubuntu</p>
-<p>Web服务器：Apache 2</p>
-<h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><ul>
-<li>已从<a href="https://yundunnext.console.aliyun.com/?p=cas#/overview/cn-hangzhou">SSL证书控制台</a>下载Apache服务器证书。</li>
-<li>已安装Open SSL。</li>
-</ul>
-<h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><ol>
-<li><p>运行以下命令在apache2目录下创建ssl目录。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行以下命令将下载的阿里云证书文件复制到ssl目录中。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp -r YourDomainName_public.crt /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp -r YourDomainName_chain.crt /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp -r YourDomainName.key /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-</li>
-<li><p>运行以下命令启用SSL模块。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo a2enmod ssl</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/znDyZLWRAsv2f4t.png" alt="image.png"></p>
-<p>SSL模块启用后可执行<code>ls /etc/apache2/sites-available</code>查看目录下生成的default-ssl.conf文件。</p>
-<p><strong>说明：</strong> 443端口是网络浏览端口，主要用于HTTPS服务。SSL模块启用后会自动放行443端口。若443端口未自动放行，可执行<code>vi /etc/apache2/ports.conf</code>并添加<code>Listen 443</code>手动放行。</p>
-</li>
-<li><p>运行以下命令修改SSL配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/apache2/sites-available/YourDomainName-ssl.conf</span><br></pre></td></tr></table></figure>
-
-<p>在default-ssl.conf文件中找到以下参数进行修改后保存并退出。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;IfModules mod_ssl.c&gt;</span><br><span class="line">&lt;VirtualHost *:443&gt;  </span><br><span class="line">ServerName   <span class="comment">#修改为证书绑定的域名www.YourDomainName.com。</span></span><br><span class="line">SSLCertificateFile /etc/apache2/ssl/www.YourDomainName_public.crt   </span><br><span class="line"><span class="comment">#将/etc/apache2/ssl/www.YourDomainName.com_public.crt替换为证书文件路径+证书文件名。</span></span><br><span class="line">SSLCertificateKeyFile /etc/ssl/apache2/www.YourDomainName.com.key   </span><br><span class="line"><span class="comment">#将/etc/apache2/ssl/www.YourDomainName.com.key替换为证书秘钥文件路径+证书秘钥文件名。</span></span><br><span class="line">SSLCertificateChainFile /etc/apache2/ssl/www.YourDomainName.com_chain.crt  </span><br><span class="line"><span class="comment">#将/etc/apache2/ssl/www.YourDomainName.com_chain.crt替换为证书链文件路径+证书链文件名。</span></span><br><span class="line">						</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/XESFU87K4QfY92A.png" alt="image.png"></p>
-<p>&#x2F;sites-available：该目录存放的是可用的虚拟主机；&#x2F;sites-enabled：该目录存放的是已经启用的虚拟主机。</p>
-<p><strong>说明：</strong> default-ssl.conf文件可能存放在&#x2F;etc&#x2F;apache2&#x2F;sites-available或&#x2F;etc&#x2F;apache2&#x2F;sites-enabled目录中。</p>
-</li>
-<li><p>运行以下命令把default-ssl.conf映射至&#x2F;etc&#x2F;apache2&#x2F;sites-enabled文件夹中建立软链接、实现二者之间的自动关联。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ln -s /etc/apache2/sites-available/YourDomainName-ssl.conf /etc/apache2/sites-enabled/YourDomainName-ssl.conf</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行以下命令重新加载Apache 2配置文件。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/apache2 force-reload</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/4Rn27NQuZgTDoFK.png" alt="image.png"></p>
-</li>
-<li><p>运行以下命令重启Apache 2服务。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/apache2 restart</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/13p6Xtfh49s8VQi.png" alt="image.png"></p>
-</li>
-</ol>
-<h2 id="后续操作"><a href="#后续操作" class="headerlink" title="后续操作"></a>后续操作</h2><p>Apache 2服务重启成功后，您可在浏览器中输入<a href="https://www.yourdomainname.com验证证书安装结果.浏览器地址栏显示绿色的小锁标识说明证书安装成功./">https://www.YourDomainName.com验证证书安装结果。浏览器地址栏显示绿色的小锁标识说明证书安装成功。</a></p>
-<p><a href="https://help.aliyun.com/document_detail/102450.html?spm=a2c4g.11186623.2.16.641a5d990B7ZJl#title-8vo-dzo-1in">原文地址</a></p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -4610,7 +4610,17 @@
 <p>效果如图所示：</p>
 <img src="\images\魔改NexT主题\image-20220728113746502.png" alt="image-20220728113746502"/>
 
-<h1 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h1><h1 id="搞怪标题"><a href="#搞怪标题" class="headerlink" title="搞怪标题"></a>搞怪标题</h1><p>在主题根目录<code>layout</code>文件夹下新建一个<code>custom.njk</code>，加入如下内容：</p>
+
+
+<h1 id="在特定页面隐藏目录"><a href="#在特定页面隐藏目录" class="headerlink" title="在特定页面隐藏目录"></a>在特定页面隐藏目录</h1><p>修改<code>themes\next\layout\_macro\sidebar.</code>文件，将</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;%- set display_toc = page.toc.enable and display_toc %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;%- set display_toc = page.toc.enable and display_toc and page.path.indexOf(&#x27;关键词&#x27;) == -1 %&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="搞怪标题"><a href="#搞怪标题" class="headerlink" title="搞怪标题"></a>搞怪标题</h1><p>在主题根目录<code>layout</code>文件夹下新建一个<code>custom.njk</code>，加入如下内容：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;# 搞怪网页标题 #&#125; </span><br><span class="line">&#123;% if theme.title_trick.enable %&#125;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">  var OriginTitile = document.title;</span><br><span class="line">  var titleTime;</span><br><span class="line">  //换网站的logo</span><br><span class="line">  function selfSetIcon(url)&#123;</span><br><span class="line">		var links = document.getElementsByTagName(&#x27;link&#x27;) </span><br><span class="line">		for (var i = 0; i &lt; links.length; i++) &#123; </span><br><span class="line">			var link = links[i]</span><br><span class="line">			var rel = link.rel; </span><br><span class="line">            var count = 0;</span><br><span class="line">			rel = rel.toLowerCase(); </span><br><span class="line">			if (rel.indexOf(&#x27;icon&#x27;) == 0) &#123; </span><br><span class="line">                count++;</span><br><span class="line">				link.href = url;</span><br><span class="line">                if(count == 2)</span><br><span class="line">				    break;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">  </span><br><span class="line">  document.addEventListener(&quot;visibilitychange&quot;, function() &#123;</span><br><span class="line">    if (document.hidden) &#123;</span><br><span class="line">      document.title = &quot;&#123;&#123; theme.title_trick.leave &#125;&#125;&quot; + OriginTitile;</span><br><span class="line">      selfSetIcon(&quot;&#123;&#123; theme.title_trick.logo &#125;&#125;&quot;);</span><br><span class="line">      clearTimeout(titleTime);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      selfSetIcon(&quot;&#123;&#123; theme.favicon.medium &#125;&#125;&quot;);</span><br><span class="line">      document.title = &quot;&#123;&#123; theme.title_trick.enter &#125;&#125;&quot; + OriginTitile;</span><br><span class="line">      titleTime = setTimeout(function() &#123;</span><br><span class="line">        document.title = OriginTitile;</span><br><span class="line">        </span><br><span class="line">      &#125;, 2000);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>修改同级目录<code>_layout.njk</code>，在<code>&#123;&#123;- next_inject('bodyEnd') &#125;&#125;</code>前面加入如下内容：</p>
