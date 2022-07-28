@@ -1,36 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Apache配置反向代理</title>
-    <url>/2020/07/23/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
-    <content><![CDATA[<blockquote>
-<p>为了让自己的spring boot项目能被域名直接访问，而不是IP:端口号的形式访问，需要用到反向代理，简单来讲就是把一个程序运行的地址映射到域名上，实现直接用域名访问。网上很多教程都是针对nignx的，而我用的是apache，也不想折腾把apache换成nignx，找了很久才找到一个可以用的，这里记录一下，方便下次使用。</p>
-</blockquote>
-<h1 id="1-开启Apache的代理模块"><a href="#1-开启Apache的代理模块" class="headerlink" title="1.开启Apache的代理模块"></a>1.开启Apache的代理模块</h1><p>在确保Apache安装好之后，通过<code>a2enmod proxy proxy_balancer proxy_http</code>开启Apache的代理模块。</p>
-<p>我用的是Ubuntu的Apache和centos下的Apache目录结构似乎有点不一样。</p>
-<span id="more"></span>
+    <title>I217-V在openwrt下大流量断网问题</title>
+    <url>/2022/07/15/I217-V%E5%9C%A8openwrt%E8%BD%AF%E8%B7%AF%E7%94%B1%E4%B8%8B%E5%A4%A7%E6%B5%81%E9%87%8F%E6%96%AD%E7%BD%91%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近跟着up司波图在玩一个AIO（All In One）服务器，也就是将软路由，NAS系统以及影音系统都集成到一个物理系统中，我用的是之前买的一个M73的小主机，里面的mini-PCIE插槽扩展了一个螃蟹RTL8111的千兆网卡，主机自带的是Intel的I217-V千兆网卡。</p>
+<p>经过一天的使用下来发现每次大流量下载或上传时，openwrt都会断一下，开始还以为是openwrt系统的问题，后来经过一番资料搜索，发现是pve下面的这张Intel网卡有问题，查看了pve系统的日志，发现了如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pve kernel: e1000e 0000:00:19.0 eno1: Detected Hardware Unit Hang:</span><br></pre></td></tr></table></figure>
+<p>这和搜索到的情况一样，于是就确定是这张Intel网卡的问题。</p>
+<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>造成该问题的原因是Intel网卡固件的bug</p>
+<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>在pve虚拟机下关掉网卡的offload功能</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ethtool -K &lt;网卡编号&gt; tx off rx off &gt;/tmp/e1000e.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2.修改配置文件"></a>2.修改配置文件</h1><p>切换到 <code>/etc/apache2/sites-enabled</code> 目录下，打开需要修改网站对应的配置</p>
-<img src="/images/Apache配置反向代理/image-20200723085537548.png" alt="image-20200723085537548" style="zoom:80%;" />
-
-<p>没有的话就新建一个对应的配置文件，文件的名字是二级域名的前缀.conf，比如我的域名是steventan.top，</p>
-<p>那么test.conf对应的网站是test.steventan.top，这个好像也只是一个命名的习惯，不一样也没多大问题，这样主要是方便管理。</p>
-<p>旧版Apache：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">	ServerName autoclock.steventan.top <span class="comment">#这里填代理服务器的IP或域名</span></span><br><span class="line">	ProxyRequests off <span class="comment">#off表示开启反向代理  on表示开启正向代理</span></span><br><span class="line">	ProxyPass / http://localhost:8080/  <span class="comment">#被代理的网站，中间的那个/千万别少了，少了的话重启报错</span></span><br><span class="line">	ProxyPassReverse / http://localhost:8080/  <span class="comment">#被代理的网站</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment"># RewriteEngine on</span></span><br><span class="line">	<span class="comment"># RewriteCond   %&#123;HTTPS&#125; !=on</span></span><br><span class="line">	<span class="comment"># RewriteRule   ^(.*)  https://%&#123;SERVER_NAME&#125;$1 [L,R]</span></span><br><span class="line"></span><br><span class="line">	ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">	CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
-
-<p>新版Apache：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">	ServerAdmin webmaster@localhost</span><br><span class="line">	</span><br><span class="line">	&lt;Proxy *&gt;</span><br><span class="line">		Order Deny,Allow</span><br><span class="line">		Allow from all</span><br><span class="line">	&lt;/Proxy&gt;</span><br><span class="line"></span><br><span class="line">	ServerName 10.100.128.8</span><br><span class="line">	ProxyRequests off</span><br><span class="line">	ProxyPass /api http://localhost:8080/</span><br><span class="line">	ProxyPassReverse /api http://localhost:8080/</span><br><span class="line">  	</span><br><span class="line"></span><br><span class="line">	ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">	CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<p>上面的配置是将本地的8080端口运行的程序映射到autoclock.steventan.top这个域名上，这就达到了我的目的，服务器上运行的spring boot项目，能通过域名直接在公网访问。</p>
-<h1 id="3-重启apache生效配置"><a href="#3-重启apache生效配置" class="headerlink" title="3.重启apache生效配置"></a>3.重启apache生效配置</h1><p>通过<code>service apache2 restart</code> 重启Apache，让配置文件生效。 </p>
+<p>为了方便，不需要每次重启虚拟机之后都手动来关掉，这里设置了一个自启动脚本，原理是pve虚拟机每次启动的呃时候都会扫描<code>/etc/profile.d</code>下面的<code>.sh</code>文件，所以办法很简单，在改文件夹下面新建一个e1000e.sh的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/profile.d/e1000e.sh</span><br></pre></td></tr></table></figure>
+<p>然后填入上面的命令即可</p>
+<p>参考链接：</p>
+<p><a href="https://blog.csdn.net/wudics/article/details/124402110">解决在x86平台装openwrt旁路由大流量断网问题（intel网卡驱动bug问题）</a></p>
+<p><a href="https://blog.csdn.net/sxyllxy/article/details/110631505">openWRT在M93p上出现的Detected Hardware Unit Hang</a></p>
 ]]></content>
       <categories>
-        <category>建站</category>
+        <category>软路由</category>
       </categories>
       <tags>
-        <tag>服务器</tag>
+        <tag>软路由</tag>
+        <tag>配置</tag>
       </tags>
   </entry>
   <entry>
@@ -94,6 +87,39 @@
       </categories>
       <tags>
         <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Apache配置反向代理</title>
+    <url>/2020/07/23/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<blockquote>
+<p>为了让自己的spring boot项目能被域名直接访问，而不是IP:端口号的形式访问，需要用到反向代理，简单来讲就是把一个程序运行的地址映射到域名上，实现直接用域名访问。网上很多教程都是针对nignx的，而我用的是apache，也不想折腾把apache换成nignx，找了很久才找到一个可以用的，这里记录一下，方便下次使用。</p>
+</blockquote>
+<h1 id="1-开启Apache的代理模块"><a href="#1-开启Apache的代理模块" class="headerlink" title="1.开启Apache的代理模块"></a>1.开启Apache的代理模块</h1><p>在确保Apache安装好之后，通过<code>a2enmod proxy proxy_balancer proxy_http</code>开启Apache的代理模块。</p>
+<p>我用的是Ubuntu的Apache和centos下的Apache目录结构似乎有点不一样。</p>
+<span id="more"></span>
+
+<h1 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2.修改配置文件"></a>2.修改配置文件</h1><p>切换到 <code>/etc/apache2/sites-enabled</code> 目录下，打开需要修改网站对应的配置</p>
+<img src="/images/Apache配置反向代理/image-20200723085537548.png" alt="image-20200723085537548" style="zoom:80%;" />
+
+<p>没有的话就新建一个对应的配置文件，文件的名字是二级域名的前缀.conf，比如我的域名是steventan.top，</p>
+<p>那么test.conf对应的网站是test.steventan.top，这个好像也只是一个命名的习惯，不一样也没多大问题，这样主要是方便管理。</p>
+<p>旧版Apache：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">	ServerName autoclock.steventan.top <span class="comment">#这里填代理服务器的IP或域名</span></span><br><span class="line">	ProxyRequests off <span class="comment">#off表示开启反向代理  on表示开启正向代理</span></span><br><span class="line">	ProxyPass / http://localhost:8080/  <span class="comment">#被代理的网站，中间的那个/千万别少了，少了的话重启报错</span></span><br><span class="line">	ProxyPassReverse / http://localhost:8080/  <span class="comment">#被代理的网站</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment"># RewriteEngine on</span></span><br><span class="line">	<span class="comment"># RewriteCond   %&#123;HTTPS&#125; !=on</span></span><br><span class="line">	<span class="comment"># RewriteRule   ^(.*)  https://%&#123;SERVER_NAME&#125;$1 [L,R]</span></span><br><span class="line"></span><br><span class="line">	ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">	CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
+
+<p>新版Apache：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">	ServerAdmin webmaster@localhost</span><br><span class="line">	</span><br><span class="line">	&lt;Proxy *&gt;</span><br><span class="line">		Order Deny,Allow</span><br><span class="line">		Allow from all</span><br><span class="line">	&lt;/Proxy&gt;</span><br><span class="line"></span><br><span class="line">	ServerName 10.100.128.8</span><br><span class="line">	ProxyRequests off</span><br><span class="line">	ProxyPass /api http://localhost:8080/</span><br><span class="line">	ProxyPassReverse /api http://localhost:8080/</span><br><span class="line">  	</span><br><span class="line"></span><br><span class="line">	ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">	CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>上面的配置是将本地的8080端口运行的程序映射到autoclock.steventan.top这个域名上，这就达到了我的目的，服务器上运行的spring boot项目，能通过域名直接在公网访问。</p>
+<h1 id="3-重启apache生效配置"><a href="#3-重启apache生效配置" class="headerlink" title="3.重启apache生效配置"></a>3.重启apache生效配置</h1><p>通过<code>service apache2 restart</code> 重启Apache，让配置文件生效。 </p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -868,362 +894,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java基础知识总结（上）</title>
-    <url>/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="Java中的注释"><a href="#Java中的注释" class="headerlink" title="Java中的注释"></a>Java中的注释</h2><ol>
-<li><p>单行注释   &#x2F;&#x2F;</p>
-</li>
-<li><p>多行注释  &#x2F;*   *&#x2F;</p>
-<p>单行注释和多行注释的作用：</p>
-<p>① 对所写的程序进行解释说明，增强可读性。方便自己，方便别人</p>
-<p>② 调试所写的代码</p>
-</li>
-<li><p>文档注释  &#x2F;**   *&#x2F;</p>
-<p>注释内容可以被JDK提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档。</p>
-<hr>
-</li>
-</ol>
-<h2 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h2><ol>
-<li><p>标识符：凡是自己可以起名字的地方都叫标识符。</p>
-<p>  比如：类名、变量名、方法名、接口名、包名…</p>
-</li>
-<li><p>标识符的命名规则：–&gt; 如果不遵守如下的规则，编译不通过！</p>
-<p>① 由26个英文字母大小写，0-9 ，_或 $ 组成 </p>
-<p>②数字不可以开头。</p>
-<p>③不可以使用关键字和保留字，但能包含关键字和保留字。</p>
-<p>④Java中严格区分大小写，长度无限制。</p>
-<p>⑤标识符不能包含空格。</p>
-</li>
-<li><p>Java中的名称命名规范： —&gt;如果不遵守如下的规范，编译可以通过！</p>
-<p>包名：多单词组成时所有字母都小写：xxxyyyzzz</p>
-<p>类名、接口名：多单词组成时，所有单词的首字母大写：XxxYyyZzz</p>
-<p>变量名、方法名：多单词组成时，第一个单词首字母小写，第二个单词开始每个单词首字母大写：xxxYyyZzz</p>
-<p>常量名：所有字母都大写。多单词时每个单词用下划线连接：XXX_YYY_ZZZ</p>
-</li>
-<li><p>注意1：在起名字时，为了提高阅读性，要尽量有意义，“见名知意”。</p>
-<p>注意2：java采用unicode字符集，因此标识符也可以使用汉字声明，但是不建议使用。 </p>
-<hr>
-</li>
-</ol>
-<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><ol>
-<li><p>变量按照数据类型来分：<br>a. 基本数据类型：</p>
-<p>​    整型：byte \ short \ int \ long</p>
-<p>​    浮点型：float \ double</p>
-<p>​    字符型：char</p>
-<p>​    布尔型：boolean</p>
-<p> b. 引用数据类型：</p>
-<pre><code>   类(class)
-
-      接口(interface)
-
-      数组(array)
-</code></pre>
-</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th align="center">类型</th>
-<th align="center">占用存储空间</th>
-<th align="center">表示数据范围</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">byte</td>
-<td align="center">1字节&#x3D;8bit</td>
-<td align="center">-128~127</td>
-</tr>
-<tr>
-<td align="center">short</td>
-<td align="center">2字节</td>
-<td align="center">-2^15 ~2^15 -1</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">4字节</td>
-<td align="center">-2^31 ~2^31 -1</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">8字节</td>
-<td align="center">-2^62 ~2^62 -1</td>
-</tr>
-<tr>
-<td align="center">float</td>
-<td align="center">4字节</td>
-<td align="center">-3.403E38 ~ 3.403E38</td>
-</tr>
-<tr>
-<td align="center">double</td>
-<td align="center">8字节</td>
-<td align="center">-1.798E308 ~ 1.798E308</td>
-</tr>
-</tbody></table>
-<ul>
-<li><strong>java的整型常量默认为 int 型，声明long型常量须后加‘l’或‘L’</strong> </li>
-<li><strong>java程序中变量通常声明为int型，除非不足以表示较大的数，才使用long</strong></li>
-</ul>
-<p>转义字符：</p>
-<table>
-<thead>
-<tr>
-<th>转义字符</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>\b</td>
-<td>退格符</td>
-</tr>
-<tr>
-<td>\n</td>
-<td>换行符</td>
-</tr>
-<tr>
-<td>\r</td>
-<td>回车符</td>
-</tr>
-<tr>
-<td>\t</td>
-<td>制表符</td>
-</tr>
-<tr>
-<td>\“</td>
-<td>双引号</td>
-</tr>
-<tr>
-<td>\‘</td>
-<td>单引号</td>
-</tr>
-<tr>
-<td>\\</td>
-<td>反斜线</td>
-</tr>
-</tbody></table>
-<ol start="2">
-<li><p>变量在类中声明的位置：</p>
-<p>​    成员变量 vs 局部变量</p>
-</li>
-</ol>
-<h3 id="定义格式"><a href="#定义格式" class="headerlink" title="定义格式"></a>定义格式</h3><ol>
-<li><p>java定义变量的格式：数据类型 变量名 &#x3D; 变量值;</p>
-</li>
-<li><p>说明：</p>
-<p>  ① 变量必须先声明，后使用</p>
-<p>  ② 变量都定义在其作用域内。在作用域内，它是有效的。换句话说，出了作用域，就失效了</p>
-<p>  ③ 同一个作用域内，不可以声明两个同名的变量</p>
-</li>
-</ol>
-<h3 id="运算规则"><a href="#运算规则" class="headerlink" title="运算规则"></a>运算规则</h3><p>基本数据类型之间的运算规则：</p>
-<p>前提：这里讨论只是7种基本数据类型变量间的运算。不包含boolean类型的。</p>
-<ol>
-<li><p>自动类型提升：</p>
-<p> 结论：当容量小的数据类型的变量与容量大的数据类型的变量做运算时，结果自动提升为容量大的数据类型。</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph LR</span><br><span class="line">char --&gt; int</span><br><span class="line">byte --&gt; int</span><br><span class="line">short --&gt; int --&gt; long --&gt; float --&gt; double</span><br></pre></td></tr></table></figure>
-
-<p> 特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。</p>
-</li>
-<li><p>强制类型转换：</p>
-<p>a.需要使用强转符：()</p>
-<p>b.注意点：强制类型转换，可能导致精度损失。</p>
-</li>
-<li><p>说明：此时的容量大小指的是，表示数的范围的大和小。比如：float容量要大于long的容量</p>
-</li>
-</ol>
-<h3 id="String类型变量的使用"><a href="#String类型变量的使用" class="headerlink" title="String类型变量的使用"></a>String类型变量的使用</h3><ol>
-<li><p>String属于引用数据类型,翻译为：字符串</p>
-</li>
-<li><p>声明String类型变量时，使用一对” “</p>
-</li>
-<li><p>String可以和8种基本数据类型变量做运算，且运算只能是连接运算：+</p>
-</li>
-<li><p>运算的结果仍然是String类型</p>
-<hr>
-</li>
-</ol>
-<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h3><p>太简单，不说了</p>
-<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>介绍一个特别的：instanceof</p>
-<p>作用是检查是否是类的对象，例如： “Hello” instanceof String &#x3D; true</p>
-<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;—逻辑与	 	| —逻辑或 	  ！—逻辑非 </p>
-<p>&amp;&amp; —短路与 	|| —短路或 	^ —逻辑异或</p>
-<ul>
-<li>“&amp;”和“&amp;&amp;”的区别： <ul>
-<li>单&amp;时，左边无论真假，右边都进行运算； </li>
-<li>双&amp;时，如果左边为真，右边参与运算，如果左边为假，那么右边不参与运算。</li>
-</ul>
-</li>
-<li>“|”和“||”的区别同理，||表示：当左边为真，右边不参与运算。</li>
-</ul>
-<h3 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符"></a>三元运算符</h3><p>格式： (表达式1)?表达式2：表达式3；</p>
-<p>若表达式1的结果为真则执行<strong>表达式2</strong>，若为假则执行<strong>表达式3</strong></p>
-<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
-<li><p>表达式1,表达式2,表达式3的类型可以不同，进行自动类型转换（提升）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="literal">true</span> ? <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1</span>) : <span class="keyword">new</span> <span class="title class_">Double</span>(<span class="number">2.0</span>);</span><br><span class="line">System.out.println(o1);<span class="comment">//1.0</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>条件表达式不能取代一般的if语句,仅当if语句中内嵌的语句为赋值语句(且两个分支都给同一变量赋值)时才能代替if语句，例如：</p>
-</li>
-</ol>
-   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line">  printf(<span class="string">&quot;even/n&quot;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//不能写成</span></span><br><span class="line">(a%<span class="number">2</span>==<span class="number">0</span>)?printf(<span class="string">&quot;even/n&quot;</span>):printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//但是可以写成</span></span><br><span class="line">printf(<span class="string">&quot;%s/n&quot;</span>,(a%<span class="number">2</span>==<span class="number">0</span>?<span class="string">&quot;even&quot;</span>:<span class="string">&quot;odd&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<h3 id="运算符的优先级"><a href="#运算符的优先级" class="headerlink" title="运算符的优先级"></a>运算符的优先级</h3><table>
-<thead>
-<tr>
-<th align="center">运算顺序（从左往右或从右往左）</th>
-<th align="center">运算符</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"></td>
-<td align="center">.    ()      {}      ;      ,</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">++  –  ~    !()</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">*      &#x2F;     %</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&lt;&lt;  &gt;&gt;   &gt;&gt;&gt;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&lt;  &gt;  &lt;&#x3D;  &gt;&#x3D;    instanceof</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&#x3D;&#x3D;      !&#x3D;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&amp;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">^</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">|</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&amp;&amp;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">||</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">?    :</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">&#x3D;    *&#x3D;    &#x2F;&#x3D;   %&#x3D;</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
-<li>数组本身是引用数据类型，而数组中的元素可以是任何数据类型，包括 基本数据类型和引用数据类型。</li>
-<li>创建数组对象会在内存中开辟一整块连续的空间，而数组名中引用的是 这块连续空间的首地址。 </li>
-<li>数组的长度一旦确定，就不能修改。 </li>
-<li>我们可以直接通过下标(或索引)的方式调用指定位置的元素，速度很快。</li>
-</ul>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h4><ol>
-<li><p>一维数组的声明</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">type <span class="keyword">var</span>[] 或 type[] <span class="keyword">var</span>；</span><br></pre></td></tr></table></figure>
-
-<p>Java语言中声明数组时不能指定其长度(数组中元素的数)， 例如： int a[5]; <strong>&#x2F;&#x2F;非法</strong></p>
-</li>
-<li><p>初始化</p>
-<ul>
-<li><p>动态初始化：数组声明且为数组元素分配空间与赋值的操作分开进行</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">3</span>];</span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">3</span>;</span><br><span class="line">arr[<span class="number">1</span>] = <span class="number">9</span>;</span><br><span class="line">arr[<span class="number">2</span>] = <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">String names[];</span><br><span class="line">names = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">3</span>];</span><br><span class="line">names[<span class="number">0</span>] = “钱学森”;</span><br><span class="line">names[<span class="number">1</span>] = “邓稼先”;</span><br><span class="line">names[<span class="number">2</span>] = “袁隆平”;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<ul>
-<li><p>静态初始化：在定义数组的同时就为数组元素分配空间并赋值。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> arr[] = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123; <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>&#125;;</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="type">int</span>[] arr = &#123;<span class="number">3</span>,<span class="number">9</span>,<span class="number">8</span>&#125;;</span><br><span class="line"></span><br><span class="line">String names[] = &#123;</span><br><span class="line">“李四光”,“茅以升”,“华罗庚”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="数组元素的默认初始化值"><a href="#数组元素的默认初始化值" class="headerlink" title="数组元素的默认初始化值"></a>数组元素的默认初始化值</h3><table>
-<thead>
-<tr>
-<th align="center">数组元素类型</th>
-<th align="center">元素默认初始值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">byte</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">short</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">0L</td>
-</tr>
-<tr>
-<td align="center">float</td>
-<td align="center">0.0F</td>
-</tr>
-<tr>
-<td align="center">double</td>
-<td align="center">0.0</td>
-</tr>
-<tr>
-<td align="center">char</td>
-<td align="center">0或‘\u0000’(表现为空)</td>
-</tr>
-<tr>
-<td align="center">boolean</td>
-<td align="center">false</td>
-</tr>
-<tr>
-<td align="center">应用类型</td>
-<td align="center">null</td>
-</tr>
-</tbody></table>
-<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><ol>
-<li><p>声明和初始化</p>
-<ul>
-<li><p>格式1（动态初始化）：int[][] arr &#x3D; new int[3][2];</p>
-<p>定义了名称为arr的二维数组 </p>
-<p>二维数组中有3个一维数组 </p>
-<p>每一个一维数组中有2个元素 一维数组的名称分别为arr[0], arr[1], arr[2] </p>
-<p>给第一个一维数组1脚标位赋值为78写法是：arr[0][1] &#x3D; 78;</p>
-</li>
-<li><p>格式2（动态初始化）：int[][] arr &#x3D; new int[3][];</p>
-<p>二维数组中有3个一维数组。 </p>
-<p>每个一维数组都是默认初始化值null (注意：区别于格式1）</p>
-<p> 可以对这个三个一维数组分别进行初始化 </p>
-<p>arr[0] &#x3D; new int[3]; arr[1] &#x3D; new int[1]; </p>
-<p>arr[2] &#x3D; new int[2];</p>
-</li>
-</ul>
-<p><strong>注： int[][]arr &#x3D; new int[][3]; &#x2F;&#x2F;非法</strong></p>
-</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java基础知识总结（下）</title>
     <url>/2020/05/06/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8B%EF%BC%89/</url>
     <content><![CDATA[<h2 id="final关键字"><a href="#final关键字" class="headerlink" title="final关键字"></a>final关键字</h2><p>在Java中声明类、变量和方法时，可使用关键字final来修饰,表示“最终的”</p>
@@ -1681,6 +1351,362 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyExpTest</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">regist</span><span class="params">(<span class="type">int</span> num)</span> <span class="keyword">throws</span> MyException &#123;</span><br><span class="line">    <span class="keyword">if</span> (num &lt; <span class="number">0</span>)</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">MyException</span>(<span class="string">&quot;人数为负值，不合理&quot;</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      System.out.println(<span class="string">&quot;登记人数&quot;</span> + num);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">manager</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      regist(<span class="number">100</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (MyException e) &#123;</span><br><span class="line">      System.out.print(<span class="string">&quot;登记失败，出错种类&quot;</span> + e.getId());</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.print(<span class="string">&quot;本次登记操作结束&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> &#123;</span><br><span class="line">    <span class="type">MyExpTest</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyExpTest</span>();</span><br><span class="line">    t.manager();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <img src="/images/Java基础知识总结（下）/image-20200512204401486.png" alt="image-20200512204401486" style="zoom: 67%;" />]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java基础知识总结（上）</title>
+    <url>/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="Java中的注释"><a href="#Java中的注释" class="headerlink" title="Java中的注释"></a>Java中的注释</h2><ol>
+<li><p>单行注释   &#x2F;&#x2F;</p>
+</li>
+<li><p>多行注释  &#x2F;*   *&#x2F;</p>
+<p>单行注释和多行注释的作用：</p>
+<p>① 对所写的程序进行解释说明，增强可读性。方便自己，方便别人</p>
+<p>② 调试所写的代码</p>
+</li>
+<li><p>文档注释  &#x2F;**   *&#x2F;</p>
+<p>注释内容可以被JDK提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档。</p>
+<hr>
+</li>
+</ol>
+<h2 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h2><ol>
+<li><p>标识符：凡是自己可以起名字的地方都叫标识符。</p>
+<p>  比如：类名、变量名、方法名、接口名、包名…</p>
+</li>
+<li><p>标识符的命名规则：–&gt; 如果不遵守如下的规则，编译不通过！</p>
+<p>① 由26个英文字母大小写，0-9 ，_或 $ 组成 </p>
+<p>②数字不可以开头。</p>
+<p>③不可以使用关键字和保留字，但能包含关键字和保留字。</p>
+<p>④Java中严格区分大小写，长度无限制。</p>
+<p>⑤标识符不能包含空格。</p>
+</li>
+<li><p>Java中的名称命名规范： —&gt;如果不遵守如下的规范，编译可以通过！</p>
+<p>包名：多单词组成时所有字母都小写：xxxyyyzzz</p>
+<p>类名、接口名：多单词组成时，所有单词的首字母大写：XxxYyyZzz</p>
+<p>变量名、方法名：多单词组成时，第一个单词首字母小写，第二个单词开始每个单词首字母大写：xxxYyyZzz</p>
+<p>常量名：所有字母都大写。多单词时每个单词用下划线连接：XXX_YYY_ZZZ</p>
+</li>
+<li><p>注意1：在起名字时，为了提高阅读性，要尽量有意义，“见名知意”。</p>
+<p>注意2：java采用unicode字符集，因此标识符也可以使用汉字声明，但是不建议使用。 </p>
+<hr>
+</li>
+</ol>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><ol>
+<li><p>变量按照数据类型来分：<br>a. 基本数据类型：</p>
+<p>​    整型：byte \ short \ int \ long</p>
+<p>​    浮点型：float \ double</p>
+<p>​    字符型：char</p>
+<p>​    布尔型：boolean</p>
+<p> b. 引用数据类型：</p>
+<pre><code>   类(class)
+
+      接口(interface)
+
+      数组(array)
+</code></pre>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">占用存储空间</th>
+<th align="center">表示数据范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">byte</td>
+<td align="center">1字节&#x3D;8bit</td>
+<td align="center">-128~127</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">2字节</td>
+<td align="center">-2^15 ~2^15 -1</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">4字节</td>
+<td align="center">-2^31 ~2^31 -1</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">8字节</td>
+<td align="center">-2^62 ~2^62 -1</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">4字节</td>
+<td align="center">-3.403E38 ~ 3.403E38</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">8字节</td>
+<td align="center">-1.798E308 ~ 1.798E308</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>java的整型常量默认为 int 型，声明long型常量须后加‘l’或‘L’</strong> </li>
+<li><strong>java程序中变量通常声明为int型，除非不足以表示较大的数，才使用long</strong></li>
+</ul>
+<p>转义字符：</p>
+<table>
+<thead>
+<tr>
+<th>转义字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\b</td>
+<td>退格符</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行符</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>回车符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>制表符</td>
+</tr>
+<tr>
+<td>\“</td>
+<td>双引号</td>
+</tr>
+<tr>
+<td>\‘</td>
+<td>单引号</td>
+</tr>
+<tr>
+<td>\\</td>
+<td>反斜线</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><p>变量在类中声明的位置：</p>
+<p>​    成员变量 vs 局部变量</p>
+</li>
+</ol>
+<h3 id="定义格式"><a href="#定义格式" class="headerlink" title="定义格式"></a>定义格式</h3><ol>
+<li><p>java定义变量的格式：数据类型 变量名 &#x3D; 变量值;</p>
+</li>
+<li><p>说明：</p>
+<p>  ① 变量必须先声明，后使用</p>
+<p>  ② 变量都定义在其作用域内。在作用域内，它是有效的。换句话说，出了作用域，就失效了</p>
+<p>  ③ 同一个作用域内，不可以声明两个同名的变量</p>
+</li>
+</ol>
+<h3 id="运算规则"><a href="#运算规则" class="headerlink" title="运算规则"></a>运算规则</h3><p>基本数据类型之间的运算规则：</p>
+<p>前提：这里讨论只是7种基本数据类型变量间的运算。不包含boolean类型的。</p>
+<ol>
+<li><p>自动类型提升：</p>
+<p> 结论：当容量小的数据类型的变量与容量大的数据类型的变量做运算时，结果自动提升为容量大的数据类型。</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph LR</span><br><span class="line">char --&gt; int</span><br><span class="line">byte --&gt; int</span><br><span class="line">short --&gt; int --&gt; long --&gt; float --&gt; double</span><br></pre></td></tr></table></figure>
+
+<p> 特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。</p>
+</li>
+<li><p>强制类型转换：</p>
+<p>a.需要使用强转符：()</p>
+<p>b.注意点：强制类型转换，可能导致精度损失。</p>
+</li>
+<li><p>说明：此时的容量大小指的是，表示数的范围的大和小。比如：float容量要大于long的容量</p>
+</li>
+</ol>
+<h3 id="String类型变量的使用"><a href="#String类型变量的使用" class="headerlink" title="String类型变量的使用"></a>String类型变量的使用</h3><ol>
+<li><p>String属于引用数据类型,翻译为：字符串</p>
+</li>
+<li><p>声明String类型变量时，使用一对” “</p>
+</li>
+<li><p>String可以和8种基本数据类型变量做运算，且运算只能是连接运算：+</p>
+</li>
+<li><p>运算的结果仍然是String类型</p>
+<hr>
+</li>
+</ol>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h3><p>太简单，不说了</p>
+<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>介绍一个特别的：instanceof</p>
+<p>作用是检查是否是类的对象，例如： “Hello” instanceof String &#x3D; true</p>
+<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;—逻辑与	 	| —逻辑或 	  ！—逻辑非 </p>
+<p>&amp;&amp; —短路与 	|| —短路或 	^ —逻辑异或</p>
+<ul>
+<li>“&amp;”和“&amp;&amp;”的区别： <ul>
+<li>单&amp;时，左边无论真假，右边都进行运算； </li>
+<li>双&amp;时，如果左边为真，右边参与运算，如果左边为假，那么右边不参与运算。</li>
+</ul>
+</li>
+<li>“|”和“||”的区别同理，||表示：当左边为真，右边不参与运算。</li>
+</ul>
+<h3 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符"></a>三元运算符</h3><p>格式： (表达式1)?表达式2：表达式3；</p>
+<p>若表达式1的结果为真则执行<strong>表达式2</strong>，若为假则执行<strong>表达式3</strong></p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
+<li><p>表达式1,表达式2,表达式3的类型可以不同，进行自动类型转换（提升）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="literal">true</span> ? <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1</span>) : <span class="keyword">new</span> <span class="title class_">Double</span>(<span class="number">2.0</span>);</span><br><span class="line">System.out.println(o1);<span class="comment">//1.0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>条件表达式不能取代一般的if语句,仅当if语句中内嵌的语句为赋值语句(且两个分支都给同一变量赋值)时才能代替if语句，例如：</p>
+</li>
+</ol>
+   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line">  printf(<span class="string">&quot;even/n&quot;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//不能写成</span></span><br><span class="line">(a%<span class="number">2</span>==<span class="number">0</span>)?printf(<span class="string">&quot;even/n&quot;</span>):printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//但是可以写成</span></span><br><span class="line">printf(<span class="string">&quot;%s/n&quot;</span>,(a%<span class="number">2</span>==<span class="number">0</span>?<span class="string">&quot;even&quot;</span>:<span class="string">&quot;odd&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="运算符的优先级"><a href="#运算符的优先级" class="headerlink" title="运算符的优先级"></a>运算符的优先级</h3><table>
+<thead>
+<tr>
+<th align="center">运算顺序（从左往右或从右往左）</th>
+<th align="center">运算符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"></td>
+<td align="center">.    ()      {}      ;      ,</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">++  –  ~    !()</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">*      &#x2F;     %</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&lt;&lt;  &gt;&gt;   &gt;&gt;&gt;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&lt;  &gt;  &lt;&#x3D;  &gt;&#x3D;    instanceof</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&#x3D;&#x3D;      !&#x3D;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&amp;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">^</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">|</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&amp;&amp;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">||</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">?    :</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">&#x3D;    *&#x3D;    &#x2F;&#x3D;   %&#x3D;</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
+<li>数组本身是引用数据类型，而数组中的元素可以是任何数据类型，包括 基本数据类型和引用数据类型。</li>
+<li>创建数组对象会在内存中开辟一整块连续的空间，而数组名中引用的是 这块连续空间的首地址。 </li>
+<li>数组的长度一旦确定，就不能修改。 </li>
+<li>我们可以直接通过下标(或索引)的方式调用指定位置的元素，速度很快。</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h4><ol>
+<li><p>一维数组的声明</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">type <span class="keyword">var</span>[] 或 type[] <span class="keyword">var</span>；</span><br></pre></td></tr></table></figure>
+
+<p>Java语言中声明数组时不能指定其长度(数组中元素的数)， 例如： int a[5]; <strong>&#x2F;&#x2F;非法</strong></p>
+</li>
+<li><p>初始化</p>
+<ul>
+<li><p>动态初始化：数组声明且为数组元素分配空间与赋值的操作分开进行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">3</span>];</span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">3</span>;</span><br><span class="line">arr[<span class="number">1</span>] = <span class="number">9</span>;</span><br><span class="line">arr[<span class="number">2</span>] = <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">String names[];</span><br><span class="line">names = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">3</span>];</span><br><span class="line">names[<span class="number">0</span>] = “钱学森”;</span><br><span class="line">names[<span class="number">1</span>] = “邓稼先”;</span><br><span class="line">names[<span class="number">2</span>] = “袁隆平”;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ul>
+<li><p>静态初始化：在定义数组的同时就为数组元素分配空间并赋值。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> arr[] = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123; <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>&#125;;</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="type">int</span>[] arr = &#123;<span class="number">3</span>,<span class="number">9</span>,<span class="number">8</span>&#125;;</span><br><span class="line"></span><br><span class="line">String names[] = &#123;</span><br><span class="line">“李四光”,“茅以升”,“华罗庚”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="数组元素的默认初始化值"><a href="#数组元素的默认初始化值" class="headerlink" title="数组元素的默认初始化值"></a>数组元素的默认初始化值</h3><table>
+<thead>
+<tr>
+<th align="center">数组元素类型</th>
+<th align="center">元素默认初始值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">byte</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">0L</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">0.0F</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">0.0</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">0或‘\u0000’(表现为空)</td>
+</tr>
+<tr>
+<td align="center">boolean</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center">应用类型</td>
+<td align="center">null</td>
+</tr>
+</tbody></table>
+<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><ol>
+<li><p>声明和初始化</p>
+<ul>
+<li><p>格式1（动态初始化）：int[][] arr &#x3D; new int[3][2];</p>
+<p>定义了名称为arr的二维数组 </p>
+<p>二维数组中有3个一维数组 </p>
+<p>每一个一维数组中有2个元素 一维数组的名称分别为arr[0], arr[1], arr[2] </p>
+<p>给第一个一维数组1脚标位赋值为78写法是：arr[0][1] &#x3D; 78;</p>
+</li>
+<li><p>格式2（动态初始化）：int[][] arr &#x3D; new int[3][];</p>
+<p>二维数组中有3个一维数组。 </p>
+<p>每个一维数组都是默认初始化值null (注意：区别于格式1）</p>
+<p> 可以对这个三个一维数组分别进行初始化 </p>
+<p>arr[0] &#x3D; new int[3]; arr[1] &#x3D; new int[1]; </p>
+<p>arr[2] &#x3D; new int[2];</p>
+</li>
+</ul>
+<p><strong>注： int[][]arr &#x3D; new int[][3]; &#x2F;&#x2F;非法</strong></p>
+</li>
+</ol>
+</li>
+</ol>
+]]></content>
       <categories>
         <category>学习笔记</category>
         <category>java</category>
@@ -2343,52 +2369,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java枚举类</title>
-    <url>/2020/06/16/Java%E6%9E%9A%E4%B8%BE%E7%B1%BB/</url>
-    <content><![CDATA[<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><p>在JDK5.0之前需要自定义枚举类，JDK5.0中新增了enum关键字，用来定义枚举类</p>
-<h2 id="枚举类的特点"><a href="#枚举类的特点" class="headerlink" title="枚举类的特点"></a>枚举类的特点</h2><ul>
-<li>枚举类对象的属性不允许被改动，所以应该使用private final修饰</li>
-<li>枚举类的被private final修饰的属性要在构造器中为期赋值</li>
-<li>若枚举类显式的定义了带参数的构造器，则在列出枚举值时也必须传入对应参数</li>
-</ul>
-<h1 id="自定义枚举类"><a href="#自定义枚举类" class="headerlink" title="自定义枚举类"></a>自定义枚举类</h1><ol>
-<li>私有化类的构造器，保证不能再类的外部创建其对象</li>
-<li>在类的内部穿件枚举类的实例，并用public static final修饰</li>
-<li>对象如果有实例变量，应该声明为private final，并在构造器中初始化</li>
-</ol>
-<span id="more"></span>
-
-<p>用季节来举例：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Season</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String NAME;<span class="comment">//季节的名称</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String DESC;<span class="comment">//季节的描述</span></span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">Season</span><span class="params">(String seasonName,String seasonDesc)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.NAME = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.DESC = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SPRING</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SUMMER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">AUTUMN</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">WINTER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;白雪皑皑&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="enum关键字定义枚举类"><a href="#enum关键字定义枚举类" class="headerlink" title="enum关键字定义枚举类"></a>enum关键字定义枚举类</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul>
-<li>用enum定义的枚举类默认继承了java.lang.Enum类，因此不能再继承其他类</li>
-<li>枚举类的构造器只能用private修饰</li>
-<li>枚举类的所有实例必须在枚举类中显式列出（用“,”分隔，“;”）结尾，列出的实例会自动添加public static final修饰</li>
-<li>必须要在枚举类的第一行声明枚举类对象</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">SeasonEnum</span> &#123;</span><br><span class="line">  SPRING(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春风又绿江南岸&quot;</span>),</span><br><span class="line">  SUMMER(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;映日荷花别样红&quot;</span>),</span><br><span class="line">  AUTUMN(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋水共长天一色&quot;</span>),</span><br><span class="line">  WINTER(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;窗含西岭千秋雪&quot;</span>);</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonName;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonDesc;</span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">SeasonEnum</span><span class="params">(String seasonName, String seasonDesc)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.seasonName = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.seasonDesc = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonName</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonName;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonDesc</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="Enum类的主要方法"><a href="#Enum类的主要方法" class="headerlink" title="Enum类的主要方法"></a>Enum类的主要方法</h1><ul>
-<li>values()方法：返回枚举类型的对象数组。该方法可以很方便地遍历所有的枚举值。 </li>
-<li>valueOf(String str)：可以把一个字符串转为对应的枚举类对象。要求字符串必须是枚举类对象的“名字”。如不是，会有运行时异常： IllegalArgumentException。 </li>
-<li>toString()：返回当前枚举类对象常量的名称</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java常用类</title>
     <url>/2020/06/06/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/</url>
     <content><![CDATA[<h1 id="字符串相关的类"><a href="#字符串相关的类" class="headerlink" title="字符串相关的类"></a>字符串相关的类</h1><h2 id="String类"><a href="#String类" class="headerlink" title="String类"></a>String类</h2><h3 id="String类的特性"><a href="#String类的特性" class="headerlink" title="String类的特性"></a>String类的特性</h3><ul>
@@ -2850,6 +2830,52 @@
       </tags>
   </entry>
   <entry>
+    <title>Java枚举类</title>
+    <url>/2020/06/16/Java%E6%9E%9A%E4%B8%BE%E7%B1%BB/</url>
+    <content><![CDATA[<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><p>在JDK5.0之前需要自定义枚举类，JDK5.0中新增了enum关键字，用来定义枚举类</p>
+<h2 id="枚举类的特点"><a href="#枚举类的特点" class="headerlink" title="枚举类的特点"></a>枚举类的特点</h2><ul>
+<li>枚举类对象的属性不允许被改动，所以应该使用private final修饰</li>
+<li>枚举类的被private final修饰的属性要在构造器中为期赋值</li>
+<li>若枚举类显式的定义了带参数的构造器，则在列出枚举值时也必须传入对应参数</li>
+</ul>
+<h1 id="自定义枚举类"><a href="#自定义枚举类" class="headerlink" title="自定义枚举类"></a>自定义枚举类</h1><ol>
+<li>私有化类的构造器，保证不能再类的外部创建其对象</li>
+<li>在类的内部穿件枚举类的实例，并用public static final修饰</li>
+<li>对象如果有实例变量，应该声明为private final，并在构造器中初始化</li>
+</ol>
+<span id="more"></span>
+
+<p>用季节来举例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Season</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String NAME;<span class="comment">//季节的名称</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String DESC;<span class="comment">//季节的描述</span></span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">Season</span><span class="params">(String seasonName,String seasonDesc)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.NAME = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.DESC = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SPRING</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SUMMER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">AUTUMN</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">WINTER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;白雪皑皑&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="enum关键字定义枚举类"><a href="#enum关键字定义枚举类" class="headerlink" title="enum关键字定义枚举类"></a>enum关键字定义枚举类</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul>
+<li>用enum定义的枚举类默认继承了java.lang.Enum类，因此不能再继承其他类</li>
+<li>枚举类的构造器只能用private修饰</li>
+<li>枚举类的所有实例必须在枚举类中显式列出（用“,”分隔，“;”）结尾，列出的实例会自动添加public static final修饰</li>
+<li>必须要在枚举类的第一行声明枚举类对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">SeasonEnum</span> &#123;</span><br><span class="line">  SPRING(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春风又绿江南岸&quot;</span>),</span><br><span class="line">  SUMMER(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;映日荷花别样红&quot;</span>),</span><br><span class="line">  AUTUMN(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋水共长天一色&quot;</span>),</span><br><span class="line">  WINTER(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;窗含西岭千秋雪&quot;</span>);</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonName;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonDesc;</span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">SeasonEnum</span><span class="params">(String seasonName, String seasonDesc)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.seasonName = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.seasonDesc = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonName</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonName;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonDesc</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Enum类的主要方法"><a href="#Enum类的主要方法" class="headerlink" title="Enum类的主要方法"></a>Enum类的主要方法</h1><ul>
+<li>values()方法：返回枚举类型的对象数组。该方法可以很方便地遍历所有的枚举值。 </li>
+<li>valueOf(String str)：可以把一个字符串转为对应的枚举类对象。要求字符串必须是枚举类对象的“名字”。如不是，会有运行时异常： IllegalArgumentException。 </li>
+<li>toString()：返回当前枚举类对象常量的名称</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LeetCode第一天</title>
     <url>/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/</url>
     <content><![CDATA[<blockquote>
@@ -2887,31 +2913,6 @@
         <tag>LeetCode</tag>
         <tag>算法</tag>
         <tag>数据结构</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux中的进程管理</title>
-    <url>/2020/05/22/Linux%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p>pa a    显示终端机下所有进程</p>
-<p>ps -A   查看所有进程（ps -e和-A是一样的效果，-e更常用一点）（这两个看到的比上面那个多些）</p>
-<p>ps u 以用户为主的格式来显示程序状况</p>
-<p>ps x 显示所有程序，不以终端机来区分</p>
-<p>lsof -i:端口号   根据指定的端口查询进程</p>
-<p>常用的组合命令：</p>
-<p>ps aux,然后再通过管道使用grep命令过滤查找特定的进程,然后再对特定的进程进行操作。</p>
-<p><strong>ps -ef|grep java|grep -v grep</strong> 显示出所有的java进程，去处掉当前的grep进程。</p>
-<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><p>kill -9 进程PID  	根据进程号结束进程</p>
-<p>killall -9 进程名 	根据进程名结束进程</p>
-<blockquote>
-<p>参考资料：<a href="https://blog.csdn.net/wojiaopanpan/article/details/7286430">https://blog.csdn.net/wojiaopanpan/article/details/7286430</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -3021,6 +3022,31 @@
 <p>格式：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chown</span> user:user fileName</span><br></pre></td></tr></table></figure>
 
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux中的进程管理</title>
+    <url>/2020/05/22/Linux%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p>pa a    显示终端机下所有进程</p>
+<p>ps -A   查看所有进程（ps -e和-A是一样的效果，-e更常用一点）（这两个看到的比上面那个多些）</p>
+<p>ps u 以用户为主的格式来显示程序状况</p>
+<p>ps x 显示所有程序，不以终端机来区分</p>
+<p>lsof -i:端口号   根据指定的端口查询进程</p>
+<p>常用的组合命令：</p>
+<p>ps aux,然后再通过管道使用grep命令过滤查找特定的进程,然后再对特定的进程进行操作。</p>
+<p><strong>ps -ef|grep java|grep -v grep</strong> 显示出所有的java进程，去处掉当前的grep进程。</p>
+<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><p>kill -9 进程PID  	根据进程号结束进程</p>
+<p>killall -9 进程名 	根据进程名结束进程</p>
+<blockquote>
+<p>参考资料：<a href="https://blog.csdn.net/wojiaopanpan/article/details/7286430">https://blog.csdn.net/wojiaopanpan/article/details/7286430</a></p>
+</blockquote>
 ]]></content>
       <categories>
         <category>学习笔记</category>
@@ -3235,6 +3261,22 @@
       <tags>
         <tag>服务器</tag>
         <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PVE直通硬盘到TrueNAS</title>
+    <url>/2022/07/16/PVE%20%E7%9B%B4%E9%80%9A%E7%A1%AC%E7%9B%98%E5%88%B0TrueNAS/</url>
+    <content><![CDATA[<h1 id="1-查询所有的硬盘识别码"><a href="#1-查询所有的硬盘识别码" class="headerlink" title="1.查询所有的硬盘识别码"></a>1.查询所有的硬盘识别码</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -la /dev/disk/by-id/|grep -v dm|grep -v lvm|grep -v part</span><br></pre></td></tr></table></figure>
+
+<h1 id="2-将硬盘直通到TrueNAS"><a href="#2-将硬盘直通到TrueNAS" class="headerlink" title="2.将硬盘直通到TrueNAS"></a>2.将硬盘直通到TrueNAS</h1><p>vmid是TrueNAS虚拟机的编号，x是编号，若此虚拟机没有sata设备，则从从0开始，xxxx为硬盘识别码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">qm set &lt;vmid&gt; --sata[x] /dev/disk/by-id/[xxxxxxx]</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>PVE</category>
+      </categories>
+      <tags>
+        <tag>配置</tag>
+        <tag>PVE</tag>
       </tags>
   </entry>
   <entry>
@@ -3537,22 +3579,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Ubuntu中设置http强制重定向为https</title>
-    <url>/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/</url>
-    <content><![CDATA[<h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
-<h3 id="2-设置http端口重定向"><a href="#2-设置http端口重定向" class="headerlink" title="2.设置http端口重定向"></a>2.设置http端口重定向</h3><p>将下面这段放到要重定向的站点配置文件里面，放在&lt;\VirtualHost *:80&gt;&lt;\VirtualHost&gt; 标签内的任何位置都行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">RewriteEngine on</span><br><span class="line">RewriteCond  %&#123;HTTPS&#125; !=on</span><br><span class="line">RewriteRule  ^(.*)  https://%&#123;SERVER_NAME&#125;<span class="variable">$1</span> [L,R]</span><br></pre></td></tr></table></figure>
-
-<h3 id="重启apach2"><a href="#重启apach2" class="headerlink" title="重启apach2"></a>重启apach2</h3><p>service apache2 restart</p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>IntelliJ Idea配置类和方法的注释模板</title>
     <url>/2020/04/15/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/</url>
     <content><![CDATA[<h2 id="设置类的注释模板"><a href="#设置类的注释模板" class="headerlink" title="设置类的注释模板"></a>设置类的注释模板</h2><p><img src="/images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/SZLA4oF5vn3hMyG.png" alt="image.png"></p>
@@ -3587,6 +3613,22 @@
       </categories>
       <tags>
         <tag>idea</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ubuntu中设置http强制重定向为https</title>
+    <url>/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/</url>
+    <content><![CDATA[<h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
+<h3 id="2-设置http端口重定向"><a href="#2-设置http端口重定向" class="headerlink" title="2.设置http端口重定向"></a>2.设置http端口重定向</h3><p>将下面这段放到要重定向的站点配置文件里面，放在&lt;\VirtualHost *:80&gt;&lt;\VirtualHost&gt; 标签内的任何位置都行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">RewriteEngine on</span><br><span class="line">RewriteCond  %&#123;HTTPS&#125; !=on</span><br><span class="line">RewriteRule  ^(.*)  https://%&#123;SERVER_NAME&#125;<span class="variable">$1</span> [L,R]</span><br></pre></td></tr></table></figure>
+
+<h3 id="重启apach2"><a href="#重启apach2" class="headerlink" title="重启apach2"></a>重启apach2</h3><p>service apache2 restart</p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -3771,13 +3813,13 @@
   <entry>
     <title>令人心动的offer观后感</title>
     <url>/2020/03/12/%E4%BB%A4%E4%BA%BA%E5%BF%83%E5%8A%A8%E7%9A%84offer%E8%A7%82%E5%90%8E%E6%84%9F/</url>
-    <content><![CDATA[<p>&amp;emsp;&amp;emsp;经过差不多一星期，把令人心动的offer给看完了，其实很舍不得的，不管是电视剧还是综艺或者是小说，只要有情节的，每次看完我都挺舍不得的，因为之后就看不到那些人了。在看的那段时间，或许自己心里就把他们给当成朋友了，看完一部之后就像和好友惜别，所以总是心里会有点难过。</p>
-<p>&amp;emsp;&amp;emsp;就不多扯了，说说自己这些天看的感受吧！</p>
+    <content><![CDATA[<p>经过差不多一星期，把令人心动的offer给看完了，其实很舍不得的，不管是电视剧还是综艺或者是小说，只要有情节的，每次看完我都挺舍不得的，因为之后就看不到那些人了。在看的那段时间，或许自己心里就把他们给当成朋友了，看完一部之后就像和好友惜别，所以总是心里会有点难过。</p>
+<p>就不多扯了，说说自己这些天看的感受吧！</p>
 <span id="more"></span>
 
-<p>&amp;emsp;&amp;emsp;这八位实习生真的都十分优秀，除了李晨还要加把油，其实李晨这一个月的实习成长也是非常之快的，从第一期开始几乎算是没入律师的门，说话也结结巴巴、比较拖沓，到第二期第三期一点一点的进步，到最后一期说话都流畅很多了，可以及时get导对手的点并给予反击，成长是很大的。而且，李晨除了能力，他也有很多其他的优点，比如可爱的表情，有一期就是因为他的可爱让邓冰莹选择他为队友，在职场中让别人和自己相处的很舒适也别人选择你作为队友、同事的一个优点。然后李浩源真的是才华横溢，总是出口成章，每句从他嘴里出来的话都是金句，逻辑思维也是十分的强，还参加过诗词大会，和我这种俗人真的是比不了，写个感受都写成这样（手动滑稽）。摘记一下他在节目中说过的金句，第一次面试的时候说的：<strong>作为一只“菜鸟”，希望能得到一次宝贵的机会。我期望这里能是“菜鸟”翱翔的起点，我亦深知，若是鲲鹏，而非北海不就的道理。</strong>在最后的面试的时候说的：<strong>我有足够的积累，但是又一直在路上，所以有无限的可能。</strong>这两句真的都是非常非常的喜欢。优秀的人总是这么优秀，太喜欢浩源的才华了。何运晨也是相当的优秀，他和浩源一起配合简直是完美，两个人十分的契合，互相都能get到对方的点，知音相遇啊，好运来组合这得是完美。其他人就不一个一个说了。（感觉我在记流水账，毫无才华可言，和这些优秀的人比起来简直是无地自容）</p>
-<p>&amp;emsp;&amp;emsp;这部综艺真正吸引我的地方，是让我了解到从象牙塔初入社会实习的这样的一个状况是怎样的，这也是我一直都想知道的，在这部综艺中一点一滴的体现着。我是从知乎上面看到的一点小片段，当时那个片段我觉得很励志，就把名字记了下来，本来都忘这回事了，一个无聊的下午想起来了，就搜了一下，然后就一发不可收拾，一集一集的看完了，每天都看，一天不看就觉得心里空落落的，每集也都很有趣，也很励志，最后也被这些人给成功圈粉了，人格魅力啊，这真的太强了。</p>
-<p>&amp;emsp;&amp;emsp;看完之后也自己反省了一下，第一个，自己是不是应该多看些书，多积累些知识，什么是腹有诗书气自华，李浩源就是最好的解释了，整个人的气场都是完全不一样，我觉得这是我应该要学习的地方，还要多读书，现在应该要从读小说，到读那些无聊的书了，那些书才能真正的提升人的一个认知，就比如：乌合之众，买了放那好久没看，几次拿起来看看不下去，又给放回书架上面，这个学期静下心来把这本书给啃完，在好多地方都看到推荐这本书了。第二个是口头的表达能力，我觉得自己就是李晨吧，可能李晨都不如，表达能力太差了，有的时候说一件事都说不清楚，这也是自己需要提升的地方。第三个是人际交往的能力，这一方面现在来说我觉得自己还是可以的，比之前有很大的进步了，但还是可以继续提升。其实，我觉得人际交往和自己的自信有关，自信又和第一点提到的，自己的知识储备有关，也和第二点提到的口头表达能里有关，也是人际交往的一个基本能力吧。</p>
+<p>这八位实习生真的都十分优秀，除了李晨还要加把油，其实李晨这一个月的实习成长也是非常之快的，从第一期开始几乎算是没入律师的门，说话也结结巴巴、比较拖沓，到第二期第三期一点一点的进步，到最后一期说话都流畅很多了，可以及时get导对手的点并给予反击，成长是很大的。而且，李晨除了能力，他也有很多其他的优点，比如可爱的表情，有一期就是因为他的可爱让邓冰莹选择他为队友，在职场中让别人和自己相处的很舒适也别人选择你作为队友、同事的一个优点。然后李浩源真的是才华横溢，总是出口成章，每句从他嘴里出来的话都是金句，逻辑思维也是十分的强，还参加过诗词大会，和我这种俗人真的是比不了，写个感受都写成这样（手动滑稽）。摘记一下他在节目中说过的金句，第一次面试的时候说的：<strong>作为一只“菜鸟”，希望能得到一次宝贵的机会。我期望这里能是“菜鸟”翱翔的起点，我亦深知，若是鲲鹏，而非北海不就的道理。</strong>在最后的面试的时候说的：<strong>我有足够的积累，但是又一直在路上，所以有无限的可能。</strong>这两句真的都是非常非常的喜欢。优秀的人总是这么优秀，太喜欢浩源的才华了。何运晨也是相当的优秀，他和浩源一起配合简直是完美，两个人十分的契合，互相都能get到对方的点，知音相遇啊，好运来组合这得是完美。其他人就不一个一个说了。（感觉我在记流水账，毫无才华可言，和这些优秀的人比起来简直是无地自容）</p>
+<p>这部综艺真正吸引我的地方，是让我了解到从象牙塔初入社会实习的这样的一个状况是怎样的，这也是我一直都想知道的，在这部综艺中一点一滴的体现着。我是从知乎上面看到的一点小片段，当时那个片段我觉得很励志，就把名字记了下来，本来都忘这回事了，一个无聊的下午想起来了，就搜了一下，然后就一发不可收拾，一集一集的看完了，每天都看，一天不看就觉得心里空落落的，每集也都很有趣，也很励志，最后也被这些人给成功圈粉了，人格魅力啊，这真的太强了。</p>
+<p>看完之后也自己反省了一下，第一个，自己是不是应该多看些书，多积累些知识，什么是腹有诗书气自华，李浩源就是最好的解释了，整个人的气场都是完全不一样，我觉得这是我应该要学习的地方，还要多读书，现在应该要从读小说，到读那些无聊的书了，那些书才能真正的提升人的一个认知，就比如：乌合之众，买了放那好久没看，几次拿起来看看不下去，又给放回书架上面，这个学期静下心来把这本书给啃完，在好多地方都看到推荐这本书了。第二个是口头的表达能力，我觉得自己就是李晨吧，可能李晨都不如，表达能力太差了，有的时候说一件事都说不清楚，这也是自己需要提升的地方。第三个是人际交往的能力，这一方面现在来说我觉得自己还是可以的，比之前有很大的进步了，但还是可以继续提升。其实，我觉得人际交往和自己的自信有关，自信又和第一点提到的，自己的知识储备有关，也和第二点提到的口头表达能里有关，也是人际交往的一个基本能力吧。</p>
 ]]></content>
       <categories>
         <category>感悟</category>
@@ -3790,14 +3832,14 @@
   <entry>
     <title>入坑hexo</title>
     <url>/2020/02/26/%E5%85%A5%E5%9D%91hexo/</url>
-    <content><![CDATA[<p>&amp;emsp; &amp;emsp;经过两天的努力，终于把hexo配置好了，虽然有些地方还是不太满意，但也就只能到这里了，干不下去了，就这样用着吧。</p>
-<p>&amp;emsp;&amp;emsp;现在是把它放在白嫖来的阿里云的服务器上，本来是放到GitHub上的，结果发现GitHub的加载速度实在是太“感人了”，我就放弃了。这个服务器今年八月份就过期了，之后不知道这个博客会何去何从，可能会自己再买一个，可能就不会再挂到服务器上了。</p>
+    <content><![CDATA[<p>经过两天的努力，终于把hexo配置好了，虽然有些地方还是不太满意，但也就只能到这里了，干不下去了，就这样用着吧。</p>
+<p>现在是把它放在白嫖来的阿里云的服务器上，本来是放到GitHub上的，结果发现GitHub的加载速度实在是太“感人了”，我就放弃了。这个服务器今年八月份就过期了，之后不知道这个博客会何去何从，可能会自己再买一个，可能就不会再挂到服务器上了。</p>
 <span id="more"></span>
 
-<p>&amp;emsp;&amp;emsp;搞这个也算是完成了自己的一个夙愿吧，本来上学期在学校就想建一个博客，奈何在学校时间有限，当时是临近期末，还要备考，看了一下大概就放弃了（当时看见还要装一大堆东西就不想搞，不知道看的谁的教程，居然还要装ruby🌚）。趁着现在这个特殊时期，待在家没太多事，就折腾了两天，弄了一下。</p>
-<p>&amp;emsp;&amp;emsp;现在对Markdown的语法还不是很熟，写起来不是很顺手，就上个学期搞课设的时候写了一点，排版还很丑（手动滑稽），明天抽空看一下练习一下吧，补几篇笔记。</p>
-<p>&amp;emsp;&amp;emsp;就到这里吧。。。。。。</p>
-<p>&amp;emsp;&amp;emsp;希望可以坚持写下去，不要白费两天的功夫。</p>
+<p>搞这个也算是完成了自己的一个夙愿吧，本来上学期在学校就想建一个博客，奈何在学校时间有限，当时是临近期末，还要备考，看了一下大概就放弃了（当时看见还要装一大堆东西就不想搞，不知道看的谁的教程，居然还要装ruby🌚）。趁着现在这个特殊时期，待在家没太多事，就折腾了两天，弄了一下。</p>
+<p>现在对Markdown的语法还不是很熟，写起来不是很顺手，就上个学期搞课设的时候写了一点，排版还很丑（手动滑稽），明天抽空看一下练习一下吧，补几篇笔记。</p>
+<p>就到这里吧。。。。。。</p>
+<p>希望可以坚持写下去，不要白费两天的功夫。</p>
 ]]></content>
       <categories>
         <category>感悟</category>
@@ -4279,23 +4321,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《时生》读后感</title>
-    <url>/2020/03/13/%E6%97%B6%E7%94%9F%E8%AF%BB%E5%90%8E%E6%84%9F/</url>
-    <content><![CDATA[<p>&amp;emsp;&amp;emsp;这本书也是很符合东野圭吾的风格，讲的是穿越的故事，很像我看的他的第一本书——《解忧杂货店》，但是给人的感觉却不一样。</p>
-<p>&amp;emsp;&amp;emsp;小说主人公是时生，也就是拓实的儿子，拓实与丽子生下的有重病的儿子。故事是以插叙的手法进描绘的，这也很符合东野圭吾的风格。从拓实和丽子结婚开始，中间插叙了他们认识之前的那些故事，时生穿越时空主要是帮助他爸爸拓实，重新认识自己的身份，放下对其生母美须子的恨意，通过这件事之后也改变了拓实为人处世的态度，让他的生活一步步走向正轨。</p>
-<p>&amp;emsp;&amp;emsp;最喜欢的几句原文：</p>
-<p>&amp;emsp;&amp;emsp;“未来不仅仅是明天，未来在人心中，只要心中有未来，人就能幸福起来，因为有人教了你母亲这个，她才将你生下来，可你看着自己们整天牢骚满腹，不思进取，你感受不到未来不能怪别人，要怪你自己，因为你是个混蛋！”</p>
-<p>&amp;emsp;&amp;emsp;“确信自己喜欢的人能好好地活着，即便面对死亡，也看到了未来。”</p>
-]]></content>
-      <categories>
-        <category>感悟</category>
-        <category>小说</category>
-      </categories>
-      <tags>
-        <tag>感悟</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>用ssh公钥配对登录服务器</title>
     <url>/2020/03/01/%E7%94%A8ssh%E5%85%AC%E9%92%A5%E9%85%8D%E5%AF%B9%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
     <content><![CDATA[<h3 id="1-生成公钥"><a href="#1-生成公钥" class="headerlink" title="1.生成公钥"></a>1.生成公钥</h3><p>ssh-keygen -t rsa -b 4096 -C “你的邮箱地址”</p>
@@ -4315,6 +4340,23 @@
       <tags>
         <tag>服务器</tag>
         <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《时生》读后感</title>
+    <url>/2020/03/13/%E6%97%B6%E7%94%9F%E8%AF%BB%E5%90%8E%E6%84%9F/</url>
+    <content><![CDATA[<p>&amp;emsp;&amp;emsp;这本书也是很符合东野圭吾的风格，讲的是穿越的故事，很像我看的他的第一本书——《解忧杂货店》，但是给人的感觉却不一样。</p>
+<p>&amp;emsp;&amp;emsp;小说主人公是时生，也就是拓实的儿子，拓实与丽子生下的有重病的儿子。故事是以插叙的手法进描绘的，这也很符合东野圭吾的风格。从拓实和丽子结婚开始，中间插叙了他们认识之前的那些故事，时生穿越时空主要是帮助他爸爸拓实，重新认识自己的身份，放下对其生母美须子的恨意，通过这件事之后也改变了拓实为人处世的态度，让他的生活一步步走向正轨。</p>
+<p>&amp;emsp;&amp;emsp;最喜欢的几句原文：</p>
+<p>&amp;emsp;&amp;emsp;“未来不仅仅是明天，未来在人心中，只要心中有未来，人就能幸福起来，因为有人教了你母亲这个，她才将你生下来，可你看着自己们整天牢骚满腹，不思进取，你感受不到未来不能怪别人，要怪你自己，因为你是个混蛋！”</p>
+<p>&amp;emsp;&amp;emsp;“确信自己喜欢的人能好好地活着，即便面对死亡，也看到了未来。”</p>
+]]></content>
+      <categories>
+        <category>感悟</category>
+        <category>小说</category>
+      </categories>
+      <tags>
+        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -4543,6 +4585,49 @@
       </categories>
       <tags>
         <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>魔改NexT主题</title>
+    <url>/2022/07/28/%E9%AD%94%E6%94%B9NexT%E4%B8%BB%E9%A2%98/</url>
+    <content><![CDATA[<ul>
+<li>hexo版本：6.2.0</li>
+<li>NexT版本：8.12.2</li>
+<li>NodeJS版本：16.16</li>
+</ul>
+<h1 id="背景修改canvas-nest"><a href="#背景修改canvas-nest" class="headerlink" title="背景修改canvas-nest"></a>背景修改<a href="https://github.com/theme-next/theme-next-canvas-nest">canvas-nest</a></h1><h2 id="step1"><a href="#step1" class="headerlink" title="step1"></a>step1</h2><p>在next主题文件夹根目录下的<code>layout/_layout.njk</code>中加入如下代码到footer标签后面即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% if theme.canvas_nest.enable %&#125;</span><br><span class="line"></span><br><span class="line">&lt;script color=&quot;&#123;&#123; theme.canvas_nest.color &#125;&#125;&quot; </span><br><span class="line">        opacity=&quot;&#123;&#123; theme.canvas_nest.opacity &#125;&#125;&quot; </span><br><span class="line">        zIndex=&quot;&#123;&#123; theme.canvas_nest.zIndex &#125;&#125;&quot; </span><br><span class="line">        count=&quot;&#123;&#123; theme.canvas_nest.count &#125;&#125;&quot; </span><br><span class="line">        src=&quot;https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js&quot;&gt;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="step2"><a href="#step2" class="headerlink" title="step2"></a>step2</h2><p>在next主题的配置文件（<code>_config.yml</code>）最后面，加入如下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Canvas-nest</span><br><span class="line"># Dependencies: https://github.com/theme-next/theme-next-canvas-nest</span><br><span class="line"># For more information: https://github.com/hustcc/canvas-nest.js</span><br><span class="line">canvas_nest:</span><br><span class="line">  enable: true</span><br><span class="line">  color: &quot;0, 0, 0&quot; # RGB values, use `,` to separate</span><br><span class="line">  opacity: 0.7 # The opacity of line: 0~1</span><br><span class="line">  zIndex: -1 # z-index property of the background</span><br><span class="line">  count: 120 # The number of lines</span><br></pre></td></tr></table></figure>
+
+<p>参数可以根据个人需求修改，color代表线条颜色，opacity为线条透明度，zIndex为层级，一般不需要修改，count为线条数量，数字越大线条越多。</p>
+<h2 id="step3（可忽略）"><a href="#step3（可忽略）" class="headerlink" title="step3（可忽略）"></a>step3（可忽略）</h2><p>为了满足个人审美需求，还将页面主体部分透明度设为100%，侧边栏badge字体颜色透明度不与主体部分保持一致，修改如下：</p>
+<h3 id="主体透明度修改"><a href="#主体透明度修改" class="headerlink" title="主体透明度修改"></a>主体透明度修改</h3><p>修改主题根目录下的<code>\source\css\_variables\base.styl</code>文件，将<code>$body-bg-color</code>和<code>$content-bg-color</code>值修改为<code>#fff0</code></p>
+<h3 id="修改侧边栏badge字体颜色"><a href="#修改侧边栏badge字体颜色" class="headerlink" title="修改侧边栏badge字体颜色"></a>修改侧边栏badge字体颜色</h3><p>修改主题根目录下的<code>source\css\_schemes\Pisces\_menu.styl</code>文件，将<code> .badge</code>中的<code>color</code>修改为rgb(255, 255, 255)</p>
+<p>效果如图所示：</p>
+<img src="\images\魔改NexT主题\image-20220728113746502.png" alt="image-20220728113746502"/>
+
+<h1 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h1><h1 id="搞怪标题"><a href="#搞怪标题" class="headerlink" title="搞怪标题"></a>搞怪标题</h1><p>在主题根目录<code>layout</code>文件夹下新建一个<code>custom.njk</code>，加入如下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;# 搞怪网页标题 #&#125; </span><br><span class="line">&#123;% if theme.title_trick.enable %&#125;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">  var OriginTitile = document.title;</span><br><span class="line">  var titleTime;</span><br><span class="line">  //换网站的logo</span><br><span class="line">  function selfSetIcon(url)&#123;</span><br><span class="line">		var links = document.getElementsByTagName(&#x27;link&#x27;) </span><br><span class="line">		for (var i = 0; i &lt; links.length; i++) &#123; </span><br><span class="line">			var link = links[i]</span><br><span class="line">			var rel = link.rel; </span><br><span class="line">            var count = 0;</span><br><span class="line">			rel = rel.toLowerCase(); </span><br><span class="line">			if (rel.indexOf(&#x27;icon&#x27;) == 0) &#123; </span><br><span class="line">                count++;</span><br><span class="line">				link.href = url;</span><br><span class="line">                if(count == 2)</span><br><span class="line">				    break;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">  </span><br><span class="line">  document.addEventListener(&quot;visibilitychange&quot;, function() &#123;</span><br><span class="line">    if (document.hidden) &#123;</span><br><span class="line">      document.title = &quot;&#123;&#123; theme.title_trick.leave &#125;&#125;&quot; + OriginTitile;</span><br><span class="line">      selfSetIcon(&quot;&#123;&#123; theme.title_trick.logo &#125;&#125;&quot;);</span><br><span class="line">      clearTimeout(titleTime);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      selfSetIcon(&quot;&#123;&#123; theme.favicon.medium &#125;&#125;&quot;);</span><br><span class="line">      document.title = &quot;&#123;&#123; theme.title_trick.enter &#125;&#125;&quot; + OriginTitile;</span><br><span class="line">      titleTime = setTimeout(function() &#123;</span><br><span class="line">        document.title = OriginTitile;</span><br><span class="line">        </span><br><span class="line">      &#125;, 2000);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改同级目录<code>_layout.njk</code>，在<code>&#123;&#123;- next_inject('bodyEnd') &#125;&#125;</code>前面加入如下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% include &#x27;custom.njk&#x27; %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在主题配置文件末尾加入如下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">title_trick:</span><br><span class="line">  enable: true</span><br><span class="line">  leave: &quot;(●—●)喔噢，崩溃了~|&quot;</span><br><span class="line">  enter: &quot;φ(&gt;ω&lt;*) 咦！又好了！|&quot;</span><br><span class="line">  logo: &quot;https://muggletan.github.io/images/failure.ico&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>NexT</category>
+      </categories>
+      <tags>
+        <tag>配置</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
 </search>
