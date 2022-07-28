@@ -34,6 +34,32 @@
       </tags>
   </entry>
   <entry>
+    <title>I217-V在openwrt下大流量断网问题</title>
+    <url>/2022/07/15/I217-V%E5%9C%A8openwrt%E8%BD%AF%E8%B7%AF%E7%94%B1%E4%B8%8B%E5%A4%A7%E6%B5%81%E9%87%8F%E6%96%AD%E7%BD%91%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近跟着up司波图在玩一个AIO（All In One）服务器，也就是将软路由，NAS系统以及影音系统都集成到一个物理系统中，我用的是之前买的一个M73的小主机，里面的mini-PCIE插槽扩展了一个螃蟹RTL8111的千兆网卡，主机自带的是Intel的I217-V千兆网卡。</p>
+<p>经过一天的使用下来发现每次大流量下载或上传时，openwrt都会断一下，开始还以为是openwrt系统的问题，后来经过一番资料搜索，发现是pve下面的这张Intel网卡有问题，查看了pve系统的日志，发现了如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pve kernel: e1000e 0000:00:19.0 eno1: Detected Hardware Unit Hang:</span><br></pre></td></tr></table></figure>
+<p>这和搜索到的情况一样，于是就确定是这张Intel网卡的问题。</p>
+<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>造成该问题的原因是Intel网卡固件的bug</p>
+<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>在pve虚拟机下关掉网卡的offload功能</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ethtool -K &lt;网卡编号&gt; tx off rx off &gt;/tmp/e1000e.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+
+<p>为了方便，不需要每次重启虚拟机之后都手动来关掉，这里设置了一个自启动脚本，原理是pve虚拟机每次启动的呃时候都会扫描<code>/etc/profile.d</code>下面的<code>.sh</code>文件，所以办法很简单，在改文件夹下面新建一个e1000e.sh的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/profile.d/e1000e.sh</span><br></pre></td></tr></table></figure>
+<p>然后填入上面的命令即可</p>
+<p>参考链接：</p>
+<p><a href="https://blog.csdn.net/wudics/article/details/124402110">解决在x86平台装openwrt旁路由大流量断网问题（intel网卡驱动bug问题）</a></p>
+<p><a href="https://blog.csdn.net/sxyllxy/article/details/110631505">openWRT在M93p上出现的Detected Hardware Unit Hang</a></p>
+]]></content>
+      <categories>
+        <category>软路由</category>
+      </categories>
+      <tags>
+        <tag>软路由</tag>
+        <tag>配置</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java中看似简单实际很坑的题目</title>
     <url>/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/</url>
     <content><![CDATA[<h3 id="第一题（貌似是考察方法的参数传递）"><a href="#第一题（貌似是考察方法的参数传递）" class="headerlink" title="第一题（貌似是考察方法的参数传递）"></a>第一题（貌似是考察方法的参数传递）</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 20;</span><br><span class="line">    method(a,b);//在调用method()方法之后输出a = 100,b = 200</span><br><span class="line">    System.out.println(&quot;a = &quot; + a);</span><br><span class="line">    System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  &#125;</span><br><span class="line">  static void method(int a,int b)&#123;</span><br><span class="line">    //代码编写处</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -97,29 +123,133 @@
       </tags>
   </entry>
   <entry>
-    <title>I217-V在openwrt下大流量断网问题</title>
-    <url>/2022/07/15/I217-V%E5%9C%A8openwrt%E8%BD%AF%E8%B7%AF%E7%94%B1%E4%B8%8B%E5%A4%A7%E6%B5%81%E9%87%8F%E6%96%AD%E7%BD%91%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近跟着up司波图在玩一个AIO（All In One）服务器，也就是将软路由，NAS系统以及影音系统都集成到一个物理系统中，我用的是之前买的一个M73的小主机，里面的mini-PCIE插槽扩展了一个螃蟹RTL8111的千兆网卡，主机自带的是Intel的I217-V千兆网卡。</p>
-<p>经过一天的使用下来发现每次大流量下载或上传时，openwrt都会断一下，开始还以为是openwrt系统的问题，后来经过一番资料搜索，发现是pve下面的这张Intel网卡有问题，查看了pve系统的日志，发现了如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pve kernel: e1000e 0000:00:19.0 eno1: Detected Hardware Unit Hang:</span><br></pre></td></tr></table></figure>
-<p>这和搜索到的情况一样，于是就确定是这张Intel网卡的问题。</p>
-<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>造成该问题的原因是Intel网卡固件的bug</p>
-<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>在pve虚拟机下关掉网卡的offload功能</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ethtool -K &lt;网卡编号&gt; tx off rx off &gt;/tmp/e1000e.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+    <title>Java基础之泛型</title>
+    <url>/2020/06/28/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%B3%9B%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="泛型的概念"><a href="#泛型的概念" class="headerlink" title="泛型的概念"></a>泛型的概念</h1><h2 id="设计背景"><a href="#设计背景" class="headerlink" title="设计背景"></a>设计背景</h2><p>集合容器类在设计阶段&#x2F;声明阶段不能确定这个容器到底实际存的是什么类型的对象，所以在JDK1.5之前只能把元素类型设计为Object，JDK1.5之后使用泛型来解决。因为这个时候除了元素的类型不确定，其他的部分是确定的，例如关于这个元素如何保存，如何管理等是确定的，因此此时把元素的类型设计成一个参数，这个类型参数叫做泛型。Collection&lt;E&gt;，List&lt;E&gt;，ArrayList&lt;E&gt; 这个就&lt;E&gt;是类型参数，即泛型。</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>所谓泛型，就是允许在定义类、接口时通过一个标识表示类中某个属性的类型或者是某个方法的返回值及参数类型。这个类型参数将在使用时（例如， 继承或实现这个接口，用这个类型声明变量、创建对象时）确定（即传入实 际的类型参数，也称为类型实参）。</p>
+<p>从JDK1.5以后，Java引入了“参数化类型（Parameterized type）”的概念， 允许我们在创建集合时指定集合元素的类型，正如：List&lt;String&gt;，这表明该List只能保存字符串类型的对象。</p>
+<p>JDK1.5改写了集合框架中的全部接口和类，为这些接口、类增加了泛型支持，从而可以在声明集合变量、创建集合对象时传入类型实参。</p>
+<span id="more"></span>
 
-<p>为了方便，不需要每次重启虚拟机之后都手动来关掉，这里设置了一个自启动脚本，原理是pve虚拟机每次启动的呃时候都会扫描<code>/etc/profile.d</code>下面的<code>.sh</code>文件，所以办法很简单，在改文件夹下面新建一个e1000e.sh的文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/profile.d/e1000e.sh</span><br></pre></td></tr></table></figure>
-<p>然后填入上面的命令即可</p>
-<p>参考链接：</p>
-<p><a href="https://blog.csdn.net/wudics/article/details/124402110">解决在x86平台装openwrt旁路由大流量断网问题（intel网卡驱动bug问题）</a></p>
-<p><a href="https://blog.csdn.net/sxyllxy/article/details/110631505">openWRT在M93p上出现的Detected Hardware Unit Hang</a></p>
+<h2 id="泛型的作用"><a href="#泛型的作用" class="headerlink" title="泛型的作用"></a>泛型的作用</h2><ol>
+<li>解决元素存储的安全性问题，好比商品、药品标签，不会弄错。 </li>
+<li>解决获取数据元素时，需要类型强制转换的问题，好比不用每回拿商品、药品都要辨别。</li>
+</ol>
+<img data-src="/images/Java基础之泛型/image-20200628145513962.png" alt="image-20200628145513962" style="zoom:80%;" />
+
+<p><img data-src="/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%B3%9B%E5%9E%8B/image-20200628145525503.png" alt="image-20200628145525503"></p>
+<p><img data-src="/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%B3%9B%E5%9E%8B/image-20200628145525503.png" alt="image-20200628145525503"></p>
+<p>Java泛型可以保证如果程序在编译时没有发出警告，运行时就不会产生ClassCastException异常。同时，代码更加简洁、健壮。</p>
+<h1 id="在集合中使用泛型"><a href="#在集合中使用泛型" class="headerlink" title="在集合中使用泛型"></a>在集合中使用泛型</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();<span class="comment">//类型推断</span></span><br><span class="line">list.add(<span class="number">78</span>);</span><br><span class="line">list.add(<span class="number">88</span>);</span><br><span class="line">list.add(<span class="number">77</span>);</span><br><span class="line">list.add(<span class="number">66</span>);</span><br><span class="line"><span class="comment">//遍历方式一：</span></span><br><span class="line"><span class="keyword">for</span>(Integer i : list)&#123;</span><br><span class="line"><span class="comment">//不需要强转</span></span><br><span class="line">System.out.println(i);</span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line"><span class="comment">//遍历方式二：</span></span><br><span class="line">Iterator&lt;Integer&gt; iterator = list.iterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">  System.out.println(iterator.next());</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line">Map&lt;String,Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String,Integer&gt;();</span><br><span class="line">map.put(<span class="string">&quot;Tom1&quot;</span>,<span class="number">34</span>);</span><br><span class="line">map.put(<span class="string">&quot;Tom2&quot;</span>,<span class="number">44</span>);</span><br><span class="line">map.put(<span class="string">&quot;Tom3&quot;</span>,<span class="number">33</span>);</span><br><span class="line">map.put(<span class="string">&quot;Tom4&quot;</span>,<span class="number">32</span>);</span><br><span class="line"><span class="comment">//添加失败</span></span><br><span class="line"><span class="comment">//map.put(33, &quot;Tom&quot;);</span></span><br><span class="line">Set&lt;Entry&lt;String,Integer&gt;&gt; entrySet = map.entrySet();</span><br><span class="line">Iterator&lt;Entry&lt;String,Integer&gt;&gt; iterator = entrySet.iterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">  Entry&lt;String,Integer&gt; entry = iterator.next();</span><br><span class="line">  System.out.println(entry.getKey() + <span class="string">&quot;---&gt;&quot;</span> + entry.getValue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="自定义泛型结构"><a href="#自定义泛型结构" class="headerlink" title="自定义泛型结构"></a>自定义泛型结构</h1><ol>
+<li><p>泛型的声明</p>
+<p>interface List&lt;T&gt;和class GenTest&lt;K,V&gt;</p>
+<p>其中T、K、V不代表值，而是代表类型，使用任意字母都可以。</p>
+<p>常用T表示（Type）</p>
+</li>
+<li><p>泛型的实例化</p>
+<p>一定要在类名后面指定类型参数的值（类型）。 如：<br>List&lt;String&gt; strList &#x3D; new ArrayList&lt;String&gt;();<br>Iterator&lt;Customer&gt; iterator &#x3D; customers.iterator();</p>
+</li>
+</ol>
+<p><strong>注意：</strong></p>
+<ul>
+<li>T只能是类名，不能用基本数据类型填充，可以用包装类填充。</li>
+<li><strong>把一个集合中的内容限制为一个特定的数据类型，这就是generics背后的核心思想</strong></li>
+</ul>
+<p>使用泛型的主要一个有点就是能够在编译时而不是在运行时检测错误。</p>
+<h2 id="泛型类、泛型接口"><a href="#泛型类、泛型接口" class="headerlink" title="泛型类、泛型接口"></a>泛型类、泛型接口</h2><ol>
+<li><p>泛型类堪忧多个参数，此时应将多个参数一起放到尖括号内，例如：&lt;E1,E2,E3&gt;</p>
+</li>
+<li><p>泛型类的构造器：public GenericClass(){}  错误写法：public GenericClass&lt;E&gt;(){}</p>
+</li>
+<li><p>实例化之后，操作原来泛型位置的结构必须与指定的泛型结构一致</p>
+</li>
+<li><p>泛型不同的引用不能互相赋值</p>
+</li>
+<li><p>泛型如果不指定，将被擦除，泛型对应的类型均按照Object处理，但不等价 于Object。</p>
+<p>泛型要使用一路都用。要不用，一路都不要用。</p>
+</li>
+<li><p>jdk1.7，泛型的简化操作：ArrayList&lt;Fruit&gt; flist &#x3D; new ArrayList&lt;&gt;();</p>
+</li>
+<li><p>泛型的指定中不能使用基本数据类型，可以使用包装类代替</p>
+</li>
+<li><p>不能使用new E[]。但是可以：E[] elements &#x3D; (E[])new Object[capacity]; </p>
+<p>参考：ArrayList源码中声明：Object[] elementData，而非泛型参数类型数组。</p>
+</li>
+<li><p>父类有泛型，子类可以选择保留泛型，也可以选择指定的泛型类型</p>
+<p>子类不保留父类的泛型：按需实现，子类没有指定泛型类型的话，默认为Object</p>
+<p>子类保留弗雷德泛型：泛型子类</p>
+<p>结论：子类必须是“富二代”，子类除了指定或保留父类的泛型，还可以增加自己的泛型</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类不保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)没有类型 擦除</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son1</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;<span class="comment">// 等价于class Son extends Father&lt;Object,Object&gt;&#123;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)具体类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son2</span> <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, String&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)全部保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son3</span>&lt;T1, T2&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)部分保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son4</span>&lt;T2&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类不保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)没有类型 擦除</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son</span>&lt;A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&#123;<span class="comment">//等价于class Son extends Father&lt;Object,Object&gt;&#123;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)具体类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son2</span>&lt;A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, String&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)全部保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son3</span>&lt;T1, T2, A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)部分保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son4</span>&lt;T2, A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, T2&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><p>方法，也可以被泛型化，不管此时定义在其中的类是不是泛型类。在泛型方法中可以定义泛型参数，此时，参数的类型就是传入数据的类型。</p>
+<p>泛型方法格式：[访问权限] &lt;泛型&gt; 返回类型 方法名([泛型标识 参数名称]) 抛出的异常</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="keyword">void</span> <span class="title function_">fromArrayToCollection</span><span class="params">(T[] a, Collection&lt;T&gt; c)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (T o : a) &#123;</span><br><span class="line">    c.add(o);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">  Object[] ao = <span class="keyword">new</span> <span class="title class_">Object</span>[<span class="number">100</span>];</span><br><span class="line">  Collection&lt;Object&gt; co = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Object&gt;();</span><br><span class="line">  fromArrayToCollection(ao, co);</span><br><span class="line">  String[] sa = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">20</span>];</span><br><span class="line">  Collection&lt;String&gt; cs = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">  fromArrayToCollection(sa, cs);</span><br><span class="line">  Collection&lt;Double&gt; cd = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">  <span class="comment">// 下面代码中T是Double类，但sa是String类型，编译错误。</span></span><br><span class="line">  <span class="comment">// fromArrayToCollection(sa, cd);</span></span><br><span class="line">  <span class="comment">// 下面代码中T是Object类型，sa是String类型，可以赋值成功。</span></span><br><span class="line">  fromArrayToCollection(sa, co);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Creature</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> <span class="keyword">extends</span> <span class="title class_">Creature</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Man</span> <span class="keyword">extends</span> <span class="title class_">Person</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PersonTest</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T <span class="keyword">extends</span> <span class="title class_">Person</span>&gt; <span class="keyword">void</span> <span class="title function_">test</span><span class="params">(T t)</span>&#123;</span><br><span class="line">    System.out.println(t);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    test(<span class="keyword">new</span> <span class="title class_">Person</span>());</span><br><span class="line">    test(<span class="keyword">new</span> <span class="title class_">Man</span>());</span><br><span class="line">    <span class="comment">//The method test(T) in the type PersonTest is not</span></span><br><span class="line">    <span class="comment">//applicable for the arguments (Creature)</span></span><br><span class="line">    test(<span class="keyword">new</span> <span class="title class_">Creature</span>());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="泛型在继承上的体现"><a href="#泛型在继承上的体现" class="headerlink" title="泛型在继承上的体现"></a>泛型在继承上的体现</h1><p>如果B是A的一个子类型（子类或者子接口），而G是具有泛型声明的类或接口，G&lt;B&gt;并不是G的子类型&lt;A&gt;</p>
+<p>比如：String是Object的子类，但是List&lt;String&gt;并不是List&lt;Object&gt;的子类。</p>
+<h1 id="通配符的使用"><a href="#通配符的使用" class="headerlink" title="通配符的使用"></a>通配符的使用</h1><ul>
+<li><p>使用类型通配符：“？” </p>
+<p>比如：List&lt;?&gt; ，Map&lt;?,?&gt; </p>
+<p>List&lt;?&gt;是List&lt;String&gt;、List&lt;Object&gt;等各种泛型List的父类。</p>
+</li>
+<li><p>读取List&lt;?&gt;的对象list中的元素时，永远是安全的，因为不管list的真实类型是什么，它包含的都是Object。</p>
+</li>
+<li><p>不能向list写入元素，因为我们不知道c的元素类型，我们不能向其中添加对象，唯一的例外是null，它是所有类型的成员</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">  List&lt;?&gt; list = <span class="literal">null</span>;</span><br><span class="line">  list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line">  list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Double&gt;();</span><br><span class="line">  <span class="comment">// list.add(3);//编译不通过</span></span><br><span class="line">  list.add(<span class="literal">null</span>);</span><br><span class="line">  List&lt;String&gt; l1 = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line">  List&lt;Integer&gt; l2 = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">  l1.add(<span class="string">&quot;123&quot;</span>);</span><br><span class="line">  l2.add(<span class="number">15</span>);</span><br><span class="line">  read(l1);</span><br><span class="line">  read(l2);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">read</span><span class="params">(List&lt;?&gt; list)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (Object o : list) &#123;</span><br><span class="line">    System.out.println(o);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ol>
+<li><p>编译错误：不能用在泛型方法声明上，返回值类型前面的&lt;&gt;不能使用“?”，例如：</p>
+<p>public static &lt;?&gt; void test(ArrayList list){}</p>
+</li>
+<li><p>编译错误：不能用在泛型类的声明上</p>
+<p>class GenericTypeClass &lt;?&gt;{}</p>
+</li>
+<li><p>编译错误：不能用在创建对象上，右边属于创建集合对象</p>
+<p>ArrayList&lt;?&gt; list2 &#x3D; new ArrayList&lt;?&gt;();</p>
+</li>
+</ol>
+<h2 id="有限制的通配符"><a href="#有限制的通配符" class="headerlink" title="有限制的通配符"></a>有限制的通配符</h2><ul>
+<li><p>通配符指定上限 </p>
+<p>上限extends：使用时指定的类型必须是继承某个类，或者实现某个接口，即&lt;&#x3D; </p>
+</li>
+<li><p>通配符指定下限 </p>
+<p>下限super：使用时指定的类型不能小于操作的类，即&gt;&#x3D;</p>
+</li>
+<li><p>举例：</p>
+<ul>
+<li><p>&lt;? extends Number&gt;   (无穷小, Number]</p>
+<p>只允许泛型为Number及Number子类的引用调用</p>
+</li>
+<li><p>&lt;? super Number&gt;   [Number, 无穷大)</p>
+<p>只允许泛型为Number及其父类的引用调用</p>
+</li>
+<li><p>&lt;? entends Conparable&gt;</p>
+<p>只允许泛型为实现Comparable接口的实现类的引用调用</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">printCollection3</span><span class="params">(Collection&lt;? extends Person&gt; coll)</span> &#123;</span><br><span class="line">  <span class="comment">//Iterator只能用Iterator&lt;?&gt;或Iterator&lt;? extends Person&gt;.why?</span></span><br><span class="line">  Iterator&lt;?&gt; iterator = coll.iterator();</span><br><span class="line">  <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.println(iterator.next());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">printCollection4</span><span class="params">(Collection&lt;? <span class="built_in">super</span> Person&gt; coll)</span> &#123;</span><br><span class="line">  <span class="comment">//Iterator只能用Iterator&lt;?&gt;或Iterator&lt;? super Person&gt;.why?</span></span><br><span class="line">  Iterator&lt;?&gt; iterator = coll.iterator();</span><br><span class="line">  <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.println(iterator.next());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="泛型嵌套举例"><a href="#泛型嵌套举例" class="headerlink" title="泛型嵌套举例"></a>泛型嵌套举例</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">  HashMap&lt;String, ArrayList&lt;Citizen&gt;&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String, ArrayList&lt;Citizen&gt;&gt;();</span><br><span class="line">  ArrayList&lt;Citizen&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Citizen&gt;();</span><br><span class="line">  list.add(<span class="keyword">new</span> <span class="title class_">Citizen</span>(<span class="string">&quot;刘恺威&quot;</span>));</span><br><span class="line">  list.add(<span class="keyword">new</span> <span class="title class_">Citizen</span>(<span class="string">&quot;杨幂&quot;</span>));</span><br><span class="line">  list.add(<span class="keyword">new</span> <span class="title class_">Citizen</span>(<span class="string">&quot;小糯米&quot;</span>));</span><br><span class="line">  map.put(<span class="string">&quot;刘恺威&quot;</span>, list);</span><br><span class="line">  Set&lt;Entry&lt;String, ArrayList&lt;Citizen&gt;&gt;&gt; entrySet = map.entrySet();</span><br><span class="line">  Iterator&lt;Entry&lt;String, ArrayList&lt;Citizen&gt;&gt;&gt; iterator = entrySet.iterator();</span><br><span class="line">  <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    Entry&lt;String, ArrayList&lt;Citizen&gt;&gt; entry = iterator.next();</span><br><span class="line">    <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> entry.getKey();</span><br><span class="line">    ArrayList&lt;Citizen&gt; value = entry.getValue();</span><br><span class="line">    System.out.println(<span class="string">&quot;户主：&quot;</span> + key);</span><br><span class="line">    System.out.println(<span class="string">&quot;家庭成员：&quot;</span> + value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
-        <category>软路由</category>
+        <category>学习笔记</category>
+        <category>java</category>
       </categories>
       <tags>
-        <tag>软路由</tag>
-        <tag>配置</tag>
+        <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -385,125 +515,351 @@
       </tags>
   </entry>
   <entry>
-    <title>Java基础之泛型</title>
-    <url>/2020/06/28/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%B3%9B%E5%9E%8B/</url>
-    <content><![CDATA[<h1 id="泛型的概念"><a href="#泛型的概念" class="headerlink" title="泛型的概念"></a>泛型的概念</h1><h2 id="设计背景"><a href="#设计背景" class="headerlink" title="设计背景"></a>设计背景</h2><p>集合容器类在设计阶段&#x2F;声明阶段不能确定这个容器到底实际存的是什么类型的对象，所以在JDK1.5之前只能把元素类型设计为Object，JDK1.5之后使用泛型来解决。因为这个时候除了元素的类型不确定，其他的部分是确定的，例如关于这个元素如何保存，如何管理等是确定的，因此此时把元素的类型设计成一个参数，这个类型参数叫做泛型。Collection&lt;E&gt;，List&lt;E&gt;，ArrayList&lt;E&gt; 这个就&lt;E&gt;是类型参数，即泛型。</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>所谓泛型，就是允许在定义类、接口时通过一个标识表示类中某个属性的类型或者是某个方法的返回值及参数类型。这个类型参数将在使用时（例如， 继承或实现这个接口，用这个类型声明变量、创建对象时）确定（即传入实 际的类型参数，也称为类型实参）。</p>
-<p>从JDK1.5以后，Java引入了“参数化类型（Parameterized type）”的概念， 允许我们在创建集合时指定集合元素的类型，正如：List&lt;String&gt;，这表明该List只能保存字符串类型的对象。</p>
-<p>JDK1.5改写了集合框架中的全部接口和类，为这些接口、类增加了泛型支持，从而可以在声明集合变量、创建集合对象时传入类型实参。</p>
-<span id="more"></span>
-
-<h2 id="泛型的作用"><a href="#泛型的作用" class="headerlink" title="泛型的作用"></a>泛型的作用</h2><ol>
-<li>解决元素存储的安全性问题，好比商品、药品标签，不会弄错。 </li>
-<li>解决获取数据元素时，需要类型强制转换的问题，好比不用每回拿商品、药品都要辨别。</li>
-</ol>
-<img data-src="/images/Java基础之泛型/image-20200628145513962.png" alt="image-20200628145513962" style="zoom:80%;" />
-
-<p><img data-src="/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%B3%9B%E5%9E%8B/image-20200628145525503.png" alt="image-20200628145525503"></p>
-<p><img data-src="/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%B3%9B%E5%9E%8B/image-20200628145525503.png" alt="image-20200628145525503"></p>
-<p>Java泛型可以保证如果程序在编译时没有发出警告，运行时就不会产生ClassCastException异常。同时，代码更加简洁、健壮。</p>
-<h1 id="在集合中使用泛型"><a href="#在集合中使用泛型" class="headerlink" title="在集合中使用泛型"></a>在集合中使用泛型</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();<span class="comment">//类型推断</span></span><br><span class="line">list.add(<span class="number">78</span>);</span><br><span class="line">list.add(<span class="number">88</span>);</span><br><span class="line">list.add(<span class="number">77</span>);</span><br><span class="line">list.add(<span class="number">66</span>);</span><br><span class="line"><span class="comment">//遍历方式一：</span></span><br><span class="line"><span class="keyword">for</span>(Integer i : list)&#123;</span><br><span class="line"><span class="comment">//不需要强转</span></span><br><span class="line">System.out.println(i);</span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line"><span class="comment">//遍历方式二：</span></span><br><span class="line">Iterator&lt;Integer&gt; iterator = list.iterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">  System.out.println(iterator.next());</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line">Map&lt;String,Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String,Integer&gt;();</span><br><span class="line">map.put(<span class="string">&quot;Tom1&quot;</span>,<span class="number">34</span>);</span><br><span class="line">map.put(<span class="string">&quot;Tom2&quot;</span>,<span class="number">44</span>);</span><br><span class="line">map.put(<span class="string">&quot;Tom3&quot;</span>,<span class="number">33</span>);</span><br><span class="line">map.put(<span class="string">&quot;Tom4&quot;</span>,<span class="number">32</span>);</span><br><span class="line"><span class="comment">//添加失败</span></span><br><span class="line"><span class="comment">//map.put(33, &quot;Tom&quot;);</span></span><br><span class="line">Set&lt;Entry&lt;String,Integer&gt;&gt; entrySet = map.entrySet();</span><br><span class="line">Iterator&lt;Entry&lt;String,Integer&gt;&gt; iterator = entrySet.iterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">  Entry&lt;String,Integer&gt; entry = iterator.next();</span><br><span class="line">  System.out.println(entry.getKey() + <span class="string">&quot;---&gt;&quot;</span> + entry.getValue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="自定义泛型结构"><a href="#自定义泛型结构" class="headerlink" title="自定义泛型结构"></a>自定义泛型结构</h1><ol>
-<li><p>泛型的声明</p>
-<p>interface List&lt;T&gt;和class GenTest&lt;K,V&gt;</p>
-<p>其中T、K、V不代表值，而是代表类型，使用任意字母都可以。</p>
-<p>常用T表示（Type）</p>
+    <title>Java基础知识总结（上）</title>
+    <url>/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="Java中的注释"><a href="#Java中的注释" class="headerlink" title="Java中的注释"></a>Java中的注释</h2><ol>
+<li><p>单行注释   &#x2F;&#x2F;</p>
 </li>
-<li><p>泛型的实例化</p>
-<p>一定要在类名后面指定类型参数的值（类型）。 如：<br>List&lt;String&gt; strList &#x3D; new ArrayList&lt;String&gt;();<br>Iterator&lt;Customer&gt; iterator &#x3D; customers.iterator();</p>
+<li><p>多行注释  &#x2F;*   *&#x2F;</p>
+<p>单行注释和多行注释的作用：</p>
+<p>① 对所写的程序进行解释说明，增强可读性。方便自己，方便别人</p>
+<p>② 调试所写的代码</p>
+</li>
+<li><p>文档注释  &#x2F;**   *&#x2F;</p>
+<p>注释内容可以被JDK提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档。</p>
+<hr>
 </li>
 </ol>
-<p><strong>注意：</strong></p>
+<h2 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h2><ol>
+<li><p>标识符：凡是自己可以起名字的地方都叫标识符。</p>
+<p>  比如：类名、变量名、方法名、接口名、包名…</p>
+</li>
+<li><p>标识符的命名规则：–&gt; 如果不遵守如下的规则，编译不通过！</p>
+<p>① 由26个英文字母大小写，0-9 ，_或 $ 组成 </p>
+<p>②数字不可以开头。</p>
+<p>③不可以使用关键字和保留字，但能包含关键字和保留字。</p>
+<p>④Java中严格区分大小写，长度无限制。</p>
+<p>⑤标识符不能包含空格。</p>
+</li>
+<li><p>Java中的名称命名规范： —&gt;如果不遵守如下的规范，编译可以通过！</p>
+<p>包名：多单词组成时所有字母都小写：xxxyyyzzz</p>
+<p>类名、接口名：多单词组成时，所有单词的首字母大写：XxxYyyZzz</p>
+<p>变量名、方法名：多单词组成时，第一个单词首字母小写，第二个单词开始每个单词首字母大写：xxxYyyZzz</p>
+<p>常量名：所有字母都大写。多单词时每个单词用下划线连接：XXX_YYY_ZZZ</p>
+</li>
+<li><p>注意1：在起名字时，为了提高阅读性，要尽量有意义，“见名知意”。</p>
+<p>注意2：java采用unicode字符集，因此标识符也可以使用汉字声明，但是不建议使用。 </p>
+<hr>
+</li>
+</ol>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><ol>
+<li><p>变量按照数据类型来分：<br>a. 基本数据类型：</p>
+<p>​    整型：byte \ short \ int \ long</p>
+<p>​    浮点型：float \ double</p>
+<p>​    字符型：char</p>
+<p>​    布尔型：boolean</p>
+<p> b. 引用数据类型：</p>
+<pre><code>   类(class)
+
+      接口(interface)
+
+      数组(array)
+</code></pre>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">占用存储空间</th>
+<th align="center">表示数据范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">byte</td>
+<td align="center">1字节&#x3D;8bit</td>
+<td align="center">-128~127</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">2字节</td>
+<td align="center">-2^15 ~2^15 -1</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">4字节</td>
+<td align="center">-2^31 ~2^31 -1</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">8字节</td>
+<td align="center">-2^62 ~2^62 -1</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">4字节</td>
+<td align="center">-3.403E38 ~ 3.403E38</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">8字节</td>
+<td align="center">-1.798E308 ~ 1.798E308</td>
+</tr>
+</tbody></table>
 <ul>
-<li>T只能是类名，不能用基本数据类型填充，可以用包装类填充。</li>
-<li><strong>把一个集合中的内容限制为一个特定的数据类型，这就是generics背后的核心思想</strong></li>
+<li><strong>java的整型常量默认为 int 型，声明long型常量须后加‘l’或‘L’</strong> </li>
+<li><strong>java程序中变量通常声明为int型，除非不足以表示较大的数，才使用long</strong></li>
 </ul>
-<p>使用泛型的主要一个有点就是能够在编译时而不是在运行时检测错误。</p>
-<h2 id="泛型类、泛型接口"><a href="#泛型类、泛型接口" class="headerlink" title="泛型类、泛型接口"></a>泛型类、泛型接口</h2><ol>
-<li><p>泛型类堪忧多个参数，此时应将多个参数一起放到尖括号内，例如：&lt;E1,E2,E3&gt;</p>
-</li>
-<li><p>泛型类的构造器：public GenericClass(){}  错误写法：public GenericClass&lt;E&gt;(){}</p>
-</li>
-<li><p>实例化之后，操作原来泛型位置的结构必须与指定的泛型结构一致</p>
-</li>
-<li><p>泛型不同的引用不能互相赋值</p>
-</li>
-<li><p>泛型如果不指定，将被擦除，泛型对应的类型均按照Object处理，但不等价 于Object。</p>
-<p>泛型要使用一路都用。要不用，一路都不要用。</p>
-</li>
-<li><p>jdk1.7，泛型的简化操作：ArrayList&lt;Fruit&gt; flist &#x3D; new ArrayList&lt;&gt;();</p>
-</li>
-<li><p>泛型的指定中不能使用基本数据类型，可以使用包装类代替</p>
-</li>
-<li><p>不能使用new E[]。但是可以：E[] elements &#x3D; (E[])new Object[capacity]; </p>
-<p>参考：ArrayList源码中声明：Object[] elementData，而非泛型参数类型数组。</p>
-</li>
-<li><p>父类有泛型，子类可以选择保留泛型，也可以选择指定的泛型类型</p>
-<p>子类不保留父类的泛型：按需实现，子类没有指定泛型类型的话，默认为Object</p>
-<p>子类保留弗雷德泛型：泛型子类</p>
-<p>结论：子类必须是“富二代”，子类除了指定或保留父类的泛型，还可以增加自己的泛型</p>
+<p>转义字符：</p>
+<table>
+<thead>
+<tr>
+<th>转义字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\b</td>
+<td>退格符</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行符</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>回车符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>制表符</td>
+</tr>
+<tr>
+<td>\“</td>
+<td>双引号</td>
+</tr>
+<tr>
+<td>\‘</td>
+<td>单引号</td>
+</tr>
+<tr>
+<td>\\</td>
+<td>反斜线</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><p>变量在类中声明的位置：</p>
+<p>​    成员变量 vs 局部变量</p>
 </li>
 </ol>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类不保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)没有类型 擦除</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son1</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;<span class="comment">// 等价于class Son extends Father&lt;Object,Object&gt;&#123;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)具体类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son2</span> <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, String&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)全部保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son3</span>&lt;T1, T2&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)部分保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son4</span>&lt;T2&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类不保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)没有类型 擦除</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son</span>&lt;A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&#123;<span class="comment">//等价于class Son extends Father&lt;Object,Object&gt;&#123;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)具体类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son2</span>&lt;A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, String&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)全部保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son3</span>&lt;T1, T2, A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)部分保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son4</span>&lt;T2, A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, T2&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><p>方法，也可以被泛型化，不管此时定义在其中的类是不是泛型类。在泛型方法中可以定义泛型参数，此时，参数的类型就是传入数据的类型。</p>
-<p>泛型方法格式：[访问权限] &lt;泛型&gt; 返回类型 方法名([泛型标识 参数名称]) 抛出的异常</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="keyword">void</span> <span class="title function_">fromArrayToCollection</span><span class="params">(T[] a, Collection&lt;T&gt; c)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (T o : a) &#123;</span><br><span class="line">    c.add(o);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">  Object[] ao = <span class="keyword">new</span> <span class="title class_">Object</span>[<span class="number">100</span>];</span><br><span class="line">  Collection&lt;Object&gt; co = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Object&gt;();</span><br><span class="line">  fromArrayToCollection(ao, co);</span><br><span class="line">  String[] sa = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">20</span>];</span><br><span class="line">  Collection&lt;String&gt; cs = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">  fromArrayToCollection(sa, cs);</span><br><span class="line">  Collection&lt;Double&gt; cd = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">  <span class="comment">// 下面代码中T是Double类，但sa是String类型，编译错误。</span></span><br><span class="line">  <span class="comment">// fromArrayToCollection(sa, cd);</span></span><br><span class="line">  <span class="comment">// 下面代码中T是Object类型，sa是String类型，可以赋值成功。</span></span><br><span class="line">  fromArrayToCollection(sa, co);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Creature</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> <span class="keyword">extends</span> <span class="title class_">Creature</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Man</span> <span class="keyword">extends</span> <span class="title class_">Person</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PersonTest</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T <span class="keyword">extends</span> <span class="title class_">Person</span>&gt; <span class="keyword">void</span> <span class="title function_">test</span><span class="params">(T t)</span>&#123;</span><br><span class="line">    System.out.println(t);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    test(<span class="keyword">new</span> <span class="title class_">Person</span>());</span><br><span class="line">    test(<span class="keyword">new</span> <span class="title class_">Man</span>());</span><br><span class="line">    <span class="comment">//The method test(T) in the type PersonTest is not</span></span><br><span class="line">    <span class="comment">//applicable for the arguments (Creature)</span></span><br><span class="line">    test(<span class="keyword">new</span> <span class="title class_">Creature</span>());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="泛型在继承上的体现"><a href="#泛型在继承上的体现" class="headerlink" title="泛型在继承上的体现"></a>泛型在继承上的体现</h1><p>如果B是A的一个子类型（子类或者子接口），而G是具有泛型声明的类或接口，G&lt;B&gt;并不是G的子类型&lt;A&gt;</p>
-<p>比如：String是Object的子类，但是List&lt;String&gt;并不是List&lt;Object&gt;的子类。</p>
-<h1 id="通配符的使用"><a href="#通配符的使用" class="headerlink" title="通配符的使用"></a>通配符的使用</h1><ul>
-<li><p>使用类型通配符：“？” </p>
-<p>比如：List&lt;?&gt; ，Map&lt;?,?&gt; </p>
-<p>List&lt;?&gt;是List&lt;String&gt;、List&lt;Object&gt;等各种泛型List的父类。</p>
+<h3 id="定义格式"><a href="#定义格式" class="headerlink" title="定义格式"></a>定义格式</h3><ol>
+<li><p>java定义变量的格式：数据类型 变量名 &#x3D; 变量值;</p>
 </li>
-<li><p>读取List&lt;?&gt;的对象list中的元素时，永远是安全的，因为不管list的真实类型是什么，它包含的都是Object。</p>
+<li><p>说明：</p>
+<p>  ① 变量必须先声明，后使用</p>
+<p>  ② 变量都定义在其作用域内。在作用域内，它是有效的。换句话说，出了作用域，就失效了</p>
+<p>  ③ 同一个作用域内，不可以声明两个同名的变量</p>
 </li>
-<li><p>不能向list写入元素，因为我们不知道c的元素类型，我们不能向其中添加对象，唯一的例外是null，它是所有类型的成员</p>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">  List&lt;?&gt; list = <span class="literal">null</span>;</span><br><span class="line">  list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line">  list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Double&gt;();</span><br><span class="line">  <span class="comment">// list.add(3);//编译不通过</span></span><br><span class="line">  list.add(<span class="literal">null</span>);</span><br><span class="line">  List&lt;String&gt; l1 = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line">  List&lt;Integer&gt; l2 = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">  l1.add(<span class="string">&quot;123&quot;</span>);</span><br><span class="line">  l2.add(<span class="number">15</span>);</span><br><span class="line">  read(l1);</span><br><span class="line">  read(l2);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">read</span><span class="params">(List&lt;?&gt; list)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (Object o : list) &#123;</span><br><span class="line">    System.out.println(o);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
+</ol>
+<h3 id="运算规则"><a href="#运算规则" class="headerlink" title="运算规则"></a>运算规则</h3><p>基本数据类型之间的运算规则：</p>
+<p>前提：这里讨论只是7种基本数据类型变量间的运算。不包含boolean类型的。</p>
 <ol>
-<li><p>编译错误：不能用在泛型方法声明上，返回值类型前面的&lt;&gt;不能使用“?”，例如：</p>
-<p>public static &lt;?&gt; void test(ArrayList list){}</p>
+<li><p>自动类型提升：</p>
+<p> 结论：当容量小的数据类型的变量与容量大的数据类型的变量做运算时，结果自动提升为容量大的数据类型。</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph LR</span><br><span class="line">char --&gt; int</span><br><span class="line">byte --&gt; int</span><br><span class="line">short --&gt; int --&gt; long --&gt; float --&gt; double</span><br></pre></td></tr></table></figure>
+
+<p> 特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。</p>
 </li>
-<li><p>编译错误：不能用在泛型类的声明上</p>
-<p>class GenericTypeClass &lt;?&gt;{}</p>
+<li><p>强制类型转换：</p>
+<p>a.需要使用强转符：()</p>
+<p>b.注意点：强制类型转换，可能导致精度损失。</p>
 </li>
-<li><p>编译错误：不能用在创建对象上，右边属于创建集合对象</p>
-<p>ArrayList&lt;?&gt; list2 &#x3D; new ArrayList&lt;?&gt;();</p>
+<li><p>说明：此时的容量大小指的是，表示数的范围的大和小。比如：float容量要大于long的容量</p>
 </li>
 </ol>
-<h2 id="有限制的通配符"><a href="#有限制的通配符" class="headerlink" title="有限制的通配符"></a>有限制的通配符</h2><ul>
-<li><p>通配符指定上限 </p>
-<p>上限extends：使用时指定的类型必须是继承某个类，或者实现某个接口，即&lt;&#x3D; </p>
+<h3 id="String类型变量的使用"><a href="#String类型变量的使用" class="headerlink" title="String类型变量的使用"></a>String类型变量的使用</h3><ol>
+<li><p>String属于引用数据类型,翻译为：字符串</p>
 </li>
-<li><p>通配符指定下限 </p>
-<p>下限super：使用时指定的类型不能小于操作的类，即&gt;&#x3D;</p>
+<li><p>声明String类型变量时，使用一对” “</p>
 </li>
-<li><p>举例：</p>
+<li><p>String可以和8种基本数据类型变量做运算，且运算只能是连接运算：+</p>
+</li>
+<li><p>运算的结果仍然是String类型</p>
+<hr>
+</li>
+</ol>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h3><p>太简单，不说了</p>
+<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>介绍一个特别的：instanceof</p>
+<p>作用是检查是否是类的对象，例如： “Hello” instanceof String &#x3D; true</p>
+<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;—逻辑与	 	| —逻辑或 	  ！—逻辑非 </p>
+<p>&amp;&amp; —短路与 	|| —短路或 	^ —逻辑异或</p>
 <ul>
-<li><p>&lt;? extends Number&gt;   (无穷小, Number]</p>
-<p>只允许泛型为Number及Number子类的引用调用</p>
-</li>
-<li><p>&lt;? super Number&gt;   [Number, 无穷大)</p>
-<p>只允许泛型为Number及其父类的引用调用</p>
-</li>
-<li><p>&lt;? entends Conparable&gt;</p>
-<p>只允许泛型为实现Comparable接口的实现类的引用调用</p>
-</li>
+<li>“&amp;”和“&amp;&amp;”的区别： <ul>
+<li>单&amp;时，左边无论真假，右边都进行运算； </li>
+<li>双&amp;时，如果左边为真，右边参与运算，如果左边为假，那么右边不参与运算。</li>
 </ul>
 </li>
+<li>“|”和“||”的区别同理，||表示：当左边为真，右边不参与运算。</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">printCollection3</span><span class="params">(Collection&lt;? extends Person&gt; coll)</span> &#123;</span><br><span class="line">  <span class="comment">//Iterator只能用Iterator&lt;?&gt;或Iterator&lt;? extends Person&gt;.why?</span></span><br><span class="line">  Iterator&lt;?&gt; iterator = coll.iterator();</span><br><span class="line">  <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.println(iterator.next());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">printCollection4</span><span class="params">(Collection&lt;? <span class="built_in">super</span> Person&gt; coll)</span> &#123;</span><br><span class="line">  <span class="comment">//Iterator只能用Iterator&lt;?&gt;或Iterator&lt;? super Person&gt;.why?</span></span><br><span class="line">  Iterator&lt;?&gt; iterator = coll.iterator();</span><br><span class="line">  <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.println(iterator.next());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符"></a>三元运算符</h3><p>格式： (表达式1)?表达式2：表达式3；</p>
+<p>若表达式1的结果为真则执行<strong>表达式2</strong>，若为假则执行<strong>表达式3</strong></p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
+<li><p>表达式1,表达式2,表达式3的类型可以不同，进行自动类型转换（提升）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="literal">true</span> ? <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1</span>) : <span class="keyword">new</span> <span class="title class_">Double</span>(<span class="number">2.0</span>);</span><br><span class="line">System.out.println(o1);<span class="comment">//1.0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>条件表达式不能取代一般的if语句,仅当if语句中内嵌的语句为赋值语句(且两个分支都给同一变量赋值)时才能代替if语句，例如：</p>
+</li>
+</ol>
+   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line">  printf(<span class="string">&quot;even/n&quot;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//不能写成</span></span><br><span class="line">(a%<span class="number">2</span>==<span class="number">0</span>)?printf(<span class="string">&quot;even/n&quot;</span>):printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//但是可以写成</span></span><br><span class="line">printf(<span class="string">&quot;%s/n&quot;</span>,(a%<span class="number">2</span>==<span class="number">0</span>?<span class="string">&quot;even&quot;</span>:<span class="string">&quot;odd&quot;</span>);</span><br></pre></td></tr></table></figure>
 
-<h1 id="泛型嵌套举例"><a href="#泛型嵌套举例" class="headerlink" title="泛型嵌套举例"></a>泛型嵌套举例</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">  HashMap&lt;String, ArrayList&lt;Citizen&gt;&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String, ArrayList&lt;Citizen&gt;&gt;();</span><br><span class="line">  ArrayList&lt;Citizen&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Citizen&gt;();</span><br><span class="line">  list.add(<span class="keyword">new</span> <span class="title class_">Citizen</span>(<span class="string">&quot;刘恺威&quot;</span>));</span><br><span class="line">  list.add(<span class="keyword">new</span> <span class="title class_">Citizen</span>(<span class="string">&quot;杨幂&quot;</span>));</span><br><span class="line">  list.add(<span class="keyword">new</span> <span class="title class_">Citizen</span>(<span class="string">&quot;小糯米&quot;</span>));</span><br><span class="line">  map.put(<span class="string">&quot;刘恺威&quot;</span>, list);</span><br><span class="line">  Set&lt;Entry&lt;String, ArrayList&lt;Citizen&gt;&gt;&gt; entrySet = map.entrySet();</span><br><span class="line">  Iterator&lt;Entry&lt;String, ArrayList&lt;Citizen&gt;&gt;&gt; iterator = entrySet.iterator();</span><br><span class="line">  <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    Entry&lt;String, ArrayList&lt;Citizen&gt;&gt; entry = iterator.next();</span><br><span class="line">    <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> entry.getKey();</span><br><span class="line">    ArrayList&lt;Citizen&gt; value = entry.getValue();</span><br><span class="line">    System.out.println(<span class="string">&quot;户主：&quot;</span> + key);</span><br><span class="line">    System.out.println(<span class="string">&quot;家庭成员：&quot;</span> + value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="运算符的优先级"><a href="#运算符的优先级" class="headerlink" title="运算符的优先级"></a>运算符的优先级</h3><table>
+<thead>
+<tr>
+<th align="center">运算顺序（从左往右或从右往左）</th>
+<th align="center">运算符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"></td>
+<td align="center">.    ()      {}      ;      ,</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">++  –  ~    !()</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">*      &#x2F;     %</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&lt;&lt;  &gt;&gt;   &gt;&gt;&gt;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&lt;  &gt;  &lt;&#x3D;  &gt;&#x3D;    instanceof</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&#x3D;&#x3D;      !&#x3D;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&amp;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">^</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">|</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&amp;&amp;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">||</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">?    :</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">&#x3D;    *&#x3D;    &#x2F;&#x3D;   %&#x3D;</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
+<li>数组本身是引用数据类型，而数组中的元素可以是任何数据类型，包括 基本数据类型和引用数据类型。</li>
+<li>创建数组对象会在内存中开辟一整块连续的空间，而数组名中引用的是 这块连续空间的首地址。 </li>
+<li>数组的长度一旦确定，就不能修改。 </li>
+<li>我们可以直接通过下标(或索引)的方式调用指定位置的元素，速度很快。</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h4><ol>
+<li><p>一维数组的声明</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">type <span class="keyword">var</span>[] 或 type[] <span class="keyword">var</span>；</span><br></pre></td></tr></table></figure>
 
+<p>Java语言中声明数组时不能指定其长度(数组中元素的数)， 例如： int a[5]; <strong>&#x2F;&#x2F;非法</strong></p>
+</li>
+<li><p>初始化</p>
+<ul>
+<li><p>动态初始化：数组声明且为数组元素分配空间与赋值的操作分开进行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">3</span>];</span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">3</span>;</span><br><span class="line">arr[<span class="number">1</span>] = <span class="number">9</span>;</span><br><span class="line">arr[<span class="number">2</span>] = <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">String names[];</span><br><span class="line">names = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">3</span>];</span><br><span class="line">names[<span class="number">0</span>] = “钱学森”;</span><br><span class="line">names[<span class="number">1</span>] = “邓稼先”;</span><br><span class="line">names[<span class="number">2</span>] = “袁隆平”;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ul>
+<li><p>静态初始化：在定义数组的同时就为数组元素分配空间并赋值。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> arr[] = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123; <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>&#125;;</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="type">int</span>[] arr = &#123;<span class="number">3</span>,<span class="number">9</span>,<span class="number">8</span>&#125;;</span><br><span class="line"></span><br><span class="line">String names[] = &#123;</span><br><span class="line">“李四光”,“茅以升”,“华罗庚”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="数组元素的默认初始化值"><a href="#数组元素的默认初始化值" class="headerlink" title="数组元素的默认初始化值"></a>数组元素的默认初始化值</h3><table>
+<thead>
+<tr>
+<th align="center">数组元素类型</th>
+<th align="center">元素默认初始值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">byte</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">0L</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">0.0F</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">0.0</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">0或‘\u0000’(表现为空)</td>
+</tr>
+<tr>
+<td align="center">boolean</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center">应用类型</td>
+<td align="center">null</td>
+</tr>
+</tbody></table>
+<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><ol>
+<li><p>声明和初始化</p>
+<ul>
+<li><p>格式1（动态初始化）：int[][] arr &#x3D; new int[3][2];</p>
+<p>定义了名称为arr的二维数组 </p>
+<p>二维数组中有3个一维数组 </p>
+<p>每一个一维数组中有2个元素 一维数组的名称分别为arr[0], arr[1], arr[2] </p>
+<p>给第一个一维数组1脚标位赋值为78写法是：arr[0][1] &#x3D; 78;</p>
+</li>
+<li><p>格式2（动态初始化）：int[][] arr &#x3D; new int[3][];</p>
+<p>二维数组中有3个一维数组。 </p>
+<p>每个一维数组都是默认初始化值null (注意：区别于格式1）</p>
+<p> 可以对这个三个一维数组分别进行初始化 </p>
+<p>arr[0] &#x3D; new int[3]; arr[1] &#x3D; new int[1]; </p>
+<p>arr[2] &#x3D; new int[2];</p>
+</li>
+</ul>
+<p><strong>注： int[][]arr &#x3D; new int[][3]; &#x2F;&#x2F;非法</strong></p>
+</li>
+</ol>
+</li>
+</ol>
 ]]></content>
       <categories>
         <category>学习笔记</category>
@@ -883,362 +1239,6 @@
 </li>
 </ul>
 <h3 id="同步控制方法"><a href="#同步控制方法" class="headerlink" title="同步控制方法"></a>同步控制方法</h3><p>Collections 类中提供了多个 synchronizedXxx() 方法，该方法可使将指定集合包装成线程同步的集合，从而可以解决多线程并发访问集合时的线程安全问题</p>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java基础知识总结（上）</title>
-    <url>/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="Java中的注释"><a href="#Java中的注释" class="headerlink" title="Java中的注释"></a>Java中的注释</h2><ol>
-<li><p>单行注释   &#x2F;&#x2F;</p>
-</li>
-<li><p>多行注释  &#x2F;*   *&#x2F;</p>
-<p>单行注释和多行注释的作用：</p>
-<p>① 对所写的程序进行解释说明，增强可读性。方便自己，方便别人</p>
-<p>② 调试所写的代码</p>
-</li>
-<li><p>文档注释  &#x2F;**   *&#x2F;</p>
-<p>注释内容可以被JDK提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档。</p>
-<hr>
-</li>
-</ol>
-<h2 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h2><ol>
-<li><p>标识符：凡是自己可以起名字的地方都叫标识符。</p>
-<p>  比如：类名、变量名、方法名、接口名、包名…</p>
-</li>
-<li><p>标识符的命名规则：–&gt; 如果不遵守如下的规则，编译不通过！</p>
-<p>① 由26个英文字母大小写，0-9 ，_或 $ 组成 </p>
-<p>②数字不可以开头。</p>
-<p>③不可以使用关键字和保留字，但能包含关键字和保留字。</p>
-<p>④Java中严格区分大小写，长度无限制。</p>
-<p>⑤标识符不能包含空格。</p>
-</li>
-<li><p>Java中的名称命名规范： —&gt;如果不遵守如下的规范，编译可以通过！</p>
-<p>包名：多单词组成时所有字母都小写：xxxyyyzzz</p>
-<p>类名、接口名：多单词组成时，所有单词的首字母大写：XxxYyyZzz</p>
-<p>变量名、方法名：多单词组成时，第一个单词首字母小写，第二个单词开始每个单词首字母大写：xxxYyyZzz</p>
-<p>常量名：所有字母都大写。多单词时每个单词用下划线连接：XXX_YYY_ZZZ</p>
-</li>
-<li><p>注意1：在起名字时，为了提高阅读性，要尽量有意义，“见名知意”。</p>
-<p>注意2：java采用unicode字符集，因此标识符也可以使用汉字声明，但是不建议使用。 </p>
-<hr>
-</li>
-</ol>
-<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><ol>
-<li><p>变量按照数据类型来分：<br>a. 基本数据类型：</p>
-<p>​    整型：byte \ short \ int \ long</p>
-<p>​    浮点型：float \ double</p>
-<p>​    字符型：char</p>
-<p>​    布尔型：boolean</p>
-<p> b. 引用数据类型：</p>
-<pre><code>   类(class)
-
-      接口(interface)
-
-      数组(array)
-</code></pre>
-</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th align="center">类型</th>
-<th align="center">占用存储空间</th>
-<th align="center">表示数据范围</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">byte</td>
-<td align="center">1字节&#x3D;8bit</td>
-<td align="center">-128~127</td>
-</tr>
-<tr>
-<td align="center">short</td>
-<td align="center">2字节</td>
-<td align="center">-2^15 ~2^15 -1</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">4字节</td>
-<td align="center">-2^31 ~2^31 -1</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">8字节</td>
-<td align="center">-2^62 ~2^62 -1</td>
-</tr>
-<tr>
-<td align="center">float</td>
-<td align="center">4字节</td>
-<td align="center">-3.403E38 ~ 3.403E38</td>
-</tr>
-<tr>
-<td align="center">double</td>
-<td align="center">8字节</td>
-<td align="center">-1.798E308 ~ 1.798E308</td>
-</tr>
-</tbody></table>
-<ul>
-<li><strong>java的整型常量默认为 int 型，声明long型常量须后加‘l’或‘L’</strong> </li>
-<li><strong>java程序中变量通常声明为int型，除非不足以表示较大的数，才使用long</strong></li>
-</ul>
-<p>转义字符：</p>
-<table>
-<thead>
-<tr>
-<th>转义字符</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>\b</td>
-<td>退格符</td>
-</tr>
-<tr>
-<td>\n</td>
-<td>换行符</td>
-</tr>
-<tr>
-<td>\r</td>
-<td>回车符</td>
-</tr>
-<tr>
-<td>\t</td>
-<td>制表符</td>
-</tr>
-<tr>
-<td>\“</td>
-<td>双引号</td>
-</tr>
-<tr>
-<td>\‘</td>
-<td>单引号</td>
-</tr>
-<tr>
-<td>\\</td>
-<td>反斜线</td>
-</tr>
-</tbody></table>
-<ol start="2">
-<li><p>变量在类中声明的位置：</p>
-<p>​    成员变量 vs 局部变量</p>
-</li>
-</ol>
-<h3 id="定义格式"><a href="#定义格式" class="headerlink" title="定义格式"></a>定义格式</h3><ol>
-<li><p>java定义变量的格式：数据类型 变量名 &#x3D; 变量值;</p>
-</li>
-<li><p>说明：</p>
-<p>  ① 变量必须先声明，后使用</p>
-<p>  ② 变量都定义在其作用域内。在作用域内，它是有效的。换句话说，出了作用域，就失效了</p>
-<p>  ③ 同一个作用域内，不可以声明两个同名的变量</p>
-</li>
-</ol>
-<h3 id="运算规则"><a href="#运算规则" class="headerlink" title="运算规则"></a>运算规则</h3><p>基本数据类型之间的运算规则：</p>
-<p>前提：这里讨论只是7种基本数据类型变量间的运算。不包含boolean类型的。</p>
-<ol>
-<li><p>自动类型提升：</p>
-<p> 结论：当容量小的数据类型的变量与容量大的数据类型的变量做运算时，结果自动提升为容量大的数据类型。</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph LR</span><br><span class="line">char --&gt; int</span><br><span class="line">byte --&gt; int</span><br><span class="line">short --&gt; int --&gt; long --&gt; float --&gt; double</span><br></pre></td></tr></table></figure>
-
-<p> 特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。</p>
-</li>
-<li><p>强制类型转换：</p>
-<p>a.需要使用强转符：()</p>
-<p>b.注意点：强制类型转换，可能导致精度损失。</p>
-</li>
-<li><p>说明：此时的容量大小指的是，表示数的范围的大和小。比如：float容量要大于long的容量</p>
-</li>
-</ol>
-<h3 id="String类型变量的使用"><a href="#String类型变量的使用" class="headerlink" title="String类型变量的使用"></a>String类型变量的使用</h3><ol>
-<li><p>String属于引用数据类型,翻译为：字符串</p>
-</li>
-<li><p>声明String类型变量时，使用一对” “</p>
-</li>
-<li><p>String可以和8种基本数据类型变量做运算，且运算只能是连接运算：+</p>
-</li>
-<li><p>运算的结果仍然是String类型</p>
-<hr>
-</li>
-</ol>
-<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h3><p>太简单，不说了</p>
-<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>介绍一个特别的：instanceof</p>
-<p>作用是检查是否是类的对象，例如： “Hello” instanceof String &#x3D; true</p>
-<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;—逻辑与	 	| —逻辑或 	  ！—逻辑非 </p>
-<p>&amp;&amp; —短路与 	|| —短路或 	^ —逻辑异或</p>
-<ul>
-<li>“&amp;”和“&amp;&amp;”的区别： <ul>
-<li>单&amp;时，左边无论真假，右边都进行运算； </li>
-<li>双&amp;时，如果左边为真，右边参与运算，如果左边为假，那么右边不参与运算。</li>
-</ul>
-</li>
-<li>“|”和“||”的区别同理，||表示：当左边为真，右边不参与运算。</li>
-</ul>
-<h3 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符"></a>三元运算符</h3><p>格式： (表达式1)?表达式2：表达式3；</p>
-<p>若表达式1的结果为真则执行<strong>表达式2</strong>，若为假则执行<strong>表达式3</strong></p>
-<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
-<li><p>表达式1,表达式2,表达式3的类型可以不同，进行自动类型转换（提升）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="literal">true</span> ? <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1</span>) : <span class="keyword">new</span> <span class="title class_">Double</span>(<span class="number">2.0</span>);</span><br><span class="line">System.out.println(o1);<span class="comment">//1.0</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>条件表达式不能取代一般的if语句,仅当if语句中内嵌的语句为赋值语句(且两个分支都给同一变量赋值)时才能代替if语句，例如：</p>
-</li>
-</ol>
-   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line">  printf(<span class="string">&quot;even/n&quot;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//不能写成</span></span><br><span class="line">(a%<span class="number">2</span>==<span class="number">0</span>)?printf(<span class="string">&quot;even/n&quot;</span>):printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//但是可以写成</span></span><br><span class="line">printf(<span class="string">&quot;%s/n&quot;</span>,(a%<span class="number">2</span>==<span class="number">0</span>?<span class="string">&quot;even&quot;</span>:<span class="string">&quot;odd&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<h3 id="运算符的优先级"><a href="#运算符的优先级" class="headerlink" title="运算符的优先级"></a>运算符的优先级</h3><table>
-<thead>
-<tr>
-<th align="center">运算顺序（从左往右或从右往左）</th>
-<th align="center">运算符</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"></td>
-<td align="center">.    ()      {}      ;      ,</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">++  –  ~    !()</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">*      &#x2F;     %</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&lt;&lt;  &gt;&gt;   &gt;&gt;&gt;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&lt;  &gt;  &lt;&#x3D;  &gt;&#x3D;    instanceof</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&#x3D;&#x3D;      !&#x3D;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&amp;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">^</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">|</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&amp;&amp;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">||</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">?    :</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">&#x3D;    *&#x3D;    &#x2F;&#x3D;   %&#x3D;</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
-<li>数组本身是引用数据类型，而数组中的元素可以是任何数据类型，包括 基本数据类型和引用数据类型。</li>
-<li>创建数组对象会在内存中开辟一整块连续的空间，而数组名中引用的是 这块连续空间的首地址。 </li>
-<li>数组的长度一旦确定，就不能修改。 </li>
-<li>我们可以直接通过下标(或索引)的方式调用指定位置的元素，速度很快。</li>
-</ul>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h4><ol>
-<li><p>一维数组的声明</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">type <span class="keyword">var</span>[] 或 type[] <span class="keyword">var</span>；</span><br></pre></td></tr></table></figure>
-
-<p>Java语言中声明数组时不能指定其长度(数组中元素的数)， 例如： int a[5]; <strong>&#x2F;&#x2F;非法</strong></p>
-</li>
-<li><p>初始化</p>
-<ul>
-<li><p>动态初始化：数组声明且为数组元素分配空间与赋值的操作分开进行</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">3</span>];</span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">3</span>;</span><br><span class="line">arr[<span class="number">1</span>] = <span class="number">9</span>;</span><br><span class="line">arr[<span class="number">2</span>] = <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">String names[];</span><br><span class="line">names = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">3</span>];</span><br><span class="line">names[<span class="number">0</span>] = “钱学森”;</span><br><span class="line">names[<span class="number">1</span>] = “邓稼先”;</span><br><span class="line">names[<span class="number">2</span>] = “袁隆平”;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<ul>
-<li><p>静态初始化：在定义数组的同时就为数组元素分配空间并赋值。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> arr[] = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123; <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>&#125;;</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="type">int</span>[] arr = &#123;<span class="number">3</span>,<span class="number">9</span>,<span class="number">8</span>&#125;;</span><br><span class="line"></span><br><span class="line">String names[] = &#123;</span><br><span class="line">“李四光”,“茅以升”,“华罗庚”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="数组元素的默认初始化值"><a href="#数组元素的默认初始化值" class="headerlink" title="数组元素的默认初始化值"></a>数组元素的默认初始化值</h3><table>
-<thead>
-<tr>
-<th align="center">数组元素类型</th>
-<th align="center">元素默认初始值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">byte</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">short</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">0L</td>
-</tr>
-<tr>
-<td align="center">float</td>
-<td align="center">0.0F</td>
-</tr>
-<tr>
-<td align="center">double</td>
-<td align="center">0.0</td>
-</tr>
-<tr>
-<td align="center">char</td>
-<td align="center">0或‘\u0000’(表现为空)</td>
-</tr>
-<tr>
-<td align="center">boolean</td>
-<td align="center">false</td>
-</tr>
-<tr>
-<td align="center">应用类型</td>
-<td align="center">null</td>
-</tr>
-</tbody></table>
-<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><ol>
-<li><p>声明和初始化</p>
-<ul>
-<li><p>格式1（动态初始化）：int[][] arr &#x3D; new int[3][2];</p>
-<p>定义了名称为arr的二维数组 </p>
-<p>二维数组中有3个一维数组 </p>
-<p>每一个一维数组中有2个元素 一维数组的名称分别为arr[0], arr[1], arr[2] </p>
-<p>给第一个一维数组1脚标位赋值为78写法是：arr[0][1] &#x3D; 78;</p>
-</li>
-<li><p>格式2（动态初始化）：int[][] arr &#x3D; new int[3][];</p>
-<p>二维数组中有3个一维数组。 </p>
-<p>每个一维数组都是默认初始化值null (注意：区别于格式1）</p>
-<p> 可以对这个三个一维数组分别进行初始化 </p>
-<p>arr[0] &#x3D; new int[3]; arr[1] &#x3D; new int[1]; </p>
-<p>arr[2] &#x3D; new int[2];</p>
-</li>
-</ul>
-<p><strong>注： int[][]arr &#x3D; new int[][3]; &#x2F;&#x2F;非法</strong></p>
-</li>
-</ol>
-</li>
-</ol>
 ]]></content>
       <categories>
         <category>学习笔记</category>
@@ -3280,6 +3280,70 @@
       </tags>
   </entry>
   <entry>
+    <title>Ubuntu系统Apache2部署SSL证书</title>
+    <url>/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/</url>
+    <content><![CDATA[<p>本文档为您介绍了如何在Ubuntu系统以及Apache2中安装阿里云SSL证书。</p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>操作系统：Ubuntu</p>
+<p>Web服务器：Apache 2</p>
+<h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><ul>
+<li>已从<a href="https://yundunnext.console.aliyun.com/?p=cas#/overview/cn-hangzhou">SSL证书控制台</a>下载Apache服务器证书。</li>
+<li>已安装Open SSL。</li>
+</ul>
+<h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><ol>
+<li><p>运行以下命令在apache2目录下创建ssl目录。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行以下命令将下载的阿里云证书文件复制到ssl目录中。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp -r YourDomainName_public.crt /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp -r YourDomainName_chain.crt /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp -r YourDomainName.key /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+</li>
+<li><p>运行以下命令启用SSL模块。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo a2enmod ssl</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/znDyZLWRAsv2f4t.png" alt="image.png"></p>
+<p>SSL模块启用后可执行<code>ls /etc/apache2/sites-available</code>查看目录下生成的default-ssl.conf文件。</p>
+<p><strong>说明：</strong> 443端口是网络浏览端口，主要用于HTTPS服务。SSL模块启用后会自动放行443端口。若443端口未自动放行，可执行<code>vi /etc/apache2/ports.conf</code>并添加<code>Listen 443</code>手动放行。</p>
+</li>
+<li><p>运行以下命令修改SSL配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/apache2/sites-available/YourDomainName-ssl.conf</span><br></pre></td></tr></table></figure>
+
+<p>在default-ssl.conf文件中找到以下参数进行修改后保存并退出。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;IfModules mod_ssl.c&gt;</span><br><span class="line">&lt;VirtualHost *:443&gt;  </span><br><span class="line">ServerName   <span class="comment">#修改为证书绑定的域名www.YourDomainName.com。</span></span><br><span class="line">SSLCertificateFile /etc/apache2/ssl/www.YourDomainName_public.crt   </span><br><span class="line"><span class="comment">#将/etc/apache2/ssl/www.YourDomainName.com_public.crt替换为证书文件路径+证书文件名。</span></span><br><span class="line">SSLCertificateKeyFile /etc/ssl/apache2/www.YourDomainName.com.key   </span><br><span class="line"><span class="comment">#将/etc/apache2/ssl/www.YourDomainName.com.key替换为证书秘钥文件路径+证书秘钥文件名。</span></span><br><span class="line">SSLCertificateChainFile /etc/apache2/ssl/www.YourDomainName.com_chain.crt  </span><br><span class="line"><span class="comment">#将/etc/apache2/ssl/www.YourDomainName.com_chain.crt替换为证书链文件路径+证书链文件名。</span></span><br><span class="line">						</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/XESFU87K4QfY92A.png" alt="image.png"></p>
+<p>&#x2F;sites-available：该目录存放的是可用的虚拟主机；&#x2F;sites-enabled：该目录存放的是已经启用的虚拟主机。</p>
+<p><strong>说明：</strong> default-ssl.conf文件可能存放在&#x2F;etc&#x2F;apache2&#x2F;sites-available或&#x2F;etc&#x2F;apache2&#x2F;sites-enabled目录中。</p>
+</li>
+<li><p>运行以下命令把default-ssl.conf映射至&#x2F;etc&#x2F;apache2&#x2F;sites-enabled文件夹中建立软链接、实现二者之间的自动关联。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ln -s /etc/apache2/sites-available/YourDomainName-ssl.conf /etc/apache2/sites-enabled/YourDomainName-ssl.conf</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行以下命令重新加载Apache 2配置文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/apache2 force-reload</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/4Rn27NQuZgTDoFK.png" alt="image.png"></p>
+</li>
+<li><p>运行以下命令重启Apache 2服务。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/apache2 restart</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/13p6Xtfh49s8VQi.png" alt="image.png"></p>
+</li>
+</ol>
+<h2 id="后续操作"><a href="#后续操作" class="headerlink" title="后续操作"></a>后续操作</h2><p>Apache 2服务重启成功后，您可在浏览器中输入<a href="https://www.yourdomainname.com验证证书安装结果.浏览器地址栏显示绿色的小锁标识说明证书安装成功./">https://www.YourDomainName.com验证证书安装结果。浏览器地址栏显示绿色的小锁标识说明证书安装成功。</a></p>
+<p><a href="https://help.aliyun.com/document_detail/102450.html?spm=a2c4g.11186623.2.16.641a5d990B7ZJl#title-8vo-dzo-1in">原文地址</a></p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker的基本使用</title>
     <url>/2020/03/28/docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<p><img data-src="/images/docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/z6JqkpsQT2orBhE.png" alt="docker.jpg"></p>
@@ -4397,43 +4461,6 @@
       </tags>
   </entry>
   <entry>
-    <title>蓝桥杯单片机超声波模块</title>
-    <url>/2020/03/13/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</url>
-    <content><![CDATA[<blockquote>
-<p>这个超声波模块的工作原理很简单，传感器像两个喇叭一样的东西，一个是负责发送超声波的，另一个负责接收超声波，根据发出到接收的时间间隔就可以算出距离了。</p>
-<p>s &#x3D; v*t&#x2F;2 </p>
-<p>初中物理知识哦。</p>
-</blockquote>
-<p>就不多说了直接上代码</p>
-<span id="more"></span>
-
-<p>main.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> sonic_counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> smgbuf[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	init();</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(sonic_counter &gt;= <span class="number">40</span>)<span class="comment">//每隔一定的时间测量一次，必须要加否则测的数据不正确</span></span><br><span class="line">		&#123;</span><br><span class="line">			distance = measure_distance();</span><br><span class="line">			sonic_counter = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		smgbuf[<span class="number">5</span>] = distance/<span class="number">100</span>;</span><br><span class="line">		smgbuf[<span class="number">6</span>] = distance%<span class="number">100</span>/<span class="number">10</span>;</span><br><span class="line">		smgbuf[<span class="number">7</span>] = distance%<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer2</span><span class="params">()</span> interrupt 12<span class="comment">//定时器2（52单片机多出来的一个定时器）</span></span><br><span class="line">&#123;</span><br><span class="line">	sonic_counter++;</span><br><span class="line">	display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>common.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _COMMON_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _COMMON_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;intrins.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sfr AUXR = <span class="number">0x8e</span>;</span><br><span class="line">sfr IE2 = <span class="number">0xaf</span>;</span><br><span class="line">sfr T2H = <span class="number">0xd6</span>;</span><br><span class="line">sfr T2L = <span class="number">0xd7</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>common.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[<span class="number">8</span>] = &#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[] = &#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">switch</span>(channel)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">		smgbuf[i] = <span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">4</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">5</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	init_timer();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	AUXR = AUXR&amp;<span class="number">0x33</span>|<span class="number">0x10</span>;<span class="comment">//定时器2的配置</span></span><br><span class="line">	IE2 = <span class="number">0x04</span>;</span><br><span class="line">	T2H = <span class="number">0xf8</span>;</span><br><span class="line">	T2L = <span class="number">0x2f</span>;</span><br><span class="line">	EA = <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	TMOD = <span class="number">0x01</span>;<span class="comment">//定时器1的配置，用于计算发送和接收之间的时间间隔</span></span><br><span class="line">	TH1 = <span class="number">0</span>;</span><br><span class="line">	TL1 = <span class="number">0</span>;</span><br><span class="line">	TR1 = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	num++;</span><br><span class="line">	<span class="keyword">if</span>(num &gt;= <span class="number">8</span>)</span><br><span class="line">		num = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>sonic.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _SONIC_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _SONIC_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> somenop &#123;_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();&#125;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//可以参照原理图</span></span><br><span class="line">sbit tx = P1^<span class="number">0</span>;<span class="comment">//发送波传感器的引脚</span></span><br><span class="line">sbit rx = P1^<span class="number">1</span>;<span class="comment">//接收波传感器的引脚</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>sonic.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span><span class="comment">//发送超声波</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)<span class="comment">//发送一组超声波</span></span><br><span class="line">	&#123;</span><br><span class="line">		tx = <span class="number">1</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">		tx = <span class="number">0</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">	&#125;</span><br><span class="line">	TR1 = <span class="number">1</span>;<span class="comment">//定时器1开始计时</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span><span class="comment">//计算、测量距离</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	send_wave();<span class="comment">//先发送</span></span><br><span class="line">	<span class="keyword">while</span>(rx == <span class="number">1</span>&amp;&amp;TF1 == <span class="number">0</span>);<span class="comment">//等待接收完毕或者定时器1溢出</span></span><br><span class="line">	TR1 = <span class="number">0</span>;<span class="comment">//定时器1停止计时</span></span><br><span class="line">	<span class="keyword">if</span>(rx == <span class="number">0</span>&amp;&amp;TF1 == <span class="number">0</span>)<span class="comment">//正常量程之内</span></span><br><span class="line">	&#123;</span><br><span class="line">		distance = ((TH1&lt;&lt;<span class="number">8</span>)+TL1)*<span class="number">0.017</span>;<span class="comment">//计算距离</span></span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> </span><br><span class="line">	&#123;</span><br><span class="line">		distance = <span class="number">999</span>;<span class="comment">//超出量程</span></span><br><span class="line">		TF1 = <span class="number">0</span>;</span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> distance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>备赛</category>
-        <category>蓝桥杯</category>
-      </categories>
-      <tags>
-        <tag>蓝桥杯</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>蓝桥杯工程模板</title>
     <url>/2020/08/14/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%B7%A5%E7%A8%8B%E6%A8%A1%E6%9D%BF/</url>
     <content><![CDATA[<p>工程模板主要是对一些基础设备做好初始化，比如四个锁存器的函数封装、定时器的初始化、数码管显示的初始化以及IIC，onewire和ADC的封装。</p>
@@ -4524,6 +4551,43 @@
       </tags>
   </entry>
   <entry>
+    <title>蓝桥杯单片机超声波模块</title>
+    <url>/2020/03/13/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</url>
+    <content><![CDATA[<blockquote>
+<p>这个超声波模块的工作原理很简单，传感器像两个喇叭一样的东西，一个是负责发送超声波的，另一个负责接收超声波，根据发出到接收的时间间隔就可以算出距离了。</p>
+<p>s &#x3D; v*t&#x2F;2 </p>
+<p>初中物理知识哦。</p>
+</blockquote>
+<p>就不多说了直接上代码</p>
+<span id="more"></span>
+
+<p>main.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> sonic_counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> smgbuf[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	init();</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(sonic_counter &gt;= <span class="number">40</span>)<span class="comment">//每隔一定的时间测量一次，必须要加否则测的数据不正确</span></span><br><span class="line">		&#123;</span><br><span class="line">			distance = measure_distance();</span><br><span class="line">			sonic_counter = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		smgbuf[<span class="number">5</span>] = distance/<span class="number">100</span>;</span><br><span class="line">		smgbuf[<span class="number">6</span>] = distance%<span class="number">100</span>/<span class="number">10</span>;</span><br><span class="line">		smgbuf[<span class="number">7</span>] = distance%<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer2</span><span class="params">()</span> interrupt 12<span class="comment">//定时器2（52单片机多出来的一个定时器）</span></span><br><span class="line">&#123;</span><br><span class="line">	sonic_counter++;</span><br><span class="line">	display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>common.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _COMMON_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _COMMON_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;intrins.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sfr AUXR = <span class="number">0x8e</span>;</span><br><span class="line">sfr IE2 = <span class="number">0xaf</span>;</span><br><span class="line">sfr T2H = <span class="number">0xd6</span>;</span><br><span class="line">sfr T2L = <span class="number">0xd7</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>common.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[<span class="number">8</span>] = &#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[] = &#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">switch</span>(channel)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">		smgbuf[i] = <span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">4</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">5</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	init_timer();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	AUXR = AUXR&amp;<span class="number">0x33</span>|<span class="number">0x10</span>;<span class="comment">//定时器2的配置</span></span><br><span class="line">	IE2 = <span class="number">0x04</span>;</span><br><span class="line">	T2H = <span class="number">0xf8</span>;</span><br><span class="line">	T2L = <span class="number">0x2f</span>;</span><br><span class="line">	EA = <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	TMOD = <span class="number">0x01</span>;<span class="comment">//定时器1的配置，用于计算发送和接收之间的时间间隔</span></span><br><span class="line">	TH1 = <span class="number">0</span>;</span><br><span class="line">	TL1 = <span class="number">0</span>;</span><br><span class="line">	TR1 = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	num++;</span><br><span class="line">	<span class="keyword">if</span>(num &gt;= <span class="number">8</span>)</span><br><span class="line">		num = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>sonic.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _SONIC_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _SONIC_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> somenop &#123;_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();&#125;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//可以参照原理图</span></span><br><span class="line">sbit tx = P1^<span class="number">0</span>;<span class="comment">//发送波传感器的引脚</span></span><br><span class="line">sbit rx = P1^<span class="number">1</span>;<span class="comment">//接收波传感器的引脚</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>sonic.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span><span class="comment">//发送超声波</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)<span class="comment">//发送一组超声波</span></span><br><span class="line">	&#123;</span><br><span class="line">		tx = <span class="number">1</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">		tx = <span class="number">0</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">	&#125;</span><br><span class="line">	TR1 = <span class="number">1</span>;<span class="comment">//定时器1开始计时</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span><span class="comment">//计算、测量距离</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	send_wave();<span class="comment">//先发送</span></span><br><span class="line">	<span class="keyword">while</span>(rx == <span class="number">1</span>&amp;&amp;TF1 == <span class="number">0</span>);<span class="comment">//等待接收完毕或者定时器1溢出</span></span><br><span class="line">	TR1 = <span class="number">0</span>;<span class="comment">//定时器1停止计时</span></span><br><span class="line">	<span class="keyword">if</span>(rx == <span class="number">0</span>&amp;&amp;TF1 == <span class="number">0</span>)<span class="comment">//正常量程之内</span></span><br><span class="line">	&#123;</span><br><span class="line">		distance = ((TH1&lt;&lt;<span class="number">8</span>)+TL1)*<span class="number">0.017</span>;<span class="comment">//计算距离</span></span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> </span><br><span class="line">	&#123;</span><br><span class="line">		distance = <span class="number">999</span>;<span class="comment">//超出量程</span></span><br><span class="line">		TF1 = <span class="number">0</span>;</span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> distance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>备赛</category>
+        <category>蓝桥杯</category>
+      </categories>
+      <tags>
+        <tag>蓝桥杯</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>魔改NexT主题</title>
     <url>/2022/07/28/%E9%AD%94%E6%94%B9NexT%E4%B8%BB%E9%A2%98/</url>
     <content><![CDATA[<ul>
@@ -4580,70 +4644,6 @@
       <tags>
         <tag>配置</tag>
         <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ubuntu系统Apache2部署SSL证书</title>
-    <url>/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/</url>
-    <content><![CDATA[<p>本文档为您介绍了如何在Ubuntu系统以及Apache2中安装阿里云SSL证书。</p>
-<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>操作系统：Ubuntu</p>
-<p>Web服务器：Apache 2</p>
-<h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><ul>
-<li>已从<a href="https://yundunnext.console.aliyun.com/?p=cas#/overview/cn-hangzhou">SSL证书控制台</a>下载Apache服务器证书。</li>
-<li>已安装Open SSL。</li>
-</ul>
-<h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><ol>
-<li><p>运行以下命令在apache2目录下创建ssl目录。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行以下命令将下载的阿里云证书文件复制到ssl目录中。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp -r YourDomainName_public.crt /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp -r YourDomainName_chain.crt /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp -r YourDomainName.key /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-</li>
-<li><p>运行以下命令启用SSL模块。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo a2enmod ssl</span><br></pre></td></tr></table></figure>
-
-<p><img data-src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/znDyZLWRAsv2f4t.png" alt="image.png"></p>
-<p>SSL模块启用后可执行<code>ls /etc/apache2/sites-available</code>查看目录下生成的default-ssl.conf文件。</p>
-<p><strong>说明：</strong> 443端口是网络浏览端口，主要用于HTTPS服务。SSL模块启用后会自动放行443端口。若443端口未自动放行，可执行<code>vi /etc/apache2/ports.conf</code>并添加<code>Listen 443</code>手动放行。</p>
-</li>
-<li><p>运行以下命令修改SSL配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/apache2/sites-available/YourDomainName-ssl.conf</span><br></pre></td></tr></table></figure>
-
-<p>在default-ssl.conf文件中找到以下参数进行修改后保存并退出。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;IfModules mod_ssl.c&gt;</span><br><span class="line">&lt;VirtualHost *:443&gt;  </span><br><span class="line">ServerName   <span class="comment">#修改为证书绑定的域名www.YourDomainName.com。</span></span><br><span class="line">SSLCertificateFile /etc/apache2/ssl/www.YourDomainName_public.crt   </span><br><span class="line"><span class="comment">#将/etc/apache2/ssl/www.YourDomainName.com_public.crt替换为证书文件路径+证书文件名。</span></span><br><span class="line">SSLCertificateKeyFile /etc/ssl/apache2/www.YourDomainName.com.key   </span><br><span class="line"><span class="comment">#将/etc/apache2/ssl/www.YourDomainName.com.key替换为证书秘钥文件路径+证书秘钥文件名。</span></span><br><span class="line">SSLCertificateChainFile /etc/apache2/ssl/www.YourDomainName.com_chain.crt  </span><br><span class="line"><span class="comment">#将/etc/apache2/ssl/www.YourDomainName.com_chain.crt替换为证书链文件路径+证书链文件名。</span></span><br><span class="line">						</span><br></pre></td></tr></table></figure>
-
-<p><img data-src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/XESFU87K4QfY92A.png" alt="image.png"></p>
-<p>&#x2F;sites-available：该目录存放的是可用的虚拟主机；&#x2F;sites-enabled：该目录存放的是已经启用的虚拟主机。</p>
-<p><strong>说明：</strong> default-ssl.conf文件可能存放在&#x2F;etc&#x2F;apache2&#x2F;sites-available或&#x2F;etc&#x2F;apache2&#x2F;sites-enabled目录中。</p>
-</li>
-<li><p>运行以下命令把default-ssl.conf映射至&#x2F;etc&#x2F;apache2&#x2F;sites-enabled文件夹中建立软链接、实现二者之间的自动关联。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ln -s /etc/apache2/sites-available/YourDomainName-ssl.conf /etc/apache2/sites-enabled/YourDomainName-ssl.conf</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行以下命令重新加载Apache 2配置文件。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/apache2 force-reload</span><br></pre></td></tr></table></figure>
-
-<p><img data-src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/4Rn27NQuZgTDoFK.png" alt="image.png"></p>
-</li>
-<li><p>运行以下命令重启Apache 2服务。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/apache2 restart</span><br></pre></td></tr></table></figure>
-
-<p><img data-src="/images/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/13p6Xtfh49s8VQi.png" alt="image.png"></p>
-</li>
-</ol>
-<h2 id="后续操作"><a href="#后续操作" class="headerlink" title="后续操作"></a>后续操作</h2><p>Apache 2服务重启成功后，您可在浏览器中输入<a href="https://www.yourdomainname.com验证证书安装结果.浏览器地址栏显示绿色的小锁标识说明证书安装成功./">https://www.YourDomainName.com验证证书安装结果。浏览器地址栏显示绿色的小锁标识说明证书安装成功。</a></p>
-<p><a href="https://help.aliyun.com/document_detail/102450.html?spm=a2c4g.11186623.2.16.641a5d990B7ZJl#title-8vo-dzo-1in">原文地址</a></p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
       </tags>
   </entry>
 </search>
