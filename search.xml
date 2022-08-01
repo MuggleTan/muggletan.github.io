@@ -1,32 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>I217-V在openwrt下大流量断网问题</title>
-    <url>/2022/07/15/I217-V%E5%9C%A8openwrt%E8%BD%AF%E8%B7%AF%E7%94%B1%E4%B8%8B%E5%A4%A7%E6%B5%81%E9%87%8F%E6%96%AD%E7%BD%91%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近跟着up司波图在玩一个AIO（All In One）服务器，也就是将软路由，NAS系统以及影音系统都集成到一个物理系统中，我用的是之前买的一个M73的小主机，里面的mini-PCIE插槽扩展了一个螃蟹RTL8111的千兆网卡，主机自带的是Intel的I217-V千兆网卡。</p>
-<p>经过一天的使用下来发现每次大流量下载或上传时，openwrt都会断一下，开始还以为是openwrt系统的问题，后来经过一番资料搜索，发现是pve下面的这张Intel网卡有问题，查看了pve系统的日志，发现了如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pve kernel: e1000e 0000:00:19.0 eno1: Detected Hardware Unit Hang:</span><br></pre></td></tr></table></figure>
-<p>这和搜索到的情况一样，于是就确定是这张Intel网卡的问题。</p>
-<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>造成该问题的原因是Intel网卡固件的bug</p>
-<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>在pve虚拟机下关掉网卡的offload功能</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ethtool -K &lt;网卡编号&gt; tx off rx off &gt;/tmp/e1000e.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
-
-<p>为了方便，不需要每次重启虚拟机之后都手动来关掉，这里设置了一个自启动脚本，原理是pve虚拟机每次启动的呃时候都会扫描<code>/etc/profile.d</code>下面的<code>.sh</code>文件，所以办法很简单，在改文件夹下面新建一个e1000e.sh的文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/profile.d/e1000e.sh</span><br></pre></td></tr></table></figure>
-<p>然后填入上面的命令即可</p>
-<p>参考链接：</p>
-<p><a href="https://blog.csdn.net/wudics/article/details/124402110">解决在x86平台装openwrt旁路由大流量断网问题（intel网卡驱动bug问题）</a></p>
-<p><a href="https://blog.csdn.net/sxyllxy/article/details/110631505">openWRT在M93p上出现的Detected Hardware Unit Hang</a></p>
-]]></content>
-      <categories>
-        <category>软路由</category>
-      </categories>
-      <tags>
-        <tag>软路由</tag>
-        <tag>配置</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Apache配置反向代理</title>
     <url>/2020/07/23/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<blockquote>
@@ -57,6 +31,95 @@
       </categories>
       <tags>
         <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>I217-V在openwrt下大流量断网问题</title>
+    <url>/2022/07/15/I217-V%E5%9C%A8openwrt%E8%BD%AF%E8%B7%AF%E7%94%B1%E4%B8%8B%E5%A4%A7%E6%B5%81%E9%87%8F%E6%96%AD%E7%BD%91%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近跟着up司波图在玩一个AIO（All In One）服务器，也就是将软路由，NAS系统以及影音系统都集成到一个物理系统中，我用的是之前买的一个M73的小主机，里面的mini-PCIE插槽扩展了一个螃蟹RTL8111的千兆网卡，主机自带的是Intel的I217-V千兆网卡。</p>
+<p>经过一天的使用下来发现每次大流量下载或上传时，openwrt都会断一下，开始还以为是openwrt系统的问题，后来经过一番资料搜索，发现是pve下面的这张Intel网卡有问题，查看了pve系统的日志，发现了如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pve kernel: e1000e 0000:00:19.0 eno1: Detected Hardware Unit Hang:</span><br></pre></td></tr></table></figure>
+<p>这和搜索到的情况一样，于是就确定是这张Intel网卡的问题。</p>
+<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>造成该问题的原因是Intel网卡固件的bug</p>
+<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>在pve虚拟机下关掉网卡的offload功能</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ethtool -K &lt;网卡编号&gt; tx off rx off &gt;/tmp/e1000e.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+
+<p>为了方便，不需要每次重启虚拟机之后都手动来关掉，这里设置了一个自启动脚本，原理是pve虚拟机每次启动的呃时候都会扫描<code>/etc/profile.d</code>下面的<code>.sh</code>文件，所以办法很简单，在改文件夹下面新建一个e1000e.sh的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/profile.d/e1000e.sh</span><br></pre></td></tr></table></figure>
+<p>然后填入上面的命令即可</p>
+<p>参考链接：</p>
+<p><a href="https://blog.csdn.net/wudics/article/details/124402110">解决在x86平台装openwrt旁路由大流量断网问题（intel网卡驱动bug问题）</a></p>
+<p><a href="https://blog.csdn.net/sxyllxy/article/details/110631505">openWRT在M93p上出现的Detected Hardware Unit Hang</a></p>
+]]></content>
+      <categories>
+        <category>软路由</category>
+      </categories>
+      <tags>
+        <tag>软路由</tag>
+        <tag>配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java中看似简单实际很坑的题目</title>
+    <url>/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/</url>
+    <content><![CDATA[<h3 id="第一题（貌似是考察方法的参数传递）"><a href="#第一题（貌似是考察方法的参数传递）" class="headerlink" title="第一题（貌似是考察方法的参数传递）"></a>第一题（貌似是考察方法的参数传递）</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 20;</span><br><span class="line">    method(a,b);//在调用method()方法之后输出a = 100,b = 200</span><br><span class="line">    System.out.println(&quot;a = &quot; + a);</span><br><span class="line">    System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  &#125;</span><br><span class="line">  static void method(int a,int b)&#123;</span><br><span class="line">    //代码编写处</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果在method中直接写</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = 100;</span><br><span class="line">b = 200;</span><br></pre></td></tr></table></figure>
+
+<p>这个样子会直接被别人鄙视</p>
+<p>其实这是一个脑筋急转弯的题目，直接像上面这样把一个基本数据类型的变量，作为形参传入函数，等于是直接把值赋给了函数中的实参，改变函数中的实参并不会影响主函数中a和b的值，在method()方法调用完之后，方法中的实参a和b就出栈了，此时在主函数输出的仍然是10和20。</p>
+<span id="more"></span>
+
+<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>机智的方法，调用完method()方法之后就直接退出程序，不让他执行主函数中的print方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  a = 100;</span><br><span class="line">  b = 200;</span><br><span class="line">  System.out.println(&quot;a = &quot; + a);</span><br><span class="line">  System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  System.exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  PrintStream ps = new PrintStream(System.out)&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void println(String x)&#123;</span><br><span class="line">            if(&quot;a = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;a = 100&quot;;</span><br><span class="line">            &#125;else if(&quot;b = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;b = 200&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            super.println(x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    System.setOut(ps);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方法用的是重写，当要调用println()这个方法分时候不是调用Java库中的println()方法，而是调用这里自己写的这个，就把要输出的“a &#x3D; 10”替换成了”a &#x3D; 100”。</p>
+<h3 id="第二题（微软面试题）"><a href="#第二题（微软面试题）" class="headerlink" title="第二题（微软面试题）"></a>第二题（微软面试题）</h3><blockquote>
+<p> 定义一个int型的数组: int[] arr &#x3D; new int]{12,3,3,34,56,77,432};让数组的每个位置上的值去除以首位置的元素,得到的结果,作为该位置上的新值。遍历新的数组。 </p>
+</blockquote>
+<p>这个题其实很简单，但是一不小心就会出错，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for(int i = 0;i &lt; arr.length;i++)</span><br><span class="line">  arr[i] = arr[i]/arr[0];</span><br></pre></td></tr></table></figure>
+
+<p>自己一顿操作之后以为稳了，实际上结果和原数组是一样的。这样从前面向后面遍历，数组第一个值在第一次就变成1了，之后每次除的arr[0]都是1，所以后面的值都没有发生变化。</p>
+<p>所以简单的题不要掉以轻心。</p>
+<p>正确的写法很简单也不止一种方法，可以从后向前遍历数组，也可以把数组的第一个值赋给一个临时变量，后面的数都除以这个临时变量。</p>
+<h3 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">  public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">    int[] arr1 = new int[]&#123;1,2,3&#125;;</span><br><span class="line">    System.out.println(arr1);</span><br><span class="line"></span><br><span class="line">    char[] arr2 = new char[]&#123;&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;&#125;;</span><br><span class="line">    System.out.println(arr2); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>问输出的分别是什么？</p>
+<p>正确答案是arr1输出的是地址值，arr2输出的是abc。</p>
+<p>这其实考的是一个很细的知识点，了解过后就会感觉这个题很low，简直是在是在侮辱自己的智商，不了解的话可能就认为两个都是输出一个地址值。</p>
+<p>这里涉及到了Java中方法的重载，同一个函数名，但是传的参数个数或者参数类型不同的话，他调的方法是不一样的。</p>
+<p>第一个整型的数组，传入的是object类型，调用的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(Object x) &#123;</span><br><span class="line">  String s = String.valueOf(x);</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(s);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二个字符型的数组，传入的是char型的数组，调用的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(char x[]) &#123;</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(x);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="第四题"><a href="#第四题" class="headerlink" title="第四题"></a>第四题</h3><blockquote>
+<p> 如下两个题目输出结果相同吗？各是什么： </p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Object o1 = true ? new Integer(1) : new Double(2.0);</span><br><span class="line">System.out.println(o1);</span><br><span class="line"></span><br><span class="line">Object o2;</span><br><span class="line">if (true)</span><br><span class="line">    o2 = new Integer(1);</span><br><span class="line">else</span><br><span class="line">    o2 = new Double(2.0);</span><br><span class="line">System.out.println(o2);</span><br></pre></td></tr></table></figure>
+
+<p>正确答案：</p>
+<p>o1输出的是1.0，o2输出的是1</p>
+<p>这个题是看似在考Object类中的方法，但是实际上，这里的三元运算符涉及到一个自动类型提升的问题</p>
+<p>(表达式1)?(表达式2):(表达式3)</p>
+<p>三元运算的最后结果是这三个表达式中的类型“最高”的一种，在计算的过程个中会有自动类型提升</p>
+<h3 id="第五题"><a href="#第五题" class="headerlink" title="第五题"></a>第五题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void method1() &#123;</span><br><span class="line">  Integer i = new Integer(1);</span><br><span class="line">  Integer j = new Integer(1);</span><br><span class="line">  System.out.println(i == j);</span><br><span class="line">  Integer m = 1;</span><br><span class="line">  Integer n = 1;</span><br><span class="line">  System.out.println(m == n);//</span><br><span class="line">  Integer x = 128;</span><br><span class="line">  Integer y = 128;</span><br><span class="line">  System.out.println(x == y);//</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个输出为false，第二个输出为true，第三个输出为false。</p>
+<p>Integer内部定义了IntegerCache结构，IntegerCache中定义了Integer[],保存了从-128<del>127范围的整数。如果我们使用自动装箱的方式，给Integer赋值的范围在 -128</del>127范围内时，可以直接使用数组中的元素，不用再去new了。目的：提高效率。</p>
+<p>Integer类中的源码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">private static class IntegerCache &#123;</span><br><span class="line">  static final int low = -128;</span><br><span class="line">  static final int high;</span><br><span class="line">  static final Integer cache[];</span><br><span class="line">  static &#123;</span><br><span class="line">    // high value may be configured by property</span><br><span class="line">    int h = 127;</span><br><span class="line">    String integerCacheHighPropValue =</span><br><span class="line">      sun.misc.VM.getSavedProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">    if (integerCacheHighPropValue != null) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        int i = parseInt(integerCacheHighPropValue);</span><br><span class="line">        i = Math.max(i, 127);</span><br><span class="line">        // Maximum array size is Integer.MAX_VALUE</span><br><span class="line">        h = Math.min(i, Integer.MAX_VALUE - (-low) -1);</span><br><span class="line">      &#125; catch( NumberFormatException nfe) &#123;</span><br><span class="line">        // If the property cannot be parsed into an int, ignore it.</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    high = h;</span><br><span class="line"></span><br><span class="line">    cache = new Integer[(high - low) + 1];</span><br><span class="line">    int j = low;</span><br><span class="line">    for(int k = 0; k &lt; cache.length; k++)</span><br><span class="line">      cache[k] = new Integer(j++);</span><br><span class="line"></span><br><span class="line">    // range [-128, 127] must be interned (JLS7 5.1.7)</span><br><span class="line">    assert IntegerCache.high &gt;= 127;</span><br><span class="line">  &#125;</span><br><span class="line">  private IntegerCache() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>算法</category>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -319,69 +382,6 @@
       <tags>
         <tag>学习笔记</tag>
         <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java中看似简单实际很坑的题目</title>
-    <url>/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/</url>
-    <content><![CDATA[<h3 id="第一题（貌似是考察方法的参数传递）"><a href="#第一题（貌似是考察方法的参数传递）" class="headerlink" title="第一题（貌似是考察方法的参数传递）"></a>第一题（貌似是考察方法的参数传递）</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 20;</span><br><span class="line">    method(a,b);//在调用method()方法之后输出a = 100,b = 200</span><br><span class="line">    System.out.println(&quot;a = &quot; + a);</span><br><span class="line">    System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  &#125;</span><br><span class="line">  static void method(int a,int b)&#123;</span><br><span class="line">    //代码编写处</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果在method中直接写</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = 100;</span><br><span class="line">b = 200;</span><br></pre></td></tr></table></figure>
-
-<p>这个样子会直接被别人鄙视</p>
-<p>其实这是一个脑筋急转弯的题目，直接像上面这样把一个基本数据类型的变量，作为形参传入函数，等于是直接把值赋给了函数中的实参，改变函数中的实参并不会影响主函数中a和b的值，在method()方法调用完之后，方法中的实参a和b就出栈了，此时在主函数输出的仍然是10和20。</p>
-<span id="more"></span>
-
-<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>机智的方法，调用完method()方法之后就直接退出程序，不让他执行主函数中的print方法。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  a = 100;</span><br><span class="line">  b = 200;</span><br><span class="line">  System.out.println(&quot;a = &quot; + a);</span><br><span class="line">  System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  System.exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  PrintStream ps = new PrintStream(System.out)&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void println(String x)&#123;</span><br><span class="line">            if(&quot;a = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;a = 100&quot;;</span><br><span class="line">            &#125;else if(&quot;b = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;b = 200&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            super.println(x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    System.setOut(ps);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这种方法用的是重写，当要调用println()这个方法分时候不是调用Java库中的println()方法，而是调用这里自己写的这个，就把要输出的“a &#x3D; 10”替换成了”a &#x3D; 100”。</p>
-<h3 id="第二题（微软面试题）"><a href="#第二题（微软面试题）" class="headerlink" title="第二题（微软面试题）"></a>第二题（微软面试题）</h3><blockquote>
-<p> 定义一个int型的数组: int[] arr &#x3D; new int]{12,3,3,34,56,77,432};让数组的每个位置上的值去除以首位置的元素,得到的结果,作为该位置上的新值。遍历新的数组。 </p>
-</blockquote>
-<p>这个题其实很简单，但是一不小心就会出错，比如：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for(int i = 0;i &lt; arr.length;i++)</span><br><span class="line">  arr[i] = arr[i]/arr[0];</span><br></pre></td></tr></table></figure>
-
-<p>自己一顿操作之后以为稳了，实际上结果和原数组是一样的。这样从前面向后面遍历，数组第一个值在第一次就变成1了，之后每次除的arr[0]都是1，所以后面的值都没有发生变化。</p>
-<p>所以简单的题不要掉以轻心。</p>
-<p>正确的写法很简单也不止一种方法，可以从后向前遍历数组，也可以把数组的第一个值赋给一个临时变量，后面的数都除以这个临时变量。</p>
-<h3 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">  public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">    int[] arr1 = new int[]&#123;1,2,3&#125;;</span><br><span class="line">    System.out.println(arr1);</span><br><span class="line"></span><br><span class="line">    char[] arr2 = new char[]&#123;&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;&#125;;</span><br><span class="line">    System.out.println(arr2); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>问输出的分别是什么？</p>
-<p>正确答案是arr1输出的是地址值，arr2输出的是abc。</p>
-<p>这其实考的是一个很细的知识点，了解过后就会感觉这个题很low，简直是在是在侮辱自己的智商，不了解的话可能就认为两个都是输出一个地址值。</p>
-<p>这里涉及到了Java中方法的重载，同一个函数名，但是传的参数个数或者参数类型不同的话，他调的方法是不一样的。</p>
-<p>第一个整型的数组，传入的是object类型，调用的是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(Object x) &#123;</span><br><span class="line">  String s = String.valueOf(x);</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(s);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>第二个字符型的数组，传入的是char型的数组，调用的是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(char x[]) &#123;</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(x);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="第四题"><a href="#第四题" class="headerlink" title="第四题"></a>第四题</h3><blockquote>
-<p> 如下两个题目输出结果相同吗？各是什么： </p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Object o1 = true ? new Integer(1) : new Double(2.0);</span><br><span class="line">System.out.println(o1);</span><br><span class="line"></span><br><span class="line">Object o2;</span><br><span class="line">if (true)</span><br><span class="line">    o2 = new Integer(1);</span><br><span class="line">else</span><br><span class="line">    o2 = new Double(2.0);</span><br><span class="line">System.out.println(o2);</span><br></pre></td></tr></table></figure>
-
-<p>正确答案：</p>
-<p>o1输出的是1.0，o2输出的是1</p>
-<p>这个题是看似在考Object类中的方法，但是实际上，这里的三元运算符涉及到一个自动类型提升的问题</p>
-<p>(表达式1)?(表达式2):(表达式3)</p>
-<p>三元运算的最后结果是这三个表达式中的类型“最高”的一种，在计算的过程个中会有自动类型提升</p>
-<h3 id="第五题"><a href="#第五题" class="headerlink" title="第五题"></a>第五题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void method1() &#123;</span><br><span class="line">  Integer i = new Integer(1);</span><br><span class="line">  Integer j = new Integer(1);</span><br><span class="line">  System.out.println(i == j);</span><br><span class="line">  Integer m = 1;</span><br><span class="line">  Integer n = 1;</span><br><span class="line">  System.out.println(m == n);//</span><br><span class="line">  Integer x = 128;</span><br><span class="line">  Integer y = 128;</span><br><span class="line">  System.out.println(x == y);//</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>第一个输出为false，第二个输出为true，第三个输出为false。</p>
-<p>Integer内部定义了IntegerCache结构，IntegerCache中定义了Integer[],保存了从-128<del>127范围的整数。如果我们使用自动装箱的方式，给Integer赋值的范围在 -128</del>127范围内时，可以直接使用数组中的元素，不用再去new了。目的：提高效率。</p>
-<p>Integer类中的源码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">private static class IntegerCache &#123;</span><br><span class="line">  static final int low = -128;</span><br><span class="line">  static final int high;</span><br><span class="line">  static final Integer cache[];</span><br><span class="line">  static &#123;</span><br><span class="line">    // high value may be configured by property</span><br><span class="line">    int h = 127;</span><br><span class="line">    String integerCacheHighPropValue =</span><br><span class="line">      sun.misc.VM.getSavedProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">    if (integerCacheHighPropValue != null) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        int i = parseInt(integerCacheHighPropValue);</span><br><span class="line">        i = Math.max(i, 127);</span><br><span class="line">        // Maximum array size is Integer.MAX_VALUE</span><br><span class="line">        h = Math.min(i, Integer.MAX_VALUE - (-low) -1);</span><br><span class="line">      &#125; catch( NumberFormatException nfe) &#123;</span><br><span class="line">        // If the property cannot be parsed into an int, ignore it.</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    high = h;</span><br><span class="line"></span><br><span class="line">    cache = new Integer[(high - low) + 1];</span><br><span class="line">    int j = low;</span><br><span class="line">    for(int k = 0; k &lt; cache.length; k++)</span><br><span class="line">      cache[k] = new Integer(j++);</span><br><span class="line"></span><br><span class="line">    // range [-128, 127] must be interned (JLS7 5.1.7)</span><br><span class="line">    assert IntegerCache.high &gt;= 127;</span><br><span class="line">  &#125;</span><br><span class="line">  private IntegerCache() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>算法</category>
-        <category>LeetCode</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -3057,41 +3057,6 @@
       </tags>
   </entry>
   <entry>
-    <title>MySQL8允许远程访问</title>
-    <url>/2020/11/23/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/</url>
-    <content><![CDATA[<h2 id="一、Ubuntu安装MySQL8"><a href="#一、Ubuntu安装MySQL8" class="headerlink" title="一、Ubuntu安装MySQL8"></a>一、Ubuntu安装MySQL8</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt install mysql-server</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="二、修改配置"><a href="#二、修改配置" class="headerlink" title="二、修改配置"></a>二、修改配置</h2><ol>
-<li><p>登录MySQL</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mysql</span><br></pre></td></tr></table></figure>
-
-<p>可以直接登录，只要输入账户密码，登录之后再改密码</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">show databases;</span><br><span class="line"></span><br><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;你的新密码&#x27;;</span><br></pre></td></tr></table></figure>
-
-
-</li>
-<li><p>更新域属性，’%’表示任何方式访问</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">update user set host=&#x27;%&#x27; where user =&#x27;root&#x27;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>执行以上语句之后再执行</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>再执行授权语句</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27;WITH GRANT OPTION;</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>软件</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>markdown基本语法</title>
     <url>/2020/02/27/Markdown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</url>
     <content><![CDATA[<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><h4 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="comment">###### 六级标题</span></span><br></pre></td></tr></table></figure>
@@ -3153,6 +3118,41 @@
       </categories>
       <tags>
         <tag>markdown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL8允许远程访问</title>
+    <url>/2020/11/23/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/</url>
+    <content><![CDATA[<h2 id="一、Ubuntu安装MySQL8"><a href="#一、Ubuntu安装MySQL8" class="headerlink" title="一、Ubuntu安装MySQL8"></a>一、Ubuntu安装MySQL8</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt install mysql-server</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二、修改配置"><a href="#二、修改配置" class="headerlink" title="二、修改配置"></a>二、修改配置</h2><ol>
+<li><p>登录MySQL</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mysql</span><br></pre></td></tr></table></figure>
+
+<p>可以直接登录，只要输入账户密码，登录之后再改密码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">show databases;</span><br><span class="line"></span><br><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;你的新密码&#x27;;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>更新域属性，’%’表示任何方式访问</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">update user set host=&#x27;%&#x27; where user =&#x27;root&#x27;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行以上语句之后再执行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再执行授权语句</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27;WITH GRANT OPTION;</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>软件</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -3682,28 +3682,6 @@
       </tags>
   </entry>
   <entry>
-    <title>sublime text3下载插件</title>
-    <url>/2020/02/26/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/</url>
-    <content><![CDATA[<h5 id="1-在github上下载Package-Control的安装包"><a href="#1-在github上下载Package-Control的安装包" class="headerlink" title="1.在github上下载Package Control的安装包"></a>1.在github上下载Package Control的安装包</h5><p><a href="https://github.com/wbond/sublime_package_control">https://github.com/wbond/sublime_package_control</a> </p>
-<h5 id="2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件"><a href="#2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件" class="headerlink" title="2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件"></a>2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件</h5><span id="more"></span>
-
-<img data-src="/images/sublime下载插件/image-20200428221639527.png" alt="image-20200428221639527" style="zoom:67%;" />
-
-<p>找到下载的文件，解压，将文件夹重命名为“Package Control”复制到sublime存放插件的目录</p>
-<h5 id="3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的"><a href="#3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的" class="headerlink" title="3.https://packagecontrol.io 这个被墙了 下载插件不下来，把下载链接改为国内的."></a>3.<code>https://packagecontrol.io</code> 这个被墙了 下载插件不下来，把下载链接改为国内的.</h5><p><img data-src="/images/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/LGq7aPkejfiBXRz.png" alt="qwqwd.png"></p>
-<p>修改User文件下的配置文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> <span class="string">&quot;bootstrapped&quot;</span>: <span class="literal">true</span>,</span><br><span class="line"> <span class="string">&quot;channels&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;https://erhan.in/channel_v3.json&quot;</span></span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;in_process_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;installed_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;ChineseLocalizations&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Package Control&quot;</span></span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="4-重启sublime-text3"><a href="#4-重启sublime-text3" class="headerlink" title="4.重启sublime text3"></a>4.重启sublime text3</h5>]]></content>
-      <categories>
-        <category>软件</category>
-        <category>配置</category>
-      </categories>
-      <tags>
-        <tag>软件</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>spring-boot在IDEA中的热部署</title>
     <url>/2020/03/15/spring-boot%E5%9C%A8IDEA%E4%B8%AD%E7%9A%84%E7%83%AD%E9%83%A8%E7%BD%B2/</url>
     <content><![CDATA[<blockquote>
@@ -3731,6 +3709,52 @@
       <tags>
         <tag>idea</tag>
         <tag>spring-boot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sublime text3下载插件</title>
+    <url>/2020/02/26/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/</url>
+    <content><![CDATA[<h5 id="1-在github上下载Package-Control的安装包"><a href="#1-在github上下载Package-Control的安装包" class="headerlink" title="1.在github上下载Package Control的安装包"></a>1.在github上下载Package Control的安装包</h5><p><a href="https://github.com/wbond/sublime_package_control">https://github.com/wbond/sublime_package_control</a> </p>
+<h5 id="2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件"><a href="#2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件" class="headerlink" title="2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件"></a>2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件</h5><span id="more"></span>
+
+<img data-src="/images/sublime下载插件/image-20200428221639527.png" alt="image-20200428221639527" style="zoom:67%;" />
+
+<p>找到下载的文件，解压，将文件夹重命名为“Package Control”复制到sublime存放插件的目录</p>
+<h5 id="3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的"><a href="#3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的" class="headerlink" title="3.https://packagecontrol.io 这个被墙了 下载插件不下来，把下载链接改为国内的."></a>3.<code>https://packagecontrol.io</code> 这个被墙了 下载插件不下来，把下载链接改为国内的.</h5><p><img data-src="/images/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/LGq7aPkejfiBXRz.png" alt="qwqwd.png"></p>
+<p>修改User文件下的配置文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> <span class="string">&quot;bootstrapped&quot;</span>: <span class="literal">true</span>,</span><br><span class="line"> <span class="string">&quot;channels&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;https://erhan.in/channel_v3.json&quot;</span></span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;in_process_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;installed_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;ChineseLocalizations&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Package Control&quot;</span></span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="4-重启sublime-text3"><a href="#4-重启sublime-text3" class="headerlink" title="4.重启sublime text3"></a>4.重启sublime text3</h5>]]></content>
+      <categories>
+        <category>软件</category>
+        <category>配置</category>
+      </categories>
+      <tags>
+        <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《摔跤吧！爸爸》观后感</title>
+    <url>/2020/06/25/%E3%80%8A%E6%91%94%E8%B7%A4%E5%90%A7%EF%BC%81%E7%88%B8%E7%88%B8%E3%80%8B%E8%A7%82%E5%90%8E%E6%84%9F/</url>
+    <content><![CDATA[<p>好久没看过电影了，从开学之后好像就没看了，一方面是开学确实时间紧一点，主要还是我自己没去找电影看吧。OK，下面进入正题。</p>
+<p>电影主要讲的是两个女儿帮爸爸实现了摔跤世界冠军的梦想。年轻的时候，电影的主人公爸爸（名字忘了叫啥了）年轻的时候是一个摔跤全国冠军，但是因为国家贫穷落后，再加上官员的贪污腐败、不重视体育，导致运动员得不到好的训练，这真是“食马者，不知其能千里而食也！”。所以这个爸爸一直很好遗憾，后来他就想要生个儿子，来替自己实现摔跤世界冠军的梦想，但是造化弄人啊，生了三个全是女儿。</p>
+<p>故事的转机发生在他的有一次这两个女儿因为两个男孩骂了她们俩，就把那两个男孩打得鼻青脸肿，这个时候他就突然意识到，为什么女孩就不能摔跤，来帮自己实现梦想呢？于是乎，他就不顾全村人异样的眼光，开始对这两个女儿开始进行摔跤训练，女儿们也反抗过，开始是找借口说训练太累了坚持不了了，后来调慢他们爸爸的闹钟，故意把灯泡烧坏，各种小伎俩都使了出来，还是没有用。但是在他们朋友的一个婚礼上，故事又出现了转机。</p>
+<p>她们逃掉了一次训练，去参加一个好朋友的婚礼，被她们的父亲发现了，她们的父亲当着所有人的面，将“我”扇了一巴掌（故事前面一段是以主人公爸爸的侄子的回忆展开的，这里就用第一人称了），后来她们两个人和这个朋友聊天的时候，朋友点醒了他们，她们的爸爸这样对她们，至少还在乎他们，而不是像其他的父亲一样，只盼着女儿快点长到14岁，把女儿嫁出去，帮别人做洗衣做饭生孩子，像摆脱了一个累赘似的，而他们这样至少可以不要像大多数女人一样，可以实现真正意义上的自由。</p>
+<p>从这之后，她们俩就开始认真训练，大女儿geeta第一次去村里参加比赛，和男孩摔跤比赛，她在四个男孩中选了看起来最强壮的那个。观众都在猜geeta能坚持几秒，但是开局出乎观众们所料，两个旗鼓相当，geeta完全不落下风，但是最后还是败下阵来，不过父亲并不失望。回去之后，geeta不甘心，问爸爸下次比赛是什么时候，之后geeta越发抓紧训练，在后面的比赛中一路披荆斩棘，战胜了邦里的所有男孩，后来参加国家比赛，尽管体重不达标，但是任然蝉联了三年的全国女子摔跤冠军。</p>
+<p>孩子长大了总是要出去的，geeta要去印度国家体育中心去接收新的训练。在那呆了一段时间，第一次回家的时候，geeta似乎不再是那个geeta了，头发留长了，心思也不全部在摔跤上面。更要命的是她觉得她在国家体育中心接受的训练技巧比之前父亲的的技巧要好。父亲也不服气，于是他们俩就比了一场，开始是不相上下的，但是随着时间越来越长，上了年纪的父亲体力跟不上，最后被干翻在泥地里。就这样geeta和父亲之间就产生了隔阂。</p>
+<p>之后geeta参加的各种国际赛事都是非常的不顺利，再后来geeta的妹妹也拿下了全国总冠军，进入到国家体育中心训练。再和geeta的相处过程中，她潜移默化的改变了geeta，老家那边，妈妈也在不断的劝爸爸好好地和geeta谈谈。在一次国际赛事之前，终于等到了这个契机，教练要geeta从55公斤级降级到51公斤级的比赛，geeta就给父亲打了电话，把情况告诉了父亲，这个片段也是很感人的一个片段，父亲就决定亲自去到帕提亚拉给geeta训练，指导geeta比赛。geeta确实找回了以前的状态，但是新的矛盾又出现了。</p>
+<p>在比赛中前夕，测体重的时候教练发现geeta的体重没有减下来，提名要将geeta取消比赛资格。经过geeta的父亲向印度体育委员会求情，体育委员会同意再给geeta一次机会。</p>
+<p>比赛正式开始之后，geeta经过父亲的指导，一次次的顺利晋级，最后拿下了全英赛的摔跤世界冠军。</p>
+<p>这部电影挺感人的，泪点低的我，流下了感动的泪水。第一次是geeta和父亲和好的时候，第二次是geeta顺利晋级决赛，最后是geeta拿下冠军。</p>
+<p>看完之后也有几个想法在我心里洒下了种子，第一个，人应该不忘初心，知道自己是怎么一路走到现在的，对geeta来说就是始终得牢记父亲的教诲，不要因为长大了换了一个环境，就把父亲之前交的都丢掉，应该记住自己是怎么一路拿下全国冠军的。第二个，也是之前在B站看见跳水世界冠军吴敏霞的视频里面说的，我们应该尊重每一位运动员，特别是小国家的运动员，因为他们能走到国际比赛的舞台很不容易，小国家的训练设施不齐全，也得不到专业的训练，因此运动员就得不到专业的训练，在之前仅仅听吴敏霞说了之后还没有太多的感触，看完这部电影之后，对这句话的感触特别深。</p>
+<p>​		</p>
+]]></content>
+      <categories>
+        <category>感悟</category>
+        <category>影视</category>
+      </categories>
+      <tags>
+        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -3834,30 +3858,6 @@
       <tags>
         <tag>Linux</tag>
         <tag>软件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《摔跤吧！爸爸》观后感</title>
-    <url>/2020/06/25/%E3%80%8A%E6%91%94%E8%B7%A4%E5%90%A7%EF%BC%81%E7%88%B8%E7%88%B8%E3%80%8B%E8%A7%82%E5%90%8E%E6%84%9F/</url>
-    <content><![CDATA[<p>好久没看过电影了，从开学之后好像就没看了，一方面是开学确实时间紧一点，主要还是我自己没去找电影看吧。OK，下面进入正题。</p>
-<p>电影主要讲的是两个女儿帮爸爸实现了摔跤世界冠军的梦想。年轻的时候，电影的主人公爸爸（名字忘了叫啥了）年轻的时候是一个摔跤全国冠军，但是因为国家贫穷落后，再加上官员的贪污腐败、不重视体育，导致运动员得不到好的训练，这真是“食马者，不知其能千里而食也！”。所以这个爸爸一直很好遗憾，后来他就想要生个儿子，来替自己实现摔跤世界冠军的梦想，但是造化弄人啊，生了三个全是女儿。</p>
-<p>故事的转机发生在他的有一次这两个女儿因为两个男孩骂了她们俩，就把那两个男孩打得鼻青脸肿，这个时候他就突然意识到，为什么女孩就不能摔跤，来帮自己实现梦想呢？于是乎，他就不顾全村人异样的眼光，开始对这两个女儿开始进行摔跤训练，女儿们也反抗过，开始是找借口说训练太累了坚持不了了，后来调慢他们爸爸的闹钟，故意把灯泡烧坏，各种小伎俩都使了出来，还是没有用。但是在他们朋友的一个婚礼上，故事又出现了转机。</p>
-<p>她们逃掉了一次训练，去参加一个好朋友的婚礼，被她们的父亲发现了，她们的父亲当着所有人的面，将“我”扇了一巴掌（故事前面一段是以主人公爸爸的侄子的回忆展开的，这里就用第一人称了），后来她们两个人和这个朋友聊天的时候，朋友点醒了他们，她们的爸爸这样对她们，至少还在乎他们，而不是像其他的父亲一样，只盼着女儿快点长到14岁，把女儿嫁出去，帮别人做洗衣做饭生孩子，像摆脱了一个累赘似的，而他们这样至少可以不要像大多数女人一样，可以实现真正意义上的自由。</p>
-<p>从这之后，她们俩就开始认真训练，大女儿geeta第一次去村里参加比赛，和男孩摔跤比赛，她在四个男孩中选了看起来最强壮的那个。观众都在猜geeta能坚持几秒，但是开局出乎观众们所料，两个旗鼓相当，geeta完全不落下风，但是最后还是败下阵来，不过父亲并不失望。回去之后，geeta不甘心，问爸爸下次比赛是什么时候，之后geeta越发抓紧训练，在后面的比赛中一路披荆斩棘，战胜了邦里的所有男孩，后来参加国家比赛，尽管体重不达标，但是任然蝉联了三年的全国女子摔跤冠军。</p>
-<p>孩子长大了总是要出去的，geeta要去印度国家体育中心去接收新的训练。在那呆了一段时间，第一次回家的时候，geeta似乎不再是那个geeta了，头发留长了，心思也不全部在摔跤上面。更要命的是她觉得她在国家体育中心接受的训练技巧比之前父亲的的技巧要好。父亲也不服气，于是他们俩就比了一场，开始是不相上下的，但是随着时间越来越长，上了年纪的父亲体力跟不上，最后被干翻在泥地里。就这样geeta和父亲之间就产生了隔阂。</p>
-<p>之后geeta参加的各种国际赛事都是非常的不顺利，再后来geeta的妹妹也拿下了全国总冠军，进入到国家体育中心训练。再和geeta的相处过程中，她潜移默化的改变了geeta，老家那边，妈妈也在不断的劝爸爸好好地和geeta谈谈。在一次国际赛事之前，终于等到了这个契机，教练要geeta从55公斤级降级到51公斤级的比赛，geeta就给父亲打了电话，把情况告诉了父亲，这个片段也是很感人的一个片段，父亲就决定亲自去到帕提亚拉给geeta训练，指导geeta比赛。geeta确实找回了以前的状态，但是新的矛盾又出现了。</p>
-<p>在比赛中前夕，测体重的时候教练发现geeta的体重没有减下来，提名要将geeta取消比赛资格。经过geeta的父亲向印度体育委员会求情，体育委员会同意再给geeta一次机会。</p>
-<p>比赛正式开始之后，geeta经过父亲的指导，一次次的顺利晋级，最后拿下了全英赛的摔跤世界冠军。</p>
-<p>这部电影挺感人的，泪点低的我，流下了感动的泪水。第一次是geeta和父亲和好的时候，第二次是geeta顺利晋级决赛，最后是geeta拿下冠军。</p>
-<p>看完之后也有几个想法在我心里洒下了种子，第一个，人应该不忘初心，知道自己是怎么一路走到现在的，对geeta来说就是始终得牢记父亲的教诲，不要因为长大了换了一个环境，就把父亲之前交的都丢掉，应该记住自己是怎么一路拿下全国冠军的。第二个，也是之前在B站看见跳水世界冠军吴敏霞的视频里面说的，我们应该尊重每一位运动员，特别是小国家的运动员，因为他们能走到国际比赛的舞台很不容易，小国家的训练设施不齐全，也得不到专业的训练，因此运动员就得不到专业的训练，在之前仅仅听吴敏霞说了之后还没有太多的感触，看完这部电影之后，对这句话的感触特别深。</p>
-<p>​		</p>
-]]></content>
-      <categories>
-        <category>感悟</category>
-        <category>影视</category>
-      </categories>
-      <tags>
-        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -4217,45 +4217,6 @@
       </tags>
   </entry>
   <entry>
-    <title>操作系统--操作系统的形成与发展</title>
-    <url>/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%A2%E6%88%90%E4%B8%8E%E5%8F%91%E5%B1%95/</url>
-    <content><![CDATA[<h2 id="操作系统的形成时期"><a href="#操作系统的形成时期" class="headerlink" title="操作系统的形成时期"></a>操作系统的形成时期</h2><h3 id="手动操作时期"><a href="#手动操作时期" class="headerlink" title="手动操作时期"></a>手动操作时期</h3><img data-src="/images/操作系统的形成与发展/vuMCXHTLqJBOh5t.png" alt="image.png" style="zoom:80%;" />
-
-<h4 id="存在缺点"><a href="#存在缺点" class="headerlink" title="存在缺点"></a>存在缺点</h4><ol>
-<li><p>用户独占全部计算机资源</p>
-</li>
-<li><p>CPU等待人工操作</p>
-</li>
-<li><p>CPU与I&#x2F;O设备串行操作</p>
-</li>
-</ol>
-<h3 id="监控程序阶段（早起批处理阶段）"><a href="#监控程序阶段（早起批处理阶段）" class="headerlink" title="监控程序阶段（早起批处理阶段）"></a>监控程序阶段（早起批处理阶段）</h3><img data-src="/images/操作系统的形成与发展/4QMJfoxRIXGiu9C.png" alt="单道批处理系统流程图" style="zoom:67%;" />
-
-<p>单道批处理系统流程图  </p>
-<span id="more"></span>
-
-<h2 id="操作系统的成熟阶段"><a href="#操作系统的成熟阶段" class="headerlink" title="操作系统的成熟阶段"></a>操作系统的成熟阶段</h2><h3 id="多道批处理系统"><a href="#多道批处理系统" class="headerlink" title="多道批处理系统"></a>多道批处理系统</h3><h4 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h4><ol>
-<li>程序浮动与存储保护问题</li>
-<li>CPU的调度和管理问题</li>
-<li>其他资源的管理和调度问题</li>
-</ol>
-<h3 id="分时操作系统"><a href="#分时操作系统" class="headerlink" title="分时操作系统"></a>分时操作系统</h3><h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h4><ol>
-<li>人机交互</li>
-<li>共享主机</li>
-<li>便于用户上机</li>
-</ol>
-<img data-src="/images/操作系统的形成与发展/vrjo1l8dPaFKY7c.png" alt="image.png" style="zoom:67%;" />
-
-<h2 id="进一步发展时期"><a href="#进一步发展时期" class="headerlink" title="进一步发展时期"></a>进一步发展时期</h2>]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>操作系统--操作系统的中断</title>
     <url>/2020/03/03/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%AD%E6%96%AD/</url>
     <content><![CDATA[<h2 id="中断的概念"><a href="#中断的概念" class="headerlink" title="中断的概念"></a>中断的概念</h2><blockquote>
@@ -4328,20 +4289,42 @@
       </tags>
   </entry>
   <entry>
-    <title>《时生》读后感</title>
-    <url>/2020/03/13/%E6%97%B6%E7%94%9F%E8%AF%BB%E5%90%8E%E6%84%9F/</url>
-    <content><![CDATA[<p>&amp;emsp;&amp;emsp;这本书也是很符合东野圭吾的风格，讲的是穿越的故事，很像我看的他的第一本书——《解忧杂货店》，但是给人的感觉却不一样。</p>
-<p>&amp;emsp;&amp;emsp;小说主人公是时生，也就是拓实的儿子，拓实与丽子生下的有重病的儿子。故事是以插叙的手法进描绘的，这也很符合东野圭吾的风格。从拓实和丽子结婚开始，中间插叙了他们认识之前的那些故事，时生穿越时空主要是帮助他爸爸拓实，重新认识自己的身份，放下对其生母美须子的恨意，通过这件事之后也改变了拓实为人处世的态度，让他的生活一步步走向正轨。</p>
-<p>&amp;emsp;&amp;emsp;最喜欢的几句原文：</p>
-<p>&amp;emsp;&amp;emsp;“未来不仅仅是明天，未来在人心中，只要心中有未来，人就能幸福起来，因为有人教了你母亲这个，她才将你生下来，可你看着自己们整天牢骚满腹，不思进取，你感受不到未来不能怪别人，要怪你自己，因为你是个混蛋！”</p>
-<p>&amp;emsp;&amp;emsp;“确信自己喜欢的人能好好地活着，即便面对死亡，也看到了未来。”</p>
-]]></content>
+    <title>操作系统--操作系统的形成与发展</title>
+    <url>/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%A2%E6%88%90%E4%B8%8E%E5%8F%91%E5%B1%95/</url>
+    <content><![CDATA[<h2 id="操作系统的形成时期"><a href="#操作系统的形成时期" class="headerlink" title="操作系统的形成时期"></a>操作系统的形成时期</h2><h3 id="手动操作时期"><a href="#手动操作时期" class="headerlink" title="手动操作时期"></a>手动操作时期</h3><img data-src="/images/操作系统的形成与发展/vuMCXHTLqJBOh5t.png" alt="image.png" style="zoom:80%;" />
+
+<h4 id="存在缺点"><a href="#存在缺点" class="headerlink" title="存在缺点"></a>存在缺点</h4><ol>
+<li><p>用户独占全部计算机资源</p>
+</li>
+<li><p>CPU等待人工操作</p>
+</li>
+<li><p>CPU与I&#x2F;O设备串行操作</p>
+</li>
+</ol>
+<h3 id="监控程序阶段（早起批处理阶段）"><a href="#监控程序阶段（早起批处理阶段）" class="headerlink" title="监控程序阶段（早起批处理阶段）"></a>监控程序阶段（早起批处理阶段）</h3><img data-src="/images/操作系统的形成与发展/4QMJfoxRIXGiu9C.png" alt="单道批处理系统流程图" style="zoom:67%;" />
+
+<p>单道批处理系统流程图  </p>
+<span id="more"></span>
+
+<h2 id="操作系统的成熟阶段"><a href="#操作系统的成熟阶段" class="headerlink" title="操作系统的成熟阶段"></a>操作系统的成熟阶段</h2><h3 id="多道批处理系统"><a href="#多道批处理系统" class="headerlink" title="多道批处理系统"></a>多道批处理系统</h3><h4 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h4><ol>
+<li>程序浮动与存储保护问题</li>
+<li>CPU的调度和管理问题</li>
+<li>其他资源的管理和调度问题</li>
+</ol>
+<h3 id="分时操作系统"><a href="#分时操作系统" class="headerlink" title="分时操作系统"></a>分时操作系统</h3><h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h4><ol>
+<li>人机交互</li>
+<li>共享主机</li>
+<li>便于用户上机</li>
+</ol>
+<img data-src="/images/操作系统的形成与发展/vrjo1l8dPaFKY7c.png" alt="image.png" style="zoom:67%;" />
+
+<h2 id="进一步发展时期"><a href="#进一步发展时期" class="headerlink" title="进一步发展时期"></a>进一步发展时期</h2>]]></content>
       <categories>
-        <category>感悟</category>
-        <category>小说</category>
+        <category>学习笔记</category>
+        <category>操作系统</category>
       </categories>
       <tags>
-        <tag>感悟</tag>
+        <tag>学习笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -4391,6 +4374,23 @@
       </categories>
       <tags>
         <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《时生》读后感</title>
+    <url>/2020/03/13/%E6%97%B6%E7%94%9F%E8%AF%BB%E5%90%8E%E6%84%9F/</url>
+    <content><![CDATA[<p>&amp;emsp;&amp;emsp;这本书也是很符合东野圭吾的风格，讲的是穿越的故事，很像我看的他的第一本书——《解忧杂货店》，但是给人的感觉却不一样。</p>
+<p>&amp;emsp;&amp;emsp;小说主人公是时生，也就是拓实的儿子，拓实与丽子生下的有重病的儿子。故事是以插叙的手法进描绘的，这也很符合东野圭吾的风格。从拓实和丽子结婚开始，中间插叙了他们认识之前的那些故事，时生穿越时空主要是帮助他爸爸拓实，重新认识自己的身份，放下对其生母美须子的恨意，通过这件事之后也改变了拓实为人处世的态度，让他的生活一步步走向正轨。</p>
+<p>&amp;emsp;&amp;emsp;最喜欢的几句原文：</p>
+<p>&amp;emsp;&amp;emsp;“未来不仅仅是明天，未来在人心中，只要心中有未来，人就能幸福起来，因为有人教了你母亲这个，她才将你生下来，可你看着自己们整天牢骚满腹，不思进取，你感受不到未来不能怪别人，要怪你自己，因为你是个混蛋！”</p>
+<p>&amp;emsp;&amp;emsp;“确信自己喜欢的人能好好地活着，即便面对死亡，也看到了未来。”</p>
+]]></content>
+      <categories>
+        <category>感悟</category>
+        <category>小说</category>
+      </categories>
+      <tags>
+        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -4687,8 +4687,8 @@
 
 
 
-<h1 id="fancybox去掉图片标题"><a href="#fancybox去掉图片标题" class="headerlink" title="fancybox去掉图片标题"></a>fancybox去掉图片标题</h1><p>修改主题文件夹下的<code>themes\next\source\js\third-party\fancybox.js</code>文件，注释掉代码</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const imageTitle = $image.attr(&#x27;title&#x27;) || $image.attr(&#x27;alt&#x27;);</span><br></pre></td></tr></table></figure>
+<h1 id="fancybox去掉图片标题"><a href="#fancybox去掉图片标题" class="headerlink" title="fancybox去掉图片标题"></a>fancybox去掉图片标题</h1><p>修改主题文件夹下的<code>themes\next\source\js\third-party\fancybox.js</code>文件，注释掉如下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const imageTitle = $image.attr(&#x27;title&#x27;) || $image.attr(&#x27;alt&#x27;);</span><br><span class="line">if (imageTitle) &#123;</span><br><span class="line">// Do not append image-caption if pandoc has already created a figcaption</span><br><span class="line">if (!$imageWrapLink.next(&#x27;figcaption&#x27;).length) &#123;</span><br><span class="line">$imageWrapLink.append(`&lt;p class=&quot;image-caption&quot;&gt;$&#123;imageTitle&#125;&lt;/p&gt;`);</span><br><span class="line">&#125;</span><br><span class="line">// Make sure img title tag will show correctly in fancybox</span><br><span class="line">$imageWrapLink.attr(&#x27;title&#x27;, imageTitle).attr(&#x27;data-caption&#x27;, imageTitle);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
