@@ -380,8 +380,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -510,8 +510,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -889,8 +889,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -1245,8 +1245,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -1712,8 +1712,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -2364,8 +2364,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -2807,8 +2807,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -2853,8 +2853,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -2873,46 +2873,6 @@
       </categories>
       <tags>
         <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode第一天</title>
-    <url>/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/</url>
-    <content><![CDATA[<blockquote>
-<p>LeetCode第350题</p>
-<p>给定两个数组，编写一个函数来计算它们的交集。</p>
-<p>示例 1：</p>
-<p>输入：nums1 &#x3D; [1,2,2,1], nums2 &#x3D; [2,2]<br>输出：[2,2]<br>示例 2:</p>
-<p>输入：nums1 &#x3D; [4,9,5], nums2 &#x3D; [9,4,9,8,4]<br>输出：[4,9]</p>
-<p>说明：</p>
-<p>输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。<br>我们可以不考虑输出结果的顺序。</p>
-<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii">https://leetcode-cn.com/problems/intersection-of-two-arrays-ii</a></p>
-</blockquote>
-<p>方法一：</p>
-<p>用哈希表映射，先把较短的那个数组遍历，存入哈希表中，键是数组中元素的值，值是数组中元素出现的次数<br>再遍历另外一个数组，从哈希表中找这个数组中的值，看是否存在，存在就将其存入新造的数组中，再将哈希表中该键对应的值减一，如果值减到了0，就将这个键移除去，否则将这个键对应的值减一，在存入哈希表中。</p>
-<span id="more"></span>
-
-<p>这个方法LeetCode上的一张图看的明明白白：</p>
-<p><img data-src="/images/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/350_fig1.gif" alt="fig1"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect1(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  <span class="keyword">if</span> (nums1.length &gt; nums2.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> intersect1(nums2, nums1);</span><br><span class="line">  &#125;</span><br><span class="line">  Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums1) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>;</span><br><span class="line">    map.put(num, count);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[nums2.length];</span><br><span class="line">  <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums2) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      arr[index++] = num;</span><br><span class="line">      <span class="keyword">if</span> (count != <span class="number">1</span>) &#123;</span><br><span class="line">        map.put(num, --count);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        map.remove(num);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>方法二：</p>
-<p>先对两个数组进行排序，然后设置两个指针来遍历这两个数组。将比较结果较小的那个数组的指针后移，如果两数相等，则将两个数组的指针都向后移，并将这个数存入新造好的数组。遍历直到有一个指针到了数组的结尾，结束遍历。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect2(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  Arrays.sort(nums1);</span><br><span class="line">  Arrays.sort(nums2);</span><br><span class="line">  <span class="type">int</span> <span class="variable">len1</span> <span class="operator">=</span> nums1.length, len2 = nums2.length;</span><br><span class="line">  <span class="type">int</span> <span class="variable">index1</span> <span class="operator">=</span> <span class="number">0</span>, index2 = <span class="number">0</span>, index = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[Math.min(len1, len2)];</span><br><span class="line">  <span class="keyword">while</span> (index1 &lt; len1 &amp;&amp; index2 &lt; len2) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums1[index1] &lt; nums2[index2]) &#123;</span><br><span class="line">      index1++;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums1[index1] &gt; nums2[index2]) &#123;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      arr[index++] = nums1[index1];</span><br><span class="line">      index1++;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>结语</p>
-<p>如果 nums2的元素存储在磁盘上，磁盘内存是有限的，并且你不能一次加载所有的元素到内存中。那么就无法高效地对 nums2进行排序，因此推荐使用方法一而不是方法二。在方法一中，nums2 只关系到查询操作，因此每次读取nums2中的一部分数据，并进行处理即可。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>算法</category>
-        <category>LeetCode</category>
-      </categories>
-      <tags>
-        <tag>LeetCode</tag>
-        <tag>算法</tag>
-        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -3032,6 +2992,46 @@
       </tags>
   </entry>
   <entry>
+    <title>LeetCode第一天</title>
+    <url>/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/</url>
+    <content><![CDATA[<blockquote>
+<p>LeetCode第350题</p>
+<p>给定两个数组，编写一个函数来计算它们的交集。</p>
+<p>示例 1：</p>
+<p>输入：nums1 &#x3D; [1,2,2,1], nums2 &#x3D; [2,2]<br>输出：[2,2]<br>示例 2:</p>
+<p>输入：nums1 &#x3D; [4,9,5], nums2 &#x3D; [9,4,9,8,4]<br>输出：[4,9]</p>
+<p>说明：</p>
+<p>输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。<br>我们可以不考虑输出结果的顺序。</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii">https://leetcode-cn.com/problems/intersection-of-two-arrays-ii</a></p>
+</blockquote>
+<p>方法一：</p>
+<p>用哈希表映射，先把较短的那个数组遍历，存入哈希表中，键是数组中元素的值，值是数组中元素出现的次数<br>再遍历另外一个数组，从哈希表中找这个数组中的值，看是否存在，存在就将其存入新造的数组中，再将哈希表中该键对应的值减一，如果值减到了0，就将这个键移除去，否则将这个键对应的值减一，在存入哈希表中。</p>
+<span id="more"></span>
+
+<p>这个方法LeetCode上的一张图看的明明白白：</p>
+<p><img data-src="/images/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/350_fig1.gif" alt="fig1"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect1(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  <span class="keyword">if</span> (nums1.length &gt; nums2.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> intersect1(nums2, nums1);</span><br><span class="line">  &#125;</span><br><span class="line">  Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums1) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>;</span><br><span class="line">    map.put(num, count);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[nums2.length];</span><br><span class="line">  <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums2) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      arr[index++] = num;</span><br><span class="line">      <span class="keyword">if</span> (count != <span class="number">1</span>) &#123;</span><br><span class="line">        map.put(num, --count);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        map.remove(num);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法二：</p>
+<p>先对两个数组进行排序，然后设置两个指针来遍历这两个数组。将比较结果较小的那个数组的指针后移，如果两数相等，则将两个数组的指针都向后移，并将这个数存入新造好的数组。遍历直到有一个指针到了数组的结尾，结束遍历。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect2(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  Arrays.sort(nums1);</span><br><span class="line">  Arrays.sort(nums2);</span><br><span class="line">  <span class="type">int</span> <span class="variable">len1</span> <span class="operator">=</span> nums1.length, len2 = nums2.length;</span><br><span class="line">  <span class="type">int</span> <span class="variable">index1</span> <span class="operator">=</span> <span class="number">0</span>, index2 = <span class="number">0</span>, index = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[Math.min(len1, len2)];</span><br><span class="line">  <span class="keyword">while</span> (index1 &lt; len1 &amp;&amp; index2 &lt; len2) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums1[index1] &lt; nums2[index2]) &#123;</span><br><span class="line">      index1++;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums1[index1] &gt; nums2[index2]) &#123;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      arr[index++] = nums1[index1];</span><br><span class="line">      index1++;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>结语</p>
+<p>如果 nums2的元素存储在磁盘上，磁盘内存是有限的，并且你不能一次加载所有的元素到内存中。那么就无法高效地对 nums2进行排序，因此推荐使用方法一而不是方法二。在方法一中，nums2 只关系到查询操作，因此每次读取nums2中的一部分数据，并进行处理即可。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>LeetCode</tag>
+        <tag>算法</tag>
+        <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux中的进程管理</title>
     <url>/2020/05/22/Linux%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p>pa a    显示终端机下所有进程</p>
@@ -3106,10 +3106,11 @@
 
 <h4 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">![](图片链接)</span><br></pre></td></tr></table></figure>
 
-
-
 <p>今天先写到这，睡觉去了🌛 🌜</p>
 <hr>
+<h4 id="文字"><a href="#文字" class="headerlink" title="文字"></a>文字</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[文字描述](链接)</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://www.baidu.com/">百度</a></p>
 ]]></content>
       <categories>
         <category>学习笔记</category>
@@ -3152,6 +3153,32 @@
       <tags>
         <tag>服务器</tag>
         <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx配置反向代理</title>
+    <url>/2021/09/19/Nginx%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<h1 id="前后端分离项目的部署配置"><a href="#前后端分离项目的部署配置" class="headerlink" title="前后端分离项目的部署配置"></a>前后端分离项目的部署配置</h1><p>Nginx就非常离谱，也不知道为什么，前端静态资源也需要单独配置，而且这配置方式还非常的离谱，贴一下配置文件</p>
+<p>配置文件路径<code>/etc/nginx/sites-enabled</code></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">server <span class="punctuation">&#123;</span></span><br><span class="line">    listen      <span class="number">80</span>;   			#监听<span class="number">80</span>端口</span><br><span class="line">    server_name	<span class="number">10.100</span><span class="number">.128</span><span class="number">.8</span>;   #监听访问的host</span><br><span class="line"></span><br><span class="line">    location /EleLabSys/ <span class="punctuation">&#123;</span></span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files $uri $uri/ EleLabSys/;	#此处非常离谱，是经过不断尝试出来的，子文件夹必须要写在这个地方才行</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line">	# 后端api代理还比较正常</span><br><span class="line">	location /prod-api/ <span class="punctuation">&#123;</span></span><br><span class="line">		proxy_set_header Host $http_host;</span><br><span class="line">		proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">		proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">		proxy_pass http<span class="punctuation">:</span><span class="comment">//localhost:8080/;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>具体是什么原因导致的暂且不深究。。。</p>
+<p>等有空再研究</p>
+<hr>
+<p>更新来了。。。</p>
+<p>经过再次的尝试，发现是需要把根路径放到最后面，这样才能正常地访问静态资源，不需要手动配置，并且代理也有效果</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;   <span class="comment">#监听80端口</span></span><br><span class="line">    server_name	10.100.128.8;   <span class="comment">#监听访问的host</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 实验室系统后端</span></span><br><span class="line">	location /prod-api/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:8080/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室代码仓库</span></span><br><span class="line">    location /gitea/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:3000/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室系统云盘</span></span><br><span class="line">	location /cloudDisk/ &#123;</span><br><span class="line">		<span class="comment"># proxy_set_header Host $http_host;</span></span><br><span class="line">		<span class="comment"># proxy_set_header X-Real-IP $remote_addr;</span></span><br><span class="line">		<span class="comment"># proxy_set_header REMOTE-HOST $remote_addr;</span></span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:9999/;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 需要放到最后面，匹配优先级最低</span></span><br><span class="line">	location / &#123;</span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /;</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -3238,32 +3265,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Nginx配置反向代理</title>
-    <url>/2021/09/19/Nginx%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
-    <content><![CDATA[<h1 id="前后端分离项目的部署配置"><a href="#前后端分离项目的部署配置" class="headerlink" title="前后端分离项目的部署配置"></a>前后端分离项目的部署配置</h1><p>Nginx就非常离谱，也不知道为什么，前端静态资源也需要单独配置，而且这配置方式还非常的离谱，贴一下配置文件</p>
-<p>配置文件路径<code>/etc/nginx/sites-enabled</code></p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">server <span class="punctuation">&#123;</span></span><br><span class="line">    listen      <span class="number">80</span>;   			#监听<span class="number">80</span>端口</span><br><span class="line">    server_name	<span class="number">10.100</span><span class="number">.128</span><span class="number">.8</span>;   #监听访问的host</span><br><span class="line"></span><br><span class="line">    location /EleLabSys/ <span class="punctuation">&#123;</span></span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files $uri $uri/ EleLabSys/;	#此处非常离谱，是经过不断尝试出来的，子文件夹必须要写在这个地方才行</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line">	# 后端api代理还比较正常</span><br><span class="line">	location /prod-api/ <span class="punctuation">&#123;</span></span><br><span class="line">		proxy_set_header Host $http_host;</span><br><span class="line">		proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">		proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">		proxy_pass http<span class="punctuation">:</span><span class="comment">//localhost:8080/;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>具体是什么原因导致的暂且不深究。。。</p>
-<p>等有空再研究</p>
-<hr>
-<p>更新来了。。。</p>
-<p>经过再次的尝试，发现是需要把根路径放到最后面，这样才能正常地访问静态资源，不需要手动配置，并且代理也有效果</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;   <span class="comment">#监听80端口</span></span><br><span class="line">    server_name	10.100.128.8;   <span class="comment">#监听访问的host</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 实验室系统后端</span></span><br><span class="line">	location /prod-api/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:8080/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室代码仓库</span></span><br><span class="line">    location /gitea/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:3000/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室系统云盘</span></span><br><span class="line">	location /cloudDisk/ &#123;</span><br><span class="line">		<span class="comment"># proxy_set_header Host $http_host;</span></span><br><span class="line">		<span class="comment"># proxy_set_header X-Real-IP $remote_addr;</span></span><br><span class="line">		<span class="comment"># proxy_set_header REMOTE-HOST $remote_addr;</span></span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:9999/;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 需要放到最后面，匹配优先级最低</span></span><br><span class="line">	location / &#123;</span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /;</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-        <category>Nginx</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>Nginx</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PVE直通硬盘到TrueNAS</title>
     <url>/2022/07/16/PVE%20%E7%9B%B4%E9%80%9A%E7%A1%AC%E7%9B%98%E5%88%B0TrueNAS/</url>
     <content><![CDATA[<h1 id="1-查询所有的硬盘识别码"><a href="#1-查询所有的硬盘识别码" class="headerlink" title="1.查询所有的硬盘识别码"></a>1.查询所有的硬盘识别码</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -la /dev/disk/by-id/|grep -v dm|grep -v lvm|grep -v part</span><br></pre></td></tr></table></figure>
@@ -3277,6 +3278,52 @@
       <tags>
         <tag>配置</tag>
         <tag>PVE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TCP/IP四层模型</title>
+    <url>/2022/08/01/TCP-IP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p>TCP&#x2F;IP网络模型适用于不同设备上进程间的通信，共分为四层分，从上到下分别是<strong>应用层、传输层、网络层、网络接口层</strong></p>
+<h1 id="应用层（Application-Layer）"><a href="#应用层（Application-Layer）" class="headerlink" title="应用层（Application Layer）"></a>应用层（Application Layer）</h1><p>应用层是最上层的，我们能直接接触到的层，我们日常所使用的软件都是在应用层上实现的。</p>
+<p>应用层不关心数据是如何传输的，就和我们寄快递的时候只需要把包裹交给快递员，我们不关心包裹是如何运输的。</p>
+<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><p>应用层的协议包括HTTP、FTP、Telnet、DNS、SMTP等。</p>
+<h1 id="传输层（Transport-Layer）"><a href="#传输层（Transport-Layer）" class="headerlink" title="传输层（Transport Layer）"></a>传输层（Transport Layer）</h1><p>传输层是为应用层提供网络支持的，在传输层有两个传输协议，分别是TCP和UDP。</p>
+<h2 id="TCP（Transmission-Control-Protocol）"><a href="#TCP（Transmission-Control-Protocol）" class="headerlink" title="TCP（Transmission Control Protocol）"></a>TCP（Transmission Control Protocol）</h2><p>TCP的全称是传输控制协议，大部分应用传输层协议使用的都是TCP，TCP为了保证数据能够可靠的传输到目的地，有流量控制、超时重传、拥塞控制等特性。</p>
+<h2 id="UDP（User-Datagram-Protocol）"><a href="#UDP（User-Datagram-Protocol）" class="headerlink" title="UDP（User Datagram Protocol）"></a>UDP（User Datagram Protocol）</h2><p>UDP全称是用户报文协议，UDP相对TCP来说就很简单，只负责发送数据包，至于数据包能否正常抵达目的地，UDP不能保证；但是换一个角度来说，UDP少干了这么多，那他的实时性相对TCP来说更好，传输效率也更高。</p>
+<p>通常来说一台设备上会运行多个应用进程，为了区分数据要发送的具体进程，传输层中需要指定<strong>端口号</strong>来区分不同的进程和应用。</p>
+<span id="more"></span>
+
+<h1 id="网络层（Internet-Layer）"><a href="#网络层（Internet-Layer）" class="headerlink" title="网络层（Internet Layer）"></a>网络层（Internet Layer）</h1><p>负责将数据从一个设备发送到另一个设备的并不是传输层，传输层设计的理念是，简单、高效、专注，实际场景中的网络环节错综复杂，网络层就来是负责数据实际传输。</p>
+<p>网络层最常用的是<strong>IP协议（Internet Protocol）</strong>，IP协议会将传输层的报文作为数据部分，再加上IP数据包组装成IP报文。</p>
+<p><img data-src="E:\Hexo_6.2.0\source\images\TCP-IP四层模型\12.jpg" alt="img"></p>
+<p>网络层负责将数据从一个设备传输到另一个设备，而为了确定目标设备，网络层需要有区分设备单的编号，这个编号就是IP地址。</p>
+<p>对于IPv4协议，IP地址共32位（32个bit），共分成四段（例如：192.168.1.1），每段8位。如果只有单纯的IP地址，虽然做到了设备区分，但是殉职起来就特别麻烦，世界上那么多设备，一个个去匹配显然是非常不科学的。</p>
+<p>因此需要借助<strong>子网掩码</strong>来将IP地址分为两种意义：</p>
+<ul>
+<li>一个是网络号，负责标识IP地址是属于哪一个[子网]的；</li>
+<li>一个是主机号，负责标识同一子网下的不同主机；</li>
+</ul>
+<p>举个栗子，比如192.168.1.1&#x2F;24，后面的<code>/24</code>表示的就是子网掩码<code>255.255.255.0</code>，255.255.255.0 二进制是「11111111-11111111-11111111-00000000」，其中共有24个1，为了简化子网掩码的表示，就用<code>/24</code>来代替。</p>
+<p>网络号&#x3D;IP地址<strong>按位与</strong>子网掩码</p>
+<p>主机号&#x3D;IP地址<strong>按位与</strong>子网掩码取反</p>
+<h1 id="网络接口层（Link-Layer）"><a href="#网络接口层（Link-Layer）" class="headerlink" title="网络接口层（Link Layer）"></a>网络接口层（Link Layer）</h1><p>网络层生成完IP头部之后，接下来要交给网络接口层在IP头前面加上MAC头，并封装成数据帧（Data Frame）发送到网络上。</p>
+<p>IP头中的接收方IP表示网络包的目的地，通过这个地址我们就可以判断要将包发送到那里，但是在以太网的世界中，这个思路行不通！</p>
+<p>以太网是一种在局域网内，把附近的设备连接起来，使其可以互相通讯的技术。我们电脑上的以太网口、WiFi接口，以太网交换机、路由器上的千兆、万兆网口，还有网线，都是以太网的组成部分。</p>
+<p>以太网判断网络包目的地的方式和IP不同，不需要采用互相匹配的方式才能在以太网中将包发往目的地，而MAC头就是干这个用的，所以在以太网进行通讯需要用到MAC地址。</p>
+<p>MAC头是以太网使用的头，包含了发送方和接收方的MAC地址等信息，我们可以通过ARP协议获取对方的MAC地址。</p>
+<p>所以网络接口层主要为网络提供链路级别的传输服务，负责在以太网、WiFi这样的底层网络上发送原始数据包，工作在网卡这个层次，使用MAC地址来别试网络中的设备。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>TCP&#x2F;IP网络的四层结构总结如下图：</p>
+<p><img data-src="E:\Hexo_6.2.0\source\images\TCP-IP四层模型\tcpip参考模型.drawio.png" alt="img"></p>
+<p>每一层的封装结构如下图：</p>
+<p><img data-src="E:\Hexo_6.2.0\source\images\TCP-IP四层模型\封装.png" alt="img"></p>
+<p>网络接口层的传输单位是帧（frame），IP层的传输单位是包（package），TCP层的传输单位是段（segment），HTTP的传输单位则是消息或报文（message），这些单位其实并没有本质上的区别，可以统称为数据包。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.xiaolincoding.com/network/1_base/tcp_ip_model.html">小林coding TCP&#x2F;IP 网络模型有哪几层？</a></p>
+]]></content>
+      <categories>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
       </tags>
   </entry>
   <entry>
@@ -3445,65 +3492,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Ubuntu中设置http强制重定向为https</title>
-    <url>/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/</url>
-    <content><![CDATA[<h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
-<h3 id="2-设置http端口重定向"><a href="#2-设置http端口重定向" class="headerlink" title="2.设置http端口重定向"></a>2.设置http端口重定向</h3><p>将下面这段放到要重定向的站点配置文件里面，放在&lt;\VirtualHost *:80&gt;&lt;\VirtualHost&gt; 标签内的任何位置都行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">RewriteEngine on</span><br><span class="line">RewriteCond  %&#123;HTTPS&#125; !=on</span><br><span class="line">RewriteRule  ^(.*)  https://%&#123;SERVER_NAME&#125;<span class="variable">$1</span> [L,R]</span><br></pre></td></tr></table></figure>
-
-<h3 id="重启apach2"><a href="#重启apach2" class="headerlink" title="重启apach2"></a>重启apach2</h3><p>service apache2 restart</p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo一键部署到云服务器</title>
-    <url>/2020/03/01/hexo%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><blockquote>
-<p>&amp;emsp;&amp;emsp;之前折腾了好久，用Rsync，ftp，stfp都试过了，都没弄成，在网上看的教程很多也是基于git的，也就是在服务器建一个git的钩子，指定一个目录作为远程仓库地址，可以通过ssh连接，然后在本地可以直接上传，最后才选择的这个方案。在成功之前踩了好多坑，配sftp的时候用百度上的坑爹教程，导致服务器都连不上，最后还是选择则了用git做仓库的方式来上传，这个教程很简单，相对于其他的同样的方法，只是不知道会不会有安全问题。</p>
-</blockquote>
-<h2 id="正式开始"><a href="#正式开始" class="headerlink" title="正式开始"></a>正式开始</h2><h3 id="1-配置Git-hooks"><a href="#1-配置Git-hooks" class="headerlink" title="1. 配置Git hooks"></a>1. 配置Git hooks</h3><ol>
-<li><p>创建Git裸仓库</p>
-<p>blog.git作为远程Git仓库，Hexo在本地生成的博客静态文件可以通过push与其同步。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/blog.git &amp;&amp; <span class="built_in">cd</span> ~/blog.git</span><br><span class="line">git init --bare</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在hooks目录下新建一个脚本文件<code>post-receive</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">touch</span> hooks/post-receive</span><br></pre></td></tr></table></figure>
-
-<p>   <code>post-receive</code>脚本将在blog.git仓库接收到push时执行</p>
-<p>   脚本非常简单，就是删除原有的&#x2F;var&#x2F;www&#x2F;html&#x2F;blog目录，然后从blog.git仓库clone新的博客静态文件</p>
-<p>   <code>vim hooks/post-receive</code> 将下面内容写入<code>post-receive</code>文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">        </span><br><span class="line"><span class="built_in">rm</span> -rf /var/www/html/blog</span><br><span class="line">git <span class="built_in">clone</span> /root/blog.git /var/www/html/blog</span><br></pre></td></tr></table></figure>
-
-
-</li>
-<li><p>给post-receive脚本执行权限</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x hooks/post-receive</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置好之后可以测试一下，就在本地clone那个远程仓库</p>
-</li>
-</ol>
-<h3 id="2-修改hexo配置文件"><a href="#2-修改hexo配置文件" class="headerlink" title="2.修改hexo配置文件"></a>2.修改hexo配置文件</h3><p>修改hexo根目录下的_config.yml文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: <span class="string">&#x27;git&#x27;</span></span><br><span class="line">  repo: <span class="string">&#x27;root@服务器IP:blog.git&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="补充一点"><a href="#补充一点" class="headerlink" title="补充一点"></a>补充一点</h3><p>如果之前有在同一台服务器上配置过git的裸库，需要在用户目录的<code>.ssh</code>目录下，将<code>known_hosts</code>文件中的主机记录删除掉，否则可能会报错。</p>
-<img data-src="https://i.loli.net/2020/04/25/Nk1QSac4IE2TxRz.png" alt="image.png" style="zoom:80%;" />
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>&amp;emsp;&amp;emsp;这个方法和其他复杂一点的方法区别就是，没有专门建一个git的用户用来上传，就直接用root用户上传，就自己用的话应该问题也不大🤔</p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>git的基本使用</title>
     <url>/2020/03/14/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<img data-src="/images/git的基本使用/HjQNKBory3xwiJv.jpg" alt="git.jpg" style="zoom:50%;" />
@@ -3595,6 +3583,49 @@
       </tags>
   </entry>
   <entry>
+    <title>hexo一键部署到云服务器</title>
+    <url>/2020/03/01/hexo%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><blockquote>
+<p>&amp;emsp;&amp;emsp;之前折腾了好久，用Rsync，ftp，stfp都试过了，都没弄成，在网上看的教程很多也是基于git的，也就是在服务器建一个git的钩子，指定一个目录作为远程仓库地址，可以通过ssh连接，然后在本地可以直接上传，最后才选择的这个方案。在成功之前踩了好多坑，配sftp的时候用百度上的坑爹教程，导致服务器都连不上，最后还是选择则了用git做仓库的方式来上传，这个教程很简单，相对于其他的同样的方法，只是不知道会不会有安全问题。</p>
+</blockquote>
+<h2 id="正式开始"><a href="#正式开始" class="headerlink" title="正式开始"></a>正式开始</h2><h3 id="1-配置Git-hooks"><a href="#1-配置Git-hooks" class="headerlink" title="1. 配置Git hooks"></a>1. 配置Git hooks</h3><ol>
+<li><p>创建Git裸仓库</p>
+<p>blog.git作为远程Git仓库，Hexo在本地生成的博客静态文件可以通过push与其同步。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/blog.git &amp;&amp; <span class="built_in">cd</span> ~/blog.git</span><br><span class="line">git init --bare</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在hooks目录下新建一个脚本文件<code>post-receive</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">touch</span> hooks/post-receive</span><br></pre></td></tr></table></figure>
+
+<p>   <code>post-receive</code>脚本将在blog.git仓库接收到push时执行</p>
+<p>   脚本非常简单，就是删除原有的&#x2F;var&#x2F;www&#x2F;html&#x2F;blog目录，然后从blog.git仓库clone新的博客静态文件</p>
+<p>   <code>vim hooks/post-receive</code> 将下面内容写入<code>post-receive</code>文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">        </span><br><span class="line"><span class="built_in">rm</span> -rf /var/www/html/blog</span><br><span class="line">git <span class="built_in">clone</span> /root/blog.git /var/www/html/blog</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>给post-receive脚本执行权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x hooks/post-receive</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置好之后可以测试一下，就在本地clone那个远程仓库</p>
+</li>
+</ol>
+<h3 id="2-修改hexo配置文件"><a href="#2-修改hexo配置文件" class="headerlink" title="2.修改hexo配置文件"></a>2.修改hexo配置文件</h3><p>修改hexo根目录下的_config.yml文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: <span class="string">&#x27;git&#x27;</span></span><br><span class="line">  repo: <span class="string">&#x27;root@服务器IP:blog.git&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="补充一点"><a href="#补充一点" class="headerlink" title="补充一点"></a>补充一点</h3><p>如果之前有在同一台服务器上配置过git的裸库，需要在用户目录的<code>.ssh</code>目录下，将<code>known_hosts</code>文件中的主机记录删除掉，否则可能会报错。</p>
+<img data-src="https://i.loli.net/2020/04/25/Nk1QSac4IE2TxRz.png" alt="image.png" style="zoom:80%;" />
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>&amp;emsp;&amp;emsp;这个方法和其他复杂一点的方法区别就是，没有专门建一个git的用户用来上传，就直接用root用户上传，就自己用的话应该问题也不大🤔</p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>IntelliJ Idea配置类和方法的注释模板</title>
     <url>/2020/04/15/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/</url>
     <content><![CDATA[<h2 id="设置类的注释模板"><a href="#设置类的注释模板" class="headerlink" title="设置类的注释模板"></a>设置类的注释模板</h2><p><img data-src="/images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/SZLA4oF5vn3hMyG.png" alt="image.png"></p>
@@ -3632,6 +3663,44 @@
       </tags>
   </entry>
   <entry>
+    <title>Ubuntu中设置http强制重定向为https</title>
+    <url>/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/</url>
+    <content><![CDATA[<h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
+<h3 id="2-设置http端口重定向"><a href="#2-设置http端口重定向" class="headerlink" title="2.设置http端口重定向"></a>2.设置http端口重定向</h3><p>将下面这段放到要重定向的站点配置文件里面，放在&lt;\VirtualHost *:80&gt;&lt;\VirtualHost&gt; 标签内的任何位置都行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">RewriteEngine on</span><br><span class="line">RewriteCond  %&#123;HTTPS&#125; !=on</span><br><span class="line">RewriteRule  ^(.*)  https://%&#123;SERVER_NAME&#125;<span class="variable">$1</span> [L,R]</span><br></pre></td></tr></table></figure>
+
+<h3 id="重启apach2"><a href="#重启apach2" class="headerlink" title="重启apach2"></a>重启apach2</h3><p>service apache2 restart</p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sublime text3下载插件</title>
+    <url>/2020/02/26/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/</url>
+    <content><![CDATA[<h5 id="1-在github上下载Package-Control的安装包"><a href="#1-在github上下载Package-Control的安装包" class="headerlink" title="1.在github上下载Package Control的安装包"></a>1.在github上下载Package Control的安装包</h5><p><a href="https://github.com/wbond/sublime_package_control">https://github.com/wbond/sublime_package_control</a> </p>
+<h5 id="2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件"><a href="#2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件" class="headerlink" title="2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件"></a>2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件</h5><span id="more"></span>
+
+<img data-src="/images/sublime下载插件/image-20200428221639527.png" alt="image-20200428221639527" style="zoom:67%;" />
+
+<p>找到下载的文件，解压，将文件夹重命名为“Package Control”复制到sublime存放插件的目录</p>
+<h5 id="3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的"><a href="#3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的" class="headerlink" title="3.https://packagecontrol.io 这个被墙了 下载插件不下来，把下载链接改为国内的."></a>3.<code>https://packagecontrol.io</code> 这个被墙了 下载插件不下来，把下载链接改为国内的.</h5><p><img data-src="/images/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/LGq7aPkejfiBXRz.png" alt="qwqwd.png"></p>
+<p>修改User文件下的配置文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> <span class="string">&quot;bootstrapped&quot;</span>: <span class="literal">true</span>,</span><br><span class="line"> <span class="string">&quot;channels&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;https://erhan.in/channel_v3.json&quot;</span></span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;in_process_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;installed_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;ChineseLocalizations&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Package Control&quot;</span></span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="4-重启sublime-text3"><a href="#4-重启sublime-text3" class="headerlink" title="4.重启sublime text3"></a>4.重启sublime text3</h5>]]></content>
+      <categories>
+        <category>软件</category>
+        <category>配置</category>
+      </categories>
+      <tags>
+        <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>spring-boot在IDEA中的热部署</title>
     <url>/2020/03/15/spring-boot%E5%9C%A8IDEA%E4%B8%AD%E7%9A%84%E7%83%AD%E9%83%A8%E7%BD%B2/</url>
     <content><![CDATA[<blockquote>
@@ -3662,25 +3731,130 @@
       </tags>
   </entry>
   <entry>
-    <title>sublime text3下载插件</title>
-    <url>/2020/02/26/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/</url>
-    <content><![CDATA[<h5 id="1-在github上下载Package-Control的安装包"><a href="#1-在github上下载Package-Control的安装包" class="headerlink" title="1.在github上下载Package Control的安装包"></a>1.在github上下载Package Control的安装包</h5><p><a href="https://github.com/wbond/sublime_package_control">https://github.com/wbond/sublime_package_control</a> </p>
-<h5 id="2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件"><a href="#2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件" class="headerlink" title="2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件"></a>2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件</h5><span id="more"></span>
+    <title>vim快捷键快速参考</title>
+    <url>/2021/09/17/vim%E5%BF%AB%E6%8D%B7%E9%94%AE/</url>
+    <content><![CDATA[<h1 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dw</td>
+<td>删除一个词</td>
+</tr>
+<tr>
+<td>dgg</td>
+<td>删除至文件开头</td>
+</tr>
+<tr>
+<td>dG</td>
+<td>删除至文件末尾</td>
+</tr>
+<tr>
+<td>dd</td>
+<td>删除当前行</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
 
-<img data-src="/images/sublime下载插件/image-20200428221639527.png" alt="image-20200428221639527" style="zoom:67%;" />
-
-<p>找到下载的文件，解压，将文件夹重命名为“Package Control”复制到sublime存放插件的目录</p>
-<h5 id="3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的"><a href="#3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的" class="headerlink" title="3.https://packagecontrol.io 这个被墙了 下载插件不下来，把下载链接改为国内的."></a>3.<code>https://packagecontrol.io</code> 这个被墙了 下载插件不下来，把下载链接改为国内的.</h5><p><img data-src="/images/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/LGq7aPkejfiBXRz.png" alt="qwqwd.png"></p>
-<p>修改User文件下的配置文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> <span class="string">&quot;bootstrapped&quot;</span>: <span class="literal">true</span>,</span><br><span class="line"> <span class="string">&quot;channels&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;https://erhan.in/channel_v3.json&quot;</span></span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;in_process_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;installed_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;ChineseLocalizations&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Package Control&quot;</span></span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="4-重启sublime-text3"><a href="#4-重启sublime-text3" class="headerlink" title="4.重启sublime text3"></a>4.重启sublime text3</h5>]]></content>
+<h1 id="复制粘贴"><a href="#复制粘贴" class="headerlink" title="复制粘贴"></a>复制粘贴</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>yy</td>
+<td>复制当前行</td>
+</tr>
+<tr>
+<td>p（小写）</td>
+<td>在当前行之后粘贴</td>
+</tr>
+<tr>
+<td>P（大写）</td>
+<td>在当前行之前粘贴</td>
+</tr>
+</tbody></table>
+<h1 id="撤销-x2F-恢复"><a href="#撤销-x2F-恢复" class="headerlink" title="撤销&#x2F;恢复"></a>撤销&#x2F;恢复</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>u</td>
+<td>撤销</td>
+</tr>
+<tr>
+<td>ctrl+r</td>
+<td>恢复</td>
+</tr>
+</tbody></table>
+<h1 id="搜索和替换"><a href="#搜索和替换" class="headerlink" title="搜索和替换"></a>搜索和替换</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x2F;text</td>
+<td>在文档后面部分搜索text</td>
+</tr>
+<tr>
+<td>?text</td>
+<td>在文档前面部分搜索text</td>
+</tr>
+<tr>
+<td>n</td>
+<td>移动到后一个搜索结果</td>
+</tr>
+<tr>
+<td>N</td>
+<td>移动到前一个搜索结果</td>
+</tr>
+<tr>
+<td>:%s&#x2F;origin&#x2F;replace&#x2F;g</td>
+<td>将所有origin替换为replace</td>
+</tr>
+</tbody></table>
+]]></content>
       <categories>
         <category>软件</category>
-        <category>配置</category>
+        <category>使用</category>
       </categories>
       <tags>
+        <tag>Linux</tag>
         <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《摔跤吧！爸爸》观后感</title>
+    <url>/2020/06/25/%E3%80%8A%E6%91%94%E8%B7%A4%E5%90%A7%EF%BC%81%E7%88%B8%E7%88%B8%E3%80%8B%E8%A7%82%E5%90%8E%E6%84%9F/</url>
+    <content><![CDATA[<p>好久没看过电影了，从开学之后好像就没看了，一方面是开学确实时间紧一点，主要还是我自己没去找电影看吧。OK，下面进入正题。</p>
+<p>电影主要讲的是两个女儿帮爸爸实现了摔跤世界冠军的梦想。年轻的时候，电影的主人公爸爸（名字忘了叫啥了）年轻的时候是一个摔跤全国冠军，但是因为国家贫穷落后，再加上官员的贪污腐败、不重视体育，导致运动员得不到好的训练，这真是“食马者，不知其能千里而食也！”。所以这个爸爸一直很好遗憾，后来他就想要生个儿子，来替自己实现摔跤世界冠军的梦想，但是造化弄人啊，生了三个全是女儿。</p>
+<p>故事的转机发生在他的有一次这两个女儿因为两个男孩骂了她们俩，就把那两个男孩打得鼻青脸肿，这个时候他就突然意识到，为什么女孩就不能摔跤，来帮自己实现梦想呢？于是乎，他就不顾全村人异样的眼光，开始对这两个女儿开始进行摔跤训练，女儿们也反抗过，开始是找借口说训练太累了坚持不了了，后来调慢他们爸爸的闹钟，故意把灯泡烧坏，各种小伎俩都使了出来，还是没有用。但是在他们朋友的一个婚礼上，故事又出现了转机。</p>
+<p>她们逃掉了一次训练，去参加一个好朋友的婚礼，被她们的父亲发现了，她们的父亲当着所有人的面，将“我”扇了一巴掌（故事前面一段是以主人公爸爸的侄子的回忆展开的，这里就用第一人称了），后来她们两个人和这个朋友聊天的时候，朋友点醒了他们，她们的爸爸这样对她们，至少还在乎他们，而不是像其他的父亲一样，只盼着女儿快点长到14岁，把女儿嫁出去，帮别人做洗衣做饭生孩子，像摆脱了一个累赘似的，而他们这样至少可以不要像大多数女人一样，可以实现真正意义上的自由。</p>
+<p>从这之后，她们俩就开始认真训练，大女儿geeta第一次去村里参加比赛，和男孩摔跤比赛，她在四个男孩中选了看起来最强壮的那个。观众都在猜geeta能坚持几秒，但是开局出乎观众们所料，两个旗鼓相当，geeta完全不落下风，但是最后还是败下阵来，不过父亲并不失望。回去之后，geeta不甘心，问爸爸下次比赛是什么时候，之后geeta越发抓紧训练，在后面的比赛中一路披荆斩棘，战胜了邦里的所有男孩，后来参加国家比赛，尽管体重不达标，但是任然蝉联了三年的全国女子摔跤冠军。</p>
+<p>孩子长大了总是要出去的，geeta要去印度国家体育中心去接收新的训练。在那呆了一段时间，第一次回家的时候，geeta似乎不再是那个geeta了，头发留长了，心思也不全部在摔跤上面。更要命的是她觉得她在国家体育中心接受的训练技巧比之前父亲的的技巧要好。父亲也不服气，于是他们俩就比了一场，开始是不相上下的，但是随着时间越来越长，上了年纪的父亲体力跟不上，最后被干翻在泥地里。就这样geeta和父亲之间就产生了隔阂。</p>
+<p>之后geeta参加的各种国际赛事都是非常的不顺利，再后来geeta的妹妹也拿下了全国总冠军，进入到国家体育中心训练。再和geeta的相处过程中，她潜移默化的改变了geeta，老家那边，妈妈也在不断的劝爸爸好好地和geeta谈谈。在一次国际赛事之前，终于等到了这个契机，教练要geeta从55公斤级降级到51公斤级的比赛，geeta就给父亲打了电话，把情况告诉了父亲，这个片段也是很感人的一个片段，父亲就决定亲自去到帕提亚拉给geeta训练，指导geeta比赛。geeta确实找回了以前的状态，但是新的矛盾又出现了。</p>
+<p>在比赛中前夕，测体重的时候教练发现geeta的体重没有减下来，提名要将geeta取消比赛资格。经过geeta的父亲向印度体育委员会求情，体育委员会同意再给geeta一次机会。</p>
+<p>比赛正式开始之后，geeta经过父亲的指导，一次次的顺利晋级，最后拿下了全英赛的摔跤世界冠军。</p>
+<p>这部电影挺感人的，泪点低的我，流下了感动的泪水。第一次是geeta和父亲和好的时候，第二次是geeta顺利晋级决赛，最后是geeta拿下冠军。</p>
+<p>看完之后也有几个想法在我心里洒下了种子，第一个，人应该不忘初心，知道自己是怎么一路走到现在的，对geeta来说就是始终得牢记父亲的教诲，不要因为长大了换了一个环境，就把父亲之前交的都丢掉，应该记住自己是怎么一路拿下全国冠军的。第二个，也是之前在B站看见跳水世界冠军吴敏霞的视频里面说的，我们应该尊重每一位运动员，特别是小国家的运动员，因为他们能走到国际比赛的舞台很不容易，小国家的训练设施不齐全，也得不到专业的训练，因此运动员就得不到专业的训练，在之前仅仅听吴敏霞说了之后还没有太多的感触，看完这部电影之后，对这句话的感触特别深。</p>
+<p>​		</p>
+]]></content>
+      <categories>
+        <category>感悟</category>
+        <category>影视</category>
+      </categories>
+      <tags>
+        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -3848,30 +4022,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《摔跤吧！爸爸》观后感</title>
-    <url>/2020/06/25/%E3%80%8A%E6%91%94%E8%B7%A4%E5%90%A7%EF%BC%81%E7%88%B8%E7%88%B8%E3%80%8B%E8%A7%82%E5%90%8E%E6%84%9F/</url>
-    <content><![CDATA[<p>好久没看过电影了，从开学之后好像就没看了，一方面是开学确实时间紧一点，主要还是我自己没去找电影看吧。OK，下面进入正题。</p>
-<p>电影主要讲的是两个女儿帮爸爸实现了摔跤世界冠军的梦想。年轻的时候，电影的主人公爸爸（名字忘了叫啥了）年轻的时候是一个摔跤全国冠军，但是因为国家贫穷落后，再加上官员的贪污腐败、不重视体育，导致运动员得不到好的训练，这真是“食马者，不知其能千里而食也！”。所以这个爸爸一直很好遗憾，后来他就想要生个儿子，来替自己实现摔跤世界冠军的梦想，但是造化弄人啊，生了三个全是女儿。</p>
-<p>故事的转机发生在他的有一次这两个女儿因为两个男孩骂了她们俩，就把那两个男孩打得鼻青脸肿，这个时候他就突然意识到，为什么女孩就不能摔跤，来帮自己实现梦想呢？于是乎，他就不顾全村人异样的眼光，开始对这两个女儿开始进行摔跤训练，女儿们也反抗过，开始是找借口说训练太累了坚持不了了，后来调慢他们爸爸的闹钟，故意把灯泡烧坏，各种小伎俩都使了出来，还是没有用。但是在他们朋友的一个婚礼上，故事又出现了转机。</p>
-<p>她们逃掉了一次训练，去参加一个好朋友的婚礼，被她们的父亲发现了，她们的父亲当着所有人的面，将“我”扇了一巴掌（故事前面一段是以主人公爸爸的侄子的回忆展开的，这里就用第一人称了），后来她们两个人和这个朋友聊天的时候，朋友点醒了他们，她们的爸爸这样对她们，至少还在乎他们，而不是像其他的父亲一样，只盼着女儿快点长到14岁，把女儿嫁出去，帮别人做洗衣做饭生孩子，像摆脱了一个累赘似的，而他们这样至少可以不要像大多数女人一样，可以实现真正意义上的自由。</p>
-<p>从这之后，她们俩就开始认真训练，大女儿geeta第一次去村里参加比赛，和男孩摔跤比赛，她在四个男孩中选了看起来最强壮的那个。观众都在猜geeta能坚持几秒，但是开局出乎观众们所料，两个旗鼓相当，geeta完全不落下风，但是最后还是败下阵来，不过父亲并不失望。回去之后，geeta不甘心，问爸爸下次比赛是什么时候，之后geeta越发抓紧训练，在后面的比赛中一路披荆斩棘，战胜了邦里的所有男孩，后来参加国家比赛，尽管体重不达标，但是任然蝉联了三年的全国女子摔跤冠军。</p>
-<p>孩子长大了总是要出去的，geeta要去印度国家体育中心去接收新的训练。在那呆了一段时间，第一次回家的时候，geeta似乎不再是那个geeta了，头发留长了，心思也不全部在摔跤上面。更要命的是她觉得她在国家体育中心接受的训练技巧比之前父亲的的技巧要好。父亲也不服气，于是他们俩就比了一场，开始是不相上下的，但是随着时间越来越长，上了年纪的父亲体力跟不上，最后被干翻在泥地里。就这样geeta和父亲之间就产生了隔阂。</p>
-<p>之后geeta参加的各种国际赛事都是非常的不顺利，再后来geeta的妹妹也拿下了全国总冠军，进入到国家体育中心训练。再和geeta的相处过程中，她潜移默化的改变了geeta，老家那边，妈妈也在不断的劝爸爸好好地和geeta谈谈。在一次国际赛事之前，终于等到了这个契机，教练要geeta从55公斤级降级到51公斤级的比赛，geeta就给父亲打了电话，把情况告诉了父亲，这个片段也是很感人的一个片段，父亲就决定亲自去到帕提亚拉给geeta训练，指导geeta比赛。geeta确实找回了以前的状态，但是新的矛盾又出现了。</p>
-<p>在比赛中前夕，测体重的时候教练发现geeta的体重没有减下来，提名要将geeta取消比赛资格。经过geeta的父亲向印度体育委员会求情，体育委员会同意再给geeta一次机会。</p>
-<p>比赛正式开始之后，geeta经过父亲的指导，一次次的顺利晋级，最后拿下了全英赛的摔跤世界冠军。</p>
-<p>这部电影挺感人的，泪点低的我，流下了感动的泪水。第一次是geeta和父亲和好的时候，第二次是geeta顺利晋级决赛，最后是geeta拿下冠军。</p>
-<p>看完之后也有几个想法在我心里洒下了种子，第一个，人应该不忘初心，知道自己是怎么一路走到现在的，对geeta来说就是始终得牢记父亲的教诲，不要因为长大了换了一个环境，就把父亲之前交的都丢掉，应该记住自己是怎么一路拿下全国冠军的。第二个，也是之前在B站看见跳水世界冠军吴敏霞的视频里面说的，我们应该尊重每一位运动员，特别是小国家的运动员，因为他们能走到国际比赛的舞台很不容易，小国家的训练设施不齐全，也得不到专业的训练，因此运动员就得不到专业的训练，在之前仅仅听吴敏霞说了之后还没有太多的感触，看完这部电影之后，对这句话的感触特别深。</p>
-<p>​		</p>
-]]></content>
-      <categories>
-        <category>感悟</category>
-        <category>影视</category>
-      </categories>
-      <tags>
-        <tag>感悟</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>在Ubuntu服务器上安装MySQL8</title>
     <url>/2020/03/01/%E5%9C%A8Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql8/</url>
     <content><![CDATA[<p>在<a href="http://dev.mysql.com/downloads/repo/apt/%EF%BC%8C%E4%B8%8B%E8%BD%BD%E4%B8%80%E4%B8%AAmysql-apt-config_0%E2%80%A6%E2%80%A6._all.deb%EF%BC%8C%E4%BC%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%EF%BC%8C%E7%94%A8dpkg">http://dev.mysql.com/downloads/repo/apt/，下载一个mysql-apt-config_0……._all.deb，传到服务器上，用dpkg</a> -i mysql-apt-config_0._…..all.deb安装执行，选择mysql8，OK之后回到终端窗口</p>
@@ -3885,6 +4035,26 @@
       <tags>
         <tag>服务器</tag>
         <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>大二下学期总结</title>
+    <url>/2020/07/09/%E5%A4%A7%E4%BA%8C%E4%B8%8B%E5%AD%A6%E6%9C%9F%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="aa3dfea4f24cd683ddff13030c08f03c6e3f3ab355b2c8d36abdf37df33fdb61">99b23c07cf5459d82b841027c3c8076927a9f0a9aac67be1dcfd0dc9dc4fe5873617ad29598f65a1927df3de1b4486a33ba82c048b4287ace2fd325eb537aee8472803d5a6a9beaaf29fb27454f2159c92b55f972810575f0f04b1d25cc578a430dd703994e8226676683ef8147f3ab03ee00238849367a202a76f6d3263ff457db9c736eb09b1ae094d772ac18066704ea0c587ecf8a132f659b02f2b268fb2ed4e850d2714792add21de86591f2ace392abf28f83dbc72c129f285c122715d117b8df6d3e092d496607539a63bb81d4e0636fc7d22100d5bec9d8cbb84de997fe01eedfa98a3f5b4fc83ae9223acf8b1e62fd64d68ab75655a1891876a0eaf9c1b40b053db049c898629917977e5c6f2713fcf95abb1be87a544c96a807287d7af73c1495e30883a179da92cff7ffc11652e4b8cb8ef9c983d6ba2653a6d5c503e263711615d5d01176faf9c4346b2de6864cbb98f7cbcb0ff0970eb878769c2d1be18bea7ab79c4c99909867e82182c4b74b0ff6be0205c59a12474534a8068a95ed97350b8f9e8a2bab55150d150b0b48724156559bb5fb9a326ecfc5cfce23fe0132d6968c22603f80ef27947a3303f818ef7650fa7253c974f47aafd9ceded8ab760dee57747122c36f81f113ea2f66bb508cd64613da4a8a823bb48ad69b05fa97ce771ad90d30f8f181ef05924ac831089e7ceb8bbfe0dc71a57346a7e8679a9dbebd35a850e62c0e0cddd59e3bd787d4ea4f2af2e3b49d55e3ecdad4957a1c46a75a6f15f9bb156f129ae39c3683b87f83a14f799d8da9034eeb5906cd35701bc290ec38446b9d675c86544dcb6cfa8abddae5148b33f4b7e52a6e0a62146bd73b73dca82007833d99f28cff3619adcba7754f95aaca2785427fc6506d29d80504b1dcd371836b390be2af35d071d34c1d3ecd76d9def892b96d0c068878d07a53de69c9a8cd710c2118c722184f47dc80c088a0397c81e206a271c1c36ae3d2899176be2c485ac69f410bcd8d8341ea0cbda0d2f80903bf43ea3ec47a86cfa32d6f5a4c9e622427a12073d16f9549c72cbaa17ec86368bf23baf2348c3e296d23aaf996be69edcff05b7da49d97c8aeb425395eb3cf1c758896db6150555ffeb84fa6e1095c86a8e715c4cbd9cc37b1258a237a76732df1e67ecaa856925cb33be4ea5335fd5e3d30c633978cff52ee760810710863a285be8b2422581b08177ea7a6ec3c2388ea54053d62f78266095318a88b8c0d8cac123322ad042a8175457b0be922de9305bfd10640d8907876945e895af6250fc13fc52eae88a6d496bd2b354c00596de3a46afddebbd6dd2e282b87a67119154eda70388128502847e89d98b41f75baff04d0126bfe9fe3f79824ec3c059e60ea936acfd2293b109114ab3623ca5395614f73e20ceee9ffe980a9b11cb6fa17b1a1d93dbed45921bb111c7012a52961e0d16153ef8cd35ebb090b053769f85a7954ce80164081b00417f6e6d9321612b0f8ffb0ec5ce34ebb91a8537561e549df9a0cd8aaf32b0c861e42fa2a2ddcb86c3f940d2f6398923f355b67d179f344af1474558e004f556be8cadcd714cf4a48ac7f867e59fc96f51ae7af394be35c887ae4fe1296e2f2d0d46e11f48df030d6c380f5304a61a875a347831f6710bcdba6ba53c03101cbee0fff2949e2bde18005065a456e42b41cc397cb59b08a4f48d39968688acb209ba4010d808ff77458e077745e0dff8a63b30dcd1495149d1a1ca624d949de676631e1c5a133e63fc74443c4a96a2a43d28e554d06bf351499b6067ba6ec4b7e0b82bdb3e078c7b63a77a4adcd52700a0e4dfa884e41cdeea841f5af5c8f570f7d3bd0086d04c4fb6fac9467d5ec3a85a6cf4e8f20bdfb1b6c01e04fdf71c03c61fed9cac585b65952103ed657339d8a9649f38b5633bd0296ba21d84409f69dd9a78e8df565117ee9b4b070585223d32dc230f9e11a922e8aee3d3770eef9f1968b1df5b1cca26a3af5917cc66844b388ebe1f4e011e903065a07a6445fcaae7d68a2d16381244f9445b93afc996e93da5108f92c5cb29e0ffa438eb840002a57ae82e6a5938abfb06a245e34fc035af3913b789498666c66d086798feb4b92a7c6b415901a80bc8d063c07216446871c117f1206e5f2b788dea882d8a99e96dccba76e3ac15577d017ad6d480581b5f59b7ad88e9ceedd5641981edfbcd53d7df6ffeac490f426465009b009cf78c4a1154765cccbd59b0fbbcd6506ec0864fed170d048c2feaf729d7a3e01e33e050608a019eed1db0e98ee56c3e49a3b31b2058f7fb6b500adb2a1a7f653158d772aaf00ab0104ca17c7c31ce4e6d15b26a26ad88836edfadf4214d9141d6c77dd4de9f273dd21edce82a2313b1b9ae3517405d4836b39e8be5438b443d59c43c35809f173c40f7becefe44c0fe755d358dda0b1f7c895df24c22de424ae04d71ee14e513dd037b3a582db1a8d4a6a8531e333cc3d781687b6738548cc5d2ec7d64465e7e39f397be9101a92a1b29094ce747b106be19fc7474d1e4a42fb772baa0dd81bd6b59cb9ac80a089dc9f891213fc25a533f6275486fc5e2bcdd957aba940b388bc80bb66b8dab90c8beec3afcc93db542bc56487ae7049c80fbd5635cdd53f726c7c1f5a7e9a2bd09de49bd0e0bf618eaa1ce1b6cce34f78d3c726b2a1b99ac16d77015cb73f9e9647cda0bd7677848b869a209a099ecdf878553acfbcc6a90520a93396e8e9dd933acc33a055fadb0c181420f5b4557ae2251929f9a708255c54175977f2534e8bc5931395d649ca11dca124d791a1ca4266ef05bbbde676d6da6eb0ffb7cec23c6bca86a44b678871ee71debd002a94a2b83ae7470913ba9f7b34c8a239b73ab9ed5e3183f50914418f5cdaf694d522beb6890bc63ddc41e02fb965438ab3f3128d653f4f3dc52a7c70cdfc24679e756859fe4134998c126c44e2c8f65c54135ce16b92e8417b14163fa514bfb4ee174ae846a1b2e1b11d364cc20f945568d345a4e1b43ebf86f975561fa270d658cb5f9a599c2598a7a064f40ed7037ee14734f09d594c85649884634044746a2f89ecc0af6ad9a2a6c8ede9ad27c32b4f2711b91850dc63e702fc74cbe30a49b67678374</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">请输入密码进行查看</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <tags>
+        <tag>感悟</tag>
+        <tag>总结</tag>
       </tags>
   </entry>
   <entry>
@@ -3968,26 +4138,6 @@
       <tags>
         <tag>羊毛</tag>
         <tag>转载</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大二下学期总结</title>
-    <url>/2020/07/09/%E5%A4%A7%E4%BA%8C%E4%B8%8B%E5%AD%A6%E6%9C%9F%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="aa3dfea4f24cd683ddff13030c08f03c6e3f3ab355b2c8d36abdf37df33fdb61">99b23c07cf5459d82b841027c3c8076927a9f0a9aac67be1dcfd0dc9dc4fe5873617ad29598f65a1927df3de1b4486a33ba82c048b4287ace2fd325eb537aee8472803d5a6a9beaaf29fb27454f2159c92b55f972810575f0f04b1d25cc578a430dd703994e8226676683ef8147f3ab03ee00238849367a202a76f6d3263ff457db9c736eb09b1ae094d772ac18066704ea0c587ecf8a132f659b02f2b268fb2ed4e850d2714792add21de86591f2ace392abf28f83dbc72c129f285c122715d117b8df6d3e092d496607539a63bb81d4e0636fc7d22100d5bec9d8cbb84de997fe01eedfa98a3f5b4fc83ae9223acf8b1e62fd64d68ab75655a1891876a0eaf9c1b40b053db049c898629917977e5c6f2713fcf95abb1be87a544c96a807287d7af73c1495e30883a179da92cff7ffc11652e4b8cb8ef9c983d6ba2653a6d5c503e263711615d5d01176faf9c4346b2de6864cbb98f7cbcb0ff0970eb878769c2d1be18bea7ab79c4c99909867e82182c4b74b0ff6be0205c59a12474534a8068a95ed97350b8f9e8a2bab55150d150b0b48724156559bb5fb9a326ecfc5cfce23fe0132d6968c22603f80ef27947a3303f818ef7650fa7253c974f47aafd9ceded8ab760dee57747122c36f81f113ea2f66bb508cd64613da4a8a823bb48ad69b05fa97ce771ad90d30f8f181ef05924ac831089e7ceb8bbfe0dc71a57346a7e8679a9dbebd35a850e62c0e0cddd59e3bd787d4ea4f2af2e3b49d55e3ecdad4957a1c46a75a6f15f9bb156f129ae39c3683b87f83a14f799d8da9034eeb5906cd35701bc290ec38446b9d675c86544dcb6cfa8abddae5148b33f4b7e52a6e0a62146bd73b73dca82007833d99f28cff3619adcba7754f95aaca2785427fc6506d29d80504b1dcd371836b390be2af35d071d34c1d3ecd76d9def892b96d0c068878d07a53de69c9a8cd710c2118c722184f47dc80c088a0397c81e206a271c1c36ae3d2899176be2c485ac69f410bcd8d8341ea0cbda0d2f80903bf43ea3ec47a86cfa32d6f5a4c9e622427a12073d16f9549c72cbaa17ec86368bf23baf2348c3e296d23aaf996be69edcff05b7da49d97c8aeb425395eb3cf1c758896db6150555ffeb84fa6e1095c86a8e715c4cbd9cc37b1258a237a76732df1e67ecaa856925cb33be4ea5335fd5e3d30c633978cff52ee760810710863a285be8b2422581b08177ea7a6ec3c2388ea54053d62f78266095318a88b8c0d8cac123322ad042a8175457b0be922de9305bfd10640d8907876945e895af6250fc13fc52eae88a6d496bd2b354c00596de3a46afddebbd6dd2e282b87a67119154eda70388128502847e89d98b41f75baff04d0126bfe9fe3f79824ec3c059e60ea936acfd2293b109114ab3623ca5395614f73e20ceee9ffe980a9b11cb6fa17b1a1d93dbed45921bb111c7012a52961e0d16153ef8cd35ebb090b053769f85a7954ce80164081b00417f6e6d9321612b0f8ffb0ec5ce34ebb91a8537561e549df9a0cd8aaf32b0c861e42fa2a2ddcb86c3f940d2f6398923f355b67d179f344af1474558e004f556be8cadcd714cf4a48ac7f867e59fc96f51ae7af394be35c887ae4fe1296e2f2d0d46e11f48df030d6c380f5304a61a875a347831f6710bcdba6ba53c03101cbee0fff2949e2bde18005065a456e42b41cc397cb59b08a4f48d39968688acb209ba4010d808ff77458e077745e0dff8a63b30dcd1495149d1a1ca624d949de676631e1c5a133e63fc74443c4a96a2a43d28e554d06bf351499b6067ba6ec4b7e0b82bdb3e078c7b63a77a4adcd52700a0e4dfa884e41cdeea841f5af5c8f570f7d3bd0086d04c4fb6fac9467d5ec3a85a6cf4e8f20bdfb1b6c01e04fdf71c03c61fed9cac585b65952103ed657339d8a9649f38b5633bd0296ba21d84409f69dd9a78e8df565117ee9b4b070585223d32dc230f9e11a922e8aee3d3770eef9f1968b1df5b1cca26a3af5917cc66844b388ebe1f4e011e903065a07a6445fcaae7d68a2d16381244f9445b93afc996e93da5108f92c5cb29e0ffa438eb840002a57ae82e6a5938abfb06a245e34fc035af3913b789498666c66d086798feb4b92a7c6b415901a80bc8d063c07216446871c117f1206e5f2b788dea882d8a99e96dccba76e3ac15577d017ad6d480581b5f59b7ad88e9ceedd5641981edfbcd53d7df6ffeac490f426465009b009cf78c4a1154765cccbd59b0fbbcd6506ec0864fed170d048c2feaf729d7a3e01e33e050608a019eed1db0e98ee56c3e49a3b31b2058f7fb6b500adb2a1a7f653158d772aaf00ab0104ca17c7c31ce4e6d15b26a26ad88836edfadf4214d9141d6c77dd4de9f273dd21edce82a2313b1b9ae3517405d4836b39e8be5438b443d59c43c35809f173c40f7becefe44c0fe755d358dda0b1f7c895df24c22de424ae04d71ee14e513dd037b3a582db1a8d4a6a8531e333cc3d781687b6738548cc5d2ec7d64465e7e39f397be9101a92a1b29094ce747b106be19fc7474d1e4a42fb772baa0dd81bd6b59cb9ac80a089dc9f891213fc25a533f6275486fc5e2bcdd957aba940b388bc80bb66b8dab90c8beec3afcc93db542bc56487ae7049c80fbd5635cdd53f726c7c1f5a7e9a2bd09de49bd0e0bf618eaa1ce1b6cce34f78d3c726b2a1b99ac16d77015cb73f9e9647cda0bd7677848b869a209a099ecdf878553acfbcc6a90520a93396e8e9dd933acc33a055fadb0c181420f5b4557ae2251929f9a708255c54175977f2534e8bc5931395d649ca11dca124d791a1ca4266ef05bbbde676d6da6eb0ffb7cec23c6bca86a44b678871ee71debd002a94a2b83ae7470913ba9f7b34c8a239b73ab9ed5e3183f50914418f5cdaf694d522beb6890bc63ddc41e02fb965438ab3f3128d653f4f3dc52a7c70cdfc24679e756859fe4134998c126c44e2c8f65c54135ce16b92e8417b14163fa514bfb4ee174ae846a1b2e1b11d364cc20f945568d345a4e1b43ebf86f975561fa270d658cb5f9a599c2598a7a064f40ed7037ee14734f09d594c85649884634044746a2f89ecc0af6ad9a2a6c8ede9ad27c32b4f2711b91850dc63e702fc74cbe30a49b67678374</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">请输入密码进行查看</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <tags>
-        <tag>感悟</tag>
-        <tag>总结</tag>
       </tags>
   </entry>
   <entry>
@@ -4241,6 +4391,28 @@
       </tags>
   </entry>
   <entry>
+    <title>用ssh公钥配对登录服务器</title>
+    <url>/2020/03/01/%E7%94%A8ssh%E5%85%AC%E9%92%A5%E9%85%8D%E5%AF%B9%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<h3 id="1-生成公钥"><a href="#1-生成公钥" class="headerlink" title="1.生成公钥"></a>1.生成公钥</h3><p>ssh-keygen -t rsa -b 4096 -C “你的邮箱地址”</p>
+<p><em>-t 指定加密算法； -b 指定生成的密钥长度； -C 一句话，一般都填邮箱地址。</em></p>
+<p><em>更多参数说明可以在终端输入：ssh-keygen –help 查看</em></p>
+<h3 id="2-将公钥写入远程主机"><a href="#2-将公钥写入远程主机" class="headerlink" title="2.将公钥写入远程主机"></a>2.将公钥写入远程主机</h3><p>在自己电脑上打开用户目录下的&#x2F;.ssh&#x2F;id_rsa.pub公钥文件，将其中的内容粘贴到服务器的、root&#x2F;.ssh&#x2F;authorized_keys目录的文件里面</p>
+<h3 id="3-修改ssh配置文件，禁止密码登录，允许秘钥登录"><a href="#3-修改ssh配置文件，禁止密码登录，允许秘钥登录" class="headerlink" title="3.修改ssh配置文件，禁止密码登录，允许秘钥登录"></a>3.修改ssh配置文件，禁止密码登录，允许秘钥登录</h3><p>vim &#x2F;etc&#x2F;ssh&#x2F;sshd_config </p>
+<p>将里面的内容修改如下所示：</p>
+<p># PubkeyAuthentication yes   中将#删除，允许秘钥登录</p>
+<p>PasswordAuthentication yes  中yes修改为no，禁止密码登录</p>
+<p><em>禁止密码登录可以防止暴力破解，虽然也没人来攻击</em></p>
+<h3 id="4-重启ssh服务"><a href="#4-重启ssh服务" class="headerlink" title="4.重启ssh服务"></a>4.重启ssh服务</h3><p>service ssh restart</p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>脚本一键部署hexo</title>
     <url>/2020/04/29/%E8%84%9A%E6%9C%AC%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2hexo/</url>
     <content><![CDATA[<blockquote>
@@ -4273,159 +4445,6 @@
       <tags>
         <tag>服务器</tag>
         <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>蓝桥杯单片机基本模块</title>
-    <url>/2020/03/08/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%9D%97/</url>
-    <content><![CDATA[<h2 id="锁存器"><a href="#锁存器" class="headerlink" title="锁存器"></a>锁存器</h2><p>蓝桥杯这款单片机是用锁存器来实现引脚的复用的，所以代码写起来很麻烦，总是要开关锁存器</p>
-<p>为了偷懒，可以用宏定义来定义每个锁存器打开的代码，也可以用函数来实现</p>
-<p><strong>用宏定义：</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> Y4 P2 = (P2&amp;0x1f)|0x80;  <span class="comment">//led</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y5 P2 = (P2&amp;0x1f)|0xa0;  <span class="comment">//蜂鸣器和继电器</span></span></span><br><span class="line">P0 = <span class="number">0x40</span>; <span class="comment">//蜂鸣器</span></span><br><span class="line">P0 = <span class="number">0x10</span>；<span class="comment">//继电器</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y6 P2 = (P2&amp;0x1f)|0xc0; <span class="comment">//数码管位选</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y7 P2 = (P2&amp;0x1f)|0xe0; <span class="comment">//数码管段选</span></span></span><br></pre></td></tr></table></figure>
-
-<p><strong>用函数：</strong></p>
-<span id="more"></span>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(channel)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>; <span class="comment">//led</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>; <span class="comment">//蜂鸣器和继电器</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>; <span class="comment">//数码管位选</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>; <span class="comment">//数码管段选</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="数码管的显示问题"><a href="#数码管的显示问题" class="headerlink" title="数码管的显示问题"></a>数码管的显示问题</h2><p>初学者一般都是用延时来实现动态数码管的，但是当要实现的功能多起来了，用延时来实现动态数码管，数码管很容易会闪烁，整体效果就很不好了。</p>
-<p>另外一种方法可以是用定时器来扫描数码管，每隔一段时间就进入中断服务函数执行数码管的扫描，只要中断间隔的时间小于人眼的视觉暂留（大概是0.1~0.4s），就看不出来数码管会闪烁了。但是这个方法也有缺点，缺点是整个系统每隔这么短的时间就必须要进入这个中断服务函数，很容易会影响、打断其他程序的执行。现在也有解决方法就是在不能被中断打断的功能执行前关掉中断的开关，执行完之后再打开，显然这个解决方法也只是权宜之计，关掉中断的开关有的时候会影响这个计时器的计时，获得的时间就不是很准确，但是误差会很小吧，十行代码51单片机几毫秒甚至更短的时间就可以执行完。所以第二种方法算是比较好的一种方法了，相对于第一种方法来说。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[]=&#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[]=&#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],smg_num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(channel)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>; <span class="comment">//led</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;	<span class="comment">//蜂鸣器和继电器</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>; <span class="comment">//数码管位选</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>; <span class="comment">//数码管段选</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>  <span class="comment">//总的初始化函数</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> i;</span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; <span class="number">8</span>;i++)</span><br><span class="line">    smgbuf[i] = <span class="number">10</span>;	<span class="comment">//做初始化，上电数码管全部是熄灭的</span></span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0xff</span>;  <span class="comment">//关掉所有的LED</span></span><br><span class="line">  select_channel(<span class="number">4</span>);</span><br><span class="line">  P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0x00</span>;  <span class="comment">//关掉继电器和蜂鸣器</span></span><br><span class="line">  select_channel(<span class="number">5</span>);</span><br><span class="line">  P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>	<span class="comment">//初始化计时器</span></span><br><span class="line">&#123;</span><br><span class="line">  TMOD = <span class="number">0x01</span>;</span><br><span class="line">  TH1 = <span class="number">0xf8</span>;</span><br><span class="line">  TL1 = <span class="number">0x2f</span>;<span class="comment">//2ms</span></span><br><span class="line">  EA = <span class="number">1</span>;</span><br><span class="line">  ET1 = <span class="number">1</span>;</span><br><span class="line">  TR1 = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>  <span class="comment">//数码管显示函数</span></span><br><span class="line">&#123;</span><br><span class="line">  smg_num++;</span><br><span class="line">  <span class="keyword">if</span>(smg_num &gt;= <span class="number">8</span>)</span><br><span class="line">    smg_num = <span class="number">0</span>;  <span class="comment">//从0-7循环扫描每一个数码管</span></span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;		<span class="comment">//消影</span></span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[smg_num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[smg_num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> i;</span><br><span class="line">  init();</span><br><span class="line">  init_timer();</span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">      smgbuf[i] = i;  <span class="comment">//数码管一次显示0-7</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer1</span><span class="params">()</span> interrupt 3</span><br><span class="line">&#123;</span><br><span class="line">  display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面的代码是直接在Typora上面写的，没有编译，应该没有很大问题（手动滑稽）</p>
-<p>这样写要改变数码管的值只要改变数组smgbuf[]中的值就行了0-9的数字是和编号一一对应的，其他的特殊符号可以自己手动加。</p>
-]]></content>
-      <categories>
-        <category>备赛</category>
-        <category>蓝桥杯</category>
-      </categories>
-      <tags>
-        <tag>蓝桥杯</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>用ssh公钥配对登录服务器</title>
-    <url>/2020/03/01/%E7%94%A8ssh%E5%85%AC%E9%92%A5%E9%85%8D%E5%AF%B9%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<h3 id="1-生成公钥"><a href="#1-生成公钥" class="headerlink" title="1.生成公钥"></a>1.生成公钥</h3><p>ssh-keygen -t rsa -b 4096 -C “你的邮箱地址”</p>
-<p><em>-t 指定加密算法； -b 指定生成的密钥长度； -C 一句话，一般都填邮箱地址。</em></p>
-<p><em>更多参数说明可以在终端输入：ssh-keygen –help 查看</em></p>
-<h3 id="2-将公钥写入远程主机"><a href="#2-将公钥写入远程主机" class="headerlink" title="2.将公钥写入远程主机"></a>2.将公钥写入远程主机</h3><p>在自己电脑上打开用户目录下的&#x2F;.ssh&#x2F;id_rsa.pub公钥文件，将其中的内容粘贴到服务器的、root&#x2F;.ssh&#x2F;authorized_keys目录的文件里面</p>
-<h3 id="3-修改ssh配置文件，禁止密码登录，允许秘钥登录"><a href="#3-修改ssh配置文件，禁止密码登录，允许秘钥登录" class="headerlink" title="3.修改ssh配置文件，禁止密码登录，允许秘钥登录"></a>3.修改ssh配置文件，禁止密码登录，允许秘钥登录</h3><p>vim &#x2F;etc&#x2F;ssh&#x2F;sshd_config </p>
-<p>将里面的内容修改如下所示：</p>
-<p># PubkeyAuthentication yes   中将#删除，允许秘钥登录</p>
-<p>PasswordAuthentication yes  中yes修改为no，禁止密码登录</p>
-<p><em>禁止密码登录可以防止暴力破解，虽然也没人来攻击</em></p>
-<h3 id="4-重启ssh服务"><a href="#4-重启ssh服务" class="headerlink" title="4.重启ssh服务"></a>4.重启ssh服务</h3><p>service ssh restart</p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>vim快捷键快速参考</title>
-    <url>/2021/09/17/vim%E5%BF%AB%E6%8D%B7%E9%94%AE/</url>
-    <content><![CDATA[<h1 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h1><table>
-<thead>
-<tr>
-<th>快捷键</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>dw</td>
-<td>删除一个词</td>
-</tr>
-<tr>
-<td>dgg</td>
-<td>删除至文件开头</td>
-</tr>
-<tr>
-<td>dG</td>
-<td>删除至文件末尾</td>
-</tr>
-<tr>
-<td>dd</td>
-<td>删除当前行</td>
-</tr>
-</tbody></table>
-<span id="more"></span>
-
-<h1 id="复制粘贴"><a href="#复制粘贴" class="headerlink" title="复制粘贴"></a>复制粘贴</h1><table>
-<thead>
-<tr>
-<th>快捷键</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>yy</td>
-<td>复制当前行</td>
-</tr>
-<tr>
-<td>p（小写）</td>
-<td>在当前行之后粘贴</td>
-</tr>
-<tr>
-<td>P（大写）</td>
-<td>在当前行之前粘贴</td>
-</tr>
-</tbody></table>
-<h1 id="撤销-x2F-恢复"><a href="#撤销-x2F-恢复" class="headerlink" title="撤销&#x2F;恢复"></a>撤销&#x2F;恢复</h1><table>
-<thead>
-<tr>
-<th>快捷键</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>u</td>
-<td>撤销</td>
-</tr>
-<tr>
-<td>ctrl+r</td>
-<td>恢复</td>
-</tr>
-</tbody></table>
-<h1 id="搜索和替换"><a href="#搜索和替换" class="headerlink" title="搜索和替换"></a>搜索和替换</h1><table>
-<thead>
-<tr>
-<th>快捷键</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>&#x2F;text</td>
-<td>在文档后面部分搜索text</td>
-</tr>
-<tr>
-<td>?text</td>
-<td>在文档前面部分搜索text</td>
-</tr>
-<tr>
-<td>n</td>
-<td>移动到后一个搜索结果</td>
-</tr>
-<tr>
-<td>N</td>
-<td>移动到前一个搜索结果</td>
-</tr>
-<tr>
-<td>:%s&#x2F;origin&#x2F;replace&#x2F;g</td>
-<td>将所有origin替换为replace</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>软件</category>
-        <category>使用</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>软件</tag>
       </tags>
   </entry>
   <entry>
@@ -4467,33 +4486,24 @@
       </tags>
   </entry>
   <entry>
-    <title>蓝桥杯单片机超声波模块</title>
-    <url>/2020/03/13/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</url>
-    <content><![CDATA[<blockquote>
-<p>这个超声波模块的工作原理很简单，传感器像两个喇叭一样的东西，一个是负责发送超声波的，另一个负责接收超声波，根据发出到接收的时间间隔就可以算出距离了。</p>
-<p>s &#x3D; v*t&#x2F;2 </p>
-<p>初中物理知识哦。</p>
-</blockquote>
-<p>就不多说了直接上代码</p>
+    <title>蓝桥杯单片机基本模块</title>
+    <url>/2020/03/08/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%9D%97/</url>
+    <content><![CDATA[<h2 id="锁存器"><a href="#锁存器" class="headerlink" title="锁存器"></a>锁存器</h2><p>蓝桥杯这款单片机是用锁存器来实现引脚的复用的，所以代码写起来很麻烦，总是要开关锁存器</p>
+<p>为了偷懒，可以用宏定义来定义每个锁存器打开的代码，也可以用函数来实现</p>
+<p><strong>用宏定义：</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> Y4 P2 = (P2&amp;0x1f)|0x80;  <span class="comment">//led</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y5 P2 = (P2&amp;0x1f)|0xa0;  <span class="comment">//蜂鸣器和继电器</span></span></span><br><span class="line">P0 = <span class="number">0x40</span>; <span class="comment">//蜂鸣器</span></span><br><span class="line">P0 = <span class="number">0x10</span>；<span class="comment">//继电器</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y6 P2 = (P2&amp;0x1f)|0xc0; <span class="comment">//数码管位选</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y7 P2 = (P2&amp;0x1f)|0xe0; <span class="comment">//数码管段选</span></span></span><br></pre></td></tr></table></figure>
+
+<p><strong>用函数：</strong></p>
 <span id="more"></span>
 
-<p>main.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> sonic_counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> smgbuf[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	init();</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(sonic_counter &gt;= <span class="number">40</span>)<span class="comment">//每隔一定的时间测量一次，必须要加否则测的数据不正确</span></span><br><span class="line">		&#123;</span><br><span class="line">			distance = measure_distance();</span><br><span class="line">			sonic_counter = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		smgbuf[<span class="number">5</span>] = distance/<span class="number">100</span>;</span><br><span class="line">		smgbuf[<span class="number">6</span>] = distance%<span class="number">100</span>/<span class="number">10</span>;</span><br><span class="line">		smgbuf[<span class="number">7</span>] = distance%<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer2</span><span class="params">()</span> interrupt 12<span class="comment">//定时器2（52单片机多出来的一个定时器）</span></span><br><span class="line">&#123;</span><br><span class="line">	sonic_counter++;</span><br><span class="line">	display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(channel)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>; <span class="comment">//led</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>; <span class="comment">//蜂鸣器和继电器</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>; <span class="comment">//数码管位选</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>; <span class="comment">//数码管段选</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>common.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _COMMON_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _COMMON_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;intrins.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sfr AUXR = <span class="number">0x8e</span>;</span><br><span class="line">sfr IE2 = <span class="number">0xaf</span>;</span><br><span class="line">sfr T2H = <span class="number">0xd6</span>;</span><br><span class="line">sfr T2L = <span class="number">0xd7</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="数码管的显示问题"><a href="#数码管的显示问题" class="headerlink" title="数码管的显示问题"></a>数码管的显示问题</h2><p>初学者一般都是用延时来实现动态数码管的，但是当要实现的功能多起来了，用延时来实现动态数码管，数码管很容易会闪烁，整体效果就很不好了。</p>
+<p>另外一种方法可以是用定时器来扫描数码管，每隔一段时间就进入中断服务函数执行数码管的扫描，只要中断间隔的时间小于人眼的视觉暂留（大概是0.1~0.4s），就看不出来数码管会闪烁了。但是这个方法也有缺点，缺点是整个系统每隔这么短的时间就必须要进入这个中断服务函数，很容易会影响、打断其他程序的执行。现在也有解决方法就是在不能被中断打断的功能执行前关掉中断的开关，执行完之后再打开，显然这个解决方法也只是权宜之计，关掉中断的开关有的时候会影响这个计时器的计时，获得的时间就不是很准确，但是误差会很小吧，十行代码51单片机几毫秒甚至更短的时间就可以执行完。所以第二种方法算是比较好的一种方法了，相对于第一种方法来说。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[]=&#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[]=&#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],smg_num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(channel)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>; <span class="comment">//led</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;	<span class="comment">//蜂鸣器和继电器</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>; <span class="comment">//数码管位选</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>; <span class="comment">//数码管段选</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>  <span class="comment">//总的初始化函数</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> i;</span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; <span class="number">8</span>;i++)</span><br><span class="line">    smgbuf[i] = <span class="number">10</span>;	<span class="comment">//做初始化，上电数码管全部是熄灭的</span></span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0xff</span>;  <span class="comment">//关掉所有的LED</span></span><br><span class="line">  select_channel(<span class="number">4</span>);</span><br><span class="line">  P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0x00</span>;  <span class="comment">//关掉继电器和蜂鸣器</span></span><br><span class="line">  select_channel(<span class="number">5</span>);</span><br><span class="line">  P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>	<span class="comment">//初始化计时器</span></span><br><span class="line">&#123;</span><br><span class="line">  TMOD = <span class="number">0x01</span>;</span><br><span class="line">  TH1 = <span class="number">0xf8</span>;</span><br><span class="line">  TL1 = <span class="number">0x2f</span>;<span class="comment">//2ms</span></span><br><span class="line">  EA = <span class="number">1</span>;</span><br><span class="line">  ET1 = <span class="number">1</span>;</span><br><span class="line">  TR1 = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>  <span class="comment">//数码管显示函数</span></span><br><span class="line">&#123;</span><br><span class="line">  smg_num++;</span><br><span class="line">  <span class="keyword">if</span>(smg_num &gt;= <span class="number">8</span>)</span><br><span class="line">    smg_num = <span class="number">0</span>;  <span class="comment">//从0-7循环扫描每一个数码管</span></span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;		<span class="comment">//消影</span></span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[smg_num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[smg_num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> i;</span><br><span class="line">  init();</span><br><span class="line">  init_timer();</span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">      smgbuf[i] = i;  <span class="comment">//数码管一次显示0-7</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer1</span><span class="params">()</span> interrupt 3</span><br><span class="line">&#123;</span><br><span class="line">  display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>common.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[<span class="number">8</span>] = &#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[] = &#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">switch</span>(channel)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">		smgbuf[i] = <span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">4</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">5</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	init_timer();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	AUXR = AUXR&amp;<span class="number">0x33</span>|<span class="number">0x10</span>;<span class="comment">//定时器2的配置</span></span><br><span class="line">	IE2 = <span class="number">0x04</span>;</span><br><span class="line">	T2H = <span class="number">0xf8</span>;</span><br><span class="line">	T2L = <span class="number">0x2f</span>;</span><br><span class="line">	EA = <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	TMOD = <span class="number">0x01</span>;<span class="comment">//定时器1的配置，用于计算发送和接收之间的时间间隔</span></span><br><span class="line">	TH1 = <span class="number">0</span>;</span><br><span class="line">	TL1 = <span class="number">0</span>;</span><br><span class="line">	TR1 = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	num++;</span><br><span class="line">	<span class="keyword">if</span>(num &gt;= <span class="number">8</span>)</span><br><span class="line">		num = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>sonic.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _SONIC_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _SONIC_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> somenop &#123;_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();&#125;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//可以参照原理图</span></span><br><span class="line">sbit tx = P1^<span class="number">0</span>;<span class="comment">//发送波传感器的引脚</span></span><br><span class="line">sbit rx = P1^<span class="number">1</span>;<span class="comment">//接收波传感器的引脚</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>sonic.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span><span class="comment">//发送超声波</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)<span class="comment">//发送一组超声波</span></span><br><span class="line">	&#123;</span><br><span class="line">		tx = <span class="number">1</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">		tx = <span class="number">0</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">	&#125;</span><br><span class="line">	TR1 = <span class="number">1</span>;<span class="comment">//定时器1开始计时</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span><span class="comment">//计算、测量距离</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	send_wave();<span class="comment">//先发送</span></span><br><span class="line">	<span class="keyword">while</span>(rx == <span class="number">1</span>&amp;&amp;TF1 == <span class="number">0</span>);<span class="comment">//等待接收完毕或者定时器1溢出</span></span><br><span class="line">	TR1 = <span class="number">0</span>;<span class="comment">//定时器1停止计时</span></span><br><span class="line">	<span class="keyword">if</span>(rx == <span class="number">0</span>&amp;&amp;TF1 == <span class="number">0</span>)<span class="comment">//正常量程之内</span></span><br><span class="line">	&#123;</span><br><span class="line">		distance = ((TH1&lt;&lt;<span class="number">8</span>)+TL1)*<span class="number">0.017</span>;<span class="comment">//计算距离</span></span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> </span><br><span class="line">	&#123;</span><br><span class="line">		distance = <span class="number">999</span>;<span class="comment">//超出量程</span></span><br><span class="line">		TF1 = <span class="number">0</span>;</span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> distance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
+<p>上面的代码是直接在Typora上面写的，没有编译，应该没有很大问题（手动滑稽）</p>
+<p>这样写要改变数码管的值只要改变数组smgbuf[]中的值就行了0-9的数字是和编号一一对应的，其他的特殊符号可以自己手动加。</p>
 ]]></content>
       <categories>
         <category>备赛</category>
@@ -4541,6 +4551,93 @@
       </categories>
       <tags>
         <tag>蓝桥杯</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>蓝桥杯单片机超声波模块</title>
+    <url>/2020/03/13/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</url>
+    <content><![CDATA[<blockquote>
+<p>这个超声波模块的工作原理很简单，传感器像两个喇叭一样的东西，一个是负责发送超声波的，另一个负责接收超声波，根据发出到接收的时间间隔就可以算出距离了。</p>
+<p>s &#x3D; v*t&#x2F;2 </p>
+<p>初中物理知识哦。</p>
+</blockquote>
+<p>就不多说了直接上代码</p>
+<span id="more"></span>
+
+<p>main.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> sonic_counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> smgbuf[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	init();</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(sonic_counter &gt;= <span class="number">40</span>)<span class="comment">//每隔一定的时间测量一次，必须要加否则测的数据不正确</span></span><br><span class="line">		&#123;</span><br><span class="line">			distance = measure_distance();</span><br><span class="line">			sonic_counter = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		smgbuf[<span class="number">5</span>] = distance/<span class="number">100</span>;</span><br><span class="line">		smgbuf[<span class="number">6</span>] = distance%<span class="number">100</span>/<span class="number">10</span>;</span><br><span class="line">		smgbuf[<span class="number">7</span>] = distance%<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer2</span><span class="params">()</span> interrupt 12<span class="comment">//定时器2（52单片机多出来的一个定时器）</span></span><br><span class="line">&#123;</span><br><span class="line">	sonic_counter++;</span><br><span class="line">	display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>common.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _COMMON_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _COMMON_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;intrins.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sfr AUXR = <span class="number">0x8e</span>;</span><br><span class="line">sfr IE2 = <span class="number">0xaf</span>;</span><br><span class="line">sfr T2H = <span class="number">0xd6</span>;</span><br><span class="line">sfr T2L = <span class="number">0xd7</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>common.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[<span class="number">8</span>] = &#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[] = &#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">switch</span>(channel)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">		smgbuf[i] = <span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">4</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">5</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	init_timer();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	AUXR = AUXR&amp;<span class="number">0x33</span>|<span class="number">0x10</span>;<span class="comment">//定时器2的配置</span></span><br><span class="line">	IE2 = <span class="number">0x04</span>;</span><br><span class="line">	T2H = <span class="number">0xf8</span>;</span><br><span class="line">	T2L = <span class="number">0x2f</span>;</span><br><span class="line">	EA = <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	TMOD = <span class="number">0x01</span>;<span class="comment">//定时器1的配置，用于计算发送和接收之间的时间间隔</span></span><br><span class="line">	TH1 = <span class="number">0</span>;</span><br><span class="line">	TL1 = <span class="number">0</span>;</span><br><span class="line">	TR1 = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	num++;</span><br><span class="line">	<span class="keyword">if</span>(num &gt;= <span class="number">8</span>)</span><br><span class="line">		num = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>sonic.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _SONIC_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _SONIC_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> somenop &#123;_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();&#125;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//可以参照原理图</span></span><br><span class="line">sbit tx = P1^<span class="number">0</span>;<span class="comment">//发送波传感器的引脚</span></span><br><span class="line">sbit rx = P1^<span class="number">1</span>;<span class="comment">//接收波传感器的引脚</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>sonic.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span><span class="comment">//发送超声波</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)<span class="comment">//发送一组超声波</span></span><br><span class="line">	&#123;</span><br><span class="line">		tx = <span class="number">1</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">		tx = <span class="number">0</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">	&#125;</span><br><span class="line">	TR1 = <span class="number">1</span>;<span class="comment">//定时器1开始计时</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span><span class="comment">//计算、测量距离</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	send_wave();<span class="comment">//先发送</span></span><br><span class="line">	<span class="keyword">while</span>(rx == <span class="number">1</span>&amp;&amp;TF1 == <span class="number">0</span>);<span class="comment">//等待接收完毕或者定时器1溢出</span></span><br><span class="line">	TR1 = <span class="number">0</span>;<span class="comment">//定时器1停止计时</span></span><br><span class="line">	<span class="keyword">if</span>(rx == <span class="number">0</span>&amp;&amp;TF1 == <span class="number">0</span>)<span class="comment">//正常量程之内</span></span><br><span class="line">	&#123;</span><br><span class="line">		distance = ((TH1&lt;&lt;<span class="number">8</span>)+TL1)*<span class="number">0.017</span>;<span class="comment">//计算距离</span></span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> </span><br><span class="line">	&#123;</span><br><span class="line">		distance = <span class="number">999</span>;<span class="comment">//超出量程</span></span><br><span class="line">		TF1 = <span class="number">0</span>;</span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> distance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>备赛</category>
+        <category>蓝桥杯</category>
+      </categories>
+      <tags>
+        <tag>蓝桥杯</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Internet校验和计算示例</title>
+    <url>/2020/05/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A0%A1%E9%AA%8C%E5%92%8C%E7%A4%BA%E4%BE%8B/</url>
+    <content><![CDATA[<blockquote>
+<p>Packet</p>
+<p>01 00 F2 03 F4 F5 F6 F7 00 00</p>
+<p>(00 00 is the checksum field)</p>
+<p>Form the 16-bit words</p>
+<p>0100 F203 F4F5 F6F7</p>
+<p>Calculate 2’s complement sum</p>
+<p>0100 + F203 + F4F5 + F6F7 &#x3D; 0002 DEEF (store the sum in a 32-bit word)</p>
+<p>Add the carries (0002) to get the 16-bit 1’s complement sum</p>
+<p>DEEF + 002 &#x3D; DEF1</p>
+<p>Calculate 1’s complement of the 1’s complement sum</p>
+<p>~DEF1 &#x3D; 210E</p>
+<p>We send the packet including the checksum 21 0E</p>
+<p>01 00 F2 03 F4 F5 F6 F7 21 0E</p>
+<p>At the receiving</p>
+<p>0100 + F203 + F4F5 + F6F7 + 210E &#x3D; 0002 FFFD<br>FFFD + 0002 &#x3D; FFFF</p>
+<p>which checks OK.</p>
+</blockquote>
+<span id="more"></span>
+
+<p>原文链接：<a href="https://blog.csdn.net/qq_34369618/java/article/details/60603867">https://blog.csdn.net/qq_34369618/java/article/details/60603867</a></p>
+<p>翻译一下：</p>
+<p>有一个Packet</p>
+<p>01 00 F2 03 F4 F5 F6 F7 00 00</p>
+<p>(最后四位 00 00 是校验和)</p>
+<p>把上面十六位的数据两个两个组合</p>
+<p>0100 F203 F4F5 F6F7</p>
+<p>将这四个32位的16进制数相加</p>
+<p>0100 + F203 + F4F5 + F6F7 &#x3D; 0002 DEEF </p>
+<p>最高位进位的“1”返回到最低位继续加</p>
+<p>DEEF + 0002 &#x3D; DEF1 </p>
+<p>再对其结果按位取反</p>
+<p>~DEF1 &#x3D; 210E</p>
+<p>21 0E就是这个package的校验</p>
+<p>01 00 F2 03 F4 F5 F6 F7 21 0E</p>
+<p>接收端也是一样的，两个十六位的数组成一个三十二位的数，再将其全部相加</p>
+<p>0100 + F203 + F4F5 + F6F7 + 210E &#x3D; 0002 FFFD<br>FFFD + 0002 &#x3D; FFFF</p>
+<p>得到的结果为FFFF就没有问题</p>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
       </tags>
   </entry>
   <entry>
@@ -4600,56 +4697,6 @@
       <tags>
         <tag>配置</tag>
         <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Internet校验和计算示例</title>
-    <url>/2020/05/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A0%A1%E9%AA%8C%E5%92%8C%E7%A4%BA%E4%BE%8B/</url>
-    <content><![CDATA[<blockquote>
-<p>Packet</p>
-<p>01 00 F2 03 F4 F5 F6 F7 00 00</p>
-<p>(00 00 is the checksum field)</p>
-<p>Form the 16-bit words</p>
-<p>0100 F203 F4F5 F6F7</p>
-<p>Calculate 2’s complement sum</p>
-<p>0100 + F203 + F4F5 + F6F7 &#x3D; 0002 DEEF (store the sum in a 32-bit word)</p>
-<p>Add the carries (0002) to get the 16-bit 1’s complement sum</p>
-<p>DEEF + 002 &#x3D; DEF1</p>
-<p>Calculate 1’s complement of the 1’s complement sum</p>
-<p>~DEF1 &#x3D; 210E</p>
-<p>We send the packet including the checksum 21 0E</p>
-<p>01 00 F2 03 F4 F5 F6 F7 21 0E</p>
-<p>At the receiving</p>
-<p>0100 + F203 + F4F5 + F6F7 + 210E &#x3D; 0002 FFFD<br>FFFD + 0002 &#x3D; FFFF</p>
-<p>which checks OK.</p>
-</blockquote>
-<span id="more"></span>
-
-<p>原文链接：<a href="https://blog.csdn.net/qq_34369618/java/article/details/60603867">https://blog.csdn.net/qq_34369618/java/article/details/60603867</a></p>
-<p>翻译一下：</p>
-<p>有一个Packet</p>
-<p>01 00 F2 03 F4 F5 F6 F7 00 00</p>
-<p>(最后四位 00 00 是校验和)</p>
-<p>把上面十六位的数据两个两个组合</p>
-<p>0100 F203 F4F5 F6F7</p>
-<p>将这四个32位的16进制数相加</p>
-<p>0100 + F203 + F4F5 + F6F7 &#x3D; 0002 DEEF </p>
-<p>最高位进位的“1”返回到最低位继续加</p>
-<p>DEEF + 0002 &#x3D; DEF1 </p>
-<p>再对其结果按位取反</p>
-<p>~DEF1 &#x3D; 210E</p>
-<p>21 0E就是这个package的校验</p>
-<p>01 00 F2 03 F4 F5 F6 F7 21 0E</p>
-<p>接收端也是一样的，两个十六位的数组成一个三十二位的数，再将其全部相加</p>
-<p>0100 + F203 + F4F5 + F6F7 + 210E &#x3D; 0002 FFFD<br>FFFD + 0002 &#x3D; FFFF</p>
-<p>得到的结果为FFFF就没有问题</p>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>计算机网络</category>
-      </categories>
-      <tags>
-        <tag>计算机网络</tag>
       </tags>
   </entry>
 </search>
