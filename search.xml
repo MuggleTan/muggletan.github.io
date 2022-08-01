@@ -27,66 +27,36 @@
       </tags>
   </entry>
   <entry>
-    <title>Java中看似简单实际很坑的题目</title>
-    <url>/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/</url>
-    <content><![CDATA[<h3 id="第一题（貌似是考察方法的参数传递）"><a href="#第一题（貌似是考察方法的参数传递）" class="headerlink" title="第一题（貌似是考察方法的参数传递）"></a>第一题（貌似是考察方法的参数传递）</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 20;</span><br><span class="line">    method(a,b);//在调用method()方法之后输出a = 100,b = 200</span><br><span class="line">    System.out.println(&quot;a = &quot; + a);</span><br><span class="line">    System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  &#125;</span><br><span class="line">  static void method(int a,int b)&#123;</span><br><span class="line">    //代码编写处</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果在method中直接写</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = 100;</span><br><span class="line">b = 200;</span><br></pre></td></tr></table></figure>
-
-<p>这个样子会直接被别人鄙视</p>
-<p>其实这是一个脑筋急转弯的题目，直接像上面这样把一个基本数据类型的变量，作为形参传入函数，等于是直接把值赋给了函数中的实参，改变函数中的实参并不会影响主函数中a和b的值，在method()方法调用完之后，方法中的实参a和b就出栈了，此时在主函数输出的仍然是10和20。</p>
+    <title>Apache配置反向代理</title>
+    <url>/2020/07/23/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<blockquote>
+<p>为了让自己的spring boot项目能被域名直接访问，而不是IP:端口号的形式访问，需要用到反向代理，简单来讲就是把一个程序运行的地址映射到域名上，实现直接用域名访问。网上很多教程都是针对nignx的，而我用的是apache，也不想折腾把apache换成nignx，找了很久才找到一个可以用的，这里记录一下，方便下次使用。</p>
+</blockquote>
+<h1 id="1-开启Apache的代理模块"><a href="#1-开启Apache的代理模块" class="headerlink" title="1.开启Apache的代理模块"></a>1.开启Apache的代理模块</h1><p>在确保Apache安装好之后，通过<code>a2enmod proxy proxy_balancer proxy_http</code>开启Apache的代理模块。</p>
+<p>我用的是Ubuntu的Apache和centos下的Apache目录结构似乎有点不一样。</p>
 <span id="more"></span>
 
-<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>机智的方法，调用完method()方法之后就直接退出程序，不让他执行主函数中的print方法。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  a = 100;</span><br><span class="line">  b = 200;</span><br><span class="line">  System.out.println(&quot;a = &quot; + a);</span><br><span class="line">  System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  System.exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2.修改配置文件"></a>2.修改配置文件</h1><p>切换到 <code>/etc/apache2/sites-enabled</code> 目录下，打开需要修改网站对应的配置</p>
+<img data-src="/images/Apache配置反向代理/image-20200723085537548.png" alt="image-20200723085537548" style="zoom:80%;" />
 
-<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  PrintStream ps = new PrintStream(System.out)&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void println(String x)&#123;</span><br><span class="line">            if(&quot;a = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;a = 100&quot;;</span><br><span class="line">            &#125;else if(&quot;b = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;b = 200&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            super.println(x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    System.setOut(ps);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>没有的话就新建一个对应的配置文件，文件的名字是二级域名的前缀.conf，比如我的域名是steventan.top，</p>
+<p>那么test.conf对应的网站是test.steventan.top，这个好像也只是一个命名的习惯，不一样也没多大问题，这样主要是方便管理。</p>
+<p>旧版Apache：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">	ServerName autoclock.steventan.top <span class="comment">#这里填代理服务器的IP或域名</span></span><br><span class="line">	ProxyRequests off <span class="comment">#off表示开启反向代理  on表示开启正向代理</span></span><br><span class="line">	ProxyPass / http://localhost:8080/  <span class="comment">#被代理的网站，中间的那个/千万别少了，少了的话重启报错</span></span><br><span class="line">	ProxyPassReverse / http://localhost:8080/  <span class="comment">#被代理的网站</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment"># RewriteEngine on</span></span><br><span class="line">	<span class="comment"># RewriteCond   %&#123;HTTPS&#125; !=on</span></span><br><span class="line">	<span class="comment"># RewriteRule   ^(.*)  https://%&#123;SERVER_NAME&#125;$1 [L,R]</span></span><br><span class="line"></span><br><span class="line">	ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">	CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
 
-<p>这种方法用的是重写，当要调用println()这个方法分时候不是调用Java库中的println()方法，而是调用这里自己写的这个，就把要输出的“a &#x3D; 10”替换成了”a &#x3D; 100”。</p>
-<h3 id="第二题（微软面试题）"><a href="#第二题（微软面试题）" class="headerlink" title="第二题（微软面试题）"></a>第二题（微软面试题）</h3><blockquote>
-<p> 定义一个int型的数组: int[] arr &#x3D; new int]{12,3,3,34,56,77,432};让数组的每个位置上的值去除以首位置的元素,得到的结果,作为该位置上的新值。遍历新的数组。 </p>
-</blockquote>
-<p>这个题其实很简单，但是一不小心就会出错，比如：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for(int i = 0;i &lt; arr.length;i++)</span><br><span class="line">  arr[i] = arr[i]/arr[0];</span><br></pre></td></tr></table></figure>
+<p>新版Apache：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">	ServerAdmin webmaster@localhost</span><br><span class="line">	</span><br><span class="line">	&lt;Proxy *&gt;</span><br><span class="line">		Order Deny,Allow</span><br><span class="line">		Allow from all</span><br><span class="line">	&lt;/Proxy&gt;</span><br><span class="line"></span><br><span class="line">	ServerName 10.100.128.8</span><br><span class="line">	ProxyRequests off</span><br><span class="line">	ProxyPass /api http://localhost:8080/</span><br><span class="line">	ProxyPassReverse /api http://localhost:8080/</span><br><span class="line">  	</span><br><span class="line"></span><br><span class="line">	ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">	CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>自己一顿操作之后以为稳了，实际上结果和原数组是一样的。这样从前面向后面遍历，数组第一个值在第一次就变成1了，之后每次除的arr[0]都是1，所以后面的值都没有发生变化。</p>
-<p>所以简单的题不要掉以轻心。</p>
-<p>正确的写法很简单也不止一种方法，可以从后向前遍历数组，也可以把数组的第一个值赋给一个临时变量，后面的数都除以这个临时变量。</p>
-<h3 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">  public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">    int[] arr1 = new int[]&#123;1,2,3&#125;;</span><br><span class="line">    System.out.println(arr1);</span><br><span class="line"></span><br><span class="line">    char[] arr2 = new char[]&#123;&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;&#125;;</span><br><span class="line">    System.out.println(arr2); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>问输出的分别是什么？</p>
-<p>正确答案是arr1输出的是地址值，arr2输出的是abc。</p>
-<p>这其实考的是一个很细的知识点，了解过后就会感觉这个题很low，简直是在是在侮辱自己的智商，不了解的话可能就认为两个都是输出一个地址值。</p>
-<p>这里涉及到了Java中方法的重载，同一个函数名，但是传的参数个数或者参数类型不同的话，他调的方法是不一样的。</p>
-<p>第一个整型的数组，传入的是object类型，调用的是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(Object x) &#123;</span><br><span class="line">  String s = String.valueOf(x);</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(s);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>第二个字符型的数组，传入的是char型的数组，调用的是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(char x[]) &#123;</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(x);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="第四题"><a href="#第四题" class="headerlink" title="第四题"></a>第四题</h3><blockquote>
-<p> 如下两个题目输出结果相同吗？各是什么： </p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Object o1 = true ? new Integer(1) : new Double(2.0);</span><br><span class="line">System.out.println(o1);</span><br><span class="line"></span><br><span class="line">Object o2;</span><br><span class="line">if (true)</span><br><span class="line">    o2 = new Integer(1);</span><br><span class="line">else</span><br><span class="line">    o2 = new Double(2.0);</span><br><span class="line">System.out.println(o2);</span><br></pre></td></tr></table></figure>
-
-<p>正确答案：</p>
-<p>o1输出的是1.0，o2输出的是1</p>
-<p>这个题是看似在考Object类中的方法，但是实际上，这里的三元运算符涉及到一个自动类型提升的问题</p>
-<p>(表达式1)?(表达式2):(表达式3)</p>
-<p>三元运算的最后结果是这三个表达式中的类型“最高”的一种，在计算的过程个中会有自动类型提升</p>
-<h3 id="第五题"><a href="#第五题" class="headerlink" title="第五题"></a>第五题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void method1() &#123;</span><br><span class="line">  Integer i = new Integer(1);</span><br><span class="line">  Integer j = new Integer(1);</span><br><span class="line">  System.out.println(i == j);</span><br><span class="line">  Integer m = 1;</span><br><span class="line">  Integer n = 1;</span><br><span class="line">  System.out.println(m == n);//</span><br><span class="line">  Integer x = 128;</span><br><span class="line">  Integer y = 128;</span><br><span class="line">  System.out.println(x == y);//</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>第一个输出为false，第二个输出为true，第三个输出为false。</p>
-<p>Integer内部定义了IntegerCache结构，IntegerCache中定义了Integer[],保存了从-128<del>127范围的整数。如果我们使用自动装箱的方式，给Integer赋值的范围在 -128</del>127范围内时，可以直接使用数组中的元素，不用再去new了。目的：提高效率。</p>
-<p>Integer类中的源码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">private static class IntegerCache &#123;</span><br><span class="line">  static final int low = -128;</span><br><span class="line">  static final int high;</span><br><span class="line">  static final Integer cache[];</span><br><span class="line">  static &#123;</span><br><span class="line">    // high value may be configured by property</span><br><span class="line">    int h = 127;</span><br><span class="line">    String integerCacheHighPropValue =</span><br><span class="line">      sun.misc.VM.getSavedProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">    if (integerCacheHighPropValue != null) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        int i = parseInt(integerCacheHighPropValue);</span><br><span class="line">        i = Math.max(i, 127);</span><br><span class="line">        // Maximum array size is Integer.MAX_VALUE</span><br><span class="line">        h = Math.min(i, Integer.MAX_VALUE - (-low) -1);</span><br><span class="line">      &#125; catch( NumberFormatException nfe) &#123;</span><br><span class="line">        // If the property cannot be parsed into an int, ignore it.</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    high = h;</span><br><span class="line"></span><br><span class="line">    cache = new Integer[(high - low) + 1];</span><br><span class="line">    int j = low;</span><br><span class="line">    for(int k = 0; k &lt; cache.length; k++)</span><br><span class="line">      cache[k] = new Integer(j++);</span><br><span class="line"></span><br><span class="line">    // range [-128, 127] must be interned (JLS7 5.1.7)</span><br><span class="line">    assert IntegerCache.high &gt;= 127;</span><br><span class="line">  &#125;</span><br><span class="line">  private IntegerCache() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+<p>上面的配置是将本地的8080端口运行的程序映射到autoclock.steventan.top这个域名上，这就达到了我的目的，服务器上运行的spring boot项目，能通过域名直接在公网访问。</p>
+<h1 id="3-重启apache生效配置"><a href="#3-重启apache生效配置" class="headerlink" title="3.重启apache生效配置"></a>3.重启apache生效配置</h1><p>通过<code>service apache2 restart</code> 重启Apache，让配置文件生效。 </p>
+]]></content>
       <categories>
-        <category>算法</category>
-        <category>LeetCode</category>
+        <category>建站</category>
       </categories>
       <tags>
-        <tag>java</tag>
+        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -349,6 +319,69 @@
       <tags>
         <tag>学习笔记</tag>
         <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java中看似简单实际很坑的题目</title>
+    <url>/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/</url>
+    <content><![CDATA[<h3 id="第一题（貌似是考察方法的参数传递）"><a href="#第一题（貌似是考察方法的参数传递）" class="headerlink" title="第一题（貌似是考察方法的参数传递）"></a>第一题（貌似是考察方法的参数传递）</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 20;</span><br><span class="line">    method(a,b);//在调用method()方法之后输出a = 100,b = 200</span><br><span class="line">    System.out.println(&quot;a = &quot; + a);</span><br><span class="line">    System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  &#125;</span><br><span class="line">  static void method(int a,int b)&#123;</span><br><span class="line">    //代码编写处</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果在method中直接写</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = 100;</span><br><span class="line">b = 200;</span><br></pre></td></tr></table></figure>
+
+<p>这个样子会直接被别人鄙视</p>
+<p>其实这是一个脑筋急转弯的题目，直接像上面这样把一个基本数据类型的变量，作为形参传入函数，等于是直接把值赋给了函数中的实参，改变函数中的实参并不会影响主函数中a和b的值，在method()方法调用完之后，方法中的实参a和b就出栈了，此时在主函数输出的仍然是10和20。</p>
+<span id="more"></span>
+
+<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>机智的方法，调用完method()方法之后就直接退出程序，不让他执行主函数中的print方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  a = 100;</span><br><span class="line">  b = 200;</span><br><span class="line">  System.out.println(&quot;a = &quot; + a);</span><br><span class="line">  System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  System.exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  PrintStream ps = new PrintStream(System.out)&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void println(String x)&#123;</span><br><span class="line">            if(&quot;a = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;a = 100&quot;;</span><br><span class="line">            &#125;else if(&quot;b = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;b = 200&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            super.println(x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    System.setOut(ps);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方法用的是重写，当要调用println()这个方法分时候不是调用Java库中的println()方法，而是调用这里自己写的这个，就把要输出的“a &#x3D; 10”替换成了”a &#x3D; 100”。</p>
+<h3 id="第二题（微软面试题）"><a href="#第二题（微软面试题）" class="headerlink" title="第二题（微软面试题）"></a>第二题（微软面试题）</h3><blockquote>
+<p> 定义一个int型的数组: int[] arr &#x3D; new int]{12,3,3,34,56,77,432};让数组的每个位置上的值去除以首位置的元素,得到的结果,作为该位置上的新值。遍历新的数组。 </p>
+</blockquote>
+<p>这个题其实很简单，但是一不小心就会出错，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for(int i = 0;i &lt; arr.length;i++)</span><br><span class="line">  arr[i] = arr[i]/arr[0];</span><br></pre></td></tr></table></figure>
+
+<p>自己一顿操作之后以为稳了，实际上结果和原数组是一样的。这样从前面向后面遍历，数组第一个值在第一次就变成1了，之后每次除的arr[0]都是1，所以后面的值都没有发生变化。</p>
+<p>所以简单的题不要掉以轻心。</p>
+<p>正确的写法很简单也不止一种方法，可以从后向前遍历数组，也可以把数组的第一个值赋给一个临时变量，后面的数都除以这个临时变量。</p>
+<h3 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">  public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">    int[] arr1 = new int[]&#123;1,2,3&#125;;</span><br><span class="line">    System.out.println(arr1);</span><br><span class="line"></span><br><span class="line">    char[] arr2 = new char[]&#123;&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;&#125;;</span><br><span class="line">    System.out.println(arr2); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>问输出的分别是什么？</p>
+<p>正确答案是arr1输出的是地址值，arr2输出的是abc。</p>
+<p>这其实考的是一个很细的知识点，了解过后就会感觉这个题很low，简直是在是在侮辱自己的智商，不了解的话可能就认为两个都是输出一个地址值。</p>
+<p>这里涉及到了Java中方法的重载，同一个函数名，但是传的参数个数或者参数类型不同的话，他调的方法是不一样的。</p>
+<p>第一个整型的数组，传入的是object类型，调用的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(Object x) &#123;</span><br><span class="line">  String s = String.valueOf(x);</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(s);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二个字符型的数组，传入的是char型的数组，调用的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(char x[]) &#123;</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(x);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="第四题"><a href="#第四题" class="headerlink" title="第四题"></a>第四题</h3><blockquote>
+<p> 如下两个题目输出结果相同吗？各是什么： </p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Object o1 = true ? new Integer(1) : new Double(2.0);</span><br><span class="line">System.out.println(o1);</span><br><span class="line"></span><br><span class="line">Object o2;</span><br><span class="line">if (true)</span><br><span class="line">    o2 = new Integer(1);</span><br><span class="line">else</span><br><span class="line">    o2 = new Double(2.0);</span><br><span class="line">System.out.println(o2);</span><br></pre></td></tr></table></figure>
+
+<p>正确答案：</p>
+<p>o1输出的是1.0，o2输出的是1</p>
+<p>这个题是看似在考Object类中的方法，但是实际上，这里的三元运算符涉及到一个自动类型提升的问题</p>
+<p>(表达式1)?(表达式2):(表达式3)</p>
+<p>三元运算的最后结果是这三个表达式中的类型“最高”的一种，在计算的过程个中会有自动类型提升</p>
+<h3 id="第五题"><a href="#第五题" class="headerlink" title="第五题"></a>第五题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void method1() &#123;</span><br><span class="line">  Integer i = new Integer(1);</span><br><span class="line">  Integer j = new Integer(1);</span><br><span class="line">  System.out.println(i == j);</span><br><span class="line">  Integer m = 1;</span><br><span class="line">  Integer n = 1;</span><br><span class="line">  System.out.println(m == n);//</span><br><span class="line">  Integer x = 128;</span><br><span class="line">  Integer y = 128;</span><br><span class="line">  System.out.println(x == y);//</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个输出为false，第二个输出为true，第三个输出为false。</p>
+<p>Integer内部定义了IntegerCache结构，IntegerCache中定义了Integer[],保存了从-128<del>127范围的整数。如果我们使用自动装箱的方式，给Integer赋值的范围在 -128</del>127范围内时，可以直接使用数组中的元素，不用再去new了。目的：提高效率。</p>
+<p>Integer类中的源码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">private static class IntegerCache &#123;</span><br><span class="line">  static final int low = -128;</span><br><span class="line">  static final int high;</span><br><span class="line">  static final Integer cache[];</span><br><span class="line">  static &#123;</span><br><span class="line">    // high value may be configured by property</span><br><span class="line">    int h = 127;</span><br><span class="line">    String integerCacheHighPropValue =</span><br><span class="line">      sun.misc.VM.getSavedProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">    if (integerCacheHighPropValue != null) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        int i = parseInt(integerCacheHighPropValue);</span><br><span class="line">        i = Math.max(i, 127);</span><br><span class="line">        // Maximum array size is Integer.MAX_VALUE</span><br><span class="line">        h = Math.min(i, Integer.MAX_VALUE - (-low) -1);</span><br><span class="line">      &#125; catch( NumberFormatException nfe) &#123;</span><br><span class="line">        // If the property cannot be parsed into an int, ignore it.</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    high = h;</span><br><span class="line"></span><br><span class="line">    cache = new Integer[(high - low) + 1];</span><br><span class="line">    int j = low;</span><br><span class="line">    for(int k = 0; k &lt; cache.length; k++)</span><br><span class="line">      cache[k] = new Integer(j++);</span><br><span class="line"></span><br><span class="line">    // range [-128, 127] must be interned (JLS7 5.1.7)</span><br><span class="line">    assert IntegerCache.high &gt;= 127;</span><br><span class="line">  &#125;</span><br><span class="line">  private IntegerCache() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>算法</category>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -3024,6 +3057,41 @@
       </tags>
   </entry>
   <entry>
+    <title>MySQL8允许远程访问</title>
+    <url>/2020/11/23/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/</url>
+    <content><![CDATA[<h2 id="一、Ubuntu安装MySQL8"><a href="#一、Ubuntu安装MySQL8" class="headerlink" title="一、Ubuntu安装MySQL8"></a>一、Ubuntu安装MySQL8</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt install mysql-server</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二、修改配置"><a href="#二、修改配置" class="headerlink" title="二、修改配置"></a>二、修改配置</h2><ol>
+<li><p>登录MySQL</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mysql</span><br></pre></td></tr></table></figure>
+
+<p>可以直接登录，只要输入账户密码，登录之后再改密码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">show databases;</span><br><span class="line"></span><br><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;你的新密码&#x27;;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>更新域属性，’%’表示任何方式访问</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">update user set host=&#x27;%&#x27; where user =&#x27;root&#x27;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行以上语句之后再执行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>再执行授权语句</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27;WITH GRANT OPTION;</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>软件</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>markdown基本语法</title>
     <url>/2020/02/27/Markdown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</url>
     <content><![CDATA[<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><h4 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="comment">###### 六级标题</span></span><br></pre></td></tr></table></figure>
@@ -3085,41 +3153,6 @@
       </categories>
       <tags>
         <tag>markdown</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL8允许远程访问</title>
-    <url>/2020/11/23/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/</url>
-    <content><![CDATA[<h2 id="一、Ubuntu安装MySQL8"><a href="#一、Ubuntu安装MySQL8" class="headerlink" title="一、Ubuntu安装MySQL8"></a>一、Ubuntu安装MySQL8</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt install mysql-server</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="二、修改配置"><a href="#二、修改配置" class="headerlink" title="二、修改配置"></a>二、修改配置</h2><ol>
-<li><p>登录MySQL</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mysql</span><br></pre></td></tr></table></figure>
-
-<p>可以直接登录，只要输入账户密码，登录之后再改密码</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">show databases;</span><br><span class="line"></span><br><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;你的新密码&#x27;;</span><br></pre></td></tr></table></figure>
-
-
-</li>
-<li><p>更新域属性，’%’表示任何方式访问</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">update user set host=&#x27;%&#x27; where user =&#x27;root&#x27;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>执行以上语句之后再执行</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>再执行授权语句</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27;WITH GRANT OPTION;</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>软件</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
-        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -3262,7 +3295,8 @@
 
 <h1 id="网络层（Internet-Layer）"><a href="#网络层（Internet-Layer）" class="headerlink" title="网络层（Internet Layer）"></a>网络层（Internet Layer）</h1><p>负责将数据从一个设备发送到另一个设备的并不是传输层，传输层设计的理念是，简单、高效、专注，实际场景中的网络环节错综复杂，网络层就来是负责数据实际传输。</p>
 <p>网络层最常用的是<strong>IP协议（Internet Protocol）</strong>，IP协议会将传输层的报文作为数据部分，再加上IP数据包组装成IP报文。</p>
-<p><img data-src="/images/TCP-IP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B/12.jpg" alt="img"></p>
+<img data-src="/images/TCP-IP四层模型/12.jpg" alt="img" style="zoom:80%;" />
+
 <p>网络层负责将数据从一个设备传输到另一个设备，而为了确定目标设备，网络层需要有区分设备单的编号，这个编号就是IP地址。</p>
 <p>对于IPv4协议，IP地址共32位（32个bit），共分成四段（例如：192.168.1.1），每段8位。如果只有单纯的IP地址，虽然做到了设备区分，但是殉职起来就特别麻烦，世界上那么多设备，一个个去匹配显然是非常不科学的。</p>
 <p>因此需要借助<strong>子网掩码</strong>来将IP地址分为两种意义：</p>
@@ -3280,9 +3314,11 @@
 <p>MAC头是以太网使用的头，包含了发送方和接收方的MAC地址等信息，我们可以通过ARP协议获取对方的MAC地址。</p>
 <p>所以网络接口层主要为网络提供链路级别的传输服务，负责在以太网、WiFi这样的底层网络上发送原始数据包，工作在网卡这个层次，使用MAC地址来别试网络中的设备。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>TCP&#x2F;IP网络的四层结构总结如下图：</p>
-<p><img data-src="/images/TCP-IP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B/tcpip%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B.png" alt="img"></p>
+<img data-src="/images/TCP-IP四层模型/tcpip参考模型.png" alt="img" style="zoom:80%;" />
+
 <p>每一层的封装结构如下图：</p>
-<p><img data-src="/images/TCP-IP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B/%E5%B0%81%E8%A3%85.png" alt="img"></p>
+<img data-src="/images/TCP-IP四层模型/封装.png" alt="img"  />
+
 <p>网络接口层的传输单位是帧（frame），IP层的传输单位是包（package），TCP层的传输单位是段（segment），HTTP的传输单位则是消息或报文（message），这些单位其实并没有本质上的区别，可以统称为数据包。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.xiaolincoding.com/network/1_base/tcp_ip_model.html">小林coding TCP&#x2F;IP 网络模型有哪几层？</a></p>
 ]]></content>
@@ -3646,6 +3682,28 @@
       </tags>
   </entry>
   <entry>
+    <title>sublime text3下载插件</title>
+    <url>/2020/02/26/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/</url>
+    <content><![CDATA[<h5 id="1-在github上下载Package-Control的安装包"><a href="#1-在github上下载Package-Control的安装包" class="headerlink" title="1.在github上下载Package Control的安装包"></a>1.在github上下载Package Control的安装包</h5><p><a href="https://github.com/wbond/sublime_package_control">https://github.com/wbond/sublime_package_control</a> </p>
+<h5 id="2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件"><a href="#2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件" class="headerlink" title="2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件"></a>2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件</h5><span id="more"></span>
+
+<img data-src="/images/sublime下载插件/image-20200428221639527.png" alt="image-20200428221639527" style="zoom:67%;" />
+
+<p>找到下载的文件，解压，将文件夹重命名为“Package Control”复制到sublime存放插件的目录</p>
+<h5 id="3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的"><a href="#3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的" class="headerlink" title="3.https://packagecontrol.io 这个被墙了 下载插件不下来，把下载链接改为国内的."></a>3.<code>https://packagecontrol.io</code> 这个被墙了 下载插件不下来，把下载链接改为国内的.</h5><p><img data-src="/images/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/LGq7aPkejfiBXRz.png" alt="qwqwd.png"></p>
+<p>修改User文件下的配置文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> <span class="string">&quot;bootstrapped&quot;</span>: <span class="literal">true</span>,</span><br><span class="line"> <span class="string">&quot;channels&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;https://erhan.in/channel_v3.json&quot;</span></span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;in_process_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;installed_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;ChineseLocalizations&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Package Control&quot;</span></span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="4-重启sublime-text3"><a href="#4-重启sublime-text3" class="headerlink" title="4.重启sublime text3"></a>4.重启sublime text3</h5>]]></content>
+      <categories>
+        <category>软件</category>
+        <category>配置</category>
+      </categories>
+      <tags>
+        <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>spring-boot在IDEA中的热部署</title>
     <url>/2020/03/15/spring-boot%E5%9C%A8IDEA%E4%B8%AD%E7%9A%84%E7%83%AD%E9%83%A8%E7%BD%B2/</url>
     <content><![CDATA[<blockquote>
@@ -3673,28 +3731,6 @@
       <tags>
         <tag>idea</tag>
         <tag>spring-boot</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sublime text3下载插件</title>
-    <url>/2020/02/26/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/</url>
-    <content><![CDATA[<h5 id="1-在github上下载Package-Control的安装包"><a href="#1-在github上下载Package-Control的安装包" class="headerlink" title="1.在github上下载Package Control的安装包"></a>1.在github上下载Package Control的安装包</h5><p><a href="https://github.com/wbond/sublime_package_control">https://github.com/wbond/sublime_package_control</a> </p>
-<h5 id="2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件"><a href="#2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件" class="headerlink" title="2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件"></a>2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件</h5><span id="more"></span>
-
-<img data-src="/images/sublime下载插件/image-20200428221639527.png" alt="image-20200428221639527" style="zoom:67%;" />
-
-<p>找到下载的文件，解压，将文件夹重命名为“Package Control”复制到sublime存放插件的目录</p>
-<h5 id="3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的"><a href="#3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的" class="headerlink" title="3.https://packagecontrol.io 这个被墙了 下载插件不下来，把下载链接改为国内的."></a>3.<code>https://packagecontrol.io</code> 这个被墙了 下载插件不下来，把下载链接改为国内的.</h5><p><img data-src="/images/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/LGq7aPkejfiBXRz.png" alt="qwqwd.png"></p>
-<p>修改User文件下的配置文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> <span class="string">&quot;bootstrapped&quot;</span>: <span class="literal">true</span>,</span><br><span class="line"> <span class="string">&quot;channels&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;https://erhan.in/channel_v3.json&quot;</span></span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;in_process_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;installed_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;ChineseLocalizations&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Package Control&quot;</span></span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="4-重启sublime-text3"><a href="#4-重启sublime-text3" class="headerlink" title="4.重启sublime text3"></a>4.重启sublime text3</h5>]]></content>
-      <categories>
-        <category>软件</category>
-        <category>配置</category>
-      </categories>
-      <tags>
-        <tag>软件</tag>
       </tags>
   </entry>
   <entry>
@@ -4181,6 +4217,45 @@
       </tags>
   </entry>
   <entry>
+    <title>操作系统--操作系统的形成与发展</title>
+    <url>/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%A2%E6%88%90%E4%B8%8E%E5%8F%91%E5%B1%95/</url>
+    <content><![CDATA[<h2 id="操作系统的形成时期"><a href="#操作系统的形成时期" class="headerlink" title="操作系统的形成时期"></a>操作系统的形成时期</h2><h3 id="手动操作时期"><a href="#手动操作时期" class="headerlink" title="手动操作时期"></a>手动操作时期</h3><img data-src="/images/操作系统的形成与发展/vuMCXHTLqJBOh5t.png" alt="image.png" style="zoom:80%;" />
+
+<h4 id="存在缺点"><a href="#存在缺点" class="headerlink" title="存在缺点"></a>存在缺点</h4><ol>
+<li><p>用户独占全部计算机资源</p>
+</li>
+<li><p>CPU等待人工操作</p>
+</li>
+<li><p>CPU与I&#x2F;O设备串行操作</p>
+</li>
+</ol>
+<h3 id="监控程序阶段（早起批处理阶段）"><a href="#监控程序阶段（早起批处理阶段）" class="headerlink" title="监控程序阶段（早起批处理阶段）"></a>监控程序阶段（早起批处理阶段）</h3><img data-src="/images/操作系统的形成与发展/4QMJfoxRIXGiu9C.png" alt="单道批处理系统流程图" style="zoom:67%;" />
+
+<p>单道批处理系统流程图  </p>
+<span id="more"></span>
+
+<h2 id="操作系统的成熟阶段"><a href="#操作系统的成熟阶段" class="headerlink" title="操作系统的成熟阶段"></a>操作系统的成熟阶段</h2><h3 id="多道批处理系统"><a href="#多道批处理系统" class="headerlink" title="多道批处理系统"></a>多道批处理系统</h3><h4 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h4><ol>
+<li>程序浮动与存储保护问题</li>
+<li>CPU的调度和管理问题</li>
+<li>其他资源的管理和调度问题</li>
+</ol>
+<h3 id="分时操作系统"><a href="#分时操作系统" class="headerlink" title="分时操作系统"></a>分时操作系统</h3><h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h4><ol>
+<li>人机交互</li>
+<li>共享主机</li>
+<li>便于用户上机</li>
+</ol>
+<img data-src="/images/操作系统的形成与发展/vrjo1l8dPaFKY7c.png" alt="image.png" style="zoom:67%;" />
+
+<h2 id="进一步发展时期"><a href="#进一步发展时期" class="headerlink" title="进一步发展时期"></a>进一步发展时期</h2>]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>操作系统--操作系统的中断</title>
     <url>/2020/03/03/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%AD%E6%96%AD/</url>
     <content><![CDATA[<h2 id="中断的概念"><a href="#中断的概念" class="headerlink" title="中断的概念"></a>中断的概念</h2><blockquote>
@@ -4253,42 +4328,20 @@
       </tags>
   </entry>
   <entry>
-    <title>操作系统--操作系统的形成与发展</title>
-    <url>/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%A2%E6%88%90%E4%B8%8E%E5%8F%91%E5%B1%95/</url>
-    <content><![CDATA[<h2 id="操作系统的形成时期"><a href="#操作系统的形成时期" class="headerlink" title="操作系统的形成时期"></a>操作系统的形成时期</h2><h3 id="手动操作时期"><a href="#手动操作时期" class="headerlink" title="手动操作时期"></a>手动操作时期</h3><img data-src="/images/操作系统的形成与发展/vuMCXHTLqJBOh5t.png" alt="image.png" style="zoom:80%;" />
-
-<h4 id="存在缺点"><a href="#存在缺点" class="headerlink" title="存在缺点"></a>存在缺点</h4><ol>
-<li><p>用户独占全部计算机资源</p>
-</li>
-<li><p>CPU等待人工操作</p>
-</li>
-<li><p>CPU与I&#x2F;O设备串行操作</p>
-</li>
-</ol>
-<h3 id="监控程序阶段（早起批处理阶段）"><a href="#监控程序阶段（早起批处理阶段）" class="headerlink" title="监控程序阶段（早起批处理阶段）"></a>监控程序阶段（早起批处理阶段）</h3><img data-src="/images/操作系统的形成与发展/4QMJfoxRIXGiu9C.png" alt="单道批处理系统流程图" style="zoom:67%;" />
-
-<p>单道批处理系统流程图  </p>
-<span id="more"></span>
-
-<h2 id="操作系统的成熟阶段"><a href="#操作系统的成熟阶段" class="headerlink" title="操作系统的成熟阶段"></a>操作系统的成熟阶段</h2><h3 id="多道批处理系统"><a href="#多道批处理系统" class="headerlink" title="多道批处理系统"></a>多道批处理系统</h3><h4 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h4><ol>
-<li>程序浮动与存储保护问题</li>
-<li>CPU的调度和管理问题</li>
-<li>其他资源的管理和调度问题</li>
-</ol>
-<h3 id="分时操作系统"><a href="#分时操作系统" class="headerlink" title="分时操作系统"></a>分时操作系统</h3><h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h4><ol>
-<li>人机交互</li>
-<li>共享主机</li>
-<li>便于用户上机</li>
-</ol>
-<img data-src="/images/操作系统的形成与发展/vrjo1l8dPaFKY7c.png" alt="image.png" style="zoom:67%;" />
-
-<h2 id="进一步发展时期"><a href="#进一步发展时期" class="headerlink" title="进一步发展时期"></a>进一步发展时期</h2>]]></content>
+    <title>《时生》读后感</title>
+    <url>/2020/03/13/%E6%97%B6%E7%94%9F%E8%AF%BB%E5%90%8E%E6%84%9F/</url>
+    <content><![CDATA[<p>&amp;emsp;&amp;emsp;这本书也是很符合东野圭吾的风格，讲的是穿越的故事，很像我看的他的第一本书——《解忧杂货店》，但是给人的感觉却不一样。</p>
+<p>&amp;emsp;&amp;emsp;小说主人公是时生，也就是拓实的儿子，拓实与丽子生下的有重病的儿子。故事是以插叙的手法进描绘的，这也很符合东野圭吾的风格。从拓实和丽子结婚开始，中间插叙了他们认识之前的那些故事，时生穿越时空主要是帮助他爸爸拓实，重新认识自己的身份，放下对其生母美须子的恨意，通过这件事之后也改变了拓实为人处世的态度，让他的生活一步步走向正轨。</p>
+<p>&amp;emsp;&amp;emsp;最喜欢的几句原文：</p>
+<p>&amp;emsp;&amp;emsp;“未来不仅仅是明天，未来在人心中，只要心中有未来，人就能幸福起来，因为有人教了你母亲这个，她才将你生下来，可你看着自己们整天牢骚满腹，不思进取，你感受不到未来不能怪别人，要怪你自己，因为你是个混蛋！”</p>
+<p>&amp;emsp;&amp;emsp;“确信自己喜欢的人能好好地活着，即便面对死亡，也看到了未来。”</p>
+]]></content>
       <categories>
-        <category>学习笔记</category>
-        <category>操作系统</category>
+        <category>感悟</category>
+        <category>小说</category>
       </categories>
       <tags>
-        <tag>学习笔记</tag>
+        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -4338,23 +4391,6 @@
       </categories>
       <tags>
         <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《时生》读后感</title>
-    <url>/2020/03/13/%E6%97%B6%E7%94%9F%E8%AF%BB%E5%90%8E%E6%84%9F/</url>
-    <content><![CDATA[<p>&amp;emsp;&amp;emsp;这本书也是很符合东野圭吾的风格，讲的是穿越的故事，很像我看的他的第一本书——《解忧杂货店》，但是给人的感觉却不一样。</p>
-<p>&amp;emsp;&amp;emsp;小说主人公是时生，也就是拓实的儿子，拓实与丽子生下的有重病的儿子。故事是以插叙的手法进描绘的，这也很符合东野圭吾的风格。从拓实和丽子结婚开始，中间插叙了他们认识之前的那些故事，时生穿越时空主要是帮助他爸爸拓实，重新认识自己的身份，放下对其生母美须子的恨意，通过这件事之后也改变了拓实为人处世的态度，让他的生活一步步走向正轨。</p>
-<p>&amp;emsp;&amp;emsp;最喜欢的几句原文：</p>
-<p>&amp;emsp;&amp;emsp;“未来不仅仅是明天，未来在人心中，只要心中有未来，人就能幸福起来，因为有人教了你母亲这个，她才将你生下来，可你看着自己们整天牢骚满腹，不思进取，你感受不到未来不能怪别人，要怪你自己，因为你是个混蛋！”</p>
-<p>&amp;emsp;&amp;emsp;“确信自己喜欢的人能好好地活着，即便面对死亡，也看到了未来。”</p>
-]]></content>
-      <categories>
-        <category>感悟</category>
-        <category>小说</category>
-      </categories>
-      <tags>
-        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -4481,6 +4517,43 @@
       </tags>
   </entry>
   <entry>
+    <title>蓝桥杯单片机超声波模块</title>
+    <url>/2020/03/13/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</url>
+    <content><![CDATA[<blockquote>
+<p>这个超声波模块的工作原理很简单，传感器像两个喇叭一样的东西，一个是负责发送超声波的，另一个负责接收超声波，根据发出到接收的时间间隔就可以算出距离了。</p>
+<p>s &#x3D; v*t&#x2F;2 </p>
+<p>初中物理知识哦。</p>
+</blockquote>
+<p>就不多说了直接上代码</p>
+<span id="more"></span>
+
+<p>main.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> sonic_counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> smgbuf[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	init();</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(sonic_counter &gt;= <span class="number">40</span>)<span class="comment">//每隔一定的时间测量一次，必须要加否则测的数据不正确</span></span><br><span class="line">		&#123;</span><br><span class="line">			distance = measure_distance();</span><br><span class="line">			sonic_counter = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		smgbuf[<span class="number">5</span>] = distance/<span class="number">100</span>;</span><br><span class="line">		smgbuf[<span class="number">6</span>] = distance%<span class="number">100</span>/<span class="number">10</span>;</span><br><span class="line">		smgbuf[<span class="number">7</span>] = distance%<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer2</span><span class="params">()</span> interrupt 12<span class="comment">//定时器2（52单片机多出来的一个定时器）</span></span><br><span class="line">&#123;</span><br><span class="line">	sonic_counter++;</span><br><span class="line">	display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>common.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _COMMON_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _COMMON_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;intrins.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sfr AUXR = <span class="number">0x8e</span>;</span><br><span class="line">sfr IE2 = <span class="number">0xaf</span>;</span><br><span class="line">sfr T2H = <span class="number">0xd6</span>;</span><br><span class="line">sfr T2L = <span class="number">0xd7</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>common.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[<span class="number">8</span>] = &#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[] = &#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">switch</span>(channel)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">		smgbuf[i] = <span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">4</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">5</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	init_timer();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	AUXR = AUXR&amp;<span class="number">0x33</span>|<span class="number">0x10</span>;<span class="comment">//定时器2的配置</span></span><br><span class="line">	IE2 = <span class="number">0x04</span>;</span><br><span class="line">	T2H = <span class="number">0xf8</span>;</span><br><span class="line">	T2L = <span class="number">0x2f</span>;</span><br><span class="line">	EA = <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	TMOD = <span class="number">0x01</span>;<span class="comment">//定时器1的配置，用于计算发送和接收之间的时间间隔</span></span><br><span class="line">	TH1 = <span class="number">0</span>;</span><br><span class="line">	TL1 = <span class="number">0</span>;</span><br><span class="line">	TR1 = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	num++;</span><br><span class="line">	<span class="keyword">if</span>(num &gt;= <span class="number">8</span>)</span><br><span class="line">		num = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>sonic.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _SONIC_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _SONIC_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> somenop &#123;_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();&#125;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//可以参照原理图</span></span><br><span class="line">sbit tx = P1^<span class="number">0</span>;<span class="comment">//发送波传感器的引脚</span></span><br><span class="line">sbit rx = P1^<span class="number">1</span>;<span class="comment">//接收波传感器的引脚</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>sonic.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span><span class="comment">//发送超声波</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)<span class="comment">//发送一组超声波</span></span><br><span class="line">	&#123;</span><br><span class="line">		tx = <span class="number">1</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">		tx = <span class="number">0</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">	&#125;</span><br><span class="line">	TR1 = <span class="number">1</span>;<span class="comment">//定时器1开始计时</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span><span class="comment">//计算、测量距离</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	send_wave();<span class="comment">//先发送</span></span><br><span class="line">	<span class="keyword">while</span>(rx == <span class="number">1</span>&amp;&amp;TF1 == <span class="number">0</span>);<span class="comment">//等待接收完毕或者定时器1溢出</span></span><br><span class="line">	TR1 = <span class="number">0</span>;<span class="comment">//定时器1停止计时</span></span><br><span class="line">	<span class="keyword">if</span>(rx == <span class="number">0</span>&amp;&amp;TF1 == <span class="number">0</span>)<span class="comment">//正常量程之内</span></span><br><span class="line">	&#123;</span><br><span class="line">		distance = ((TH1&lt;&lt;<span class="number">8</span>)+TL1)*<span class="number">0.017</span>;<span class="comment">//计算距离</span></span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> </span><br><span class="line">	&#123;</span><br><span class="line">		distance = <span class="number">999</span>;<span class="comment">//超出量程</span></span><br><span class="line">		TF1 = <span class="number">0</span>;</span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> distance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>备赛</category>
+        <category>蓝桥杯</category>
+      </categories>
+      <tags>
+        <tag>蓝桥杯</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>蓝桥杯工程模板</title>
     <url>/2020/08/14/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%B7%A5%E7%A8%8B%E6%A8%A1%E6%9D%BF/</url>
     <content><![CDATA[<p>工程模板主要是对一些基础设备做好初始化，比如四个锁存器的函数封装、定时器的初始化、数码管显示的初始化以及IIC，onewire和ADC的封装。</p>
@@ -4571,43 +4644,6 @@
       </tags>
   </entry>
   <entry>
-    <title>蓝桥杯单片机超声波模块</title>
-    <url>/2020/03/13/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</url>
-    <content><![CDATA[<blockquote>
-<p>这个超声波模块的工作原理很简单，传感器像两个喇叭一样的东西，一个是负责发送超声波的，另一个负责接收超声波，根据发出到接收的时间间隔就可以算出距离了。</p>
-<p>s &#x3D; v*t&#x2F;2 </p>
-<p>初中物理知识哦。</p>
-</blockquote>
-<p>就不多说了直接上代码</p>
-<span id="more"></span>
-
-<p>main.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> sonic_counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> smgbuf[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	init();</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(sonic_counter &gt;= <span class="number">40</span>)<span class="comment">//每隔一定的时间测量一次，必须要加否则测的数据不正确</span></span><br><span class="line">		&#123;</span><br><span class="line">			distance = measure_distance();</span><br><span class="line">			sonic_counter = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		smgbuf[<span class="number">5</span>] = distance/<span class="number">100</span>;</span><br><span class="line">		smgbuf[<span class="number">6</span>] = distance%<span class="number">100</span>/<span class="number">10</span>;</span><br><span class="line">		smgbuf[<span class="number">7</span>] = distance%<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer2</span><span class="params">()</span> interrupt 12<span class="comment">//定时器2（52单片机多出来的一个定时器）</span></span><br><span class="line">&#123;</span><br><span class="line">	sonic_counter++;</span><br><span class="line">	display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>common.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _COMMON_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _COMMON_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;intrins.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sfr AUXR = <span class="number">0x8e</span>;</span><br><span class="line">sfr IE2 = <span class="number">0xaf</span>;</span><br><span class="line">sfr T2H = <span class="number">0xd6</span>;</span><br><span class="line">sfr T2L = <span class="number">0xd7</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>common.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[<span class="number">8</span>] = &#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[] = &#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">switch</span>(channel)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">		smgbuf[i] = <span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">4</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">5</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	init_timer();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	AUXR = AUXR&amp;<span class="number">0x33</span>|<span class="number">0x10</span>;<span class="comment">//定时器2的配置</span></span><br><span class="line">	IE2 = <span class="number">0x04</span>;</span><br><span class="line">	T2H = <span class="number">0xf8</span>;</span><br><span class="line">	T2L = <span class="number">0x2f</span>;</span><br><span class="line">	EA = <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	TMOD = <span class="number">0x01</span>;<span class="comment">//定时器1的配置，用于计算发送和接收之间的时间间隔</span></span><br><span class="line">	TH1 = <span class="number">0</span>;</span><br><span class="line">	TL1 = <span class="number">0</span>;</span><br><span class="line">	TR1 = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	num++;</span><br><span class="line">	<span class="keyword">if</span>(num &gt;= <span class="number">8</span>)</span><br><span class="line">		num = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>sonic.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _SONIC_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _SONIC_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> somenop &#123;_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();&#125;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//可以参照原理图</span></span><br><span class="line">sbit tx = P1^<span class="number">0</span>;<span class="comment">//发送波传感器的引脚</span></span><br><span class="line">sbit rx = P1^<span class="number">1</span>;<span class="comment">//接收波传感器的引脚</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>sonic.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span><span class="comment">//发送超声波</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)<span class="comment">//发送一组超声波</span></span><br><span class="line">	&#123;</span><br><span class="line">		tx = <span class="number">1</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">		tx = <span class="number">0</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">	&#125;</span><br><span class="line">	TR1 = <span class="number">1</span>;<span class="comment">//定时器1开始计时</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span><span class="comment">//计算、测量距离</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	send_wave();<span class="comment">//先发送</span></span><br><span class="line">	<span class="keyword">while</span>(rx == <span class="number">1</span>&amp;&amp;TF1 == <span class="number">0</span>);<span class="comment">//等待接收完毕或者定时器1溢出</span></span><br><span class="line">	TR1 = <span class="number">0</span>;<span class="comment">//定时器1停止计时</span></span><br><span class="line">	<span class="keyword">if</span>(rx == <span class="number">0</span>&amp;&amp;TF1 == <span class="number">0</span>)<span class="comment">//正常量程之内</span></span><br><span class="line">	&#123;</span><br><span class="line">		distance = ((TH1&lt;&lt;<span class="number">8</span>)+TL1)*<span class="number">0.017</span>;<span class="comment">//计算距离</span></span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> </span><br><span class="line">	&#123;</span><br><span class="line">		distance = <span class="number">999</span>;<span class="comment">//超出量程</span></span><br><span class="line">		TF1 = <span class="number">0</span>;</span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> distance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>备赛</category>
-        <category>蓝桥杯</category>
-      </categories>
-      <tags>
-        <tag>蓝桥杯</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>魔改NexT主题</title>
     <url>/2022/07/28/%E9%AD%94%E6%94%B9NexT%E4%B8%BB%E9%A2%98/</url>
     <content><![CDATA[<ul>
@@ -4664,39 +4700,6 @@
       <tags>
         <tag>配置</tag>
         <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Apache配置反向代理</title>
-    <url>/2020/07/23/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
-    <content><![CDATA[<blockquote>
-<p>为了让自己的spring boot项目能被域名直接访问，而不是IP:端口号的形式访问，需要用到反向代理，简单来讲就是把一个程序运行的地址映射到域名上，实现直接用域名访问。网上很多教程都是针对nignx的，而我用的是apache，也不想折腾把apache换成nignx，找了很久才找到一个可以用的，这里记录一下，方便下次使用。</p>
-</blockquote>
-<h1 id="1-开启Apache的代理模块"><a href="#1-开启Apache的代理模块" class="headerlink" title="1.开启Apache的代理模块"></a>1.开启Apache的代理模块</h1><p>在确保Apache安装好之后，通过<code>a2enmod proxy proxy_balancer proxy_http</code>开启Apache的代理模块。</p>
-<p>我用的是Ubuntu的Apache和centos下的Apache目录结构似乎有点不一样。</p>
-<span id="more"></span>
-
-<h1 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2.修改配置文件"></a>2.修改配置文件</h1><p>切换到 <code>/etc/apache2/sites-enabled</code> 目录下，打开需要修改网站对应的配置</p>
-<img data-src="/images/Apache配置反向代理/image-20200723085537548.png" alt="image-20200723085537548" style="zoom:80%;" />
-
-<p>没有的话就新建一个对应的配置文件，文件的名字是二级域名的前缀.conf，比如我的域名是steventan.top，</p>
-<p>那么test.conf对应的网站是test.steventan.top，这个好像也只是一个命名的习惯，不一样也没多大问题，这样主要是方便管理。</p>
-<p>旧版Apache：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">	ServerName autoclock.steventan.top <span class="comment">#这里填代理服务器的IP或域名</span></span><br><span class="line">	ProxyRequests off <span class="comment">#off表示开启反向代理  on表示开启正向代理</span></span><br><span class="line">	ProxyPass / http://localhost:8080/  <span class="comment">#被代理的网站，中间的那个/千万别少了，少了的话重启报错</span></span><br><span class="line">	ProxyPassReverse / http://localhost:8080/  <span class="comment">#被代理的网站</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment"># RewriteEngine on</span></span><br><span class="line">	<span class="comment"># RewriteCond   %&#123;HTTPS&#125; !=on</span></span><br><span class="line">	<span class="comment"># RewriteRule   ^(.*)  https://%&#123;SERVER_NAME&#125;$1 [L,R]</span></span><br><span class="line"></span><br><span class="line">	ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">	CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
-
-<p>新版Apache：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">	ServerAdmin webmaster@localhost</span><br><span class="line">	</span><br><span class="line">	&lt;Proxy *&gt;</span><br><span class="line">		Order Deny,Allow</span><br><span class="line">		Allow from all</span><br><span class="line">	&lt;/Proxy&gt;</span><br><span class="line"></span><br><span class="line">	ServerName 10.100.128.8</span><br><span class="line">	ProxyRequests off</span><br><span class="line">	ProxyPass /api http://localhost:8080/</span><br><span class="line">	ProxyPassReverse /api http://localhost:8080/</span><br><span class="line">  	</span><br><span class="line"></span><br><span class="line">	ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">	CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<p>上面的配置是将本地的8080端口运行的程序映射到autoclock.steventan.top这个域名上，这就达到了我的目的，服务器上运行的spring boot项目，能通过域名直接在公网访问。</p>
-<h1 id="3-重启apache生效配置"><a href="#3-重启apache生效配置" class="headerlink" title="3.重启apache生效配置"></a>3.重启apache生效配置</h1><p>通过<code>service apache2 restart</code> 重启Apache，让配置文件生效。 </p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
       </tags>
   </entry>
 </search>
