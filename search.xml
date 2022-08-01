@@ -2876,6 +2876,46 @@
       </tags>
   </entry>
   <entry>
+    <title>LeetCode第一天</title>
+    <url>/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/</url>
+    <content><![CDATA[<blockquote>
+<p>LeetCode第350题</p>
+<p>给定两个数组，编写一个函数来计算它们的交集。</p>
+<p>示例 1：</p>
+<p>输入：nums1 &#x3D; [1,2,2,1], nums2 &#x3D; [2,2]<br>输出：[2,2]<br>示例 2:</p>
+<p>输入：nums1 &#x3D; [4,9,5], nums2 &#x3D; [9,4,9,8,4]<br>输出：[4,9]</p>
+<p>说明：</p>
+<p>输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。<br>我们可以不考虑输出结果的顺序。</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii">https://leetcode-cn.com/problems/intersection-of-two-arrays-ii</a></p>
+</blockquote>
+<p>方法一：</p>
+<p>用哈希表映射，先把较短的那个数组遍历，存入哈希表中，键是数组中元素的值，值是数组中元素出现的次数<br>再遍历另外一个数组，从哈希表中找这个数组中的值，看是否存在，存在就将其存入新造的数组中，再将哈希表中该键对应的值减一，如果值减到了0，就将这个键移除去，否则将这个键对应的值减一，在存入哈希表中。</p>
+<span id="more"></span>
+
+<p>这个方法LeetCode上的一张图看的明明白白：</p>
+<p><img data-src="/images/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/350_fig1.gif" alt="fig1"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect1(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  <span class="keyword">if</span> (nums1.length &gt; nums2.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> intersect1(nums2, nums1);</span><br><span class="line">  &#125;</span><br><span class="line">  Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums1) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>;</span><br><span class="line">    map.put(num, count);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[nums2.length];</span><br><span class="line">  <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums2) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      arr[index++] = num;</span><br><span class="line">      <span class="keyword">if</span> (count != <span class="number">1</span>) &#123;</span><br><span class="line">        map.put(num, --count);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        map.remove(num);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法二：</p>
+<p>先对两个数组进行排序，然后设置两个指针来遍历这两个数组。将比较结果较小的那个数组的指针后移，如果两数相等，则将两个数组的指针都向后移，并将这个数存入新造好的数组。遍历直到有一个指针到了数组的结尾，结束遍历。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect2(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  Arrays.sort(nums1);</span><br><span class="line">  Arrays.sort(nums2);</span><br><span class="line">  <span class="type">int</span> <span class="variable">len1</span> <span class="operator">=</span> nums1.length, len2 = nums2.length;</span><br><span class="line">  <span class="type">int</span> <span class="variable">index1</span> <span class="operator">=</span> <span class="number">0</span>, index2 = <span class="number">0</span>, index = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[Math.min(len1, len2)];</span><br><span class="line">  <span class="keyword">while</span> (index1 &lt; len1 &amp;&amp; index2 &lt; len2) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums1[index1] &lt; nums2[index2]) &#123;</span><br><span class="line">      index1++;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums1[index1] &gt; nums2[index2]) &#123;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      arr[index++] = nums1[index1];</span><br><span class="line">      index1++;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>结语</p>
+<p>如果 nums2的元素存储在磁盘上，磁盘内存是有限的，并且你不能一次加载所有的元素到内存中。那么就无法高效地对 nums2进行排序，因此推荐使用方法一而不是方法二。在方法一中，nums2 只关系到查询操作，因此每次读取nums2中的一部分数据，并进行处理即可。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>LeetCode</tag>
+        <tag>算法</tag>
+        <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux中的权限管理</title>
     <url>/2020/05/15/Linux%E4%B8%AD%E7%9A%84%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h1 id="文件基本权限"><a href="#文件基本权限" class="headerlink" title="文件基本权限"></a>文件基本权限</h1><p>首先看一下Linux中的文件权限，可以用ll命令或者带-l的ls命令查看</p>
@@ -2992,46 +3032,6 @@
       </tags>
   </entry>
   <entry>
-    <title>LeetCode第一天</title>
-    <url>/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/</url>
-    <content><![CDATA[<blockquote>
-<p>LeetCode第350题</p>
-<p>给定两个数组，编写一个函数来计算它们的交集。</p>
-<p>示例 1：</p>
-<p>输入：nums1 &#x3D; [1,2,2,1], nums2 &#x3D; [2,2]<br>输出：[2,2]<br>示例 2:</p>
-<p>输入：nums1 &#x3D; [4,9,5], nums2 &#x3D; [9,4,9,8,4]<br>输出：[4,9]</p>
-<p>说明：</p>
-<p>输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。<br>我们可以不考虑输出结果的顺序。</p>
-<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii">https://leetcode-cn.com/problems/intersection-of-two-arrays-ii</a></p>
-</blockquote>
-<p>方法一：</p>
-<p>用哈希表映射，先把较短的那个数组遍历，存入哈希表中，键是数组中元素的值，值是数组中元素出现的次数<br>再遍历另外一个数组，从哈希表中找这个数组中的值，看是否存在，存在就将其存入新造的数组中，再将哈希表中该键对应的值减一，如果值减到了0，就将这个键移除去，否则将这个键对应的值减一，在存入哈希表中。</p>
-<span id="more"></span>
-
-<p>这个方法LeetCode上的一张图看的明明白白：</p>
-<p><img data-src="/images/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/350_fig1.gif" alt="fig1"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect1(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  <span class="keyword">if</span> (nums1.length &gt; nums2.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> intersect1(nums2, nums1);</span><br><span class="line">  &#125;</span><br><span class="line">  Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums1) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>;</span><br><span class="line">    map.put(num, count);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[nums2.length];</span><br><span class="line">  <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums2) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      arr[index++] = num;</span><br><span class="line">      <span class="keyword">if</span> (count != <span class="number">1</span>) &#123;</span><br><span class="line">        map.put(num, --count);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        map.remove(num);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>方法二：</p>
-<p>先对两个数组进行排序，然后设置两个指针来遍历这两个数组。将比较结果较小的那个数组的指针后移，如果两数相等，则将两个数组的指针都向后移，并将这个数存入新造好的数组。遍历直到有一个指针到了数组的结尾，结束遍历。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect2(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  Arrays.sort(nums1);</span><br><span class="line">  Arrays.sort(nums2);</span><br><span class="line">  <span class="type">int</span> <span class="variable">len1</span> <span class="operator">=</span> nums1.length, len2 = nums2.length;</span><br><span class="line">  <span class="type">int</span> <span class="variable">index1</span> <span class="operator">=</span> <span class="number">0</span>, index2 = <span class="number">0</span>, index = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[Math.min(len1, len2)];</span><br><span class="line">  <span class="keyword">while</span> (index1 &lt; len1 &amp;&amp; index2 &lt; len2) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums1[index1] &lt; nums2[index2]) &#123;</span><br><span class="line">      index1++;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums1[index1] &gt; nums2[index2]) &#123;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      arr[index++] = nums1[index1];</span><br><span class="line">      index1++;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>结语</p>
-<p>如果 nums2的元素存储在磁盘上，磁盘内存是有限的，并且你不能一次加载所有的元素到内存中。那么就无法高效地对 nums2进行排序，因此推荐使用方法一而不是方法二。在方法一中，nums2 只关系到查询操作，因此每次读取nums2中的一部分数据，并进行处理即可。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>算法</category>
-        <category>LeetCode</category>
-      </categories>
-      <tags>
-        <tag>LeetCode</tag>
-        <tag>算法</tag>
-        <tag>数据结构</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux中的进程管理</title>
     <url>/2020/05/22/Linux%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p>pa a    显示终端机下所有进程</p>
@@ -3054,70 +3054,6 @@
       </categories>
       <tags>
         <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>markdown基本语法</title>
-    <url>/2020/02/27/Markdown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</url>
-    <content><![CDATA[<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><h4 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="comment">###### 六级标题</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>注意#和标题之间要有空格才会有效果</strong>   这简直是初学者的一大坑  </p>
-<span id="more"></span>
-
-<h4 id="文本样式"><a href="#文本样式" class="headerlink" title="文本样式"></a>文本样式</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">*斜体1*	 _斜体2_</span><br><span class="line">**加粗1**  __加粗2__</span><br><span class="line">~~删除线~~</span><br><span class="line">H~2~O	（hexo要用&lt;sub&gt;&lt;/sub&gt;标签，如H&lt;sub&gt;2&lt;/sub&gt;O）</span><br><span class="line">2^10^   （hexo要用&lt;sup&gt;&lt;/sup&gt;标签，如2&lt;sup&gt;10&lt;/sup&gt;）</span><br><span class="line">&gt; 引用</span><br></pre></td></tr></table></figure>
-
-<p><strong>效果显示</strong></p>
-<p><em>斜体1</em>	 <em>斜体2</em><br><strong>加粗1</strong>     <strong>加粗2</strong><br><del>删除线</del></p>
-<p>H<sub>2</sub>O<br>2<sup>10</sup></p>
-<blockquote>
-<p>引用</p>
-</blockquote>
-<p><strong>后面两个要在偏好里面设置，Markdown扩展语法那几个选项打上勾</strong></p>
-<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">- 项目1</span><br><span class="line">  </span><br><span class="line">  - 项目2</span><br><span class="line">  </span><br><span class="line">    - 项目3</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>项目1</p>
-<ul>
-<li><p>项目2</p>
-<ul>
-<li>项目3</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1. 项目</span><br><span class="line">2. 项目</span><br><span class="line">3. 项目</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>项目</li>
-<li>项目</li>
-<li>项目</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- [ ] 计划任务</span><br><span class="line">- [x] 完成任务 </span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><input disabled="" type="checkbox"> 计划任务</li>
-<li><input checked="" disabled="" type="checkbox"> 完成任务</li>
-</ul>
-<h4 id="插入代码"><a href="#插入代码" class="headerlink" title="插入代码"></a>插入代码</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">```c</span><br><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line">void <span class="function"><span class="title">main</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">return</span> 0;</span><br><span class="line">&#125;</span><br><span class="line">​```</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">![](图片链接)</span><br></pre></td></tr></table></figure>
-
-<p>今天先写到这，睡觉去了🌛 🌜</p>
-<hr>
-<h4 id="文字"><a href="#文字" class="headerlink" title="文字"></a>文字</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[文字描述](链接)</span><br></pre></td></tr></table></figure>
-
-<p><a href="https://www.baidu.com/">百度</a></p>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>markdown</category>
-      </categories>
-      <tags>
-        <tag>markdown</tag>
       </tags>
   </entry>
   <entry>
@@ -3153,32 +3089,6 @@
       <tags>
         <tag>服务器</tag>
         <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Nginx配置反向代理</title>
-    <url>/2021/09/19/Nginx%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
-    <content><![CDATA[<h1 id="前后端分离项目的部署配置"><a href="#前后端分离项目的部署配置" class="headerlink" title="前后端分离项目的部署配置"></a>前后端分离项目的部署配置</h1><p>Nginx就非常离谱，也不知道为什么，前端静态资源也需要单独配置，而且这配置方式还非常的离谱，贴一下配置文件</p>
-<p>配置文件路径<code>/etc/nginx/sites-enabled</code></p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">server <span class="punctuation">&#123;</span></span><br><span class="line">    listen      <span class="number">80</span>;   			#监听<span class="number">80</span>端口</span><br><span class="line">    server_name	<span class="number">10.100</span><span class="number">.128</span><span class="number">.8</span>;   #监听访问的host</span><br><span class="line"></span><br><span class="line">    location /EleLabSys/ <span class="punctuation">&#123;</span></span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files $uri $uri/ EleLabSys/;	#此处非常离谱，是经过不断尝试出来的，子文件夹必须要写在这个地方才行</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line">	# 后端api代理还比较正常</span><br><span class="line">	location /prod-api/ <span class="punctuation">&#123;</span></span><br><span class="line">		proxy_set_header Host $http_host;</span><br><span class="line">		proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">		proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">		proxy_pass http<span class="punctuation">:</span><span class="comment">//localhost:8080/;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>具体是什么原因导致的暂且不深究。。。</p>
-<p>等有空再研究</p>
-<hr>
-<p>更新来了。。。</p>
-<p>经过再次的尝试，发现是需要把根路径放到最后面，这样才能正常地访问静态资源，不需要手动配置，并且代理也有效果</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;   <span class="comment">#监听80端口</span></span><br><span class="line">    server_name	10.100.128.8;   <span class="comment">#监听访问的host</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 实验室系统后端</span></span><br><span class="line">	location /prod-api/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:8080/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室代码仓库</span></span><br><span class="line">    location /gitea/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:3000/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室系统云盘</span></span><br><span class="line">	location /cloudDisk/ &#123;</span><br><span class="line">		<span class="comment"># proxy_set_header Host $http_host;</span></span><br><span class="line">		<span class="comment"># proxy_set_header X-Real-IP $remote_addr;</span></span><br><span class="line">		<span class="comment"># proxy_set_header REMOTE-HOST $remote_addr;</span></span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:9999/;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 需要放到最后面，匹配优先级最低</span></span><br><span class="line">	location / &#123;</span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /;</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-        <category>Nginx</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -3265,6 +3175,32 @@
       </tags>
   </entry>
   <entry>
+    <title>Nginx配置反向代理</title>
+    <url>/2021/09/19/Nginx%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<h1 id="前后端分离项目的部署配置"><a href="#前后端分离项目的部署配置" class="headerlink" title="前后端分离项目的部署配置"></a>前后端分离项目的部署配置</h1><p>Nginx就非常离谱，也不知道为什么，前端静态资源也需要单独配置，而且这配置方式还非常的离谱，贴一下配置文件</p>
+<p>配置文件路径<code>/etc/nginx/sites-enabled</code></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">server <span class="punctuation">&#123;</span></span><br><span class="line">    listen      <span class="number">80</span>;   			#监听<span class="number">80</span>端口</span><br><span class="line">    server_name	<span class="number">10.100</span><span class="number">.128</span><span class="number">.8</span>;   #监听访问的host</span><br><span class="line"></span><br><span class="line">    location /EleLabSys/ <span class="punctuation">&#123;</span></span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files $uri $uri/ EleLabSys/;	#此处非常离谱，是经过不断尝试出来的，子文件夹必须要写在这个地方才行</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line">	# 后端api代理还比较正常</span><br><span class="line">	location /prod-api/ <span class="punctuation">&#123;</span></span><br><span class="line">		proxy_set_header Host $http_host;</span><br><span class="line">		proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">		proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">		proxy_pass http<span class="punctuation">:</span><span class="comment">//localhost:8080/;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>具体是什么原因导致的暂且不深究。。。</p>
+<p>等有空再研究</p>
+<hr>
+<p>更新来了。。。</p>
+<p>经过再次的尝试，发现是需要把根路径放到最后面，这样才能正常地访问静态资源，不需要手动配置，并且代理也有效果</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;   <span class="comment">#监听80端口</span></span><br><span class="line">    server_name	10.100.128.8;   <span class="comment">#监听访问的host</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 实验室系统后端</span></span><br><span class="line">	location /prod-api/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:8080/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室代码仓库</span></span><br><span class="line">    location /gitea/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:3000/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室系统云盘</span></span><br><span class="line">	location /cloudDisk/ &#123;</span><br><span class="line">		<span class="comment"># proxy_set_header Host $http_host;</span></span><br><span class="line">		<span class="comment"># proxy_set_header X-Real-IP $remote_addr;</span></span><br><span class="line">		<span class="comment"># proxy_set_header REMOTE-HOST $remote_addr;</span></span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:9999/;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 需要放到最后面，匹配优先级最低</span></span><br><span class="line">	location / &#123;</span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /;</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PVE直通硬盘到TrueNAS</title>
     <url>/2022/07/16/PVE%20%E7%9B%B4%E9%80%9A%E7%A1%AC%E7%9B%98%E5%88%B0TrueNAS/</url>
     <content><![CDATA[<h1 id="1-查询所有的硬盘识别码"><a href="#1-查询所有的硬盘识别码" class="headerlink" title="1.查询所有的硬盘识别码"></a>1.查询所有的硬盘识别码</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -la /dev/disk/by-id/|grep -v dm|grep -v lvm|grep -v part</span><br></pre></td></tr></table></figure>
@@ -3295,7 +3231,7 @@
 
 <h1 id="网络层（Internet-Layer）"><a href="#网络层（Internet-Layer）" class="headerlink" title="网络层（Internet Layer）"></a>网络层（Internet Layer）</h1><p>负责将数据从一个设备发送到另一个设备的并不是传输层，传输层设计的理念是，简单、高效、专注，实际场景中的网络环节错综复杂，网络层就来是负责数据实际传输。</p>
 <p>网络层最常用的是<strong>IP协议（Internet Protocol）</strong>，IP协议会将传输层的报文作为数据部分，再加上IP数据包组装成IP报文。</p>
-<p><img data-src="E:\Hexo_6.2.0\source\images\TCP-IP四层模型\12.jpg" alt="img"></p>
+<p><img data-src="/%5Cimages%5CTCP-IP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B%5C12.jpg" alt="img"></p>
 <p>网络层负责将数据从一个设备传输到另一个设备，而为了确定目标设备，网络层需要有区分设备单的编号，这个编号就是IP地址。</p>
 <p>对于IPv4协议，IP地址共32位（32个bit），共分成四段（例如：192.168.1.1），每段8位。如果只有单纯的IP地址，虽然做到了设备区分，但是殉职起来就特别麻烦，世界上那么多设备，一个个去匹配显然是非常不科学的。</p>
 <p>因此需要借助<strong>子网掩码</strong>来将IP地址分为两种意义：</p>
@@ -3313,9 +3249,9 @@
 <p>MAC头是以太网使用的头，包含了发送方和接收方的MAC地址等信息，我们可以通过ARP协议获取对方的MAC地址。</p>
 <p>所以网络接口层主要为网络提供链路级别的传输服务，负责在以太网、WiFi这样的底层网络上发送原始数据包，工作在网卡这个层次，使用MAC地址来别试网络中的设备。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>TCP&#x2F;IP网络的四层结构总结如下图：</p>
-<p><img data-src="E:\Hexo_6.2.0\source\images\TCP-IP四层模型\tcpip参考模型.drawio.png" alt="img"></p>
+<p><img data-src="/%5Cimages%5CTCP-IP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B%5Ctcpip%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B.drawio.png" alt="img"></p>
 <p>每一层的封装结构如下图：</p>
-<p><img data-src="E:\Hexo_6.2.0\source\images\TCP-IP四层模型\封装.png" alt="img"></p>
+<p><img data-src="/%5Cimages%5CTCP-IP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B%5C%E5%B0%81%E8%A3%85.png" alt="img"></p>
 <p>网络接口层的传输单位是帧（frame），IP层的传输单位是包（package），TCP层的传输单位是段（segment），HTTP的传输单位则是消息或报文（message），这些单位其实并没有本质上的区别，可以统称为数据包。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.xiaolincoding.com/network/1_base/tcp_ip_model.html">小林coding TCP&#x2F;IP 网络模型有哪几层？</a></p>
 ]]></content>
@@ -3626,6 +3562,22 @@
       </tags>
   </entry>
   <entry>
+    <title>Ubuntu中设置http强制重定向为https</title>
+    <url>/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/</url>
+    <content><![CDATA[<h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
+<h3 id="2-设置http端口重定向"><a href="#2-设置http端口重定向" class="headerlink" title="2.设置http端口重定向"></a>2.设置http端口重定向</h3><p>将下面这段放到要重定向的站点配置文件里面，放在&lt;\VirtualHost *:80&gt;&lt;\VirtualHost&gt; 标签内的任何位置都行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">RewriteEngine on</span><br><span class="line">RewriteCond  %&#123;HTTPS&#125; !=on</span><br><span class="line">RewriteRule  ^(.*)  https://%&#123;SERVER_NAME&#125;<span class="variable">$1</span> [L,R]</span><br></pre></td></tr></table></figure>
+
+<h3 id="重启apach2"><a href="#重启apach2" class="headerlink" title="重启apach2"></a>重启apach2</h3><p>service apache2 restart</p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>IntelliJ Idea配置类和方法的注释模板</title>
     <url>/2020/04/15/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/</url>
     <content><![CDATA[<h2 id="设置类的注释模板"><a href="#设置类的注释模板" class="headerlink" title="设置类的注释模板"></a>设置类的注释模板</h2><p><img data-src="/images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/SZLA4oF5vn3hMyG.png" alt="image.png"></p>
@@ -3663,44 +3615,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Ubuntu中设置http强制重定向为https</title>
-    <url>/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/</url>
-    <content><![CDATA[<h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
-<h3 id="2-设置http端口重定向"><a href="#2-设置http端口重定向" class="headerlink" title="2.设置http端口重定向"></a>2.设置http端口重定向</h3><p>将下面这段放到要重定向的站点配置文件里面，放在&lt;\VirtualHost *:80&gt;&lt;\VirtualHost&gt; 标签内的任何位置都行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">RewriteEngine on</span><br><span class="line">RewriteCond  %&#123;HTTPS&#125; !=on</span><br><span class="line">RewriteRule  ^(.*)  https://%&#123;SERVER_NAME&#125;<span class="variable">$1</span> [L,R]</span><br></pre></td></tr></table></figure>
-
-<h3 id="重启apach2"><a href="#重启apach2" class="headerlink" title="重启apach2"></a>重启apach2</h3><p>service apache2 restart</p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sublime text3下载插件</title>
-    <url>/2020/02/26/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/</url>
-    <content><![CDATA[<h5 id="1-在github上下载Package-Control的安装包"><a href="#1-在github上下载Package-Control的安装包" class="headerlink" title="1.在github上下载Package Control的安装包"></a>1.在github上下载Package Control的安装包</h5><p><a href="https://github.com/wbond/sublime_package_control">https://github.com/wbond/sublime_package_control</a> </p>
-<h5 id="2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件"><a href="#2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件" class="headerlink" title="2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件"></a>2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件</h5><span id="more"></span>
-
-<img data-src="/images/sublime下载插件/image-20200428221639527.png" alt="image-20200428221639527" style="zoom:67%;" />
-
-<p>找到下载的文件，解压，将文件夹重命名为“Package Control”复制到sublime存放插件的目录</p>
-<h5 id="3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的"><a href="#3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的" class="headerlink" title="3.https://packagecontrol.io 这个被墙了 下载插件不下来，把下载链接改为国内的."></a>3.<code>https://packagecontrol.io</code> 这个被墙了 下载插件不下来，把下载链接改为国内的.</h5><p><img data-src="/images/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/LGq7aPkejfiBXRz.png" alt="qwqwd.png"></p>
-<p>修改User文件下的配置文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> <span class="string">&quot;bootstrapped&quot;</span>: <span class="literal">true</span>,</span><br><span class="line"> <span class="string">&quot;channels&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;https://erhan.in/channel_v3.json&quot;</span></span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;in_process_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;installed_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;ChineseLocalizations&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Package Control&quot;</span></span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="4-重启sublime-text3"><a href="#4-重启sublime-text3" class="headerlink" title="4.重启sublime text3"></a>4.重启sublime text3</h5>]]></content>
-      <categories>
-        <category>软件</category>
-        <category>配置</category>
-      </categories>
-      <tags>
-        <tag>软件</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>spring-boot在IDEA中的热部署</title>
     <url>/2020/03/15/spring-boot%E5%9C%A8IDEA%E4%B8%AD%E7%9A%84%E7%83%AD%E9%83%A8%E7%BD%B2/</url>
     <content><![CDATA[<blockquote>
@@ -3728,6 +3642,28 @@
       <tags>
         <tag>idea</tag>
         <tag>spring-boot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sublime text3下载插件</title>
+    <url>/2020/02/26/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/</url>
+    <content><![CDATA[<h5 id="1-在github上下载Package-Control的安装包"><a href="#1-在github上下载Package-Control的安装包" class="headerlink" title="1.在github上下载Package Control的安装包"></a>1.在github上下载Package Control的安装包</h5><p><a href="https://github.com/wbond/sublime_package_control">https://github.com/wbond/sublime_package_control</a> </p>
+<h5 id="2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件"><a href="#2-打开sublime存放插件的目录：在sublime菜单栏-gt-gt-首选项-gt-gt-浏览插件" class="headerlink" title="2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件"></a>2.打开sublime存放插件的目录：在sublime菜单栏&gt;&gt;首选项&gt;&gt;浏览插件</h5><span id="more"></span>
+
+<img data-src="/images/sublime下载插件/image-20200428221639527.png" alt="image-20200428221639527" style="zoom:67%;" />
+
+<p>找到下载的文件，解压，将文件夹重命名为“Package Control”复制到sublime存放插件的目录</p>
+<h5 id="3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的"><a href="#3-https-packagecontrol-io-这个被墙了-下载插件不下来，把下载链接改为国内的" class="headerlink" title="3.https://packagecontrol.io 这个被墙了 下载插件不下来，把下载链接改为国内的."></a>3.<code>https://packagecontrol.io</code> 这个被墙了 下载插件不下来，把下载链接改为国内的.</h5><p><img data-src="/images/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/LGq7aPkejfiBXRz.png" alt="qwqwd.png"></p>
+<p>修改User文件下的配置文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> <span class="string">&quot;bootstrapped&quot;</span>: <span class="literal">true</span>,</span><br><span class="line"> <span class="string">&quot;channels&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;https://erhan.in/channel_v3.json&quot;</span></span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;in_process_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line"> ],</span><br><span class="line"> <span class="string">&quot;installed_packages&quot;</span>:</span><br><span class="line"> [</span><br><span class="line">  <span class="string">&quot;ChineseLocalizations&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Package Control&quot;</span></span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="4-重启sublime-text3"><a href="#4-重启sublime-text3" class="headerlink" title="4.重启sublime text3"></a>4.重启sublime text3</h5>]]></content>
+      <categories>
+        <category>软件</category>
+        <category>配置</category>
+      </categories>
+      <tags>
+        <tag>软件</tag>
       </tags>
   </entry>
   <entry>
@@ -4448,6 +4384,34 @@
       </tags>
   </entry>
   <entry>
+    <title>蓝桥杯单片机基本模块</title>
+    <url>/2020/03/08/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%9D%97/</url>
+    <content><![CDATA[<h2 id="锁存器"><a href="#锁存器" class="headerlink" title="锁存器"></a>锁存器</h2><p>蓝桥杯这款单片机是用锁存器来实现引脚的复用的，所以代码写起来很麻烦，总是要开关锁存器</p>
+<p>为了偷懒，可以用宏定义来定义每个锁存器打开的代码，也可以用函数来实现</p>
+<p><strong>用宏定义：</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> Y4 P2 = (P2&amp;0x1f)|0x80;  <span class="comment">//led</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y5 P2 = (P2&amp;0x1f)|0xa0;  <span class="comment">//蜂鸣器和继电器</span></span></span><br><span class="line">P0 = <span class="number">0x40</span>; <span class="comment">//蜂鸣器</span></span><br><span class="line">P0 = <span class="number">0x10</span>；<span class="comment">//继电器</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y6 P2 = (P2&amp;0x1f)|0xc0; <span class="comment">//数码管位选</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y7 P2 = (P2&amp;0x1f)|0xe0; <span class="comment">//数码管段选</span></span></span><br></pre></td></tr></table></figure>
+
+<p><strong>用函数：</strong></p>
+<span id="more"></span>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(channel)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>; <span class="comment">//led</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>; <span class="comment">//蜂鸣器和继电器</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>; <span class="comment">//数码管位选</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>; <span class="comment">//数码管段选</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="数码管的显示问题"><a href="#数码管的显示问题" class="headerlink" title="数码管的显示问题"></a>数码管的显示问题</h2><p>初学者一般都是用延时来实现动态数码管的，但是当要实现的功能多起来了，用延时来实现动态数码管，数码管很容易会闪烁，整体效果就很不好了。</p>
+<p>另外一种方法可以是用定时器来扫描数码管，每隔一段时间就进入中断服务函数执行数码管的扫描，只要中断间隔的时间小于人眼的视觉暂留（大概是0.1~0.4s），就看不出来数码管会闪烁了。但是这个方法也有缺点，缺点是整个系统每隔这么短的时间就必须要进入这个中断服务函数，很容易会影响、打断其他程序的执行。现在也有解决方法就是在不能被中断打断的功能执行前关掉中断的开关，执行完之后再打开，显然这个解决方法也只是权宜之计，关掉中断的开关有的时候会影响这个计时器的计时，获得的时间就不是很准确，但是误差会很小吧，十行代码51单片机几毫秒甚至更短的时间就可以执行完。所以第二种方法算是比较好的一种方法了，相对于第一种方法来说。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[]=&#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[]=&#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],smg_num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(channel)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>; <span class="comment">//led</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;	<span class="comment">//蜂鸣器和继电器</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>; <span class="comment">//数码管位选</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>; <span class="comment">//数码管段选</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>  <span class="comment">//总的初始化函数</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> i;</span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; <span class="number">8</span>;i++)</span><br><span class="line">    smgbuf[i] = <span class="number">10</span>;	<span class="comment">//做初始化，上电数码管全部是熄灭的</span></span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0xff</span>;  <span class="comment">//关掉所有的LED</span></span><br><span class="line">  select_channel(<span class="number">4</span>);</span><br><span class="line">  P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0x00</span>;  <span class="comment">//关掉继电器和蜂鸣器</span></span><br><span class="line">  select_channel(<span class="number">5</span>);</span><br><span class="line">  P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>	<span class="comment">//初始化计时器</span></span><br><span class="line">&#123;</span><br><span class="line">  TMOD = <span class="number">0x01</span>;</span><br><span class="line">  TH1 = <span class="number">0xf8</span>;</span><br><span class="line">  TL1 = <span class="number">0x2f</span>;<span class="comment">//2ms</span></span><br><span class="line">  EA = <span class="number">1</span>;</span><br><span class="line">  ET1 = <span class="number">1</span>;</span><br><span class="line">  TR1 = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>  <span class="comment">//数码管显示函数</span></span><br><span class="line">&#123;</span><br><span class="line">  smg_num++;</span><br><span class="line">  <span class="keyword">if</span>(smg_num &gt;= <span class="number">8</span>)</span><br><span class="line">    smg_num = <span class="number">0</span>;  <span class="comment">//从0-7循环扫描每一个数码管</span></span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;		<span class="comment">//消影</span></span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[smg_num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[smg_num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> i;</span><br><span class="line">  init();</span><br><span class="line">  init_timer();</span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">      smgbuf[i] = i;  <span class="comment">//数码管一次显示0-7</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer1</span><span class="params">()</span> interrupt 3</span><br><span class="line">&#123;</span><br><span class="line">  display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码是直接在Typora上面写的，没有编译，应该没有很大问题（手动滑稽）</p>
+<p>这样写要改变数码管的值只要改变数组smgbuf[]中的值就行了0-9的数字是和编号一一对应的，其他的特殊符号可以自己手动加。</p>
+]]></content>
+      <categories>
+        <category>备赛</category>
+        <category>蓝桥杯</category>
+      </categories>
+      <tags>
+        <tag>蓝桥杯</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>蓝桥杯单片机按键</title>
     <url>/2020/04/03/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E6%8C%89%E9%94%AE/</url>
     <content><![CDATA[<blockquote>
@@ -4486,24 +4450,33 @@
       </tags>
   </entry>
   <entry>
-    <title>蓝桥杯单片机基本模块</title>
-    <url>/2020/03/08/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%9D%97/</url>
-    <content><![CDATA[<h2 id="锁存器"><a href="#锁存器" class="headerlink" title="锁存器"></a>锁存器</h2><p>蓝桥杯这款单片机是用锁存器来实现引脚的复用的，所以代码写起来很麻烦，总是要开关锁存器</p>
-<p>为了偷懒，可以用宏定义来定义每个锁存器打开的代码，也可以用函数来实现</p>
-<p><strong>用宏定义：</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> Y4 P2 = (P2&amp;0x1f)|0x80;  <span class="comment">//led</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y5 P2 = (P2&amp;0x1f)|0xa0;  <span class="comment">//蜂鸣器和继电器</span></span></span><br><span class="line">P0 = <span class="number">0x40</span>; <span class="comment">//蜂鸣器</span></span><br><span class="line">P0 = <span class="number">0x10</span>；<span class="comment">//继电器</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y6 P2 = (P2&amp;0x1f)|0xc0; <span class="comment">//数码管位选</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y7 P2 = (P2&amp;0x1f)|0xe0; <span class="comment">//数码管段选</span></span></span><br></pre></td></tr></table></figure>
-
-<p><strong>用函数：</strong></p>
+    <title>蓝桥杯单片机超声波模块</title>
+    <url>/2020/03/13/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</url>
+    <content><![CDATA[<blockquote>
+<p>这个超声波模块的工作原理很简单，传感器像两个喇叭一样的东西，一个是负责发送超声波的，另一个负责接收超声波，根据发出到接收的时间间隔就可以算出距离了。</p>
+<p>s &#x3D; v*t&#x2F;2 </p>
+<p>初中物理知识哦。</p>
+</blockquote>
+<p>就不多说了直接上代码</p>
 <span id="more"></span>
 
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(channel)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>; <span class="comment">//led</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>; <span class="comment">//蜂鸣器和继电器</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>; <span class="comment">//数码管位选</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>; <span class="comment">//数码管段选</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>main.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> sonic_counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> smgbuf[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	init();</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(sonic_counter &gt;= <span class="number">40</span>)<span class="comment">//每隔一定的时间测量一次，必须要加否则测的数据不正确</span></span><br><span class="line">		&#123;</span><br><span class="line">			distance = measure_distance();</span><br><span class="line">			sonic_counter = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		smgbuf[<span class="number">5</span>] = distance/<span class="number">100</span>;</span><br><span class="line">		smgbuf[<span class="number">6</span>] = distance%<span class="number">100</span>/<span class="number">10</span>;</span><br><span class="line">		smgbuf[<span class="number">7</span>] = distance%<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer2</span><span class="params">()</span> interrupt 12<span class="comment">//定时器2（52单片机多出来的一个定时器）</span></span><br><span class="line">&#123;</span><br><span class="line">	sonic_counter++;</span><br><span class="line">	display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="数码管的显示问题"><a href="#数码管的显示问题" class="headerlink" title="数码管的显示问题"></a>数码管的显示问题</h2><p>初学者一般都是用延时来实现动态数码管的，但是当要实现的功能多起来了，用延时来实现动态数码管，数码管很容易会闪烁，整体效果就很不好了。</p>
-<p>另外一种方法可以是用定时器来扫描数码管，每隔一段时间就进入中断服务函数执行数码管的扫描，只要中断间隔的时间小于人眼的视觉暂留（大概是0.1~0.4s），就看不出来数码管会闪烁了。但是这个方法也有缺点，缺点是整个系统每隔这么短的时间就必须要进入这个中断服务函数，很容易会影响、打断其他程序的执行。现在也有解决方法就是在不能被中断打断的功能执行前关掉中断的开关，执行完之后再打开，显然这个解决方法也只是权宜之计，关掉中断的开关有的时候会影响这个计时器的计时，获得的时间就不是很准确，但是误差会很小吧，十行代码51单片机几毫秒甚至更短的时间就可以执行完。所以第二种方法算是比较好的一种方法了，相对于第一种方法来说。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[]=&#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[]=&#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],smg_num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(channel)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>; <span class="comment">//led</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;	<span class="comment">//蜂鸣器和继电器</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>; <span class="comment">//数码管位选</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>; <span class="comment">//数码管段选</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>  <span class="comment">//总的初始化函数</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> i;</span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; <span class="number">8</span>;i++)</span><br><span class="line">    smgbuf[i] = <span class="number">10</span>;	<span class="comment">//做初始化，上电数码管全部是熄灭的</span></span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0xff</span>;  <span class="comment">//关掉所有的LED</span></span><br><span class="line">  select_channel(<span class="number">4</span>);</span><br><span class="line">  P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0x00</span>;  <span class="comment">//关掉继电器和蜂鸣器</span></span><br><span class="line">  select_channel(<span class="number">5</span>);</span><br><span class="line">  P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>	<span class="comment">//初始化计时器</span></span><br><span class="line">&#123;</span><br><span class="line">  TMOD = <span class="number">0x01</span>;</span><br><span class="line">  TH1 = <span class="number">0xf8</span>;</span><br><span class="line">  TL1 = <span class="number">0x2f</span>;<span class="comment">//2ms</span></span><br><span class="line">  EA = <span class="number">1</span>;</span><br><span class="line">  ET1 = <span class="number">1</span>;</span><br><span class="line">  TR1 = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>  <span class="comment">//数码管显示函数</span></span><br><span class="line">&#123;</span><br><span class="line">  smg_num++;</span><br><span class="line">  <span class="keyword">if</span>(smg_num &gt;= <span class="number">8</span>)</span><br><span class="line">    smg_num = <span class="number">0</span>;  <span class="comment">//从0-7循环扫描每一个数码管</span></span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;		<span class="comment">//消影</span></span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[smg_num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[smg_num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> i;</span><br><span class="line">  init();</span><br><span class="line">  init_timer();</span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">      smgbuf[i] = i;  <span class="comment">//数码管一次显示0-7</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer1</span><span class="params">()</span> interrupt 3</span><br><span class="line">&#123;</span><br><span class="line">  display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>common.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _COMMON_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _COMMON_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;intrins.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sfr AUXR = <span class="number">0x8e</span>;</span><br><span class="line">sfr IE2 = <span class="number">0xaf</span>;</span><br><span class="line">sfr T2H = <span class="number">0xd6</span>;</span><br><span class="line">sfr T2L = <span class="number">0xd7</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
 
-<p>上面的代码是直接在Typora上面写的，没有编译，应该没有很大问题（手动滑稽）</p>
-<p>这样写要改变数码管的值只要改变数组smgbuf[]中的值就行了0-9的数字是和编号一一对应的，其他的特殊符号可以自己手动加。</p>
+<p>common.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[<span class="number">8</span>] = &#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[] = &#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">switch</span>(channel)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">		smgbuf[i] = <span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">4</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">5</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	init_timer();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	AUXR = AUXR&amp;<span class="number">0x33</span>|<span class="number">0x10</span>;<span class="comment">//定时器2的配置</span></span><br><span class="line">	IE2 = <span class="number">0x04</span>;</span><br><span class="line">	T2H = <span class="number">0xf8</span>;</span><br><span class="line">	T2L = <span class="number">0x2f</span>;</span><br><span class="line">	EA = <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	TMOD = <span class="number">0x01</span>;<span class="comment">//定时器1的配置，用于计算发送和接收之间的时间间隔</span></span><br><span class="line">	TH1 = <span class="number">0</span>;</span><br><span class="line">	TL1 = <span class="number">0</span>;</span><br><span class="line">	TR1 = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	num++;</span><br><span class="line">	<span class="keyword">if</span>(num &gt;= <span class="number">8</span>)</span><br><span class="line">		num = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>sonic.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _SONIC_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _SONIC_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> somenop &#123;_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();&#125;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//可以参照原理图</span></span><br><span class="line">sbit tx = P1^<span class="number">0</span>;<span class="comment">//发送波传感器的引脚</span></span><br><span class="line">sbit rx = P1^<span class="number">1</span>;<span class="comment">//接收波传感器的引脚</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>sonic.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span><span class="comment">//发送超声波</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)<span class="comment">//发送一组超声波</span></span><br><span class="line">	&#123;</span><br><span class="line">		tx = <span class="number">1</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">		tx = <span class="number">0</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">	&#125;</span><br><span class="line">	TR1 = <span class="number">1</span>;<span class="comment">//定时器1开始计时</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span><span class="comment">//计算、测量距离</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	send_wave();<span class="comment">//先发送</span></span><br><span class="line">	<span class="keyword">while</span>(rx == <span class="number">1</span>&amp;&amp;TF1 == <span class="number">0</span>);<span class="comment">//等待接收完毕或者定时器1溢出</span></span><br><span class="line">	TR1 = <span class="number">0</span>;<span class="comment">//定时器1停止计时</span></span><br><span class="line">	<span class="keyword">if</span>(rx == <span class="number">0</span>&amp;&amp;TF1 == <span class="number">0</span>)<span class="comment">//正常量程之内</span></span><br><span class="line">	&#123;</span><br><span class="line">		distance = ((TH1&lt;&lt;<span class="number">8</span>)+TL1)*<span class="number">0.017</span>;<span class="comment">//计算距离</span></span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> </span><br><span class="line">	&#123;</span><br><span class="line">		distance = <span class="number">999</span>;<span class="comment">//超出量程</span></span><br><span class="line">		TF1 = <span class="number">0</span>;</span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> distance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 ]]></content>
       <categories>
         <category>备赛</category>
@@ -4541,43 +4514,6 @@
 <h3 id="ds1302-h"><a href="#ds1302-h" class="headerlink" title="ds1302.h"></a>ds1302.h</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> __DS1302_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __DS1302_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Write_Ds1302_Byte</span><span class="params">(<span class="type">unsigned</span>  <span class="type">char</span> temp)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">Write_Ds1302</span><span class="params">( <span class="type">unsigned</span> <span class="type">char</span> address,<span class="type">unsigned</span> <span class="type">char</span> dat )</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> <span class="title function_">Read_Ds1302</span> <span class="params">( <span class="type">unsigned</span> <span class="type">char</span> address )</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_ds1302</span><span class="params">(<span class="type">char</span> h,m,s)</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h3 id="ds1302-c"><a href="#ds1302-c" class="headerlink" title="ds1302.c"></a>ds1302.c</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ds1302.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sbit SCK=P1^<span class="number">7</span>;		</span><br><span class="line">sbit SDA=P2^<span class="number">3</span>;		</span><br><span class="line">sbit RST = P1^<span class="number">3</span>;  			</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Write_Ds1302_Byte</span><span class="params">(<span class="type">unsigned</span>  <span class="type">char</span> temp)</span> </span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++)     	</span><br><span class="line">	&#123; </span><br><span class="line">		SCK=<span class="number">0</span>;</span><br><span class="line">		SDA=temp&amp;<span class="number">0x01</span>;</span><br><span class="line">		temp&gt;&gt;=<span class="number">1</span>; </span><br><span class="line">		SCK=<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;   </span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Write_Ds1302</span><span class="params">( <span class="type">unsigned</span> <span class="type">char</span> address,<span class="type">unsigned</span> <span class="type">char</span> dat )</span>     </span><br><span class="line">&#123;</span><br><span class="line"> 	RST=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line"> 	SCK=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line"> 	RST=<span class="number">1</span>;	</span><br><span class="line">   	_nop_();  </span><br><span class="line"> 	Write_Ds1302_Byte(address);	</span><br><span class="line"> 	Write_Ds1302_Byte(dat);		</span><br><span class="line"> 	RST=<span class="number">0</span>; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> <span class="title function_">Read_Ds1302</span> <span class="params">( <span class="type">unsigned</span> <span class="type">char</span> address )</span></span><br><span class="line">&#123;</span><br><span class="line"> 	<span class="type">unsigned</span> <span class="type">char</span> i,temp=<span class="number">0x00</span>;</span><br><span class="line"> 	RST=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line"> 	SCK=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line"> 	RST=<span class="number">1</span>;</span><br><span class="line">	_nop_();</span><br><span class="line"> 	Write_Ds1302_Byte(address);</span><br><span class="line"> 	<span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++) 	</span><br><span class="line"> 	&#123;		</span><br><span class="line">		SCK=<span class="number">0</span>;</span><br><span class="line">		temp&gt;&gt;=<span class="number">1</span>;	</span><br><span class="line"> 		<span class="keyword">if</span>(SDA)</span><br><span class="line"> 		temp|=<span class="number">0x80</span>;	</span><br><span class="line"> 		SCK=<span class="number">1</span>;</span><br><span class="line">	&#125; </span><br><span class="line"> 	RST=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line"> 	RST=<span class="number">0</span>;</span><br><span class="line">	SCK=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line">	SCK=<span class="number">1</span>;</span><br><span class="line">	_nop_();</span><br><span class="line">	SDA=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line">	SDA=<span class="number">1</span>;</span><br><span class="line">	_nop_();</span><br><span class="line">	<span class="keyword">return</span> (temp);			</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_ds1302</span><span class="params">(<span class="type">char</span> h,m,s)</span></span><br><span class="line">&#123;</span><br><span class="line">	Write_Ds1302(<span class="number">0x8e</span>,<span class="number">0x00</span>);</span><br><span class="line">	Write_Ds1302(<span class="number">0x84</span>,h);</span><br><span class="line">	Write_Ds1302(<span class="number">0x82</span>,m);</span><br><span class="line">	Write_Ds1302(<span class="number">0x80</span>,s);</span><br><span class="line">	Write_Ds1302(<span class="number">0x8e</span>,<span class="number">0x80</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>备赛</category>
-        <category>蓝桥杯</category>
-      </categories>
-      <tags>
-        <tag>蓝桥杯</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>蓝桥杯单片机超声波模块</title>
-    <url>/2020/03/13/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</url>
-    <content><![CDATA[<blockquote>
-<p>这个超声波模块的工作原理很简单，传感器像两个喇叭一样的东西，一个是负责发送超声波的，另一个负责接收超声波，根据发出到接收的时间间隔就可以算出距离了。</p>
-<p>s &#x3D; v*t&#x2F;2 </p>
-<p>初中物理知识哦。</p>
-</blockquote>
-<p>就不多说了直接上代码</p>
-<span id="more"></span>
-
-<p>main.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> sonic_counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> smgbuf[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	init();</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(sonic_counter &gt;= <span class="number">40</span>)<span class="comment">//每隔一定的时间测量一次，必须要加否则测的数据不正确</span></span><br><span class="line">		&#123;</span><br><span class="line">			distance = measure_distance();</span><br><span class="line">			sonic_counter = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		smgbuf[<span class="number">5</span>] = distance/<span class="number">100</span>;</span><br><span class="line">		smgbuf[<span class="number">6</span>] = distance%<span class="number">100</span>/<span class="number">10</span>;</span><br><span class="line">		smgbuf[<span class="number">7</span>] = distance%<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer2</span><span class="params">()</span> interrupt 12<span class="comment">//定时器2（52单片机多出来的一个定时器）</span></span><br><span class="line">&#123;</span><br><span class="line">	sonic_counter++;</span><br><span class="line">	display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>common.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _COMMON_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _COMMON_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;intrins.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sfr AUXR = <span class="number">0x8e</span>;</span><br><span class="line">sfr IE2 = <span class="number">0xaf</span>;</span><br><span class="line">sfr T2H = <span class="number">0xd6</span>;</span><br><span class="line">sfr T2L = <span class="number">0xd7</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>common.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[<span class="number">8</span>] = &#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[] = &#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">switch</span>(channel)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">		smgbuf[i] = <span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">4</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">5</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	init_timer();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	AUXR = AUXR&amp;<span class="number">0x33</span>|<span class="number">0x10</span>;<span class="comment">//定时器2的配置</span></span><br><span class="line">	IE2 = <span class="number">0x04</span>;</span><br><span class="line">	T2H = <span class="number">0xf8</span>;</span><br><span class="line">	T2L = <span class="number">0x2f</span>;</span><br><span class="line">	EA = <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	TMOD = <span class="number">0x01</span>;<span class="comment">//定时器1的配置，用于计算发送和接收之间的时间间隔</span></span><br><span class="line">	TH1 = <span class="number">0</span>;</span><br><span class="line">	TL1 = <span class="number">0</span>;</span><br><span class="line">	TR1 = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	num++;</span><br><span class="line">	<span class="keyword">if</span>(num &gt;= <span class="number">8</span>)</span><br><span class="line">		num = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>sonic.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _SONIC_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _SONIC_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> somenop &#123;_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();&#125;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//可以参照原理图</span></span><br><span class="line">sbit tx = P1^<span class="number">0</span>;<span class="comment">//发送波传感器的引脚</span></span><br><span class="line">sbit rx = P1^<span class="number">1</span>;<span class="comment">//接收波传感器的引脚</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>sonic.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span><span class="comment">//发送超声波</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)<span class="comment">//发送一组超声波</span></span><br><span class="line">	&#123;</span><br><span class="line">		tx = <span class="number">1</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">		tx = <span class="number">0</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">	&#125;</span><br><span class="line">	TR1 = <span class="number">1</span>;<span class="comment">//定时器1开始计时</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span><span class="comment">//计算、测量距离</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	send_wave();<span class="comment">//先发送</span></span><br><span class="line">	<span class="keyword">while</span>(rx == <span class="number">1</span>&amp;&amp;TF1 == <span class="number">0</span>);<span class="comment">//等待接收完毕或者定时器1溢出</span></span><br><span class="line">	TR1 = <span class="number">0</span>;<span class="comment">//定时器1停止计时</span></span><br><span class="line">	<span class="keyword">if</span>(rx == <span class="number">0</span>&amp;&amp;TF1 == <span class="number">0</span>)<span class="comment">//正常量程之内</span></span><br><span class="line">	&#123;</span><br><span class="line">		distance = ((TH1&lt;&lt;<span class="number">8</span>)+TL1)*<span class="number">0.017</span>;<span class="comment">//计算距离</span></span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> </span><br><span class="line">	&#123;</span><br><span class="line">		distance = <span class="number">999</span>;<span class="comment">//超出量程</span></span><br><span class="line">		TF1 = <span class="number">0</span>;</span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> distance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
@@ -4697,6 +4633,70 @@
       <tags>
         <tag>配置</tag>
         <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>markdown基本语法</title>
+    <url>/2020/02/27/Markdown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><h4 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="comment">###### 六级标题</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>注意#和标题之间要有空格才会有效果</strong>   这简直是初学者的一大坑  </p>
+<span id="more"></span>
+
+<h4 id="文本样式"><a href="#文本样式" class="headerlink" title="文本样式"></a>文本样式</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">*斜体1*	 _斜体2_</span><br><span class="line">**加粗1**  __加粗2__</span><br><span class="line">~~删除线~~</span><br><span class="line">H~2~O	（hexo要用&lt;sub&gt;&lt;/sub&gt;标签，如H&lt;sub&gt;2&lt;/sub&gt;O）</span><br><span class="line">2^10^   （hexo要用&lt;sup&gt;&lt;/sup&gt;标签，如2&lt;sup&gt;10&lt;/sup&gt;）</span><br><span class="line">&gt; 引用</span><br></pre></td></tr></table></figure>
+
+<p><strong>效果显示</strong></p>
+<p><em>斜体1</em>	 <em>斜体2</em><br><strong>加粗1</strong>     <strong>加粗2</strong><br><del>删除线</del></p>
+<p>H<sub>2</sub>O<br>2<sup>10</sup></p>
+<blockquote>
+<p>引用</p>
+</blockquote>
+<p><strong>后面两个要在偏好里面设置，Markdown扩展语法那几个选项打上勾</strong></p>
+<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">- 项目1</span><br><span class="line">  </span><br><span class="line">  - 项目2</span><br><span class="line">  </span><br><span class="line">    - 项目3</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>项目1</p>
+<ul>
+<li><p>项目2</p>
+<ul>
+<li>项目3</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1. 项目</span><br><span class="line">2. 项目</span><br><span class="line">3. 项目</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>项目</li>
+<li>项目</li>
+<li>项目</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- [ ] 计划任务</span><br><span class="line">- [x] 完成任务 </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><input disabled="" type="checkbox"> 计划任务</li>
+<li><input checked="" disabled="" type="checkbox"> 完成任务</li>
+</ul>
+<h4 id="插入代码"><a href="#插入代码" class="headerlink" title="插入代码"></a>插入代码</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">```c</span><br><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line">void <span class="function"><span class="title">main</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">return</span> 0;</span><br><span class="line">&#125;</span><br><span class="line">​```</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">![](图片链接)</span><br></pre></td></tr></table></figure>
+
+<p>今天先写到这，睡觉去了🌛 🌜</p>
+<hr>
+<h4 id="文字"><a href="#文字" class="headerlink" title="文字"></a>文字</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[文字描述](链接)</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://www.baidu.com/">百度</a></p>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>markdown</category>
+      </categories>
+      <tags>
+        <tag>markdown</tag>
       </tags>
   </entry>
 </search>
