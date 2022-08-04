@@ -1,6 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>HTTP常见面试问题</title>
+    <url>/2022/08/02/HTTP%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="HTTP基本概念"><a href="#HTTP基本概念" class="headerlink" title="HTTP基本概念"></a>HTTP基本概念</h1><h2 id="HTTP是什么"><a href="#HTTP是什么" class="headerlink" title="HTTP是什么"></a>HTTP是什么</h2><p>HTTP全称为超文本传输协议（HyperText Transfer Protocol）。</p>
+<ol>
+<li><p>超文本</p>
+<p>如HTTP名字中所说的，其传输的是超文本，超文本从字面上理解是超过了普通的文本文字，也就是还包括文字以外的内容，如图片、视频、超链接等，超文本	就是这些内容的混合体。</p>
+<p>HTML（<strong>H</strong>yper <strong>T</strong>ext <strong>M</strong>arkup <strong>L</strong>anguage）就是最常见的超文本了，它本身只是纯文字的文件，但是内部用很多标签定义了图片、视频的链接，经过浏览器解释之后，呈现给我们的就是一个有文字、有图片和视频的网页了。</p>
+</li>
+<li><p>传输</p>
+<p>所谓“传输”，就是将东西从一个地方搬到另一个地方。</p>
+<p>HTTP协议是一个双向协议。</p>
+<p>我们上网的时候，浏览器是请求方A，访问的网站就是应答方B，双方约定使用HTTP协议来通信，于是浏览器把请求数据发送给网站，网站再把一些数据返回给浏览器，最后由浏览器渲染出来显示在屏幕上。</p>
+<img data-src="/images/HTTP常见面试问题/5-请求应答.png" alt="请求-应答"  />
+
+<p>虽然数据是在A点和B点传输，但是中间也允许有中转或接力。</p>
+<p>这就好比传纸条，第一排的同学传到最后面一排的同学，传递的过程中就要经过好多同学（中间人），而在HTTP里，需要中间人遵从HTTP协议，只要不打扰基本的数据传输，就可以任意添加额外的东西。</p>
+</li>
+<li><p>协议</p>
+<p>我们生活中的协议，本质上和计算机中的协议是相同的，协议的特点：</p>
+<ul>
+<li>协：代表需要有两个及以上的参与者。例如：三方协议里的参与者包括（你、公司、学校）；租房协议里面包括（你和房东）。</li>
+<li>议：代表是对参与者的一种行为约定和规范。例如三方协议里规定试用期期限、毁约金等；租房协议里规定租期期限，每月租金金额、违约如何处理等。</li>
+</ul>
+<p>针对HTTP协议，我们可以这么理解，HTTP就是一个用在计算机世界里的协议，他是用计算机能够理解的语言建立了一种计算机之间交流通信的规范，以及相关的各种控制和错误处理方式（行为约定和规范）。</p>
+</li>
+</ol>
+<p>所以，总结以上说的三点，“超文本传输协议”就可以表述为：HTTP是一个用在计算机世界里专门在两点之间传输文字、图片、视频、音频等超文本数据的约定和规范。</p>
+<blockquote>
+<p>那 HTTP是用于从互联网服务器传输到本地浏览器的协议，这种说法正确吗？</p>
+</blockquote>
+<p>这种说法并不完全正确，也可以是从服务器传输到服务器的协议，所以用两点之间更加的准确。</p>
+<h2 id="HTTP常见的状态码有哪些"><a href="#HTTP常见的状态码有哪些" class="headerlink" title="HTTP常见的状态码有哪些"></a>HTTP常见的状态码有哪些</h2><img data-src="../images/HTTP常见面试问题/6-五大类HTTP状态码.png" alt=" 五大类 HTTP 状态码 "  />
+
+<p><code>1XX</code>不详细描述了，如上图所述。</p>
+<p><code>2XX</code>这类状态码表示服务器成功处理了客户端的请求。</p>
+<ul>
+<li><code>200 OK</code> 是最常见的成功状态码，表示一切正常。如果是非<code>HEAD</code>请求，服务器返回的响应头都会有body数据。</li>
+<li><code>204 No Content</code>也是一个比较常见的成功状态码，与200 OK基本相同，但是响应头没有body数据。</li>
+<li><code>206 Partial Content</code>是应用于HTTP分块下载或断点重传的，表示响应返回的body数据并不是资源的全部，而只是其中的一部分，也是服务器处理成功的状态。</li>
+</ul>
+<p><code>3XX</code>这类状态码表示客户端请求的资源发生了变动，需要客户端用新的URL重新发送请求获取资源，也就是重定向</p>
+<ul>
+<li><p><code>301 Moved Permanently</code>表示永久重定向，说明请求的资源已经不存在了，需要用心的URL再次访问。</p>
+</li>
+<li><p><code>302 Found</code>表示临时的重定向，说明请求的资源还在，但是需要另一个URL来访问</p>
+<p>301和302都会在响应头中使用<code>Location</code>字段，指明后续需要跳转的URL，浏览器会自动重定向新的URL。</p>
+</li>
+</ul>
+<ul>
+<li><code>304 Not Modified</code>不具有跳转含义，表示资源未修改，重定向已存在的缓存文件，也称为缓存重定向，也就是告诉客户端缓存资源没有过期，可以继续使用。</li>
+</ul>
+<p><code>4XX</code>这类状态码表示客户端发送的报文有误，服务器无法处理。</p>
+<ul>
+<li><code>4000 Bad Request</code>表示客户端请求的报文有错误，但只是一个笼统的错误。</li>
+<li><code>403 Forbidden</code>表示服务器禁止访问资源，客户端请求未出错。</li>
+<li><code>404 Not Found</code>表示请求的资源在服务器上不存在，或未找到，所以无法提供给客户端。</li>
+</ul>
+<p><code>5XX</code>这类状态码表示客户端请求报文没问题，但是服务器处理时内部发生了错误，属于服务器端的错误码</p>
+<ul>
+<li><code>500 Internal Service Error</code>和400类型相似，是一个笼统通用的错误码，服务器端发生的具体错误并没有提示出来。</li>
+<li><code>501 Not Implemented</code>表示客户端请求的功能还不支持，类似于“即将业务，敬请期待”的意思。</li>
+<li><code>502 Bad Gateway</code>通常是服务器作为网关或代理时返回的错误码，表示服务器自身工作正常，访问后端服务器发生了错误。</li>
+<li><code>503 Service Unavailable</code>表示服务器当前很忙，无法响应客户端，类似于“网络正忙，请稍后重试”。</li>
+</ul>
+<h2 id="HTTP常见的字段"><a href="#HTTP常见的字段" class="headerlink" title="HTTP常见的字段"></a>HTTP常见的字段</h2><ol>
+<li><p>Host字段</p>
+<p>客户端发请求时用来指定服务器的域名</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Host: www.baidu.com</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Content-Length字段</p>
+<p>服务器返回数据时，会带有该字段，表名本次回应数据的长度。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Content-Length: 1000</span><br></pre></td></tr></table></figure>
+
+<p>如上就是告诉浏览器，本次服务器回应的数据长度是1000个字节，后面的字节就属于下一个回应了。</p>
+</li>
+<li><p>Connection字段</p>
+<p>该字段最常用于客户端要求服务器使用TCP持久连接，以便其他请求复用。</p>
+<p>HTTP&#x2F;1.1版本的默认连接都是持久连接，但是为了兼容老版本的HTTP，需要指定<code>Connection</code>首部字段的值为<code>Keep-Alive</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Connection: keep-alive</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Content-Type字段</p>
+<p>该字段用于服务器回应时告诉客户端，本次数据是什么格式。</p>
+<img data-src="/images/HTTP常见面试问题/10-content-type字段.png" alt="img" />
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Content-Type: text/html; charset=utf-8</span><br></pre></td></tr></table></figure>
+
+<p>上面的类型表名发送的是网页，而且编码是UTF-8。</p>
+<p>客户端请求的时候可以试用<code>Accept</code>字段声明自己可以接受那些数据格式。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Accept: */*</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，客户端声明自己可以接受任何格式的数据。</p>
+</li>
+<li><p>Content-Encoding 字段</p>
+<p>该字段说明了数据的压缩方法，表名服务器返回的数据使用了上面压缩格式。</p>
+<img data-src="/images/HTTP常见面试问题/11-content-encoding字段.png" alt="img"  />
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Content-Encoding: gzip</span><br></pre></td></tr></table></figure>
+
+<p>上面表示服务器返回的数据采用了gzip的压缩方式，告知客户端需要用此方法来解压数据。</p>
+<p>和<code>Content-Type</code>类似，客户端在请求时，可以用<code>Accept-Encoding</code>来说明自己可以接受那些压缩方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Accept-Encoding: gzip, deflate</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="GET和POST"><a href="#GET和POST" class="headerlink" title="GET和POST"></a>GET和POST</h1><h2 id="GET和POST的区别"><a href="#GET和POST的区别" class="headerlink" title="GET和POST的区别"></a>GET和POST的区别</h2><ul>
+<li><p>GET</p>
+<p>根据RFC规范，GET的语义是从服务器获取指定的资源，这个资源可以是静态的文本、页面、图片、视频等。GET请求参数的位置一般是写在URL当中，URL规定只能支持ASCII，所以GET请求的参数只允许ASCII字符，而且浏览器会对URL的长度有限制（HTTP协议本上对URL长度没有做规定）。</p>
+</li>
+<li><p>POST</p>
+<p>根据RFC规范，POST请求的语义是根据请求负荷（报文body）对指定资源做出处理，处理的具体方式视资源类型而不同、POST请求携带数据的位置一般是在报文body中，body中的数据可以是任意格式的数据，只要客户端与服务器协商好即可，并且浏览器不会对body大小做限制。</p>
+<p>比如，在我文章底部的评论区留言后，点击提交，浏览器就会执行一次POST请求，把你们的留言文字放进报文body里，然后拼接好POST请求头，通过TCP协议发送到服务器。</p>
+</li>
+</ul>
+<h2 id="GET和POST方法是否都安全和幂等"><a href="#GET和POST方法是否都安全和幂等" class="headerlink" title="GET和POST方法是否都安全和幂等"></a>GET和POST方法是否都安全和幂等</h2><p>首先说明一下安全和幂等的概念：</p>
+<ul>
+<li>在HTTP协议中，所谓的安全试制请求方法会不会破坏服务器上的资源。</li>
+<li>所谓的幂等，是指多次执行相同的操作，结果是否都是相同的。</li>
+</ul>
+<p>如果从RFC规范定义的语义来说：</p>
+<ul>
+<li>GET方法是安全且幂等的，因为他是只读操作，无论操作多少次，服务器上的数据都是安全的，并且每次的结果也是相同的。所以，可以对GET方法请求的数据做缓存，这个缓存可以放到浏览器上，也可以放到代理上（如Nginx）。</li>
+<li>POST方法因为是新增或修改数据操作，会修改服务器上的资源，所以是不安全的，而且多次提交数据就会创建多个资源所以不是幂等的。</li>
+</ul>
+<p>需要注意的，上面说的都是基于RFC规范定义的语义来分析的，实际开发中，开发者不一定会按照规范来实现GET和POST方法，比如：</p>
+<ul>
+<li>可以使用GET方法来实现新增或删除数据的请求，这样GET方法就是不安全、不幂等的。</li>
+<li>可以使用POST方法来实现数据查询的请求，这样POST方法就是安全和幂等的。</li>
+</ul>
+<blockquote>
+<p>有一个笑话，有人写了个博客，删除博客用的是GET请求，他觉得没人访问就连鉴权都没做。</p>
+<p>然后Google服务器爬虫爬了一遍，他所有博文就没了。&amp;#x1F602;</p>
+</blockquote>
+<h1 id="HTTP缓存技术"><a href="#HTTP缓存技术" class="headerlink" title="HTTP缓存技术"></a>HTTP缓存技术</h1><h2 id="HTTP缓存的实现方式"><a href="#HTTP缓存的实现方式" class="headerlink" title="HTTP缓存的实现方式"></a>HTTP缓存的实现方式</h2><p>对于一些重复性的HTTP请求，比如每次请求得到的数据都一样，我们可以把这对「请求-响应」的数据缓存到本地，那么下一次请求就可以直接读取本地的数据了，不需要通过网络获取服务器的响应，这样的话HTTP&#x2F;1.1的性能会有肉眼可见的提升。</p>
+<p>所以避免发送同样HTTP请求的方法就是通过缓存技术，HTTP设计者早在之前就考虑到了这点，所以HTTP协议的头部有不少字段都是针对缓存设计的。</p>
+<p>HTTP缓存的实现方式总体上可以分为两种，分别是强制缓存和协商缓存。</p>
+<h3 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h3><p>前置缓存指的是只要浏览器判断缓存没过期，则直接使用浏览器本地的缓存，决定是否使用缓存的主动性在浏览器。</p>
+<p>如下图，返回的状态码是200，但是括号中的标识是赖在内存缓存，也就是使用了强制缓存。</p>
+<img data-src="../images/HTTP常见面试问题/image-20220803210210198.png" alt="image-20220803210210198"  />
+
+<p>强制缓存是利用下面这两个HTTP响应头部（Response Header）字段来实现的，他们都用来表示资源在客户端缓存的有效期：</p>
+<ul>
+<li><code>Cache-Control</code>，是一个相对时间；</li>
+<li><code>Expires</code>，是一个绝对时间；</li>
+</ul>
+<p>如果HTTP响应头同时有这两个字段的话，<strong>Cache-Controle的优先级高于Expire</strong>。</p>
+<p>Cache-Control的选项更多一些，设置更加精细，所以建议使用Cache-Control来实现强缓存。具体实现流程如下：</p>
+]]></content>
+      <categories>
+        <category>学习笔记，计算机网络</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Apache配置反向代理</title>
     <url>/2020/07/23/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<blockquote>
@@ -515,6 +668,362 @@
       </tags>
   </entry>
   <entry>
+    <title>Java基础知识总结（上）</title>
+    <url>/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="Java中的注释"><a href="#Java中的注释" class="headerlink" title="Java中的注释"></a>Java中的注释</h2><ol>
+<li><p>单行注释   &#x2F;&#x2F;</p>
+</li>
+<li><p>多行注释  &#x2F;*   *&#x2F;</p>
+<p>单行注释和多行注释的作用：</p>
+<p>① 对所写的程序进行解释说明，增强可读性。方便自己，方便别人</p>
+<p>② 调试所写的代码</p>
+</li>
+<li><p>文档注释  &#x2F;**   *&#x2F;</p>
+<p>注释内容可以被JDK提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档。</p>
+<hr>
+</li>
+</ol>
+<h2 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h2><ol>
+<li><p>标识符：凡是自己可以起名字的地方都叫标识符。</p>
+<p>  比如：类名、变量名、方法名、接口名、包名…</p>
+</li>
+<li><p>标识符的命名规则：–&gt; 如果不遵守如下的规则，编译不通过！</p>
+<p>① 由26个英文字母大小写，0-9 ，_或 $ 组成 </p>
+<p>②数字不可以开头。</p>
+<p>③不可以使用关键字和保留字，但能包含关键字和保留字。</p>
+<p>④Java中严格区分大小写，长度无限制。</p>
+<p>⑤标识符不能包含空格。</p>
+</li>
+<li><p>Java中的名称命名规范： —&gt;如果不遵守如下的规范，编译可以通过！</p>
+<p>包名：多单词组成时所有字母都小写：xxxyyyzzz</p>
+<p>类名、接口名：多单词组成时，所有单词的首字母大写：XxxYyyZzz</p>
+<p>变量名、方法名：多单词组成时，第一个单词首字母小写，第二个单词开始每个单词首字母大写：xxxYyyZzz</p>
+<p>常量名：所有字母都大写。多单词时每个单词用下划线连接：XXX_YYY_ZZZ</p>
+</li>
+<li><p>注意1：在起名字时，为了提高阅读性，要尽量有意义，“见名知意”。</p>
+<p>注意2：java采用unicode字符集，因此标识符也可以使用汉字声明，但是不建议使用。 </p>
+<hr>
+</li>
+</ol>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><ol>
+<li><p>变量按照数据类型来分：<br>a. 基本数据类型：</p>
+<p>​    整型：byte \ short \ int \ long</p>
+<p>​    浮点型：float \ double</p>
+<p>​    字符型：char</p>
+<p>​    布尔型：boolean</p>
+<p> b. 引用数据类型：</p>
+<pre><code>   类(class)
+
+      接口(interface)
+
+      数组(array)
+</code></pre>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">占用存储空间</th>
+<th align="center">表示数据范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">byte</td>
+<td align="center">1字节&#x3D;8bit</td>
+<td align="center">-128~127</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">2字节</td>
+<td align="center">-2^15 ~2^15 -1</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">4字节</td>
+<td align="center">-2^31 ~2^31 -1</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">8字节</td>
+<td align="center">-2^62 ~2^62 -1</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">4字节</td>
+<td align="center">-3.403E38 ~ 3.403E38</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">8字节</td>
+<td align="center">-1.798E308 ~ 1.798E308</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>java的整型常量默认为 int 型，声明long型常量须后加‘l’或‘L’</strong> </li>
+<li><strong>java程序中变量通常声明为int型，除非不足以表示较大的数，才使用long</strong></li>
+</ul>
+<p>转义字符：</p>
+<table>
+<thead>
+<tr>
+<th>转义字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\b</td>
+<td>退格符</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行符</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>回车符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>制表符</td>
+</tr>
+<tr>
+<td>\“</td>
+<td>双引号</td>
+</tr>
+<tr>
+<td>\‘</td>
+<td>单引号</td>
+</tr>
+<tr>
+<td>\\</td>
+<td>反斜线</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><p>变量在类中声明的位置：</p>
+<p>​    成员变量 vs 局部变量</p>
+</li>
+</ol>
+<h3 id="定义格式"><a href="#定义格式" class="headerlink" title="定义格式"></a>定义格式</h3><ol>
+<li><p>java定义变量的格式：数据类型 变量名 &#x3D; 变量值;</p>
+</li>
+<li><p>说明：</p>
+<p>  ① 变量必须先声明，后使用</p>
+<p>  ② 变量都定义在其作用域内。在作用域内，它是有效的。换句话说，出了作用域，就失效了</p>
+<p>  ③ 同一个作用域内，不可以声明两个同名的变量</p>
+</li>
+</ol>
+<h3 id="运算规则"><a href="#运算规则" class="headerlink" title="运算规则"></a>运算规则</h3><p>基本数据类型之间的运算规则：</p>
+<p>前提：这里讨论只是7种基本数据类型变量间的运算。不包含boolean类型的。</p>
+<ol>
+<li><p>自动类型提升：</p>
+<p> 结论：当容量小的数据类型的变量与容量大的数据类型的变量做运算时，结果自动提升为容量大的数据类型。</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph LR</span><br><span class="line">char --&gt; int</span><br><span class="line">byte --&gt; int</span><br><span class="line">short --&gt; int --&gt; long --&gt; float --&gt; double</span><br></pre></td></tr></table></figure>
+
+<p> 特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。</p>
+</li>
+<li><p>强制类型转换：</p>
+<p>a.需要使用强转符：()</p>
+<p>b.注意点：强制类型转换，可能导致精度损失。</p>
+</li>
+<li><p>说明：此时的容量大小指的是，表示数的范围的大和小。比如：float容量要大于long的容量</p>
+</li>
+</ol>
+<h3 id="String类型变量的使用"><a href="#String类型变量的使用" class="headerlink" title="String类型变量的使用"></a>String类型变量的使用</h3><ol>
+<li><p>String属于引用数据类型,翻译为：字符串</p>
+</li>
+<li><p>声明String类型变量时，使用一对” “</p>
+</li>
+<li><p>String可以和8种基本数据类型变量做运算，且运算只能是连接运算：+</p>
+</li>
+<li><p>运算的结果仍然是String类型</p>
+<hr>
+</li>
+</ol>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h3><p>太简单，不说了</p>
+<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>介绍一个特别的：instanceof</p>
+<p>作用是检查是否是类的对象，例如： “Hello” instanceof String &#x3D; true</p>
+<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;—逻辑与	 	| —逻辑或 	  ！—逻辑非 </p>
+<p>&amp;&amp; —短路与 	|| —短路或 	^ —逻辑异或</p>
+<ul>
+<li>“&amp;”和“&amp;&amp;”的区别： <ul>
+<li>单&amp;时，左边无论真假，右边都进行运算； </li>
+<li>双&amp;时，如果左边为真，右边参与运算，如果左边为假，那么右边不参与运算。</li>
+</ul>
+</li>
+<li>“|”和“||”的区别同理，||表示：当左边为真，右边不参与运算。</li>
+</ul>
+<h3 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符"></a>三元运算符</h3><p>格式： (表达式1)?表达式2：表达式3；</p>
+<p>若表达式1的结果为真则执行<strong>表达式2</strong>，若为假则执行<strong>表达式3</strong></p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
+<li><p>表达式1,表达式2,表达式3的类型可以不同，进行自动类型转换（提升）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="literal">true</span> ? <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1</span>) : <span class="keyword">new</span> <span class="title class_">Double</span>(<span class="number">2.0</span>);</span><br><span class="line">System.out.println(o1);<span class="comment">//1.0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>条件表达式不能取代一般的if语句,仅当if语句中内嵌的语句为赋值语句(且两个分支都给同一变量赋值)时才能代替if语句，例如：</p>
+</li>
+</ol>
+   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line">  printf(<span class="string">&quot;even/n&quot;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//不能写成</span></span><br><span class="line">(a%<span class="number">2</span>==<span class="number">0</span>)?printf(<span class="string">&quot;even/n&quot;</span>):printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//但是可以写成</span></span><br><span class="line">printf(<span class="string">&quot;%s/n&quot;</span>,(a%<span class="number">2</span>==<span class="number">0</span>?<span class="string">&quot;even&quot;</span>:<span class="string">&quot;odd&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="运算符的优先级"><a href="#运算符的优先级" class="headerlink" title="运算符的优先级"></a>运算符的优先级</h3><table>
+<thead>
+<tr>
+<th align="center">运算顺序（从左往右或从右往左）</th>
+<th align="center">运算符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"></td>
+<td align="center">.    ()      {}      ;      ,</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">++  –  ~    !()</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">*      &#x2F;     %</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&lt;&lt;  &gt;&gt;   &gt;&gt;&gt;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&lt;  &gt;  &lt;&#x3D;  &gt;&#x3D;    instanceof</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&#x3D;&#x3D;      !&#x3D;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&amp;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">^</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">|</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&amp;&amp;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">||</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">?    :</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">&#x3D;    *&#x3D;    &#x2F;&#x3D;   %&#x3D;</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
+<li>数组本身是引用数据类型，而数组中的元素可以是任何数据类型，包括 基本数据类型和引用数据类型。</li>
+<li>创建数组对象会在内存中开辟一整块连续的空间，而数组名中引用的是 这块连续空间的首地址。 </li>
+<li>数组的长度一旦确定，就不能修改。 </li>
+<li>我们可以直接通过下标(或索引)的方式调用指定位置的元素，速度很快。</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h4><ol>
+<li><p>一维数组的声明</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">type <span class="keyword">var</span>[] 或 type[] <span class="keyword">var</span>；</span><br></pre></td></tr></table></figure>
+
+<p>Java语言中声明数组时不能指定其长度(数组中元素的数)， 例如： int a[5]; <strong>&#x2F;&#x2F;非法</strong></p>
+</li>
+<li><p>初始化</p>
+<ul>
+<li><p>动态初始化：数组声明且为数组元素分配空间与赋值的操作分开进行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">3</span>];</span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">3</span>;</span><br><span class="line">arr[<span class="number">1</span>] = <span class="number">9</span>;</span><br><span class="line">arr[<span class="number">2</span>] = <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">String names[];</span><br><span class="line">names = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">3</span>];</span><br><span class="line">names[<span class="number">0</span>] = “钱学森”;</span><br><span class="line">names[<span class="number">1</span>] = “邓稼先”;</span><br><span class="line">names[<span class="number">2</span>] = “袁隆平”;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ul>
+<li><p>静态初始化：在定义数组的同时就为数组元素分配空间并赋值。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> arr[] = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123; <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>&#125;;</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="type">int</span>[] arr = &#123;<span class="number">3</span>,<span class="number">9</span>,<span class="number">8</span>&#125;;</span><br><span class="line"></span><br><span class="line">String names[] = &#123;</span><br><span class="line">“李四光”,“茅以升”,“华罗庚”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="数组元素的默认初始化值"><a href="#数组元素的默认初始化值" class="headerlink" title="数组元素的默认初始化值"></a>数组元素的默认初始化值</h3><table>
+<thead>
+<tr>
+<th align="center">数组元素类型</th>
+<th align="center">元素默认初始值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">byte</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">0L</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">0.0F</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">0.0</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">0或‘\u0000’(表现为空)</td>
+</tr>
+<tr>
+<td align="center">boolean</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center">应用类型</td>
+<td align="center">null</td>
+</tr>
+</tbody></table>
+<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><ol>
+<li><p>声明和初始化</p>
+<ul>
+<li><p>格式1（动态初始化）：int[][] arr &#x3D; new int[3][2];</p>
+<p>定义了名称为arr的二维数组 </p>
+<p>二维数组中有3个一维数组 </p>
+<p>每一个一维数组中有2个元素 一维数组的名称分别为arr[0], arr[1], arr[2] </p>
+<p>给第一个一维数组1脚标位赋值为78写法是：arr[0][1] &#x3D; 78;</p>
+</li>
+<li><p>格式2（动态初始化）：int[][] arr &#x3D; new int[3][];</p>
+<p>二维数组中有3个一维数组。 </p>
+<p>每个一维数组都是默认初始化值null (注意：区别于格式1）</p>
+<p> 可以对这个三个一维数组分别进行初始化 </p>
+<p>arr[0] &#x3D; new int[3]; arr[1] &#x3D; new int[1]; </p>
+<p>arr[2] &#x3D; new int[2];</p>
+</li>
+</ul>
+<p><strong>注： int[][]arr &#x3D; new int[][3]; &#x2F;&#x2F;非法</strong></p>
+</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java基础之集合框架</title>
     <url>/2020/06/16/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/</url>
     <content><![CDATA[<h1 id="Java-集合框架概述"><a href="#Java-集合框架概述" class="headerlink" title="Java 集合框架概述"></a>Java 集合框架概述</h1><blockquote>
@@ -883,362 +1392,6 @@
 </li>
 </ul>
 <h3 id="同步控制方法"><a href="#同步控制方法" class="headerlink" title="同步控制方法"></a>同步控制方法</h3><p>Collections 类中提供了多个 synchronizedXxx() 方法，该方法可使将指定集合包装成线程同步的集合，从而可以解决多线程并发访问集合时的线程安全问题</p>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java基础知识总结（上）</title>
-    <url>/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="Java中的注释"><a href="#Java中的注释" class="headerlink" title="Java中的注释"></a>Java中的注释</h2><ol>
-<li><p>单行注释   &#x2F;&#x2F;</p>
-</li>
-<li><p>多行注释  &#x2F;*   *&#x2F;</p>
-<p>单行注释和多行注释的作用：</p>
-<p>① 对所写的程序进行解释说明，增强可读性。方便自己，方便别人</p>
-<p>② 调试所写的代码</p>
-</li>
-<li><p>文档注释  &#x2F;**   *&#x2F;</p>
-<p>注释内容可以被JDK提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档。</p>
-<hr>
-</li>
-</ol>
-<h2 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h2><ol>
-<li><p>标识符：凡是自己可以起名字的地方都叫标识符。</p>
-<p>  比如：类名、变量名、方法名、接口名、包名…</p>
-</li>
-<li><p>标识符的命名规则：–&gt; 如果不遵守如下的规则，编译不通过！</p>
-<p>① 由26个英文字母大小写，0-9 ，_或 $ 组成 </p>
-<p>②数字不可以开头。</p>
-<p>③不可以使用关键字和保留字，但能包含关键字和保留字。</p>
-<p>④Java中严格区分大小写，长度无限制。</p>
-<p>⑤标识符不能包含空格。</p>
-</li>
-<li><p>Java中的名称命名规范： —&gt;如果不遵守如下的规范，编译可以通过！</p>
-<p>包名：多单词组成时所有字母都小写：xxxyyyzzz</p>
-<p>类名、接口名：多单词组成时，所有单词的首字母大写：XxxYyyZzz</p>
-<p>变量名、方法名：多单词组成时，第一个单词首字母小写，第二个单词开始每个单词首字母大写：xxxYyyZzz</p>
-<p>常量名：所有字母都大写。多单词时每个单词用下划线连接：XXX_YYY_ZZZ</p>
-</li>
-<li><p>注意1：在起名字时，为了提高阅读性，要尽量有意义，“见名知意”。</p>
-<p>注意2：java采用unicode字符集，因此标识符也可以使用汉字声明，但是不建议使用。 </p>
-<hr>
-</li>
-</ol>
-<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><ol>
-<li><p>变量按照数据类型来分：<br>a. 基本数据类型：</p>
-<p>​    整型：byte \ short \ int \ long</p>
-<p>​    浮点型：float \ double</p>
-<p>​    字符型：char</p>
-<p>​    布尔型：boolean</p>
-<p> b. 引用数据类型：</p>
-<pre><code>   类(class)
-
-      接口(interface)
-
-      数组(array)
-</code></pre>
-</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th align="center">类型</th>
-<th align="center">占用存储空间</th>
-<th align="center">表示数据范围</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">byte</td>
-<td align="center">1字节&#x3D;8bit</td>
-<td align="center">-128~127</td>
-</tr>
-<tr>
-<td align="center">short</td>
-<td align="center">2字节</td>
-<td align="center">-2^15 ~2^15 -1</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">4字节</td>
-<td align="center">-2^31 ~2^31 -1</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">8字节</td>
-<td align="center">-2^62 ~2^62 -1</td>
-</tr>
-<tr>
-<td align="center">float</td>
-<td align="center">4字节</td>
-<td align="center">-3.403E38 ~ 3.403E38</td>
-</tr>
-<tr>
-<td align="center">double</td>
-<td align="center">8字节</td>
-<td align="center">-1.798E308 ~ 1.798E308</td>
-</tr>
-</tbody></table>
-<ul>
-<li><strong>java的整型常量默认为 int 型，声明long型常量须后加‘l’或‘L’</strong> </li>
-<li><strong>java程序中变量通常声明为int型，除非不足以表示较大的数，才使用long</strong></li>
-</ul>
-<p>转义字符：</p>
-<table>
-<thead>
-<tr>
-<th>转义字符</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>\b</td>
-<td>退格符</td>
-</tr>
-<tr>
-<td>\n</td>
-<td>换行符</td>
-</tr>
-<tr>
-<td>\r</td>
-<td>回车符</td>
-</tr>
-<tr>
-<td>\t</td>
-<td>制表符</td>
-</tr>
-<tr>
-<td>\“</td>
-<td>双引号</td>
-</tr>
-<tr>
-<td>\‘</td>
-<td>单引号</td>
-</tr>
-<tr>
-<td>\\</td>
-<td>反斜线</td>
-</tr>
-</tbody></table>
-<ol start="2">
-<li><p>变量在类中声明的位置：</p>
-<p>​    成员变量 vs 局部变量</p>
-</li>
-</ol>
-<h3 id="定义格式"><a href="#定义格式" class="headerlink" title="定义格式"></a>定义格式</h3><ol>
-<li><p>java定义变量的格式：数据类型 变量名 &#x3D; 变量值;</p>
-</li>
-<li><p>说明：</p>
-<p>  ① 变量必须先声明，后使用</p>
-<p>  ② 变量都定义在其作用域内。在作用域内，它是有效的。换句话说，出了作用域，就失效了</p>
-<p>  ③ 同一个作用域内，不可以声明两个同名的变量</p>
-</li>
-</ol>
-<h3 id="运算规则"><a href="#运算规则" class="headerlink" title="运算规则"></a>运算规则</h3><p>基本数据类型之间的运算规则：</p>
-<p>前提：这里讨论只是7种基本数据类型变量间的运算。不包含boolean类型的。</p>
-<ol>
-<li><p>自动类型提升：</p>
-<p> 结论：当容量小的数据类型的变量与容量大的数据类型的变量做运算时，结果自动提升为容量大的数据类型。</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph LR</span><br><span class="line">char --&gt; int</span><br><span class="line">byte --&gt; int</span><br><span class="line">short --&gt; int --&gt; long --&gt; float --&gt; double</span><br></pre></td></tr></table></figure>
-
-<p> 特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。</p>
-</li>
-<li><p>强制类型转换：</p>
-<p>a.需要使用强转符：()</p>
-<p>b.注意点：强制类型转换，可能导致精度损失。</p>
-</li>
-<li><p>说明：此时的容量大小指的是，表示数的范围的大和小。比如：float容量要大于long的容量</p>
-</li>
-</ol>
-<h3 id="String类型变量的使用"><a href="#String类型变量的使用" class="headerlink" title="String类型变量的使用"></a>String类型变量的使用</h3><ol>
-<li><p>String属于引用数据类型,翻译为：字符串</p>
-</li>
-<li><p>声明String类型变量时，使用一对” “</p>
-</li>
-<li><p>String可以和8种基本数据类型变量做运算，且运算只能是连接运算：+</p>
-</li>
-<li><p>运算的结果仍然是String类型</p>
-<hr>
-</li>
-</ol>
-<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h3><p>太简单，不说了</p>
-<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>介绍一个特别的：instanceof</p>
-<p>作用是检查是否是类的对象，例如： “Hello” instanceof String &#x3D; true</p>
-<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;—逻辑与	 	| —逻辑或 	  ！—逻辑非 </p>
-<p>&amp;&amp; —短路与 	|| —短路或 	^ —逻辑异或</p>
-<ul>
-<li>“&amp;”和“&amp;&amp;”的区别： <ul>
-<li>单&amp;时，左边无论真假，右边都进行运算； </li>
-<li>双&amp;时，如果左边为真，右边参与运算，如果左边为假，那么右边不参与运算。</li>
-</ul>
-</li>
-<li>“|”和“||”的区别同理，||表示：当左边为真，右边不参与运算。</li>
-</ul>
-<h3 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符"></a>三元运算符</h3><p>格式： (表达式1)?表达式2：表达式3；</p>
-<p>若表达式1的结果为真则执行<strong>表达式2</strong>，若为假则执行<strong>表达式3</strong></p>
-<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
-<li><p>表达式1,表达式2,表达式3的类型可以不同，进行自动类型转换（提升）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="literal">true</span> ? <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1</span>) : <span class="keyword">new</span> <span class="title class_">Double</span>(<span class="number">2.0</span>);</span><br><span class="line">System.out.println(o1);<span class="comment">//1.0</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>条件表达式不能取代一般的if语句,仅当if语句中内嵌的语句为赋值语句(且两个分支都给同一变量赋值)时才能代替if语句，例如：</p>
-</li>
-</ol>
-   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line">  printf(<span class="string">&quot;even/n&quot;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//不能写成</span></span><br><span class="line">(a%<span class="number">2</span>==<span class="number">0</span>)?printf(<span class="string">&quot;even/n&quot;</span>):printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//但是可以写成</span></span><br><span class="line">printf(<span class="string">&quot;%s/n&quot;</span>,(a%<span class="number">2</span>==<span class="number">0</span>?<span class="string">&quot;even&quot;</span>:<span class="string">&quot;odd&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<h3 id="运算符的优先级"><a href="#运算符的优先级" class="headerlink" title="运算符的优先级"></a>运算符的优先级</h3><table>
-<thead>
-<tr>
-<th align="center">运算顺序（从左往右或从右往左）</th>
-<th align="center">运算符</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"></td>
-<td align="center">.    ()      {}      ;      ,</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">++  –  ~    !()</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">*      &#x2F;     %</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&lt;&lt;  &gt;&gt;   &gt;&gt;&gt;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&lt;  &gt;  &lt;&#x3D;  &gt;&#x3D;    instanceof</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&#x3D;&#x3D;      !&#x3D;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&amp;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">^</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">|</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&amp;&amp;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">||</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">?    :</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">&#x3D;    *&#x3D;    &#x2F;&#x3D;   %&#x3D;</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
-<li>数组本身是引用数据类型，而数组中的元素可以是任何数据类型，包括 基本数据类型和引用数据类型。</li>
-<li>创建数组对象会在内存中开辟一整块连续的空间，而数组名中引用的是 这块连续空间的首地址。 </li>
-<li>数组的长度一旦确定，就不能修改。 </li>
-<li>我们可以直接通过下标(或索引)的方式调用指定位置的元素，速度很快。</li>
-</ul>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h4><ol>
-<li><p>一维数组的声明</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">type <span class="keyword">var</span>[] 或 type[] <span class="keyword">var</span>；</span><br></pre></td></tr></table></figure>
-
-<p>Java语言中声明数组时不能指定其长度(数组中元素的数)， 例如： int a[5]; <strong>&#x2F;&#x2F;非法</strong></p>
-</li>
-<li><p>初始化</p>
-<ul>
-<li><p>动态初始化：数组声明且为数组元素分配空间与赋值的操作分开进行</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">3</span>];</span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">3</span>;</span><br><span class="line">arr[<span class="number">1</span>] = <span class="number">9</span>;</span><br><span class="line">arr[<span class="number">2</span>] = <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">String names[];</span><br><span class="line">names = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">3</span>];</span><br><span class="line">names[<span class="number">0</span>] = “钱学森”;</span><br><span class="line">names[<span class="number">1</span>] = “邓稼先”;</span><br><span class="line">names[<span class="number">2</span>] = “袁隆平”;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<ul>
-<li><p>静态初始化：在定义数组的同时就为数组元素分配空间并赋值。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> arr[] = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123; <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>&#125;;</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="type">int</span>[] arr = &#123;<span class="number">3</span>,<span class="number">9</span>,<span class="number">8</span>&#125;;</span><br><span class="line"></span><br><span class="line">String names[] = &#123;</span><br><span class="line">“李四光”,“茅以升”,“华罗庚”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="数组元素的默认初始化值"><a href="#数组元素的默认初始化值" class="headerlink" title="数组元素的默认初始化值"></a>数组元素的默认初始化值</h3><table>
-<thead>
-<tr>
-<th align="center">数组元素类型</th>
-<th align="center">元素默认初始值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">byte</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">short</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">0L</td>
-</tr>
-<tr>
-<td align="center">float</td>
-<td align="center">0.0F</td>
-</tr>
-<tr>
-<td align="center">double</td>
-<td align="center">0.0</td>
-</tr>
-<tr>
-<td align="center">char</td>
-<td align="center">0或‘\u0000’(表现为空)</td>
-</tr>
-<tr>
-<td align="center">boolean</td>
-<td align="center">false</td>
-</tr>
-<tr>
-<td align="center">应用类型</td>
-<td align="center">null</td>
-</tr>
-</tbody></table>
-<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><ol>
-<li><p>声明和初始化</p>
-<ul>
-<li><p>格式1（动态初始化）：int[][] arr &#x3D; new int[3][2];</p>
-<p>定义了名称为arr的二维数组 </p>
-<p>二维数组中有3个一维数组 </p>
-<p>每一个一维数组中有2个元素 一维数组的名称分别为arr[0], arr[1], arr[2] </p>
-<p>给第一个一维数组1脚标位赋值为78写法是：arr[0][1] &#x3D; 78;</p>
-</li>
-<li><p>格式2（动态初始化）：int[][] arr &#x3D; new int[3][];</p>
-<p>二维数组中有3个一维数组。 </p>
-<p>每个一维数组都是默认初始化值null (注意：区别于格式1）</p>
-<p> 可以对这个三个一维数组分别进行初始化 </p>
-<p>arr[0] &#x3D; new int[3]; arr[1] &#x3D; new int[1]; </p>
-<p>arr[2] &#x3D; new int[2];</p>
-</li>
-</ul>
-<p><strong>注： int[][]arr &#x3D; new int[][3]; &#x2F;&#x2F;非法</strong></p>
-</li>
-</ol>
-</li>
-</ol>
 ]]></content>
       <categories>
         <category>学习笔记</category>
@@ -2369,6 +2522,52 @@
       </tags>
   </entry>
   <entry>
+    <title>Java枚举类</title>
+    <url>/2020/06/16/Java%E6%9E%9A%E4%B8%BE%E7%B1%BB/</url>
+    <content><![CDATA[<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><p>在JDK5.0之前需要自定义枚举类，JDK5.0中新增了enum关键字，用来定义枚举类</p>
+<h2 id="枚举类的特点"><a href="#枚举类的特点" class="headerlink" title="枚举类的特点"></a>枚举类的特点</h2><ul>
+<li>枚举类对象的属性不允许被改动，所以应该使用private final修饰</li>
+<li>枚举类的被private final修饰的属性要在构造器中为期赋值</li>
+<li>若枚举类显式的定义了带参数的构造器，则在列出枚举值时也必须传入对应参数</li>
+</ul>
+<h1 id="自定义枚举类"><a href="#自定义枚举类" class="headerlink" title="自定义枚举类"></a>自定义枚举类</h1><ol>
+<li>私有化类的构造器，保证不能再类的外部创建其对象</li>
+<li>在类的内部穿件枚举类的实例，并用public static final修饰</li>
+<li>对象如果有实例变量，应该声明为private final，并在构造器中初始化</li>
+</ol>
+<span id="more"></span>
+
+<p>用季节来举例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Season</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String NAME;<span class="comment">//季节的名称</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String DESC;<span class="comment">//季节的描述</span></span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">Season</span><span class="params">(String seasonName,String seasonDesc)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.NAME = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.DESC = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SPRING</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SUMMER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">AUTUMN</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">WINTER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;白雪皑皑&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="enum关键字定义枚举类"><a href="#enum关键字定义枚举类" class="headerlink" title="enum关键字定义枚举类"></a>enum关键字定义枚举类</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul>
+<li>用enum定义的枚举类默认继承了java.lang.Enum类，因此不能再继承其他类</li>
+<li>枚举类的构造器只能用private修饰</li>
+<li>枚举类的所有实例必须在枚举类中显式列出（用“,”分隔，“;”）结尾，列出的实例会自动添加public static final修饰</li>
+<li>必须要在枚举类的第一行声明枚举类对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">SeasonEnum</span> &#123;</span><br><span class="line">  SPRING(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春风又绿江南岸&quot;</span>),</span><br><span class="line">  SUMMER(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;映日荷花别样红&quot;</span>),</span><br><span class="line">  AUTUMN(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋水共长天一色&quot;</span>),</span><br><span class="line">  WINTER(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;窗含西岭千秋雪&quot;</span>);</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonName;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonDesc;</span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">SeasonEnum</span><span class="params">(String seasonName, String seasonDesc)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.seasonName = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.seasonDesc = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonName</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonName;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonDesc</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Enum类的主要方法"><a href="#Enum类的主要方法" class="headerlink" title="Enum类的主要方法"></a>Enum类的主要方法</h1><ul>
+<li>values()方法：返回枚举类型的对象数组。该方法可以很方便地遍历所有的枚举值。 </li>
+<li>valueOf(String str)：可以把一个字符串转为对应的枚举类对象。要求字符串必须是枚举类对象的“名字”。如不是，会有运行时异常： IllegalArgumentException。 </li>
+<li>toString()：返回当前枚举类对象常量的名称</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java常用类</title>
     <url>/2020/06/06/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/</url>
     <content><![CDATA[<h1 id="字符串相关的类"><a href="#字符串相关的类" class="headerlink" title="字符串相关的类"></a>字符串相关的类</h1><h2 id="String类"><a href="#String类" class="headerlink" title="String类"></a>String类</h2><h3 id="String类的特性"><a href="#String类的特性" class="headerlink" title="String类的特性"></a>String类的特性</h3><ul>
@@ -2812,52 +3011,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java枚举类</title>
-    <url>/2020/06/16/Java%E6%9E%9A%E4%B8%BE%E7%B1%BB/</url>
-    <content><![CDATA[<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><p>在JDK5.0之前需要自定义枚举类，JDK5.0中新增了enum关键字，用来定义枚举类</p>
-<h2 id="枚举类的特点"><a href="#枚举类的特点" class="headerlink" title="枚举类的特点"></a>枚举类的特点</h2><ul>
-<li>枚举类对象的属性不允许被改动，所以应该使用private final修饰</li>
-<li>枚举类的被private final修饰的属性要在构造器中为期赋值</li>
-<li>若枚举类显式的定义了带参数的构造器，则在列出枚举值时也必须传入对应参数</li>
-</ul>
-<h1 id="自定义枚举类"><a href="#自定义枚举类" class="headerlink" title="自定义枚举类"></a>自定义枚举类</h1><ol>
-<li>私有化类的构造器，保证不能再类的外部创建其对象</li>
-<li>在类的内部穿件枚举类的实例，并用public static final修饰</li>
-<li>对象如果有实例变量，应该声明为private final，并在构造器中初始化</li>
-</ol>
-<span id="more"></span>
-
-<p>用季节来举例：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Season</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String NAME;<span class="comment">//季节的名称</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String DESC;<span class="comment">//季节的描述</span></span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">Season</span><span class="params">(String seasonName,String seasonDesc)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.NAME = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.DESC = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SPRING</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SUMMER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">AUTUMN</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">WINTER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;白雪皑皑&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="enum关键字定义枚举类"><a href="#enum关键字定义枚举类" class="headerlink" title="enum关键字定义枚举类"></a>enum关键字定义枚举类</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul>
-<li>用enum定义的枚举类默认继承了java.lang.Enum类，因此不能再继承其他类</li>
-<li>枚举类的构造器只能用private修饰</li>
-<li>枚举类的所有实例必须在枚举类中显式列出（用“,”分隔，“;”）结尾，列出的实例会自动添加public static final修饰</li>
-<li>必须要在枚举类的第一行声明枚举类对象</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">SeasonEnum</span> &#123;</span><br><span class="line">  SPRING(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春风又绿江南岸&quot;</span>),</span><br><span class="line">  SUMMER(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;映日荷花别样红&quot;</span>),</span><br><span class="line">  AUTUMN(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋水共长天一色&quot;</span>),</span><br><span class="line">  WINTER(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;窗含西岭千秋雪&quot;</span>);</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonName;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonDesc;</span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">SeasonEnum</span><span class="params">(String seasonName, String seasonDesc)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.seasonName = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.seasonDesc = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonName</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonName;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonDesc</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="Enum类的主要方法"><a href="#Enum类的主要方法" class="headerlink" title="Enum类的主要方法"></a>Enum类的主要方法</h1><ul>
-<li>values()方法：返回枚举类型的对象数组。该方法可以很方便地遍历所有的枚举值。 </li>
-<li>valueOf(String str)：可以把一个字符串转为对应的枚举类对象。要求字符串必须是枚举类对象的“名字”。如不是，会有运行时异常： IllegalArgumentException。 </li>
-<li>toString()：返回当前枚举类对象常量的名称</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java标识符命名规范</title>
     <url>/2020/03/28/Java%E6%A0%87%E8%AF%86%E7%AC%A6%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</url>
     <content><![CDATA[<ol>
@@ -3024,7 +3177,6 @@
 
 ]]></content>
       <categories>
-        <category>学习笔记</category>
         <category>Linux</category>
       </categories>
       <tags>
@@ -3049,7 +3201,6 @@
 </blockquote>
 ]]></content>
       <categories>
-        <category>学习笔记</category>
         <category>Linux</category>
       </categories>
       <tags>
@@ -3281,55 +3432,6 @@
       </tags>
   </entry>
   <entry>
-    <title>TCP/IP四层模型</title>
-    <url>/2022/08/01/TCP-IP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<p>TCP&#x2F;IP网络模型适用于不同设备上进程间的通信，共分为四层分，从上到下分别是<strong>应用层、传输层、网络层、网络接口层</strong></p>
-<h1 id="应用层（Application-Layer）"><a href="#应用层（Application-Layer）" class="headerlink" title="应用层（Application Layer）"></a>应用层（Application Layer）</h1><p>应用层是最上层的，我们能直接接触到的层，我们日常所使用的软件都是在应用层上实现的。</p>
-<p>应用层不关心数据是如何传输的，就和我们寄快递的时候只需要把包裹交给快递员，我们不关心包裹是如何运输的。</p>
-<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><p>应用层的协议包括HTTP、FTP、Telnet、DNS、SMTP等。</p>
-<h1 id="传输层（Transport-Layer）"><a href="#传输层（Transport-Layer）" class="headerlink" title="传输层（Transport Layer）"></a>传输层（Transport Layer）</h1><p>传输层是为应用层提供网络支持的，在传输层有两个传输协议，分别是TCP和UDP。</p>
-<h2 id="TCP（Transmission-Control-Protocol）"><a href="#TCP（Transmission-Control-Protocol）" class="headerlink" title="TCP（Transmission Control Protocol）"></a>TCP（Transmission Control Protocol）</h2><p>TCP的全称是传输控制协议，大部分应用传输层协议使用的都是TCP，TCP为了保证数据能够可靠的传输到目的地，有流量控制、超时重传、拥塞控制等特性。</p>
-<h2 id="UDP（User-Datagram-Protocol）"><a href="#UDP（User-Datagram-Protocol）" class="headerlink" title="UDP（User Datagram Protocol）"></a>UDP（User Datagram Protocol）</h2><p>UDP全称是用户报文协议，UDP相对TCP来说就很简单，只负责发送数据包，至于数据包能否正常抵达目的地，UDP不能保证；但是换一个角度来说，UDP少干了这么多，那他的实时性相对TCP来说更好，传输效率也更高。</p>
-<p>通常来说一台设备上会运行多个应用进程，为了区分数据要发送的具体进程，传输层中需要指定<strong>端口号</strong>来区分不同的进程和应用。</p>
-<span id="more"></span>
-
-<h1 id="网络层（Internet-Layer）"><a href="#网络层（Internet-Layer）" class="headerlink" title="网络层（Internet Layer）"></a>网络层（Internet Layer）</h1><p>负责将数据从一个设备发送到另一个设备的并不是传输层，传输层设计的理念是，简单、高效、专注，实际场景中的网络环节错综复杂，网络层就来是负责数据实际传输。</p>
-<p>网络层最常用的是<strong>IP协议（Internet Protocol）</strong>，IP协议会将传输层的报文作为数据部分，再加上IP数据包组装成IP报文。</p>
-<img data-src="/images/TCP-IP四层模型/12.jpg" alt="img" style="zoom:80%;" />
-
-<p>网络层负责将数据从一个设备传输到另一个设备，而为了确定目标设备，网络层需要有区分设备单的编号，这个编号就是IP地址。</p>
-<p>对于IPv4协议，IP地址共32位（32个bit），共分成四段（例如：192.168.1.1），每段8位。如果只有单纯的IP地址，虽然做到了设备区分，但是殉职起来就特别麻烦，世界上那么多设备，一个个去匹配显然是非常不科学的。</p>
-<p>因此需要借助<strong>子网掩码</strong>来将IP地址分为两种意义：</p>
-<ul>
-<li>一个是网络号，负责标识IP地址是属于哪一个[子网]的；</li>
-<li>一个是主机号，负责标识同一子网下的不同主机；</li>
-</ul>
-<p>举个栗子，比如192.168.1.1&#x2F;24，后面的<code>/24</code>表示的就是子网掩码<code>255.255.255.0</code>，255.255.255.0 二进制是「11111111-11111111-11111111-00000000」，其中共有24个1，为了简化子网掩码的表示，就用<code>/24</code>来代替。</p>
-<p>网络号&#x3D;IP地址<strong>按位与</strong>子网掩码</p>
-<p>主机号&#x3D;IP地址<strong>按位与</strong>子网掩码取反</p>
-<h1 id="网络接口层（Link-Layer）"><a href="#网络接口层（Link-Layer）" class="headerlink" title="网络接口层（Link Layer）"></a>网络接口层（Link Layer）</h1><p>网络层生成完IP头部之后，接下来要交给网络接口层在IP头前面加上MAC头，并封装成数据帧（Data Frame）发送到网络上。</p>
-<p>IP头中的接收方IP表示网络包的目的地，通过这个地址我们就可以判断要将包发送到那里，但是在以太网的世界中，这个思路行不通！</p>
-<p>以太网是一种在局域网内，把附近的设备连接起来，使其可以互相通讯的技术。我们电脑上的以太网口、WiFi接口，以太网交换机、路由器上的千兆、万兆网口，还有网线，都是以太网的组成部分。</p>
-<p>以太网判断网络包目的地的方式和IP不同，不需要采用互相匹配的方式才能在以太网中将包发往目的地，而MAC头就是干这个用的，所以在以太网进行通讯需要用到MAC地址。</p>
-<p>MAC头是以太网使用的头，包含了发送方和接收方的MAC地址等信息，我们可以通过ARP协议获取对方的MAC地址。</p>
-<p>所以网络接口层主要为网络提供链路级别的传输服务，负责在以太网、WiFi这样的底层网络上发送原始数据包，工作在网卡这个层次，使用MAC地址来别试网络中的设备。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>TCP&#x2F;IP网络的四层结构总结如下图：</p>
-<img data-src="/images/TCP-IP四层模型/tcpip参考模型.png" alt="img" style="zoom:80%;" />
-
-<p>每一层的封装结构如下图：</p>
-<img data-src="/images/TCP-IP四层模型/封装.png" alt="img"  />
-
-<p>网络接口层的传输单位是帧（frame），IP层的传输单位是包（package），TCP层的传输单位是段（segment），HTTP的传输单位则是消息或报文（message），这些单位其实并没有本质上的区别，可以统称为数据包。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.xiaolincoding.com/network/1_base/tcp_ip_model.html">小林coding TCP&#x2F;IP 网络模型有哪几层？</a></p>
-]]></content>
-      <categories>
-        <category>计算机网络</category>
-      </categories>
-      <tags>
-        <tag>计算机网络</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Ubuntu系统Apache2部署SSL证书</title>
     <url>/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/</url>
     <content><![CDATA[<p>本文档为您介绍了如何在Ubuntu系统以及Apache2中安装阿里云SSL证书。</p>
@@ -3391,6 +3493,56 @@
       </categories>
       <tags>
         <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TCP/IP四层模型</title>
+    <url>/2022/08/01/TCP-IP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p>TCP&#x2F;IP网络模型适用于不同设备上进程间的通信，共分为四层分，从上到下分别是<strong>应用层、传输层、网络层、网络接口层</strong></p>
+<h1 id="应用层（Application-Layer）"><a href="#应用层（Application-Layer）" class="headerlink" title="应用层（Application Layer）"></a>应用层（Application Layer）</h1><p>应用层是最上层的，我们能直接接触到的层，我们日常所使用的软件都是在应用层上实现的。</p>
+<p>应用层不关心数据是如何传输的，就和我们寄快递的时候只需要把包裹交给快递员，我们不关心包裹是如何运输的。</p>
+<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><p>应用层的协议包括HTTP、FTP、Telnet、DNS、SMTP等。</p>
+<h1 id="传输层（Transport-Layer）"><a href="#传输层（Transport-Layer）" class="headerlink" title="传输层（Transport Layer）"></a>传输层（Transport Layer）</h1><p>传输层是为应用层提供网络支持的，在传输层有两个传输协议，分别是TCP和UDP。</p>
+<h2 id="TCP（Transmission-Control-Protocol）"><a href="#TCP（Transmission-Control-Protocol）" class="headerlink" title="TCP（Transmission Control Protocol）"></a>TCP（Transmission Control Protocol）</h2><p>TCP的全称是传输控制协议，大部分应用传输层协议使用的都是TCP，TCP为了保证数据能够可靠的传输到目的地，有流量控制、超时重传、拥塞控制等特性。</p>
+<h2 id="UDP（User-Datagram-Protocol）"><a href="#UDP（User-Datagram-Protocol）" class="headerlink" title="UDP（User Datagram Protocol）"></a>UDP（User Datagram Protocol）</h2><p>UDP全称是用户报文协议，UDP相对TCP来说就很简单，只负责发送数据包，至于数据包能否正常抵达目的地，UDP不能保证；但是换一个角度来说，UDP少干了这么多，那他的实时性相对TCP来说更好，传输效率也更高。</p>
+<p>通常来说一台设备上会运行多个应用进程，为了区分数据要发送的具体进程，传输层中需要指定<strong>端口号</strong>来区分不同的进程和应用。</p>
+<span id="more"></span>
+
+<h1 id="网络层（Internet-Layer）"><a href="#网络层（Internet-Layer）" class="headerlink" title="网络层（Internet Layer）"></a>网络层（Internet Layer）</h1><p>负责将数据从一个设备发送到另一个设备的并不是传输层，传输层设计的理念是，简单、高效、专注，实际场景中的网络环节错综复杂，网络层就来是负责数据实际传输。</p>
+<p>网络层最常用的是<strong>IP协议（Internet Protocol）</strong>，IP协议会将传输层的报文作为数据部分，再加上IP数据包组装成IP报文。</p>
+<img data-src="/images/TCP-IP四层模型/12.jpg" alt="img" style="zoom:80%;" />
+
+<p>网络层负责将数据从一个设备传输到另一个设备，而为了确定目标设备，网络层需要有区分设备单的编号，这个编号就是IP地址。</p>
+<p>对于IPv4协议，IP地址共32位（32个bit），共分成四段（例如：192.168.1.1），每段8位。如果只有单纯的IP地址，虽然做到了设备区分，但是殉职起来就特别麻烦，世界上那么多设备，一个个去匹配显然是非常不科学的。</p>
+<p>因此需要借助<strong>子网掩码</strong>来将IP地址分为两种意义：</p>
+<ul>
+<li>一个是网络号，负责标识IP地址是属于哪一个[子网]的；</li>
+<li>一个是主机号，负责标识同一子网下的不同主机；</li>
+</ul>
+<p>举个栗子，比如192.168.1.1&#x2F;24，后面的<code>/24</code>表示的就是子网掩码<code>255.255.255.0</code>，255.255.255.0 二进制是「11111111-11111111-11111111-00000000」，其中共有24个1，为了简化子网掩码的表示，就用<code>/24</code>来代替。</p>
+<p>网络号&#x3D;IP地址<strong>按位与</strong>子网掩码</p>
+<p>主机号&#x3D;IP地址<strong>按位与</strong>子网掩码取反</p>
+<h1 id="网络接口层（Link-Layer）"><a href="#网络接口层（Link-Layer）" class="headerlink" title="网络接口层（Link Layer）"></a>网络接口层（Link Layer）</h1><p>网络层生成完IP头部之后，接下来要交给网络接口层在IP头前面加上MAC头，并封装成数据帧（Data Frame）发送到网络上。</p>
+<p>IP头中的接收方IP表示网络包的目的地，通过这个地址我们就可以判断要将包发送到那里，但是在以太网的世界中，这个思路行不通！</p>
+<p>以太网是一种在局域网内，把附近的设备连接起来，使其可以互相通讯的技术。我们电脑上的以太网口、WiFi接口，以太网交换机、路由器上的千兆、万兆网口，还有网线，都是以太网的组成部分。</p>
+<p>以太网判断网络包目的地的方式和IP不同，不需要采用互相匹配的方式才能在以太网中将包发往目的地，而MAC头就是干这个用的，所以在以太网进行通讯需要用到MAC地址。</p>
+<p>MAC头是以太网使用的头，包含了发送方和接收方的MAC地址等信息，我们可以通过ARP协议获取对方的MAC地址。</p>
+<p>所以网络接口层主要为网络提供链路级别的传输服务，负责在以太网、WiFi这样的底层网络上发送原始数据包，工作在网卡这个层次，使用MAC地址来别试网络中的设备。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>TCP&#x2F;IP网络的四层结构总结如下图：</p>
+<img data-src="/images/TCP-IP四层模型/tcpip参考模型.png" alt="img" style="zoom:80%;" />
+
+<p>每一层的封装结构如下图：</p>
+<img data-src="/images/TCP-IP四层模型/封装.png" alt="img"  />
+
+<p>网络接口层的传输单位是帧（frame），IP层的传输单位是包（package），TCP层的传输单位是段（segment），HTTP的传输单位则是消息或报文（message），这些单位其实并没有本质上的区别，可以统称为数据包。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.xiaolincoding.com/network/1_base/tcp_ip_model.html">小林coding TCP&#x2F;IP 网络模型有哪几层？</a></p>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
       </tags>
   </entry>
   <entry>
@@ -3734,30 +3886,6 @@
       </tags>
   </entry>
   <entry>
-    <title>《摔跤吧！爸爸》观后感</title>
-    <url>/2020/06/25/%E3%80%8A%E6%91%94%E8%B7%A4%E5%90%A7%EF%BC%81%E7%88%B8%E7%88%B8%E3%80%8B%E8%A7%82%E5%90%8E%E6%84%9F/</url>
-    <content><![CDATA[<p>好久没看过电影了，从开学之后好像就没看了，一方面是开学确实时间紧一点，主要还是我自己没去找电影看吧。OK，下面进入正题。</p>
-<p>电影主要讲的是两个女儿帮爸爸实现了摔跤世界冠军的梦想。年轻的时候，电影的主人公爸爸（名字忘了叫啥了）年轻的时候是一个摔跤全国冠军，但是因为国家贫穷落后，再加上官员的贪污腐败、不重视体育，导致运动员得不到好的训练，这真是“食马者，不知其能千里而食也！”。所以这个爸爸一直很好遗憾，后来他就想要生个儿子，来替自己实现摔跤世界冠军的梦想，但是造化弄人啊，生了三个全是女儿。</p>
-<p>故事的转机发生在他的有一次这两个女儿因为两个男孩骂了她们俩，就把那两个男孩打得鼻青脸肿，这个时候他就突然意识到，为什么女孩就不能摔跤，来帮自己实现梦想呢？于是乎，他就不顾全村人异样的眼光，开始对这两个女儿开始进行摔跤训练，女儿们也反抗过，开始是找借口说训练太累了坚持不了了，后来调慢他们爸爸的闹钟，故意把灯泡烧坏，各种小伎俩都使了出来，还是没有用。但是在他们朋友的一个婚礼上，故事又出现了转机。</p>
-<p>她们逃掉了一次训练，去参加一个好朋友的婚礼，被她们的父亲发现了，她们的父亲当着所有人的面，将“我”扇了一巴掌（故事前面一段是以主人公爸爸的侄子的回忆展开的，这里就用第一人称了），后来她们两个人和这个朋友聊天的时候，朋友点醒了他们，她们的爸爸这样对她们，至少还在乎他们，而不是像其他的父亲一样，只盼着女儿快点长到14岁，把女儿嫁出去，帮别人做洗衣做饭生孩子，像摆脱了一个累赘似的，而他们这样至少可以不要像大多数女人一样，可以实现真正意义上的自由。</p>
-<p>从这之后，她们俩就开始认真训练，大女儿geeta第一次去村里参加比赛，和男孩摔跤比赛，她在四个男孩中选了看起来最强壮的那个。观众都在猜geeta能坚持几秒，但是开局出乎观众们所料，两个旗鼓相当，geeta完全不落下风，但是最后还是败下阵来，不过父亲并不失望。回去之后，geeta不甘心，问爸爸下次比赛是什么时候，之后geeta越发抓紧训练，在后面的比赛中一路披荆斩棘，战胜了邦里的所有男孩，后来参加国家比赛，尽管体重不达标，但是任然蝉联了三年的全国女子摔跤冠军。</p>
-<p>孩子长大了总是要出去的，geeta要去印度国家体育中心去接收新的训练。在那呆了一段时间，第一次回家的时候，geeta似乎不再是那个geeta了，头发留长了，心思也不全部在摔跤上面。更要命的是她觉得她在国家体育中心接受的训练技巧比之前父亲的的技巧要好。父亲也不服气，于是他们俩就比了一场，开始是不相上下的，但是随着时间越来越长，上了年纪的父亲体力跟不上，最后被干翻在泥地里。就这样geeta和父亲之间就产生了隔阂。</p>
-<p>之后geeta参加的各种国际赛事都是非常的不顺利，再后来geeta的妹妹也拿下了全国总冠军，进入到国家体育中心训练。再和geeta的相处过程中，她潜移默化的改变了geeta，老家那边，妈妈也在不断的劝爸爸好好地和geeta谈谈。在一次国际赛事之前，终于等到了这个契机，教练要geeta从55公斤级降级到51公斤级的比赛，geeta就给父亲打了电话，把情况告诉了父亲，这个片段也是很感人的一个片段，父亲就决定亲自去到帕提亚拉给geeta训练，指导geeta比赛。geeta确实找回了以前的状态，但是新的矛盾又出现了。</p>
-<p>在比赛中前夕，测体重的时候教练发现geeta的体重没有减下来，提名要将geeta取消比赛资格。经过geeta的父亲向印度体育委员会求情，体育委员会同意再给geeta一次机会。</p>
-<p>比赛正式开始之后，geeta经过父亲的指导，一次次的顺利晋级，最后拿下了全英赛的摔跤世界冠军。</p>
-<p>这部电影挺感人的，泪点低的我，流下了感动的泪水。第一次是geeta和父亲和好的时候，第二次是geeta顺利晋级决赛，最后是geeta拿下冠军。</p>
-<p>看完之后也有几个想法在我心里洒下了种子，第一个，人应该不忘初心，知道自己是怎么一路走到现在的，对geeta来说就是始终得牢记父亲的教诲，不要因为长大了换了一个环境，就把父亲之前交的都丢掉，应该记住自己是怎么一路拿下全国冠军的。第二个，也是之前在B站看见跳水世界冠军吴敏霞的视频里面说的，我们应该尊重每一位运动员，特别是小国家的运动员，因为他们能走到国际比赛的舞台很不容易，小国家的训练设施不齐全，也得不到专业的训练，因此运动员就得不到专业的训练，在之前仅仅听吴敏霞说了之后还没有太多的感触，看完这部电影之后，对这句话的感触特别深。</p>
-<p>​		</p>
-]]></content>
-      <categories>
-        <category>感悟</category>
-        <category>影视</category>
-      </categories>
-      <tags>
-        <tag>感悟</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>vim快捷键快速参考</title>
     <url>/2021/09/17/vim%E5%BF%AB%E6%8D%B7%E9%94%AE/</url>
     <content><![CDATA[<h1 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h1><table>
@@ -3858,6 +3986,30 @@
       <tags>
         <tag>Linux</tag>
         <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《摔跤吧！爸爸》观后感</title>
+    <url>/2020/06/25/%E3%80%8A%E6%91%94%E8%B7%A4%E5%90%A7%EF%BC%81%E7%88%B8%E7%88%B8%E3%80%8B%E8%A7%82%E5%90%8E%E6%84%9F/</url>
+    <content><![CDATA[<p>好久没看过电影了，从开学之后好像就没看了，一方面是开学确实时间紧一点，主要还是我自己没去找电影看吧。OK，下面进入正题。</p>
+<p>电影主要讲的是两个女儿帮爸爸实现了摔跤世界冠军的梦想。年轻的时候，电影的主人公爸爸（名字忘了叫啥了）年轻的时候是一个摔跤全国冠军，但是因为国家贫穷落后，再加上官员的贪污腐败、不重视体育，导致运动员得不到好的训练，这真是“食马者，不知其能千里而食也！”。所以这个爸爸一直很好遗憾，后来他就想要生个儿子，来替自己实现摔跤世界冠军的梦想，但是造化弄人啊，生了三个全是女儿。</p>
+<p>故事的转机发生在他的有一次这两个女儿因为两个男孩骂了她们俩，就把那两个男孩打得鼻青脸肿，这个时候他就突然意识到，为什么女孩就不能摔跤，来帮自己实现梦想呢？于是乎，他就不顾全村人异样的眼光，开始对这两个女儿开始进行摔跤训练，女儿们也反抗过，开始是找借口说训练太累了坚持不了了，后来调慢他们爸爸的闹钟，故意把灯泡烧坏，各种小伎俩都使了出来，还是没有用。但是在他们朋友的一个婚礼上，故事又出现了转机。</p>
+<p>她们逃掉了一次训练，去参加一个好朋友的婚礼，被她们的父亲发现了，她们的父亲当着所有人的面，将“我”扇了一巴掌（故事前面一段是以主人公爸爸的侄子的回忆展开的，这里就用第一人称了），后来她们两个人和这个朋友聊天的时候，朋友点醒了他们，她们的爸爸这样对她们，至少还在乎他们，而不是像其他的父亲一样，只盼着女儿快点长到14岁，把女儿嫁出去，帮别人做洗衣做饭生孩子，像摆脱了一个累赘似的，而他们这样至少可以不要像大多数女人一样，可以实现真正意义上的自由。</p>
+<p>从这之后，她们俩就开始认真训练，大女儿geeta第一次去村里参加比赛，和男孩摔跤比赛，她在四个男孩中选了看起来最强壮的那个。观众都在猜geeta能坚持几秒，但是开局出乎观众们所料，两个旗鼓相当，geeta完全不落下风，但是最后还是败下阵来，不过父亲并不失望。回去之后，geeta不甘心，问爸爸下次比赛是什么时候，之后geeta越发抓紧训练，在后面的比赛中一路披荆斩棘，战胜了邦里的所有男孩，后来参加国家比赛，尽管体重不达标，但是任然蝉联了三年的全国女子摔跤冠军。</p>
+<p>孩子长大了总是要出去的，geeta要去印度国家体育中心去接收新的训练。在那呆了一段时间，第一次回家的时候，geeta似乎不再是那个geeta了，头发留长了，心思也不全部在摔跤上面。更要命的是她觉得她在国家体育中心接受的训练技巧比之前父亲的的技巧要好。父亲也不服气，于是他们俩就比了一场，开始是不相上下的，但是随着时间越来越长，上了年纪的父亲体力跟不上，最后被干翻在泥地里。就这样geeta和父亲之间就产生了隔阂。</p>
+<p>之后geeta参加的各种国际赛事都是非常的不顺利，再后来geeta的妹妹也拿下了全国总冠军，进入到国家体育中心训练。再和geeta的相处过程中，她潜移默化的改变了geeta，老家那边，妈妈也在不断的劝爸爸好好地和geeta谈谈。在一次国际赛事之前，终于等到了这个契机，教练要geeta从55公斤级降级到51公斤级的比赛，geeta就给父亲打了电话，把情况告诉了父亲，这个片段也是很感人的一个片段，父亲就决定亲自去到帕提亚拉给geeta训练，指导geeta比赛。geeta确实找回了以前的状态，但是新的矛盾又出现了。</p>
+<p>在比赛中前夕，测体重的时候教练发现geeta的体重没有减下来，提名要将geeta取消比赛资格。经过geeta的父亲向印度体育委员会求情，体育委员会同意再给geeta一次机会。</p>
+<p>比赛正式开始之后，geeta经过父亲的指导，一次次的顺利晋级，最后拿下了全英赛的摔跤世界冠军。</p>
+<p>这部电影挺感人的，泪点低的我，流下了感动的泪水。第一次是geeta和父亲和好的时候，第二次是geeta顺利晋级决赛，最后是geeta拿下冠军。</p>
+<p>看完之后也有几个想法在我心里洒下了种子，第一个，人应该不忘初心，知道自己是怎么一路走到现在的，对geeta来说就是始终得牢记父亲的教诲，不要因为长大了换了一个环境，就把父亲之前交的都丢掉，应该记住自己是怎么一路拿下全国冠军的。第二个，也是之前在B站看见跳水世界冠军吴敏霞的视频里面说的，我们应该尊重每一位运动员，特别是小国家的运动员，因为他们能走到国际比赛的舞台很不容易，小国家的训练设施不齐全，也得不到专业的训练，因此运动员就得不到专业的训练，在之前仅仅听吴敏霞说了之后还没有太多的感触，看完这部电影之后，对这句话的感触特别深。</p>
+<p>​		</p>
+]]></content>
+      <categories>
+        <category>感悟</category>
+        <category>影视</category>
+      </categories>
+      <tags>
+        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
