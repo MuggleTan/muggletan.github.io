@@ -35,8 +35,11 @@
 <meta property="og:image" content="http://muggletan.github.io/images/HTTP常见面试问题/10-content-type字段.png">
 <meta property="og:image" content="http://muggletan.github.io/images/HTTP常见面试问题/11-content-encoding字段.png">
 <meta property="og:image" content="http://muggletan.github.io/2022/08/02/images/HTTP常见面试问题/image-20220803210210198.png">
+<meta property="og:image" content="http://muggletan.github.io/2022/08/02/images/HTTP常见面试问题/缓存etag.png">
+<meta property="og:image" content="http://muggletan.github.io/2022/08/02/images/HTTP常见面试问题/d92026ce085b401c95cf02b7ce9b7fae.png">
+<meta property="og:image" content="http://muggletan.github.io/images/http常见面试问题/14-cookie技术.png">
 <meta property="article:published_time" content="2022-08-02T10:42:22.000Z">
-<meta property="article:modified_time" content="2022-08-03T13:12:18.402Z">
+<meta property="article:modified_time" content="2022-08-05T09:24:10.944Z">
 <meta property="article:author" content="muggle">
 <meta property="article:tag" content="计算机网络">
 <meta name="twitter:card" content="summary">
@@ -153,7 +156,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">HTTP基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP%E5%B8%B8%E8%A7%81%E7%9A%84%E7%8A%B6%E6%80%81%E7%A0%81%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="nav-number">1.2.</span> <span class="nav-text">HTTP常见的状态码有哪些</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP%E5%B8%B8%E8%A7%81%E7%9A%84%E5%AD%97%E6%AE%B5"><span class="nav-number">1.3.</span> <span class="nav-text">HTTP常见的字段</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GET%E5%92%8CPOST"><span class="nav-number">2.</span> <span class="nav-text">GET和POST</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GET%E5%92%8CPOST%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.1.</span> <span class="nav-text">GET和POST的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GET%E5%92%8CPOST%E6%96%B9%E6%B3%95%E6%98%AF%E5%90%A6%E9%83%BD%E5%AE%89%E5%85%A8%E5%92%8C%E5%B9%82%E7%AD%89"><span class="nav-number">2.2.</span> <span class="nav-text">GET和POST方法是否都安全和幂等</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP%E7%BC%93%E5%AD%98%E6%8A%80%E6%9C%AF"><span class="nav-number">3.</span> <span class="nav-text">HTTP缓存技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP%E7%BC%93%E5%AD%98%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">HTTP缓存的实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E5%88%B6%E7%BC%93%E5%AD%98"><span class="nav-number">3.1.1.</span> <span class="nav-text">强制缓存</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">HTTP基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP%E5%B8%B8%E8%A7%81%E7%9A%84%E7%8A%B6%E6%80%81%E7%A0%81%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="nav-number">1.2.</span> <span class="nav-text">HTTP常见的状态码有哪些</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP%E5%B8%B8%E8%A7%81%E7%9A%84%E5%AD%97%E6%AE%B5"><span class="nav-number">1.3.</span> <span class="nav-text">HTTP常见的字段</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GET%E5%92%8CPOST"><span class="nav-number">2.</span> <span class="nav-text">GET和POST</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GET%E5%92%8CPOST%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.1.</span> <span class="nav-text">GET和POST的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GET%E5%92%8CPOST%E6%96%B9%E6%B3%95%E6%98%AF%E5%90%A6%E9%83%BD%E5%AE%89%E5%85%A8%E5%92%8C%E5%B9%82%E7%AD%89"><span class="nav-number">2.2.</span> <span class="nav-text">GET和POST方法是否都安全和幂等</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP%E7%BC%93%E5%AD%98%E6%8A%80%E6%9C%AF"><span class="nav-number">3.</span> <span class="nav-text">HTTP缓存技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP%E7%BC%93%E5%AD%98%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">HTTP缓存的实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E5%88%B6%E7%BC%93%E5%AD%98"><span class="nav-number">3.1.1.</span> <span class="nav-text">强制缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98"><span class="nav-number">3.1.2.</span> <span class="nav-text">协商缓存</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP%E7%89%B9%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">HTTP特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-x2F-1-1%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">4.1.</span> <span class="nav-text">HTTP&#x2F;1.1的优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-x2F-1-1%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-number">4.2.</span> <span class="nav-text">HTTP&#x2F;1.1的缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-x2F-1-1%E6%80%A7%E8%83%BD"><span class="nav-number">4.3.</span> <span class="nav-text">HTTP&#x2F;1.1性能</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -268,7 +271,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-03 21:12:18" itemprop="dateModified" datetime="2022-08-03T21:12:18+08:00">2022-08-03</time>
+      <time title="修改时间：2022-08-05 17:24:10" itemprop="dateModified" datetime="2022-08-05T17:24:10+08:00">2022-08-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -308,6 +311,8 @@
 <p>HTTP协议是一个双向协议。</p>
 <p>我们上网的时候，浏览器是请求方A，访问的网站就是应答方B，双方约定使用HTTP协议来通信，于是浏览器把请求数据发送给网站，网站再把一些数据返回给浏览器，最后由浏览器渲染出来显示在屏幕上。</p>
 <img data-src="/images/HTTP常见面试问题/5-请求应答.png" alt="请求-应答"  />
+
+<span id="more"></span>
 
 <p>虽然数据是在A点和B点传输，但是中间也允许有中转或接力。</p>
 <p>这就好比传纸条，第一排的同学传到最后面一排的同学，传递的过程中就要经过好多同学（中间人），而在HTTP里，需要中间人遵从HTTP协议，只要不打扰基本的数据传输，就可以任意添加额外的东西。</p>
@@ -439,6 +444,80 @@
 </ul>
 <p>如果HTTP响应头同时有这两个字段的话，<strong>Cache-Controle的优先级高于Expire</strong>。</p>
 <p>Cache-Control的选项更多一些，设置更加精细，所以建议使用Cache-Control来实现强缓存。具体实现流程如下：</p>
+<ul>
+<li>当浏览器第一次请求访问服务器资源时，服务器会在返回这个资源的同时，在Response头中加上Cache-Control这个字段，该字段中设置了资源过期时间的长度。</li>
+<li>当浏览器再次请求该资源时，会先通过请求该资源的时间与Cache-Control中设置过期的时间大小来计算出该资源是否过期，如果没有，则使用改缓存，否则重新请求服务器。</li>
+<li>当资源过期后，服务器再次收到请求，会重复上述步骤。</li>
+</ul>
+<h3 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h3><p>当我们在浏览器使用开发者工具的时候，可能看到过某些请求的响应码是<code>304</code>，这个是告诉浏览器可以使用本地缓存的资源，通常这种服务端告知客户端是否可用使用缓存的方式被称为协商缓存。</p>
+<p>协商缓存可以基于两种头部字段来实现。</p>
+<ol>
+<li>基于请求头中的<code>If-Modified-Since</code>字段与响应头部中的<code>Last-Modified</code>字段实现<ul>
+<li>响应头中的<code>Last-Modified</code>：表示这个响应资源最后修改的时间，服务器给客户端返回资源的时候会带上。</li>
+<li>请求头中的<code>If-Modified-Since</code>：当需要再次请求服务器该资源的时候，客户端会将该资源的修改时间作为<code>If-Midified-Since</code>的值放到请求头，一起发送给服务器，服务器收到后返现有<code>If-Modified-Since</code>，则将该资源的最后修改时间与之对比，若最后修改时间较新，则说明资源又被修改过，则返回新资源，HTTP 200 OK；如果最后修改时间较旧，则返回HTTP 304，浏览器继续使用本地缓存。</li>
+</ul>
+</li>
+<li>请求头部中的 <code>If-None-Match</code> 字段与响应头部中的 <code>ETag</code> 字段<ul>
+<li>响应头中的<code>Etag</code>：唯一标识响应资源。</li>
+<li>请求头中的<code>If-None-Match</code>：当资源过期时，浏览器发现该资源的响应头中有Etag，则再次向服务器发起请求时，会将请求头中的If-None-Match的值设为Etag的值。服务器收到请求后就行对比，如果资源没有变化则返回HTTP 304，如果变化了则返回新的资源，HTTP 200 OK。</li>
+</ul>
+</li>
+</ol>
+<p>下图就是一个<code>Etag</code>协商的过程。</p>
+<img data-src="../images/HTTP常见面试问题/缓存etag.png" alt="img"  />
+
+<p>第一种方式是基于时间来实现的，而第二种方式是基于一个位移标识来实现的，相对来说后者可以更加准确地判断出文件内容是否被修改该，避免时间被篡改而导致的不可靠问题。</p>
+<p>如果HTTP响应头同时有Etag和Last-Modified字段的时候，Etag的优先级更高，就是先会通过判断Etag是否变化了，如果未发生变化，再看Last-Modified。</p>
+<p>注意：协商缓存这两种方法都需要配合强制缓存中的Cache-Control字段来使用，只有在未命中强制缓存的时候，才可以发起带有协商缓存字段的请求。</p>
+<p>下图是浏览器判断缓存是否过期的完整流程。</p>
+<img data-src="../images/HTTP常见面试问题/d92026ce085b401c95cf02b7ce9b7fae.png" alt="img"  />
+
+<h1 id="HTTP特性"><a href="#HTTP特性" class="headerlink" title="HTTP特性"></a>HTTP特性</h1><h2 id="HTTP-x2F-1-1的优点"><a href="#HTTP-x2F-1-1的优点" class="headerlink" title="HTTP&#x2F;1.1的优点"></a>HTTP&#x2F;1.1的优点</h2><p>HTTP最突出的优点是「简单、灵活和易于扩展、应用广泛和快平台」。</p>
+<ol>
+<li><p>简单</p>
+<p>HTTP报文基本格式就是<code>header + body</code>，头部信息也是<code>key-value</code>的简单文本形式，易于理解，降低了学习和使用的门槛。</p>
+</li>
+<li><p>灵活和易于扩展</p>
+<p>HTTP协议里的各类请求方法、URI&#x2F;URL、状态码、头部字段等每个组成要求都没有被固定死，都允许开发人员自定义和扩充。</p>
+<p>同时HTTP由于是工作在应用层（OSI第七层），则他下层可以随意变化。</p>
+<p>HTTPS也就是在HTTP与TCP层之间增加了SSL&#x2F;TLS安全创术层，HTTP&#x2F;3甚至吧TCP层换成基于UDP的QUIC。</p>
+</li>
+<li><p>应用广泛和跨平台</p>
+<p>互联网发展至今，HTTP的应用范围非常的广阔，从台式机的浏览器到手机上的各种APP，HTTP的应用遍地开花，同时具有跨平台的优越性。</p>
+</li>
+</ol>
+<h2 id="HTTP-x2F-1-1的缺点"><a href="#HTTP-x2F-1-1的缺点" class="headerlink" title="HTTP&#x2F;1.1的缺点"></a>HTTP&#x2F;1.1的缺点</h2><p>HTTP协议里有优缺点一题的双刃剑，分别是「无状态、明文传输」，同时还有一大缺点「不安全」。</p>
+<ol>
+<li><p>无状态双刃剑</p>
+<p>无状态的<strong>好处</strong>，因为服务器不需要去记忆HTTP的状态，所以不需要额外的资源来记录状态信息，这可以减轻服务器的负担，能够把更多的CPU和内存来对外提供服务。</p>
+<p>无状态的<strong>坏处</strong>，没有记忆的服务器，在完成一些关联性的操作时会非常麻烦，例如：登录-&gt;添加购物车-&gt;下单-&gt;结算-&gt;支付，这一系列操作都要知道用户的身份才行。单服务器不知道这些请求是有关联的，每次都要问一遍身份信息，这就显得非常的“不聪明”。</p>
+<p>对于无状态的问题，解决方案也有多种，比较简单的方式是使用<strong>Cookie</strong>技术，通过在请求和响应报文中写入Cookie信息来控制客户端的状态。</p>
+<p>Cookie就相当于一个“小贴纸”， 在客户端第一次请求后，服务器会下发一个装有客户信息的“小贴纸”，后续客户端请求服务器的时候，带上“小贴纸”，服务器就认识这是谁了。</p>
+<img data-src="/images/http常见面试问题/14-cookie技术.png" alt="Cookie 技术"  />
+</li>
+<li><p>明文双刃剑</p>
+<p>明文意味着在传输的过程中不需要对信息进行加密和解密，可以在一定程度上减少客户端和服务器的性能消耗。</p>
+<p>但也正是这样，HTTP所有的信息都暴露在光天化日之下，相当于信息裸奔了，在明文传输的漫长过程中，很容易就会被别人窃取，如果里面有你的账号密码信息，那就相当于号没了。</p>
+</li>
+<li><p>不安全</p>
+<p>HTTP比较严重的缺点就是不安全：</p>
+<ul>
+<li>明文通信，内容可能被窃听。比如上面说的<strong>号没了</strong>。</li>
+<li>不验证通信方的身份，可能会遭遇伪装。比如访问假的淘宝、京东，那<strong>钱没了</strong>。</li>
+<li>无法验证报文的完整性，有可能内容会被篡改。比如在网页上植入垃圾广告，视觉污染，眼没了。</li>
+</ul>
+<p>HTTP的安全问题可以用HTTPS的方式来解决，也就是通过引入SSL&#x2F;TLS层，使得安全性可靠。</p>
+</li>
+</ol>
+<h2 id="HTTP-x2F-1-1性能"><a href="#HTTP-x2F-1-1性能" class="headerlink" title="HTTP&#x2F;1.1性能"></a>HTTP&#x2F;1.1性能</h2><p>HTTP是基于<strong>TCP&#x2F;IP</strong>，并且使用了「<strong>请求 - 应答</strong>」的通信模式，所以性能关键就在这两点。</p>
+<ol>
+<li><p>长连接</p>
+</li>
+<li><p>管道网络传输</p>
+</li>
+<li><p>对头阻塞</p>
+</li>
+</ol>
 
     </div>
 
