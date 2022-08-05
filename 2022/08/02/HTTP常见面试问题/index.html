@@ -31,15 +31,15 @@
 <meta property="og:description" content="HTTP基本概念HTTP是什么HTTP全称为超文本传输协议（HyperText Transfer Protocol）。  超文本 如HTTP名字中所说的，其传输的是超文本，超文本从字面上理解是超过了普通的文本文字，也就是还包括文字以外的内容，如图片、视频、超链接等，超文本	就是这些内容的混合体。 HTML（Hyper Text Markup Language）就是最常见的超文本了，它本身只是纯文字">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://muggletan.github.io/images/HTTP常见面试问题/5-请求应答.png">
-<meta property="og:image" content="http://muggletan.github.io/2022/08/02/images/HTTP常见面试问题/6-五大类HTTP状态码.png">
+<meta property="og:image" content="http://muggletan.github.io/images/HTTP常见面试问题/6-五大类HTTP状态码.png">
 <meta property="og:image" content="http://muggletan.github.io/images/HTTP常见面试问题/10-content-type字段.png">
 <meta property="og:image" content="http://muggletan.github.io/images/HTTP常见面试问题/11-content-encoding字段.png">
-<meta property="og:image" content="http://muggletan.github.io/2022/08/02/images/HTTP常见面试问题/image-20220803210210198.png">
-<meta property="og:image" content="http://muggletan.github.io/2022/08/02/images/HTTP常见面试问题/缓存etag.png">
-<meta property="og:image" content="http://muggletan.github.io/2022/08/02/images/HTTP常见面试问题/d92026ce085b401c95cf02b7ce9b7fae.png">
+<meta property="og:image" content="http://muggletan.github.io/images/HTTP常见面试问题/image-20220803210210198.png">
+<meta property="og:image" content="http://muggletan.github.io/images/HTTP常见面试问题/缓存etag.png">
+<meta property="og:image" content="http://muggletan.github.io/images/HTTP常见面试问题/d92026ce085b401c95cf02b7ce9b7fae.png">
 <meta property="og:image" content="http://muggletan.github.io/images/http常见面试问题/14-cookie技术.png">
 <meta property="article:published_time" content="2022-08-02T10:42:22.000Z">
-<meta property="article:modified_time" content="2022-08-05T09:24:10.944Z">
+<meta property="article:modified_time" content="2022-08-05T12:55:10.975Z">
 <meta property="article:author" content="muggle">
 <meta property="article:tag" content="计算机网络">
 <meta name="twitter:card" content="summary">
@@ -271,7 +271,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-05 17:24:10" itemprop="dateModified" datetime="2022-08-05T17:24:10+08:00">2022-08-05</time>
+      <time title="修改时间：2022-08-05 20:55:10" itemprop="dateModified" datetime="2022-08-05T20:55:10+08:00">2022-08-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -331,7 +331,7 @@
 <p>那 HTTP是用于从互联网服务器传输到本地浏览器的协议，这种说法正确吗？</p>
 </blockquote>
 <p>这种说法并不完全正确，也可以是从服务器传输到服务器的协议，所以用两点之间更加的准确。</p>
-<h2 id="HTTP常见的状态码有哪些"><a href="#HTTP常见的状态码有哪些" class="headerlink" title="HTTP常见的状态码有哪些"></a>HTTP常见的状态码有哪些</h2><img data-src="../images/HTTP常见面试问题/6-五大类HTTP状态码.png" alt=" 五大类 HTTP 状态码 "  />
+<h2 id="HTTP常见的状态码有哪些"><a href="#HTTP常见的状态码有哪些" class="headerlink" title="HTTP常见的状态码有哪些"></a>HTTP常见的状态码有哪些</h2><img data-src="/images/HTTP常见面试问题/6-五大类HTTP状态码.png" alt=" 五大类 HTTP 状态码 "  />
 
 <p><code>1XX</code>不详细描述了，如上图所述。</p>
 <p><code>2XX</code>这类状态码表示服务器成功处理了客户端的请求。</p>
@@ -435,7 +435,7 @@
 <p>HTTP缓存的实现方式总体上可以分为两种，分别是强制缓存和协商缓存。</p>
 <h3 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h3><p>前置缓存指的是只要浏览器判断缓存没过期，则直接使用浏览器本地的缓存，决定是否使用缓存的主动性在浏览器。</p>
 <p>如下图，返回的状态码是200，但是括号中的标识是赖在内存缓存，也就是使用了强制缓存。</p>
-<img data-src="../images/HTTP常见面试问题/image-20220803210210198.png" alt="image-20220803210210198"  />
+<img data-src="/images/HTTP常见面试问题/image-20220803210210198.png" alt="image-20220803210210198"  />
 
 <p>强制缓存是利用下面这两个HTTP响应头部（Response Header）字段来实现的，他们都用来表示资源在客户端缓存的有效期：</p>
 <ul>
@@ -464,13 +464,13 @@
 </li>
 </ol>
 <p>下图就是一个<code>Etag</code>协商的过程。</p>
-<img data-src="../images/HTTP常见面试问题/缓存etag.png" alt="img"  />
+<img data-src="/images/HTTP常见面试问题/缓存etag.png" alt="img"  />
 
 <p>第一种方式是基于时间来实现的，而第二种方式是基于一个位移标识来实现的，相对来说后者可以更加准确地判断出文件内容是否被修改该，避免时间被篡改而导致的不可靠问题。</p>
 <p>如果HTTP响应头同时有Etag和Last-Modified字段的时候，Etag的优先级更高，就是先会通过判断Etag是否变化了，如果未发生变化，再看Last-Modified。</p>
 <p>注意：协商缓存这两种方法都需要配合强制缓存中的Cache-Control字段来使用，只有在未命中强制缓存的时候，才可以发起带有协商缓存字段的请求。</p>
 <p>下图是浏览器判断缓存是否过期的完整流程。</p>
-<img data-src="../images/HTTP常见面试问题/d92026ce085b401c95cf02b7ce9b7fae.png" alt="img"  />
+<img data-src="/images/HTTP常见面试问题/d92026ce085b401c95cf02b7ce9b7fae.png" alt="img"  />
 
 <h1 id="HTTP特性"><a href="#HTTP特性" class="headerlink" title="HTTP特性"></a>HTTP特性</h1><h2 id="HTTP-x2F-1-1的优点"><a href="#HTTP-x2F-1-1的优点" class="headerlink" title="HTTP&#x2F;1.1的优点"></a>HTTP&#x2F;1.1的优点</h2><p>HTTP最突出的优点是「简单、灵活和易于扩展、应用广泛和快平台」。</p>
 <ol>

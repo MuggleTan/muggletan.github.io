@@ -34,6 +34,95 @@
       </tags>
   </entry>
   <entry>
+    <title>I217-V在openwrt下大流量断网问题</title>
+    <url>/2022/07/15/I217-V%E5%9C%A8openwrt%E8%BD%AF%E8%B7%AF%E7%94%B1%E4%B8%8B%E5%A4%A7%E6%B5%81%E9%87%8F%E6%96%AD%E7%BD%91%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近跟着up司波图在玩一个AIO（All In One）服务器，也就是将软路由，NAS系统以及影音系统都集成到一个物理系统中，我用的是之前买的一个M73的小主机，里面的mini-PCIE插槽扩展了一个螃蟹RTL8111的千兆网卡，主机自带的是Intel的I217-V千兆网卡。</p>
+<p>经过一天的使用下来发现每次大流量下载或上传时，openwrt都会断一下，开始还以为是openwrt系统的问题，后来经过一番资料搜索，发现是pve下面的这张Intel网卡有问题，查看了pve系统的日志，发现了如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pve kernel: e1000e 0000:00:19.0 eno1: Detected Hardware Unit Hang:</span><br></pre></td></tr></table></figure>
+<p>这和搜索到的情况一样，于是就确定是这张Intel网卡的问题。</p>
+<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>造成该问题的原因是Intel网卡固件的bug</p>
+<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>在pve虚拟机下关掉网卡的offload功能</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ethtool -K &lt;网卡编号&gt; tx off rx off &gt;/tmp/e1000e.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+
+<p>为了方便，不需要每次重启虚拟机之后都手动来关掉，这里设置了一个自启动脚本，原理是pve虚拟机每次启动的呃时候都会扫描<code>/etc/profile.d</code>下面的<code>.sh</code>文件，所以办法很简单，在改文件夹下面新建一个e1000e.sh的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/profile.d/e1000e.sh</span><br></pre></td></tr></table></figure>
+<p>然后填入上面的命令即可</p>
+<p>参考链接：</p>
+<p><a href="https://blog.csdn.net/wudics/article/details/124402110">解决在x86平台装openwrt旁路由大流量断网问题（intel网卡驱动bug问题）</a></p>
+<p><a href="https://blog.csdn.net/sxyllxy/article/details/110631505">openWRT在M93p上出现的Detected Hardware Unit Hang</a></p>
+]]></content>
+      <categories>
+        <category>软路由</category>
+      </categories>
+      <tags>
+        <tag>软路由</tag>
+        <tag>配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java中看似简单实际很坑的题目</title>
+    <url>/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/</url>
+    <content><![CDATA[<h3 id="第一题（貌似是考察方法的参数传递）"><a href="#第一题（貌似是考察方法的参数传递）" class="headerlink" title="第一题（貌似是考察方法的参数传递）"></a>第一题（貌似是考察方法的参数传递）</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 20;</span><br><span class="line">    method(a,b);//在调用method()方法之后输出a = 100,b = 200</span><br><span class="line">    System.out.println(&quot;a = &quot; + a);</span><br><span class="line">    System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  &#125;</span><br><span class="line">  static void method(int a,int b)&#123;</span><br><span class="line">    //代码编写处</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果在method中直接写</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = 100;</span><br><span class="line">b = 200;</span><br></pre></td></tr></table></figure>
+
+<p>这个样子会直接被别人鄙视</p>
+<p>其实这是一个脑筋急转弯的题目，直接像上面这样把一个基本数据类型的变量，作为形参传入函数，等于是直接把值赋给了函数中的实参，改变函数中的实参并不会影响主函数中a和b的值，在method()方法调用完之后，方法中的实参a和b就出栈了，此时在主函数输出的仍然是10和20。</p>
+<span id="more"></span>
+
+<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>机智的方法，调用完method()方法之后就直接退出程序，不让他执行主函数中的print方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  a = 100;</span><br><span class="line">  b = 200;</span><br><span class="line">  System.out.println(&quot;a = &quot; + a);</span><br><span class="line">  System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  System.exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  PrintStream ps = new PrintStream(System.out)&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void println(String x)&#123;</span><br><span class="line">            if(&quot;a = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;a = 100&quot;;</span><br><span class="line">            &#125;else if(&quot;b = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;b = 200&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            super.println(x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    System.setOut(ps);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方法用的是重写，当要调用println()这个方法分时候不是调用Java库中的println()方法，而是调用这里自己写的这个，就把要输出的“a &#x3D; 10”替换成了”a &#x3D; 100”。</p>
+<h3 id="第二题（微软面试题）"><a href="#第二题（微软面试题）" class="headerlink" title="第二题（微软面试题）"></a>第二题（微软面试题）</h3><blockquote>
+<p> 定义一个int型的数组: int[] arr &#x3D; new int]{12,3,3,34,56,77,432};让数组的每个位置上的值去除以首位置的元素,得到的结果,作为该位置上的新值。遍历新的数组。 </p>
+</blockquote>
+<p>这个题其实很简单，但是一不小心就会出错，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for(int i = 0;i &lt; arr.length;i++)</span><br><span class="line">  arr[i] = arr[i]/arr[0];</span><br></pre></td></tr></table></figure>
+
+<p>自己一顿操作之后以为稳了，实际上结果和原数组是一样的。这样从前面向后面遍历，数组第一个值在第一次就变成1了，之后每次除的arr[0]都是1，所以后面的值都没有发生变化。</p>
+<p>所以简单的题不要掉以轻心。</p>
+<p>正确的写法很简单也不止一种方法，可以从后向前遍历数组，也可以把数组的第一个值赋给一个临时变量，后面的数都除以这个临时变量。</p>
+<h3 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">  public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">    int[] arr1 = new int[]&#123;1,2,3&#125;;</span><br><span class="line">    System.out.println(arr1);</span><br><span class="line"></span><br><span class="line">    char[] arr2 = new char[]&#123;&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;&#125;;</span><br><span class="line">    System.out.println(arr2); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>问输出的分别是什么？</p>
+<p>正确答案是arr1输出的是地址值，arr2输出的是abc。</p>
+<p>这其实考的是一个很细的知识点，了解过后就会感觉这个题很low，简直是在是在侮辱自己的智商，不了解的话可能就认为两个都是输出一个地址值。</p>
+<p>这里涉及到了Java中方法的重载，同一个函数名，但是传的参数个数或者参数类型不同的话，他调的方法是不一样的。</p>
+<p>第一个整型的数组，传入的是object类型，调用的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(Object x) &#123;</span><br><span class="line">  String s = String.valueOf(x);</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(s);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二个字符型的数组，传入的是char型的数组，调用的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(char x[]) &#123;</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(x);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="第四题"><a href="#第四题" class="headerlink" title="第四题"></a>第四题</h3><blockquote>
+<p> 如下两个题目输出结果相同吗？各是什么： </p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Object o1 = true ? new Integer(1) : new Double(2.0);</span><br><span class="line">System.out.println(o1);</span><br><span class="line"></span><br><span class="line">Object o2;</span><br><span class="line">if (true)</span><br><span class="line">    o2 = new Integer(1);</span><br><span class="line">else</span><br><span class="line">    o2 = new Double(2.0);</span><br><span class="line">System.out.println(o2);</span><br></pre></td></tr></table></figure>
+
+<p>正确答案：</p>
+<p>o1输出的是1.0，o2输出的是1</p>
+<p>这个题是看似在考Object类中的方法，但是实际上，这里的三元运算符涉及到一个自动类型提升的问题</p>
+<p>(表达式1)?(表达式2):(表达式3)</p>
+<p>三元运算的最后结果是这三个表达式中的类型“最高”的一种，在计算的过程个中会有自动类型提升</p>
+<h3 id="第五题"><a href="#第五题" class="headerlink" title="第五题"></a>第五题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void method1() &#123;</span><br><span class="line">  Integer i = new Integer(1);</span><br><span class="line">  Integer j = new Integer(1);</span><br><span class="line">  System.out.println(i == j);</span><br><span class="line">  Integer m = 1;</span><br><span class="line">  Integer n = 1;</span><br><span class="line">  System.out.println(m == n);//</span><br><span class="line">  Integer x = 128;</span><br><span class="line">  Integer y = 128;</span><br><span class="line">  System.out.println(x == y);//</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个输出为false，第二个输出为true，第三个输出为false。</p>
+<p>Integer内部定义了IntegerCache结构，IntegerCache中定义了Integer[],保存了从-128<del>127范围的整数。如果我们使用自动装箱的方式，给Integer赋值的范围在 -128</del>127范围内时，可以直接使用数组中的元素，不用再去new了。目的：提高效率。</p>
+<p>Integer类中的源码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">private static class IntegerCache &#123;</span><br><span class="line">  static final int low = -128;</span><br><span class="line">  static final int high;</span><br><span class="line">  static final Integer cache[];</span><br><span class="line">  static &#123;</span><br><span class="line">    // high value may be configured by property</span><br><span class="line">    int h = 127;</span><br><span class="line">    String integerCacheHighPropValue =</span><br><span class="line">      sun.misc.VM.getSavedProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">    if (integerCacheHighPropValue != null) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        int i = parseInt(integerCacheHighPropValue);</span><br><span class="line">        i = Math.max(i, 127);</span><br><span class="line">        // Maximum array size is Integer.MAX_VALUE</span><br><span class="line">        h = Math.min(i, Integer.MAX_VALUE - (-low) -1);</span><br><span class="line">      &#125; catch( NumberFormatException nfe) &#123;</span><br><span class="line">        // If the property cannot be parsed into an int, ignore it.</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    high = h;</span><br><span class="line"></span><br><span class="line">    cache = new Integer[(high - low) + 1];</span><br><span class="line">    int j = low;</span><br><span class="line">    for(int k = 0; k &lt; cache.length; k++)</span><br><span class="line">      cache[k] = new Integer(j++);</span><br><span class="line"></span><br><span class="line">    // range [-128, 127] must be interned (JLS7 5.1.7)</span><br><span class="line">    assert IntegerCache.high &gt;= 127;</span><br><span class="line">  &#125;</span><br><span class="line">  private IntegerCache() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>算法</category>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HTTP常见面试问题</title>
     <url>/2022/08/02/HTTP%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h1 id="HTTP基本概念"><a href="#HTTP基本概念" class="headerlink" title="HTTP基本概念"></a>HTTP基本概念</h1><h2 id="HTTP是什么"><a href="#HTTP是什么" class="headerlink" title="HTTP是什么"></a>HTTP是什么</h2><p>HTTP全称为超文本传输协议（HyperText Transfer Protocol）。</p>
@@ -67,7 +156,7 @@
 <p>那 HTTP是用于从互联网服务器传输到本地浏览器的协议，这种说法正确吗？</p>
 </blockquote>
 <p>这种说法并不完全正确，也可以是从服务器传输到服务器的协议，所以用两点之间更加的准确。</p>
-<h2 id="HTTP常见的状态码有哪些"><a href="#HTTP常见的状态码有哪些" class="headerlink" title="HTTP常见的状态码有哪些"></a>HTTP常见的状态码有哪些</h2><img data-src="../images/HTTP常见面试问题/6-五大类HTTP状态码.png" alt=" 五大类 HTTP 状态码 "  />
+<h2 id="HTTP常见的状态码有哪些"><a href="#HTTP常见的状态码有哪些" class="headerlink" title="HTTP常见的状态码有哪些"></a>HTTP常见的状态码有哪些</h2><img data-src="/images/HTTP常见面试问题/6-五大类HTTP状态码.png" alt=" 五大类 HTTP 状态码 "  />
 
 <p><code>1XX</code>不详细描述了，如上图所述。</p>
 <p><code>2XX</code>这类状态码表示服务器成功处理了客户端的请求。</p>
@@ -171,7 +260,7 @@
 <p>HTTP缓存的实现方式总体上可以分为两种，分别是强制缓存和协商缓存。</p>
 <h3 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h3><p>前置缓存指的是只要浏览器判断缓存没过期，则直接使用浏览器本地的缓存，决定是否使用缓存的主动性在浏览器。</p>
 <p>如下图，返回的状态码是200，但是括号中的标识是赖在内存缓存，也就是使用了强制缓存。</p>
-<img data-src="../images/HTTP常见面试问题/image-20220803210210198.png" alt="image-20220803210210198"  />
+<img data-src="/images/HTTP常见面试问题/image-20220803210210198.png" alt="image-20220803210210198"  />
 
 <p>强制缓存是利用下面这两个HTTP响应头部（Response Header）字段来实现的，他们都用来表示资源在客户端缓存的有效期：</p>
 <ul>
@@ -200,13 +289,13 @@
 </li>
 </ol>
 <p>下图就是一个<code>Etag</code>协商的过程。</p>
-<img data-src="../images/HTTP常见面试问题/缓存etag.png" alt="img"  />
+<img data-src="/images/HTTP常见面试问题/缓存etag.png" alt="img"  />
 
 <p>第一种方式是基于时间来实现的，而第二种方式是基于一个位移标识来实现的，相对来说后者可以更加准确地判断出文件内容是否被修改该，避免时间被篡改而导致的不可靠问题。</p>
 <p>如果HTTP响应头同时有Etag和Last-Modified字段的时候，Etag的优先级更高，就是先会通过判断Etag是否变化了，如果未发生变化，再看Last-Modified。</p>
 <p>注意：协商缓存这两种方法都需要配合强制缓存中的Cache-Control字段来使用，只有在未命中强制缓存的时候，才可以发起带有协商缓存字段的请求。</p>
 <p>下图是浏览器判断缓存是否过期的完整流程。</p>
-<img data-src="../images/HTTP常见面试问题/d92026ce085b401c95cf02b7ce9b7fae.png" alt="img"  />
+<img data-src="/images/HTTP常见面试问题/d92026ce085b401c95cf02b7ce9b7fae.png" alt="img"  />
 
 <h1 id="HTTP特性"><a href="#HTTP特性" class="headerlink" title="HTTP特性"></a>HTTP特性</h1><h2 id="HTTP-x2F-1-1的优点"><a href="#HTTP-x2F-1-1的优点" class="headerlink" title="HTTP&#x2F;1.1的优点"></a>HTTP&#x2F;1.1的优点</h2><p>HTTP最突出的优点是「简单、灵活和易于扩展、应用广泛和快平台」。</p>
 <ol>
@@ -260,95 +349,6 @@
       </categories>
       <tags>
         <tag>计算机网络</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>I217-V在openwrt下大流量断网问题</title>
-    <url>/2022/07/15/I217-V%E5%9C%A8openwrt%E8%BD%AF%E8%B7%AF%E7%94%B1%E4%B8%8B%E5%A4%A7%E6%B5%81%E9%87%8F%E6%96%AD%E7%BD%91%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近跟着up司波图在玩一个AIO（All In One）服务器，也就是将软路由，NAS系统以及影音系统都集成到一个物理系统中，我用的是之前买的一个M73的小主机，里面的mini-PCIE插槽扩展了一个螃蟹RTL8111的千兆网卡，主机自带的是Intel的I217-V千兆网卡。</p>
-<p>经过一天的使用下来发现每次大流量下载或上传时，openwrt都会断一下，开始还以为是openwrt系统的问题，后来经过一番资料搜索，发现是pve下面的这张Intel网卡有问题，查看了pve系统的日志，发现了如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pve kernel: e1000e 0000:00:19.0 eno1: Detected Hardware Unit Hang:</span><br></pre></td></tr></table></figure>
-<p>这和搜索到的情况一样，于是就确定是这张Intel网卡的问题。</p>
-<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>造成该问题的原因是Intel网卡固件的bug</p>
-<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>在pve虚拟机下关掉网卡的offload功能</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ethtool -K &lt;网卡编号&gt; tx off rx off &gt;/tmp/e1000e.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
-
-<p>为了方便，不需要每次重启虚拟机之后都手动来关掉，这里设置了一个自启动脚本，原理是pve虚拟机每次启动的呃时候都会扫描<code>/etc/profile.d</code>下面的<code>.sh</code>文件，所以办法很简单，在改文件夹下面新建一个e1000e.sh的文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/profile.d/e1000e.sh</span><br></pre></td></tr></table></figure>
-<p>然后填入上面的命令即可</p>
-<p>参考链接：</p>
-<p><a href="https://blog.csdn.net/wudics/article/details/124402110">解决在x86平台装openwrt旁路由大流量断网问题（intel网卡驱动bug问题）</a></p>
-<p><a href="https://blog.csdn.net/sxyllxy/article/details/110631505">openWRT在M93p上出现的Detected Hardware Unit Hang</a></p>
-]]></content>
-      <categories>
-        <category>软路由</category>
-      </categories>
-      <tags>
-        <tag>软路由</tag>
-        <tag>配置</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java中看似简单实际很坑的题目</title>
-    <url>/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/</url>
-    <content><![CDATA[<h3 id="第一题（貌似是考察方法的参数传递）"><a href="#第一题（貌似是考察方法的参数传递）" class="headerlink" title="第一题（貌似是考察方法的参数传递）"></a>第一题（貌似是考察方法的参数传递）</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 20;</span><br><span class="line">    method(a,b);//在调用method()方法之后输出a = 100,b = 200</span><br><span class="line">    System.out.println(&quot;a = &quot; + a);</span><br><span class="line">    System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  &#125;</span><br><span class="line">  static void method(int a,int b)&#123;</span><br><span class="line">    //代码编写处</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果在method中直接写</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = 100;</span><br><span class="line">b = 200;</span><br></pre></td></tr></table></figure>
-
-<p>这个样子会直接被别人鄙视</p>
-<p>其实这是一个脑筋急转弯的题目，直接像上面这样把一个基本数据类型的变量，作为形参传入函数，等于是直接把值赋给了函数中的实参，改变函数中的实参并不会影响主函数中a和b的值，在method()方法调用完之后，方法中的实参a和b就出栈了，此时在主函数输出的仍然是10和20。</p>
-<span id="more"></span>
-
-<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>机智的方法，调用完method()方法之后就直接退出程序，不让他执行主函数中的print方法。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  a = 100;</span><br><span class="line">  b = 200;</span><br><span class="line">  System.out.println(&quot;a = &quot; + a);</span><br><span class="line">  System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  System.exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  PrintStream ps = new PrintStream(System.out)&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void println(String x)&#123;</span><br><span class="line">            if(&quot;a = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;a = 100&quot;;</span><br><span class="line">            &#125;else if(&quot;b = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;b = 200&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            super.println(x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    System.setOut(ps);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这种方法用的是重写，当要调用println()这个方法分时候不是调用Java库中的println()方法，而是调用这里自己写的这个，就把要输出的“a &#x3D; 10”替换成了”a &#x3D; 100”。</p>
-<h3 id="第二题（微软面试题）"><a href="#第二题（微软面试题）" class="headerlink" title="第二题（微软面试题）"></a>第二题（微软面试题）</h3><blockquote>
-<p> 定义一个int型的数组: int[] arr &#x3D; new int]{12,3,3,34,56,77,432};让数组的每个位置上的值去除以首位置的元素,得到的结果,作为该位置上的新值。遍历新的数组。 </p>
-</blockquote>
-<p>这个题其实很简单，但是一不小心就会出错，比如：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for(int i = 0;i &lt; arr.length;i++)</span><br><span class="line">  arr[i] = arr[i]/arr[0];</span><br></pre></td></tr></table></figure>
-
-<p>自己一顿操作之后以为稳了，实际上结果和原数组是一样的。这样从前面向后面遍历，数组第一个值在第一次就变成1了，之后每次除的arr[0]都是1，所以后面的值都没有发生变化。</p>
-<p>所以简单的题不要掉以轻心。</p>
-<p>正确的写法很简单也不止一种方法，可以从后向前遍历数组，也可以把数组的第一个值赋给一个临时变量，后面的数都除以这个临时变量。</p>
-<h3 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">  public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">    int[] arr1 = new int[]&#123;1,2,3&#125;;</span><br><span class="line">    System.out.println(arr1);</span><br><span class="line"></span><br><span class="line">    char[] arr2 = new char[]&#123;&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;&#125;;</span><br><span class="line">    System.out.println(arr2); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>问输出的分别是什么？</p>
-<p>正确答案是arr1输出的是地址值，arr2输出的是abc。</p>
-<p>这其实考的是一个很细的知识点，了解过后就会感觉这个题很low，简直是在是在侮辱自己的智商，不了解的话可能就认为两个都是输出一个地址值。</p>
-<p>这里涉及到了Java中方法的重载，同一个函数名，但是传的参数个数或者参数类型不同的话，他调的方法是不一样的。</p>
-<p>第一个整型的数组，传入的是object类型，调用的是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(Object x) &#123;</span><br><span class="line">  String s = String.valueOf(x);</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(s);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>第二个字符型的数组，传入的是char型的数组，调用的是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(char x[]) &#123;</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(x);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="第四题"><a href="#第四题" class="headerlink" title="第四题"></a>第四题</h3><blockquote>
-<p> 如下两个题目输出结果相同吗？各是什么： </p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Object o1 = true ? new Integer(1) : new Double(2.0);</span><br><span class="line">System.out.println(o1);</span><br><span class="line"></span><br><span class="line">Object o2;</span><br><span class="line">if (true)</span><br><span class="line">    o2 = new Integer(1);</span><br><span class="line">else</span><br><span class="line">    o2 = new Double(2.0);</span><br><span class="line">System.out.println(o2);</span><br></pre></td></tr></table></figure>
-
-<p>正确答案：</p>
-<p>o1输出的是1.0，o2输出的是1</p>
-<p>这个题是看似在考Object类中的方法，但是实际上，这里的三元运算符涉及到一个自动类型提升的问题</p>
-<p>(表达式1)?(表达式2):(表达式3)</p>
-<p>三元运算的最后结果是这三个表达式中的类型“最高”的一种，在计算的过程个中会有自动类型提升</p>
-<h3 id="第五题"><a href="#第五题" class="headerlink" title="第五题"></a>第五题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void method1() &#123;</span><br><span class="line">  Integer i = new Integer(1);</span><br><span class="line">  Integer j = new Integer(1);</span><br><span class="line">  System.out.println(i == j);</span><br><span class="line">  Integer m = 1;</span><br><span class="line">  Integer n = 1;</span><br><span class="line">  System.out.println(m == n);//</span><br><span class="line">  Integer x = 128;</span><br><span class="line">  Integer y = 128;</span><br><span class="line">  System.out.println(x == y);//</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>第一个输出为false，第二个输出为true，第三个输出为false。</p>
-<p>Integer内部定义了IntegerCache结构，IntegerCache中定义了Integer[],保存了从-128<del>127范围的整数。如果我们使用自动装箱的方式，给Integer赋值的范围在 -128</del>127范围内时，可以直接使用数组中的元素，不用再去new了。目的：提高效率。</p>
-<p>Integer类中的源码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">private static class IntegerCache &#123;</span><br><span class="line">  static final int low = -128;</span><br><span class="line">  static final int high;</span><br><span class="line">  static final Integer cache[];</span><br><span class="line">  static &#123;</span><br><span class="line">    // high value may be configured by property</span><br><span class="line">    int h = 127;</span><br><span class="line">    String integerCacheHighPropValue =</span><br><span class="line">      sun.misc.VM.getSavedProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">    if (integerCacheHighPropValue != null) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        int i = parseInt(integerCacheHighPropValue);</span><br><span class="line">        i = Math.max(i, 127);</span><br><span class="line">        // Maximum array size is Integer.MAX_VALUE</span><br><span class="line">        h = Math.min(i, Integer.MAX_VALUE - (-low) -1);</span><br><span class="line">      &#125; catch( NumberFormatException nfe) &#123;</span><br><span class="line">        // If the property cannot be parsed into an int, ignore it.</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    high = h;</span><br><span class="line"></span><br><span class="line">    cache = new Integer[(high - low) + 1];</span><br><span class="line">    int j = low;</span><br><span class="line">    for(int k = 0; k &lt; cache.length; k++)</span><br><span class="line">      cache[k] = new Integer(j++);</span><br><span class="line"></span><br><span class="line">    // range [-128, 127] must be interned (JLS7 5.1.7)</span><br><span class="line">    assert IntegerCache.high &gt;= 127;</span><br><span class="line">  &#125;</span><br><span class="line">  private IntegerCache() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>算法</category>
-        <category>LeetCode</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -609,8 +609,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -739,8 +739,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -1118,8 +1118,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -1474,8 +1474,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -1941,8 +1941,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -2593,8 +2593,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -3036,8 +3036,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -3082,8 +3082,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -3873,43 +3873,6 @@
       </tags>
   </entry>
   <entry>
-    <title>IntelliJ Idea配置类和方法的注释模板</title>
-    <url>/2020/04/15/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/</url>
-    <content><![CDATA[<h2 id="设置类的注释模板"><a href="#设置类的注释模板" class="headerlink" title="设置类的注释模板"></a>设置类的注释模板</h2><p><img data-src="/images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/SZLA4oF5vn3hMyG.png" alt="image.png"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@Author</span> $&#123;USER&#125;</span></span><br><span class="line"><span class="comment">* <span class="doctag">@Create</span> $&#123;DATE&#125; - $&#123;TIME&#125;</span></span><br><span class="line"><span class="comment">* <span class="doctag">@Description</span> </span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h2 id="设置方法的注释模板"><a href="#设置方法的注释模板" class="headerlink" title="设置方法的注释模板"></a>设置方法的注释模板</h2><ol>
-<li><p><img data-src="/images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/xjalmy8dg3Y5WtQ.png" alt="image.png"></p>
-<p>也可以选2，先新建一个模板组，而这里是直接选的已经有得user组，然后添加template</p>
-</li>
-<li><p>根据自己的习惯给模板取个名字，填在Abbreviation里面</p>
-<p><strong>模板里面开头是没有&#x2F;的</strong>，加上斜杠如果在方法体外写注释，变量名和返回值类型获取不到显示是空白的</p>
-</li>
-<li><p>点下面的define设置模板生成的地方，选择java下面的所有，或者选everywhere也行</p>
-<p><img data-src="/images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/TmfWIo75LX3dqcQ.png"></p>
-</li>
-<li><p>右下角的expand with是模板补全的按键，可以根据自己的习惯改一下</p>
-</li>
-<li><p>把模板贴到文本框里面之后就可以点Edit variables了</p>
-<p><img data-src="/images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/U8CyvX5ElThioqa.png" alt="image.png"></p>
-</li>
-<li><p>保存之后可以再一个方法前面&#x2F;** + 回车就行了，这就是为什么我名字取为**</p>
-</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">**</span><br><span class="line"> * <span class="meta">@Author</span> $USER$</span><br><span class="line"> * <span class="meta">@Description</span> $description$</span><br><span class="line"> * <span class="meta">@Date</span> $date$ $time$</span><br><span class="line"> * <span class="meta">@Param</span> $param$</span><br><span class="line"> * <span class="meta">@return</span> $<span class="keyword">return</span>$</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>软件</category>
-        <category>配置</category>
-      </categories>
-      <tags>
-        <tag>idea</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>spring-boot在IDEA中的热部署</title>
     <url>/2020/03/15/spring-boot%E5%9C%A8IDEA%E4%B8%AD%E7%9A%84%E7%83%AD%E9%83%A8%E7%BD%B2/</url>
     <content><![CDATA[<blockquote>
@@ -3935,8 +3898,8 @@
         <category>配置</category>
       </categories>
       <tags>
-        <tag>idea</tag>
         <tag>spring-boot</tag>
+        <tag>idea</tag>
       </tags>
   </entry>
   <entry>
@@ -4128,6 +4091,22 @@
       </tags>
   </entry>
   <entry>
+    <title>在Ubuntu服务器上安装MySQL8</title>
+    <url>/2020/03/01/%E5%9C%A8Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql8/</url>
+    <content><![CDATA[<p>在<a href="http://dev.mysql.com/downloads/repo/apt/%EF%BC%8C%E4%B8%8B%E8%BD%BD%E4%B8%80%E4%B8%AAmysql-apt-config_0%E2%80%A6%E2%80%A6._all.deb%EF%BC%8C%E4%BC%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%EF%BC%8C%E7%94%A8dpkg">http://dev.mysql.com/downloads/repo/apt/，下载一个mysql-apt-config_0……._all.deb，传到服务器上，用dpkg</a> -i mysql-apt-config_0._…..all.deb安装执行，选择mysql8，OK之后回到终端窗口</p>
+<p>执行sudo apt update</p>
+<p>然后使用sudo apt install mysql-server命令，就会安装MySQL8.0</p>
+]]></content>
+      <categories>
+        <category>软件</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>八路抢答器课程设计报告</title>
     <url>/2020/05/31/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/</url>
     <content><![CDATA[<blockquote>
@@ -4253,22 +4232,6 @@
       </tags>
   </entry>
   <entry>
-    <title>在Ubuntu服务器上安装MySQL8</title>
-    <url>/2020/03/01/%E5%9C%A8Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql8/</url>
-    <content><![CDATA[<p>在<a href="http://dev.mysql.com/downloads/repo/apt/%EF%BC%8C%E4%B8%8B%E8%BD%BD%E4%B8%80%E4%B8%AAmysql-apt-config_0%E2%80%A6%E2%80%A6._all.deb%EF%BC%8C%E4%BC%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%EF%BC%8C%E7%94%A8dpkg">http://dev.mysql.com/downloads/repo/apt/，下载一个mysql-apt-config_0……._all.deb，传到服务器上，用dpkg</a> -i mysql-apt-config_0._…..all.deb安装执行，选择mysql8，OK之后回到终端窗口</p>
-<p>执行sudo apt update</p>
-<p>然后使用sudo apt install mysql-server命令，就会安装MySQL8.0</p>
-]]></content>
-      <categories>
-        <category>软件</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>软件</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>大二下学期总结</title>
     <url>/2020/07/09/%E5%A4%A7%E4%BA%8C%E4%B8%8B%E5%AD%A6%E6%9C%9F%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
@@ -4286,6 +4249,89 @@
       <tags>
         <tag>感悟</tag>
         <tag>总结</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何利用好学生优惠</title>
+    <url>/2020/02/27/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/</url>
+    <content><![CDATA[<p><img data-src="/images/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/loq428.png" alt=" loq428.png"></p>
+<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>本文介绍的是利用学生身份可以享受到的相关学生优惠权益，但也希望各位享受权利的同时不要忘记自己的义务，不要售卖、转手自己的学生优惠资格，使得其他同学无法受益。</p>
+<p><strong>欢迎提交 issue 给我们你发现的实用资源！</strong> | 本文更新于 2019 年 05 月 12 日</p>
+<p>点击 <code>watch</code> 可以得到更新信息哟！</p>
+<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><ul>
+<li>查看、利用、转载、引用本集锦请查看 <a href="https://github.com/ivmm/Student-resources/blob/master/lisence">License</a>。</li>
+<li>一切官方的助学资金等，请咨询学校领导、辅导员、班主任，请勿向陌生账户转账！</li>
+<li>校园借贷风险极高，请谨慎尝试。</li>
+<li>对需要出示身份证、手持身份证的资源请保持谨慎。</li>
+<li>保管好自己的学生证、身份证，不要随意丢弃。</li>
+</ul>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>高考已经过去，你们也将迎来不同于以往的大学生活，大学或许对之前的12年管制式生活来说是解放了，不过你也知道的，解放后面是什么，脱离了父母和老师的管束以及适当的财务自主，你的生活并不会就无比精彩。</p>
+<p>让自己的大学生活过得积极而精彩：</p>
+<ol>
+<li>多参加校级、省级、国家级的比赛，你的比较对象就不会是同班同学了而是同龄人，视野更大。</li>
+<li>多上台讲讲，第一次第二次第三次可能会小心脏砰砰跳，后面真的就见怪不怪了，会自信很多。</li>
+<li>不要再默默无闻了，让老师们注意到你，都大学了上课还不敢举个手？</li>
+<li>做点义工，为社会做点贡献，工作了就真没时间了。</li>
+<li>做人做事记得留个证据，留个发票，留个单子。</li>
+<li>多向长辈们问候问候，偶尔放个长假了就去看看。</li>
+</ol>
+<p>那么就期待着9月开启你的上当受骗之旅吧，不过可能在6月买电脑买手机的时候就已经上当受骗。（逃～）</p>
+<h1 id="学生包"><a href="#学生包" class="headerlink" title="学生包"></a>学生包</h1><p>各类学生优惠项目经过许多年的发展，很多学生包已经不单单只通过 edu 邮箱验证身份了，而且使用 @edu.cn 反而会降低申请成功率。 建议使用学生证、入学通知书等有学院官方标志和日期的工具来证明自己的身份。</p>
+<ul>
+<li>**<a href="https://education.github.com/pack">Github 学生包</a>**，高质量的开发工具集合，并提供 DIgitalocean 的 50美元代金券，免费域名一枚。</li>
+<li>**<a href="https://imagine.microsoft.com/zh-cn/catalog">Microsoft Imagine 学生包</a>**，免费使用微软的开发软件，包括 Windows Server 系统，以及 Azure 学生订阅。</li>
+<li>**<a href="https://aws.amazon.com/cn/education/awseducate/">AWS 学生包</a>**，亚马逊云计算的学生包，可以获得至少 $40 的优惠和教育培训。</li>
+<li>**<a href="http://www.autodesk.com.cn/education/home">Autodesk 学生包</a>**，旗下 AutoCAD , 3DMAX , Maya 等软件，其（教育版）免费试用期可延长至三年。</li>
+<li>**<a href="https://www.jetbrains.com/student/">JetBrains 学生包</a>**，免费使用各类开发工具和集成工具。</li>
+<li>**<a href="https://edu.google.com/products/productivity-tools/">G Suite for Education</a>**，为教育用户提供的谷歌生产力工具套件（大陆不在申请区之内）。</li>
+<li><strong><a href="http://www.lindo.com/index.php?option=com_content&view=article&id=120&Itemid=45">LINGO Educational Research License</a></strong>, LINGO 教育授权，著名线性与非线性求解器，求解优化模型的最佳选择，数学建模必备。</li>
+</ul>
+<h1 id="学生优惠"><a href="#学生优惠" class="headerlink" title="学生优惠"></a>学生优惠</h1><ul>
+<li>**<a href="https://products.office.com/en-us/student?tab=students">Office in Education</a>**，微软家提供的免费 Office 365 教育优惠，中国大多数学校无缘申请。</li>
+<li>**<a href="https://promotion.aliyun.com/ntms/act/campus2018.html?accounttraceid=22aca9b8-8f26-44f2-b514-d97cf21a6654&userCode=oitiwrd3">阿里云+云翼计划</a>**，118元&#x2F;年，阿里云ECS+OSS+域名+机器学习API+Clouder认证。  24岁以下实名认证即可获得，无需验证学生身份!!</li>
+<li>**<a href="https://www.qcloud.com/act/campus">腾讯云+校园计划</a>**，10元一个月的云服务器租用，免费域名、云储存，需要抢购。</li>
+<li>**<a href="https://developer.huaweicloud.com/campus">华为云+云创校园计划</a>**，9元&#x2F;月 24岁及以下免学生认证，实名认证即可购买，需要抢购。</li>
+<li>**<a href="https://cloud.baidu.com/campaign/campus-2018/index.html">百度云启航校园计划</a>**，云服务器半年124元</li>
+<li>**<a href="http://www.apple.com/cn-k12/shop">苹果教育商店</a>**，苹果设备优惠，Music和 Pro APP 优惠，暑假还会有学生优惠大促销。</li>
+<li>**<a href="https://www.microsoftstore.com.cn/student?Icid=StoreNavi_EDU">微软教育商店</a>**，9折购买微软旗下的各种硬件设备。</li>
+<li>**<a href="http://www.onthehub.com/">OnTheHub 教育商店</a>**，PD 和 VMware 的虚拟机优惠，以及更多软件优惠。</li>
+<li>**<a href="https://www.siteground.com/student-hosting.htm">SiteGroud 学生计划</a>**，WP 官方推荐的主机托管商提供 $1.99&#x2F;月 高性能 CP 托管。</li>
+<li>**<a href="https://www.spotify.com/hk-zh/student/">Spotify 学生优惠</a>**，Spotify Premium学生订阅半价优惠。</li>
+<li>**<a href="https://pantheon.io/edu">Pantheon 学生版</a>**，专业高性能网站托管的学生优惠。</li>
+<li>**<a href="http://coupon.dji.com/cn/edu">大疆教育优惠</a>**，大疆产品的教育折扣。</li>
+<li>**<a href="https://todoist.com/education">Todoist教育优惠</a>**，强大的任务、思路整理工具提供半价教育优惠。</li>
+<li>**<a href="https://setapp.com/educational-discount">SetAPP教育优惠</a>**，macOS 应用合集订阅包半价优惠，非常适合MAC学生党，每月4.99刀</li>
+<li><strong><a href="http://app.eagle.cool/forum/topic/5354/%E6%88%91%E6%98%AF%E5%AD%A6%E7%94%9F%E6%88%96%E6%95%99%E5%B8%88-%E6%98%AF%E5%90%A6%E4%BA%AB%E6%9C%89%E4%BC%98%E6%83%A0%E4%BB%B7%E6%A0%BC">Eagle教育优惠</a></strong>, Win&#x2F;Mac系统，设计师图片管理工具，支持试用一个月，原价199，优惠价139，需提供身份和证件信息。优秀的本地图片管理工具，搭配学生版OneDrive进行同步管理，美滋滋。（目前已支持图片、视频、字体等类型文件的管理）</li>
+</ul>
+<h1 id="实用干货"><a href="#实用干货" class="headerlink" title="实用干货"></a>实用干货</h1><ul>
+<li>**<a href="https://creativemarket.com/free-goods">CreativeMarket Free Goods</a>**，每周免费六款设计资源，电商、前端必备。</li>
+<li>**<a href="https://www.axure.com/edu">Axure</a>**， 原型设计工具，产品、运营必备，学生、教师免费。</li>
+<li>**<a href="https://www.adobe.com/cn/products/xd.html">Adobe XD</a>**，原型设计工具，<del>没想到吧我Adobe也有免费的东西啦XD</del> 官网直接提供免费版，奋起直追Mac的Sketch，Win党难得的福利。此外Adobe还提供对XD插件设计的奖励，<a href="https://www.adobe.io/apis/creativecloud/xd.html">可参与设计开发可供XD使用的插件</a>。</li>
+<li>**<a href="http://education.minecraft.net/get-started">Minecraft</a>**， 我的世界教育免费版 ，仅支持邮箱。</li>
+<li>**<a href="http://www.wolfram.com/mathematica/pricing/students-individuals.php">Mathematica</a>**， 现代科学计算软件，3折优惠 50刀，添加购物车后显示。</li>
+<li>**<a href="https://www.tableau.com/zh-cn/academic">Tableau</a>**， 数据可视化分析软件，对学生、教室以及教育组织提供免费使用。</li>
+</ul>
+<h1 id="推荐软件"><a href="#推荐软件" class="headerlink" title="推荐软件"></a>推荐软件</h1><ul>
+<li>**<a href="https://cloudconvert.com/">CloudConvert</a>**，转码神器，格式齐全的在线转码利器。</li>
+<li>**<a href="https://smallpdf.com/">Smallpdf</a>**，专业文档转PDF，PDF转文档神器。</li>
+<li>**<a href="https://github.com/drew-royster/canvasFileSync">Canvas File Sync</a>**，Syncs Canvas-LMS课程文件</li>
+</ul>
+<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><ul>
+<li><strong>少数派：</strong><a href="https://sspai.com/post/39430">在校师生福利：Apple、微软、Adobe 等产品如何通过教育优惠购买</a></li>
+<li><strong>少数派：</strong><a href="https://sspai.com/post/43533">学生专属福利，你可能还不知道这些常用服务其实可以更便宜</a></li>
+</ul>
+<h1 id="相关推荐"><a href="#相关推荐" class="headerlink" title="相关推荐"></a>相关推荐</h1><p><strong>买电脑：</strong> 学生购买电脑多为笔记本，可关注 <a href="http://tieba.baidu.com/f?kw=%E7%AC%94%E8%AE%B0%E6%9C%AC&ie=utf-8">笔记本吧</a><br>如果为台式可关注 显卡吧&#x2F;图拉丁吧&#x2F;电脑吧 等专业硬件社区，或直接关注微信公众号“笔吧评测室”，由笔记本吧吧主和吧务团队运营，质量保证。</p>
+<p><strong>如何科学提问：</strong> 《<a href="http://git.oschina.net/mifar/How-To-Ask-Questions-The-Smart-Way">提问的智慧</a>》 《<a href="https://github.com/octowhale/Stop-Ask-Questions-The-Stupid-Ways/blob/master/README.md">别像弱智一样提问</a>》</p>
+<p><strong>搜索引擎：</strong> 为了你的身体健康、事业有成，请尽量<strong>减少使用百度</strong>的频率。</p>
+<p><strong>PPT 制作：</strong>《<a href="https://www.mf8.biz/ppt-tips/">放 PPT 之前，请你注意这一些！</a>》</p>
+<p>原作者博客：<a href="https://www.mf8.biz/">https://www.mf8.biz/</a></p>
+]]></content>
+      <categories>
+        <category>羊毛</category>
+      </categories>
+      <tags>
+        <tag>羊毛</tag>
+        <tag>转载</tag>
       </tags>
   </entry>
   <entry>
@@ -4434,128 +4480,6 @@
       </tags>
   </entry>
   <entry>
-    <title>如何利用好学生优惠</title>
-    <url>/2020/02/27/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/</url>
-    <content><![CDATA[<p><img data-src="/images/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/loq428.png" alt=" loq428.png"></p>
-<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>本文介绍的是利用学生身份可以享受到的相关学生优惠权益，但也希望各位享受权利的同时不要忘记自己的义务，不要售卖、转手自己的学生优惠资格，使得其他同学无法受益。</p>
-<p><strong>欢迎提交 issue 给我们你发现的实用资源！</strong> | 本文更新于 2019 年 05 月 12 日</p>
-<p>点击 <code>watch</code> 可以得到更新信息哟！</p>
-<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><ul>
-<li>查看、利用、转载、引用本集锦请查看 <a href="https://github.com/ivmm/Student-resources/blob/master/lisence">License</a>。</li>
-<li>一切官方的助学资金等，请咨询学校领导、辅导员、班主任，请勿向陌生账户转账！</li>
-<li>校园借贷风险极高，请谨慎尝试。</li>
-<li>对需要出示身份证、手持身份证的资源请保持谨慎。</li>
-<li>保管好自己的学生证、身份证，不要随意丢弃。</li>
-</ul>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>高考已经过去，你们也将迎来不同于以往的大学生活，大学或许对之前的12年管制式生活来说是解放了，不过你也知道的，解放后面是什么，脱离了父母和老师的管束以及适当的财务自主，你的生活并不会就无比精彩。</p>
-<p>让自己的大学生活过得积极而精彩：</p>
-<ol>
-<li>多参加校级、省级、国家级的比赛，你的比较对象就不会是同班同学了而是同龄人，视野更大。</li>
-<li>多上台讲讲，第一次第二次第三次可能会小心脏砰砰跳，后面真的就见怪不怪了，会自信很多。</li>
-<li>不要再默默无闻了，让老师们注意到你，都大学了上课还不敢举个手？</li>
-<li>做点义工，为社会做点贡献，工作了就真没时间了。</li>
-<li>做人做事记得留个证据，留个发票，留个单子。</li>
-<li>多向长辈们问候问候，偶尔放个长假了就去看看。</li>
-</ol>
-<p>那么就期待着9月开启你的上当受骗之旅吧，不过可能在6月买电脑买手机的时候就已经上当受骗。（逃～）</p>
-<h1 id="学生包"><a href="#学生包" class="headerlink" title="学生包"></a>学生包</h1><p>各类学生优惠项目经过许多年的发展，很多学生包已经不单单只通过 edu 邮箱验证身份了，而且使用 @edu.cn 反而会降低申请成功率。 建议使用学生证、入学通知书等有学院官方标志和日期的工具来证明自己的身份。</p>
-<ul>
-<li>**<a href="https://education.github.com/pack">Github 学生包</a>**，高质量的开发工具集合，并提供 DIgitalocean 的 50美元代金券，免费域名一枚。</li>
-<li>**<a href="https://imagine.microsoft.com/zh-cn/catalog">Microsoft Imagine 学生包</a>**，免费使用微软的开发软件，包括 Windows Server 系统，以及 Azure 学生订阅。</li>
-<li>**<a href="https://aws.amazon.com/cn/education/awseducate/">AWS 学生包</a>**，亚马逊云计算的学生包，可以获得至少 $40 的优惠和教育培训。</li>
-<li>**<a href="http://www.autodesk.com.cn/education/home">Autodesk 学生包</a>**，旗下 AutoCAD , 3DMAX , Maya 等软件，其（教育版）免费试用期可延长至三年。</li>
-<li>**<a href="https://www.jetbrains.com/student/">JetBrains 学生包</a>**，免费使用各类开发工具和集成工具。</li>
-<li>**<a href="https://edu.google.com/products/productivity-tools/">G Suite for Education</a>**，为教育用户提供的谷歌生产力工具套件（大陆不在申请区之内）。</li>
-<li><strong><a href="http://www.lindo.com/index.php?option=com_content&view=article&id=120&Itemid=45">LINGO Educational Research License</a></strong>, LINGO 教育授权，著名线性与非线性求解器，求解优化模型的最佳选择，数学建模必备。</li>
-</ul>
-<h1 id="学生优惠"><a href="#学生优惠" class="headerlink" title="学生优惠"></a>学生优惠</h1><ul>
-<li>**<a href="https://products.office.com/en-us/student?tab=students">Office in Education</a>**，微软家提供的免费 Office 365 教育优惠，中国大多数学校无缘申请。</li>
-<li>**<a href="https://promotion.aliyun.com/ntms/act/campus2018.html?accounttraceid=22aca9b8-8f26-44f2-b514-d97cf21a6654&userCode=oitiwrd3">阿里云+云翼计划</a>**，118元&#x2F;年，阿里云ECS+OSS+域名+机器学习API+Clouder认证。  24岁以下实名认证即可获得，无需验证学生身份!!</li>
-<li>**<a href="https://www.qcloud.com/act/campus">腾讯云+校园计划</a>**，10元一个月的云服务器租用，免费域名、云储存，需要抢购。</li>
-<li>**<a href="https://developer.huaweicloud.com/campus">华为云+云创校园计划</a>**，9元&#x2F;月 24岁及以下免学生认证，实名认证即可购买，需要抢购。</li>
-<li>**<a href="https://cloud.baidu.com/campaign/campus-2018/index.html">百度云启航校园计划</a>**，云服务器半年124元</li>
-<li>**<a href="http://www.apple.com/cn-k12/shop">苹果教育商店</a>**，苹果设备优惠，Music和 Pro APP 优惠，暑假还会有学生优惠大促销。</li>
-<li>**<a href="https://www.microsoftstore.com.cn/student?Icid=StoreNavi_EDU">微软教育商店</a>**，9折购买微软旗下的各种硬件设备。</li>
-<li>**<a href="http://www.onthehub.com/">OnTheHub 教育商店</a>**，PD 和 VMware 的虚拟机优惠，以及更多软件优惠。</li>
-<li>**<a href="https://www.siteground.com/student-hosting.htm">SiteGroud 学生计划</a>**，WP 官方推荐的主机托管商提供 $1.99&#x2F;月 高性能 CP 托管。</li>
-<li>**<a href="https://www.spotify.com/hk-zh/student/">Spotify 学生优惠</a>**，Spotify Premium学生订阅半价优惠。</li>
-<li>**<a href="https://pantheon.io/edu">Pantheon 学生版</a>**，专业高性能网站托管的学生优惠。</li>
-<li>**<a href="http://coupon.dji.com/cn/edu">大疆教育优惠</a>**，大疆产品的教育折扣。</li>
-<li>**<a href="https://todoist.com/education">Todoist教育优惠</a>**，强大的任务、思路整理工具提供半价教育优惠。</li>
-<li>**<a href="https://setapp.com/educational-discount">SetAPP教育优惠</a>**，macOS 应用合集订阅包半价优惠，非常适合MAC学生党，每月4.99刀</li>
-<li><strong><a href="http://app.eagle.cool/forum/topic/5354/%E6%88%91%E6%98%AF%E5%AD%A6%E7%94%9F%E6%88%96%E6%95%99%E5%B8%88-%E6%98%AF%E5%90%A6%E4%BA%AB%E6%9C%89%E4%BC%98%E6%83%A0%E4%BB%B7%E6%A0%BC">Eagle教育优惠</a></strong>, Win&#x2F;Mac系统，设计师图片管理工具，支持试用一个月，原价199，优惠价139，需提供身份和证件信息。优秀的本地图片管理工具，搭配学生版OneDrive进行同步管理，美滋滋。（目前已支持图片、视频、字体等类型文件的管理）</li>
-</ul>
-<h1 id="实用干货"><a href="#实用干货" class="headerlink" title="实用干货"></a>实用干货</h1><ul>
-<li>**<a href="https://creativemarket.com/free-goods">CreativeMarket Free Goods</a>**，每周免费六款设计资源，电商、前端必备。</li>
-<li>**<a href="https://www.axure.com/edu">Axure</a>**， 原型设计工具，产品、运营必备，学生、教师免费。</li>
-<li>**<a href="https://www.adobe.com/cn/products/xd.html">Adobe XD</a>**，原型设计工具，<del>没想到吧我Adobe也有免费的东西啦XD</del> 官网直接提供免费版，奋起直追Mac的Sketch，Win党难得的福利。此外Adobe还提供对XD插件设计的奖励，<a href="https://www.adobe.io/apis/creativecloud/xd.html">可参与设计开发可供XD使用的插件</a>。</li>
-<li>**<a href="http://education.minecraft.net/get-started">Minecraft</a>**， 我的世界教育免费版 ，仅支持邮箱。</li>
-<li>**<a href="http://www.wolfram.com/mathematica/pricing/students-individuals.php">Mathematica</a>**， 现代科学计算软件，3折优惠 50刀，添加购物车后显示。</li>
-<li>**<a href="https://www.tableau.com/zh-cn/academic">Tableau</a>**， 数据可视化分析软件，对学生、教室以及教育组织提供免费使用。</li>
-</ul>
-<h1 id="推荐软件"><a href="#推荐软件" class="headerlink" title="推荐软件"></a>推荐软件</h1><ul>
-<li>**<a href="https://cloudconvert.com/">CloudConvert</a>**，转码神器，格式齐全的在线转码利器。</li>
-<li>**<a href="https://smallpdf.com/">Smallpdf</a>**，专业文档转PDF，PDF转文档神器。</li>
-<li>**<a href="https://github.com/drew-royster/canvasFileSync">Canvas File Sync</a>**，Syncs Canvas-LMS课程文件</li>
-</ul>
-<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><ul>
-<li><strong>少数派：</strong><a href="https://sspai.com/post/39430">在校师生福利：Apple、微软、Adobe 等产品如何通过教育优惠购买</a></li>
-<li><strong>少数派：</strong><a href="https://sspai.com/post/43533">学生专属福利，你可能还不知道这些常用服务其实可以更便宜</a></li>
-</ul>
-<h1 id="相关推荐"><a href="#相关推荐" class="headerlink" title="相关推荐"></a>相关推荐</h1><p><strong>买电脑：</strong> 学生购买电脑多为笔记本，可关注 <a href="http://tieba.baidu.com/f?kw=%E7%AC%94%E8%AE%B0%E6%9C%AC&ie=utf-8">笔记本吧</a><br>如果为台式可关注 显卡吧&#x2F;图拉丁吧&#x2F;电脑吧 等专业硬件社区，或直接关注微信公众号“笔吧评测室”，由笔记本吧吧主和吧务团队运营，质量保证。</p>
-<p><strong>如何科学提问：</strong> 《<a href="http://git.oschina.net/mifar/How-To-Ask-Questions-The-Smart-Way">提问的智慧</a>》 《<a href="https://github.com/octowhale/Stop-Ask-Questions-The-Stupid-Ways/blob/master/README.md">别像弱智一样提问</a>》</p>
-<p><strong>搜索引擎：</strong> 为了你的身体健康、事业有成，请尽量<strong>减少使用百度</strong>的频率。</p>
-<p><strong>PPT 制作：</strong>《<a href="https://www.mf8.biz/ppt-tips/">放 PPT 之前，请你注意这一些！</a>》</p>
-<p>原作者博客：<a href="https://www.mf8.biz/">https://www.mf8.biz/</a></p>
-]]></content>
-      <categories>
-        <category>羊毛</category>
-      </categories>
-      <tags>
-        <tag>羊毛</tag>
-        <tag>转载</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>操作系统--操作系统的形成与发展</title>
-    <url>/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%A2%E6%88%90%E4%B8%8E%E5%8F%91%E5%B1%95/</url>
-    <content><![CDATA[<h2 id="操作系统的形成时期"><a href="#操作系统的形成时期" class="headerlink" title="操作系统的形成时期"></a>操作系统的形成时期</h2><h3 id="手动操作时期"><a href="#手动操作时期" class="headerlink" title="手动操作时期"></a>手动操作时期</h3><img data-src="/images/操作系统的形成与发展/vuMCXHTLqJBOh5t.png" alt="image.png" style="zoom:80%;" />
-
-<h4 id="存在缺点"><a href="#存在缺点" class="headerlink" title="存在缺点"></a>存在缺点</h4><ol>
-<li><p>用户独占全部计算机资源</p>
-</li>
-<li><p>CPU等待人工操作</p>
-</li>
-<li><p>CPU与I&#x2F;O设备串行操作</p>
-</li>
-</ol>
-<h3 id="监控程序阶段（早起批处理阶段）"><a href="#监控程序阶段（早起批处理阶段）" class="headerlink" title="监控程序阶段（早起批处理阶段）"></a>监控程序阶段（早起批处理阶段）</h3><img data-src="/images/操作系统的形成与发展/4QMJfoxRIXGiu9C.png" alt="单道批处理系统流程图" style="zoom:67%;" />
-
-<p>单道批处理系统流程图  </p>
-<span id="more"></span>
-
-<h2 id="操作系统的成熟阶段"><a href="#操作系统的成熟阶段" class="headerlink" title="操作系统的成熟阶段"></a>操作系统的成熟阶段</h2><h3 id="多道批处理系统"><a href="#多道批处理系统" class="headerlink" title="多道批处理系统"></a>多道批处理系统</h3><h4 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h4><ol>
-<li>程序浮动与存储保护问题</li>
-<li>CPU的调度和管理问题</li>
-<li>其他资源的管理和调度问题</li>
-</ol>
-<h3 id="分时操作系统"><a href="#分时操作系统" class="headerlink" title="分时操作系统"></a>分时操作系统</h3><h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h4><ol>
-<li>人机交互</li>
-<li>共享主机</li>
-<li>便于用户上机</li>
-</ol>
-<img data-src="/images/操作系统的形成与发展/vrjo1l8dPaFKY7c.png" alt="image.png" style="zoom:67%;" />
-
-<h2 id="进一步发展时期"><a href="#进一步发展时期" class="headerlink" title="进一步发展时期"></a>进一步发展时期</h2>]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>操作系统--操作系统的概述</title>
     <url>/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%A6%82%E8%BF%B0/</url>
     <content><![CDATA[<h3 id="计算机的组成"><a href="#计算机的组成" class="headerlink" title="计算机的组成"></a>计算机的组成</h3><p>硬件+软件</p>
@@ -4596,6 +4520,45 @@
 </li>
 </ol>
 ]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统--操作系统的形成与发展</title>
+    <url>/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%A2%E6%88%90%E4%B8%8E%E5%8F%91%E5%B1%95/</url>
+    <content><![CDATA[<h2 id="操作系统的形成时期"><a href="#操作系统的形成时期" class="headerlink" title="操作系统的形成时期"></a>操作系统的形成时期</h2><h3 id="手动操作时期"><a href="#手动操作时期" class="headerlink" title="手动操作时期"></a>手动操作时期</h3><img data-src="/images/操作系统的形成与发展/vuMCXHTLqJBOh5t.png" alt="image.png" style="zoom:80%;" />
+
+<h4 id="存在缺点"><a href="#存在缺点" class="headerlink" title="存在缺点"></a>存在缺点</h4><ol>
+<li><p>用户独占全部计算机资源</p>
+</li>
+<li><p>CPU等待人工操作</p>
+</li>
+<li><p>CPU与I&#x2F;O设备串行操作</p>
+</li>
+</ol>
+<h3 id="监控程序阶段（早起批处理阶段）"><a href="#监控程序阶段（早起批处理阶段）" class="headerlink" title="监控程序阶段（早起批处理阶段）"></a>监控程序阶段（早起批处理阶段）</h3><img data-src="/images/操作系统的形成与发展/4QMJfoxRIXGiu9C.png" alt="单道批处理系统流程图" style="zoom:67%;" />
+
+<p>单道批处理系统流程图  </p>
+<span id="more"></span>
+
+<h2 id="操作系统的成熟阶段"><a href="#操作系统的成熟阶段" class="headerlink" title="操作系统的成熟阶段"></a>操作系统的成熟阶段</h2><h3 id="多道批处理系统"><a href="#多道批处理系统" class="headerlink" title="多道批处理系统"></a>多道批处理系统</h3><h4 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h4><ol>
+<li>程序浮动与存储保护问题</li>
+<li>CPU的调度和管理问题</li>
+<li>其他资源的管理和调度问题</li>
+</ol>
+<h3 id="分时操作系统"><a href="#分时操作系统" class="headerlink" title="分时操作系统"></a>分时操作系统</h3><h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h4><ol>
+<li>人机交互</li>
+<li>共享主机</li>
+<li>便于用户上机</li>
+</ol>
+<img data-src="/images/操作系统的形成与发展/vrjo1l8dPaFKY7c.png" alt="image.png" style="zoom:67%;" />
+
+<h2 id="进一步发展时期"><a href="#进一步发展时期" class="headerlink" title="进一步发展时期"></a>进一步发展时期</h2>]]></content>
       <categories>
         <category>学习笔记</category>
         <category>操作系统</category>
@@ -4928,6 +4891,43 @@
       <tags>
         <tag>配置</tag>
         <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>IntelliJ Idea配置类和方法的注释模板</title>
+    <url>/2020/04/15/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/</url>
+    <content><![CDATA[<h2 id="设置类的注释模板"><a href="#设置类的注释模板" class="headerlink" title="设置类的注释模板"></a>设置类的注释模板</h2><p><img data-src="/images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/SZLA4oF5vn3hMyG.png" alt="image.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@Author</span> $&#123;USER&#125;</span></span><br><span class="line"><span class="comment">* <span class="doctag">@Create</span> $&#123;DATE&#125; - $&#123;TIME&#125;</span></span><br><span class="line"><span class="comment">* <span class="doctag">@Description</span> </span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="设置方法的注释模板"><a href="#设置方法的注释模板" class="headerlink" title="设置方法的注释模板"></a>设置方法的注释模板</h2><ol>
+<li><p><img data-src="/images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/xjalmy8dg3Y5WtQ.png" alt="image.png"></p>
+<p>也可以选2，先新建一个模板组，而这里是直接选的已经有得user组，然后添加template</p>
+</li>
+<li><p>根据自己的习惯给模板取个名字，填在Abbreviation里面</p>
+<p><strong>模板里面开头是没有&#x2F;的</strong>，加上斜杠如果在方法体外写注释，变量名和返回值类型获取不到显示是空白的</p>
+</li>
+<li><p>点下面的define设置模板生成的地方，选择java下面的所有，或者选everywhere也行</p>
+<p><img data-src="/images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/TmfWIo75LX3dqcQ.png"></p>
+</li>
+<li><p>右下角的expand with是模板补全的按键，可以根据自己的习惯改一下</p>
+</li>
+<li><p>把模板贴到文本框里面之后就可以点Edit variables了</p>
+<p><img data-src="/images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/U8CyvX5ElThioqa.png" alt="image.png"></p>
+</li>
+<li><p>保存之后可以再一个方法前面&#x2F;** + 回车就行了，这就是为什么我名字取为**</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">**</span><br><span class="line"> * <span class="meta">@Author</span> $USER$</span><br><span class="line"> * <span class="meta">@Description</span> $description$</span><br><span class="line"> * <span class="meta">@Date</span> $date$ $time$</span><br><span class="line"> * <span class="meta">@Param</span> $param$</span><br><span class="line"> * <span class="meta">@return</span> $<span class="keyword">return</span>$</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>软件</category>
+        <category>配置</category>
+      </categories>
+      <tags>
+        <tag>idea</tag>
       </tags>
   </entry>
 </search>
