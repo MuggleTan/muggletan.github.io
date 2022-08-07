@@ -258,7 +258,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-06 19:59:06" itemprop="dateModified" datetime="2022-08-06T19:59:06+08:00">2022-08-06</time>
+      <time title="修改时间：2022-08-06 20:36:27" itemprop="dateModified" datetime="2022-08-06T20:36:27+08:00">2022-08-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -962,9 +962,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2020-11-23 21:25:44 / 修改时间：22:35:16" itemprop="dateCreated datePublished" datetime="2020-11-23T21:25:44+08:00">2020-11-23</time>
+      <time title="创建时间：2020-11-23 21:25:44" itemprop="dateCreated datePublished" datetime="2020-11-23T21:25:44+08:00">2020-11-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-07 18:32:01" itemprop="dateModified" datetime="2022-08-07T18:32:01+08:00">2022-08-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -990,28 +996,26 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="一、Ubuntu安装MySQL8"><a href="#一、Ubuntu安装MySQL8" class="headerlink" title="一、Ubuntu安装MySQL8"></a>一、Ubuntu安装MySQL8</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install mysql-server</span><br></pre></td></tr></table></figure>
+          <h2 id="Ubuntu安装MySQL8"><a href="#Ubuntu安装MySQL8" class="headerlink" title="Ubuntu安装MySQL8"></a>Ubuntu安装MySQL8</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install mysql-server</span><br></pre></td></tr></table></figure>
 
 
 
-<h2 id="二、修改配置"><a href="#二、修改配置" class="headerlink" title="二、修改配置"></a>二、修改配置</h2><ol>
-<li><p>登录MySQL</p>
+<h2 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h2><p>登录MySQL</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mysql</span><br></pre></td></tr></table></figure>
 
 <p>可以直接登录，只要输入账户密码，登录之后再改密码</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">show databases;</span><br><span class="line"></span><br><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;你的新密码&#x27;;</span><br></pre></td></tr></table></figure>
 
-
-</li>
-<li><p>更新域属性，’%’表示任何方式访问</p>
+<p>更新域属性，’%’表示任何方式访问</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update user set host=&#x27;%&#x27; where user =&#x27;root&#x27;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>执行以上语句之后再执行</p>
+
+<p>执行以上语句之后再执行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>再执行授权语句</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27;WITH GRANT OPTION;</span><br></pre></td></tr></table></figure></li>
-</ol>
+
+<p>再执行授权语句</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27;WITH GRANT OPTION;</span><br></pre></td></tr></table></figure>
+
+<p>若还是有问题，则将<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>文件中的<code>bind-address</code>注释掉。</p>
 
       
     </div>
