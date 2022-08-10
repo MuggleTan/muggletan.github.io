@@ -32,7 +32,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://muggletan.github.io/images/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%AD%E6%96%AD/RXkpNUiVHOa2Y48.png">
 <meta property="article:published_time" content="2020-03-03T09:21:39.000Z">
-<meta property="article:modified_time" content="2021-09-18T13:37:52.256Z">
+<meta property="article:modified_time" content="2022-08-10T02:57:39.669Z">
 <meta property="article:author" content="muggle">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -264,7 +264,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2021-09-18 21:37:52" itemprop="dateModified" datetime="2021-09-18T21:37:52+08:00">2021-09-18</time>
+      <time title="修改时间：2022-08-10 10:57:39" itemprop="dateModified" datetime="2022-08-10T10:57:39+08:00">2022-08-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -324,7 +324,21 @@
 <li>是多道程序并发执行的推动力</li>
 <li>操作系统是由中断驱动的</li>
 </ol>
-<h2 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">A[中断]--&gt;B[外中断]</span><br><span class="line">B--&gt;D[可屏蔽中断]</span><br><span class="line">B--&gt;E[不可屏蔽中断]</span><br><span class="line">A--&gt;C[内中断]</span><br><span class="line">C--&gt;F[自愿中断]</span><br><span class="line">F--&gt;G[系统调用]</span><br><span class="line">F--&gt;H[缺页中断]</span><br><span class="line">F--&gt;I[断点指令]</span><br><span class="line">F--&gt;J[其他程序性异常]</span><br><span class="line">C--&gt;K[强迫性中断]</span><br><span class="line">K--&gt;O[硬件故障中断]</span><br><span class="line">K--&gt;L[程序性中断]</span><br><span class="line">K--&gt;M[输入输出中断]</span><br><span class="line">K--&gt;N[外部中断]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h2><pre class="mermaid">graph LR
+A[中断]-->B[外中断]
+B-->D[可屏蔽中断]
+B-->E[不可屏蔽中断]
+A-->C[内中断]
+C-->F[自愿中断]
+F-->G[系统调用]
+F-->H[缺页中断]
+F-->I[断点指令]
+F-->J[其他程序性异常]
+C-->K[强迫性中断]
+K-->O[硬件故障中断]
+K-->L[程序性中断]
+K-->M[输入输出中断]
+K-->N[外部中断]</pre>
 
 <ul>
 <li><p>内中断和外中断：中断来源是否来自计算机内部</p>
@@ -340,7 +354,13 @@
 <li><p>自愿性中断：用户程序在使用中请求操作系统提供某种功能服务，通过执行一条访管指令，称为访管中断或陷阱，是当前运行程序所期待的，用户程序对操作系统的某种需求</p>
 </li>
 </ul>
-<h2 id="中断的响应过程"><a href="#中断的响应过程" class="headerlink" title="中断的响应过程"></a>中断的响应过程</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TB</span><br><span class="line">A[发出中断信号]--&gt;B[CPU完成当前指令的执行]</span><br><span class="line">B--&gt;C[CPU发送中断答应信号]--&gt;D[关中断]</span><br><span class="line">D--&gt;E[CPU将PWS,PC和CS压入核心栈中]</span><br><span class="line">E--&gt;F[将中断处理程序的入口地址送入IP和CS]</span><br><span class="line">F--&gt;G[保存剩余的CPU状态信息]--&gt;H[开中断]--&gt;I[处理中断]</span><br><span class="line">I--&gt;J[恢复CPU的状态信息]--&gt;K[恢复中断钱的PWS,PC和CS]</span><br></pre></td></tr></table></figure>
+<h2 id="中断的响应过程"><a href="#中断的响应过程" class="headerlink" title="中断的响应过程"></a>中断的响应过程</h2><pre class="mermaid">graph TB
+A[发出中断信号]-->B[CPU完成当前指令的执行]
+B-->C[CPU发送中断答应信号]-->D[关中断]
+D-->E[CPU将PWS,PC和CS压入核心栈中]
+E-->F[将中断处理程序的入口地址送入IP和CS]
+F-->G[保存剩余的CPU状态信息]-->H[开中断]-->I[处理中断]
+I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
 
 <h3 id="简单概括"><a href="#简单概括" class="headerlink" title="简单概括"></a>简单概括</h3><ol>
 <li><p>发现中断源</p>
@@ -479,7 +499,7 @@
   </script>
 
   
-
+  
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -492,6 +512,8 @@
 <script src="/js/third-party/search/local-search.js"></script>
 
 
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.3/mermaid.min.js","integrity":"sha256-TIYL00Rhw/8WaoUhYTLX9SKIEFdXxg+yMWSLVUbhiLg="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
 
   <script src="/js/third-party/fancybox.js"></script>
 

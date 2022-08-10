@@ -33,8 +33,8 @@
 <meta property="article:published_time" content="2020-04-14T12:15:55.000Z">
 <meta property="article:modified_time" content="2020-05-06T13:01:52.183Z">
 <meta property="article:author" content="muggle">
-<meta property="article:tag" content="Java">
 <meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
 
 
@@ -446,7 +446,10 @@
 <ol>
 <li><p>自动类型提升：</p>
 <p> 结论：当容量小的数据类型的变量与容量大的数据类型的变量做运算时，结果自动提升为容量大的数据类型。</p>
-  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">char --&gt; int</span><br><span class="line">byte --&gt; int</span><br><span class="line">short --&gt; int --&gt; long --&gt; float --&gt; double</span><br></pre></td></tr></table></figure>
+  <pre class="mermaid">   graph LR
+char --> int
+byte --> int
+short --> int --> long --> float --> double</pre>
 
 <p> 特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。</p>
 </li>
@@ -686,8 +689,8 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/Java/" rel="tag"># Java</a>
               <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># 学习笔记</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
           </div>
 
         
@@ -763,7 +766,7 @@
   </script>
 
   
-
+  
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -776,6 +779,8 @@
 <script src="/js/third-party/search/local-search.js"></script>
 
 
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.3/mermaid.min.js","integrity":"sha256-TIYL00Rhw/8WaoUhYTLX9SKIEFdXxg+yMWSLVUbhiLg="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
 
   <script src="/js/third-party/fancybox.js"></script>
 
