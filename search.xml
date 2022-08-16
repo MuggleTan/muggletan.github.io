@@ -412,6 +412,32 @@
       </tags>
   </entry>
   <entry>
+    <title>I217-V在openwrt下大流量断网问题</title>
+    <url>/2022/07/15/I217-V%E5%9C%A8openwrt%E8%BD%AF%E8%B7%AF%E7%94%B1%E4%B8%8B%E5%A4%A7%E6%B5%81%E9%87%8F%E6%96%AD%E7%BD%91%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近跟着up司波图在玩一个AIO（All In One）服务器，也就是将软路由，NAS系统以及影音系统都集成到一个物理系统中，我用的是之前买的一个M73的小主机，里面的mini-PCIE插槽扩展了一个螃蟹RTL8111的千兆网卡，主机自带的是Intel的I217-V千兆网卡。</p>
+<p>经过一天的使用下来发现每次大流量下载或上传时，openwrt都会断一下，开始还以为是openwrt系统的问题，后来经过一番资料搜索，发现是pve下面的这张Intel网卡有问题，查看了pve系统的日志，发现了如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pve kernel: e1000e 0000:00:19.0 eno1: Detected Hardware Unit Hang:</span><br></pre></td></tr></table></figure>
+<p>这和搜索到的情况一样，于是就确定是这张Intel网卡的问题。</p>
+<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>造成该问题的原因是Intel网卡固件的bug</p>
+<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>在pve虚拟机下关掉网卡的offload功能</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ethtool -K &lt;网卡编号&gt; tx off rx off &gt;/tmp/e1000e.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+
+<p>为了方便，不需要每次重启虚拟机之后都手动来关掉，这里设置了一个自启动脚本，原理是pve虚拟机每次启动的呃时候都会扫描<code>/etc/profile.d</code>下面的<code>.sh</code>文件，所以办法很简单，在改文件夹下面新建一个e1000e.sh的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/profile.d/e1000e.sh</span><br></pre></td></tr></table></figure>
+<p>然后填入上面的命令即可</p>
+<p>参考链接：</p>
+<p><a href="https://blog.csdn.net/wudics/article/details/124402110">解决在x86平台装openwrt旁路由大流量断网问题（intel网卡驱动bug问题）</a></p>
+<p><a href="https://blog.csdn.net/sxyllxy/article/details/110631505">openWRT在M93p上出现的Detected Hardware Unit Hang</a></p>
+]]></content>
+      <categories>
+        <category>软路由</category>
+      </categories>
+      <tags>
+        <tag>软路由</tag>
+        <tag>配置</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java中看似简单实际很坑的题目</title>
     <url>/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/</url>
     <content><![CDATA[<h3 id="第一题（貌似是考察方法的参数传递）"><a href="#第一题（貌似是考察方法的参数传递）" class="headerlink" title="第一题（貌似是考察方法的参数传递）"></a>第一题（貌似是考察方法的参数传递）</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 20;</span><br><span class="line">    method(a,b);//在调用method()方法之后输出a = 100,b = 200</span><br><span class="line">    System.out.println(&quot;a = &quot; + a);</span><br><span class="line">    System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  &#125;</span><br><span class="line">  static void method(int a,int b)&#123;</span><br><span class="line">    //代码编写处</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -472,32 +498,6 @@
       </categories>
       <tags>
         <tag>java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>I217-V在openwrt下大流量断网问题</title>
-    <url>/2022/07/15/I217-V%E5%9C%A8openwrt%E8%BD%AF%E8%B7%AF%E7%94%B1%E4%B8%8B%E5%A4%A7%E6%B5%81%E9%87%8F%E6%96%AD%E7%BD%91%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近跟着up司波图在玩一个AIO（All In One）服务器，也就是将软路由，NAS系统以及影音系统都集成到一个物理系统中，我用的是之前买的一个M73的小主机，里面的mini-PCIE插槽扩展了一个螃蟹RTL8111的千兆网卡，主机自带的是Intel的I217-V千兆网卡。</p>
-<p>经过一天的使用下来发现每次大流量下载或上传时，openwrt都会断一下，开始还以为是openwrt系统的问题，后来经过一番资料搜索，发现是pve下面的这张Intel网卡有问题，查看了pve系统的日志，发现了如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pve kernel: e1000e 0000:00:19.0 eno1: Detected Hardware Unit Hang:</span><br></pre></td></tr></table></figure>
-<p>这和搜索到的情况一样，于是就确定是这张Intel网卡的问题。</p>
-<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>造成该问题的原因是Intel网卡固件的bug</p>
-<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>在pve虚拟机下关掉网卡的offload功能</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ethtool -K &lt;网卡编号&gt; tx off rx off &gt;/tmp/e1000e.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
-
-<p>为了方便，不需要每次重启虚拟机之后都手动来关掉，这里设置了一个自启动脚本，原理是pve虚拟机每次启动的呃时候都会扫描<code>/etc/profile.d</code>下面的<code>.sh</code>文件，所以办法很简单，在改文件夹下面新建一个e1000e.sh的文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/profile.d/e1000e.sh</span><br></pre></td></tr></table></figure>
-<p>然后填入上面的命令即可</p>
-<p>参考链接：</p>
-<p><a href="https://blog.csdn.net/wudics/article/details/124402110">解决在x86平台装openwrt旁路由大流量断网问题（intel网卡驱动bug问题）</a></p>
-<p><a href="https://blog.csdn.net/sxyllxy/article/details/110631505">openWRT在M93p上出现的Detected Hardware Unit Hang</a></p>
-]]></content>
-      <categories>
-        <category>软路由</category>
-      </categories>
-      <tags>
-        <tag>软路由</tag>
-        <tag>配置</tag>
       </tags>
   </entry>
   <entry>
@@ -758,8 +758,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -888,367 +888,8 @@
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java基础知识总结（上）</title>
-    <url>/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="Java中的注释"><a href="#Java中的注释" class="headerlink" title="Java中的注释"></a>Java中的注释</h2><ol>
-<li><p>单行注释   &#x2F;&#x2F;</p>
-</li>
-<li><p>多行注释  &#x2F;*   *&#x2F;</p>
-<p>单行注释和多行注释的作用：</p>
-<p>① 对所写的程序进行解释说明，增强可读性。方便自己，方便别人</p>
-<p>② 调试所写的代码</p>
-</li>
-<li><p>文档注释  &#x2F;**   *&#x2F;</p>
-<p>注释内容可以被JDK提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档。</p>
-<hr>
-</li>
-</ol>
-<h2 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h2><ol>
-<li><p>标识符：凡是自己可以起名字的地方都叫标识符。</p>
-<p>  比如：类名、变量名、方法名、接口名、包名…</p>
-</li>
-<li><p>标识符的命名规则：–&gt; 如果不遵守如下的规则，编译不通过！</p>
-<p>① 由26个英文字母大小写，0-9 ，_或 $ 组成 </p>
-<p>②数字不可以开头。</p>
-<p>③不可以使用关键字和保留字，但能包含关键字和保留字。</p>
-<p>④Java中严格区分大小写，长度无限制。</p>
-<p>⑤标识符不能包含空格。</p>
-</li>
-<li><p>Java中的名称命名规范： —&gt;如果不遵守如下的规范，编译可以通过！</p>
-<p>包名：多单词组成时所有字母都小写：xxxyyyzzz</p>
-<p>类名、接口名：多单词组成时，所有单词的首字母大写：XxxYyyZzz</p>
-<p>变量名、方法名：多单词组成时，第一个单词首字母小写，第二个单词开始每个单词首字母大写：xxxYyyZzz</p>
-<p>常量名：所有字母都大写。多单词时每个单词用下划线连接：XXX_YYY_ZZZ</p>
-</li>
-<li><p>注意1：在起名字时，为了提高阅读性，要尽量有意义，“见名知意”。</p>
-<p>注意2：java采用unicode字符集，因此标识符也可以使用汉字声明，但是不建议使用。 </p>
-<hr>
-</li>
-</ol>
-<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><ol>
-<li><p>变量按照数据类型来分：<br>a. 基本数据类型：</p>
-<p>​    整型：byte \ short \ int \ long</p>
-<p>​    浮点型：float \ double</p>
-<p>​    字符型：char</p>
-<p>​    布尔型：boolean</p>
-<p> b. 引用数据类型：</p>
-<pre><code>   类(class)
-
-      接口(interface)
-
-      数组(array)
-</code></pre>
-</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th align="center">类型</th>
-<th align="center">占用存储空间</th>
-<th align="center">表示数据范围</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">byte</td>
-<td align="center">1字节&#x3D;8bit</td>
-<td align="center">-128~127</td>
-</tr>
-<tr>
-<td align="center">short</td>
-<td align="center">2字节</td>
-<td align="center">-2^15 ~2^15 -1</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">4字节</td>
-<td align="center">-2^31 ~2^31 -1</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">8字节</td>
-<td align="center">-2^62 ~2^62 -1</td>
-</tr>
-<tr>
-<td align="center">float</td>
-<td align="center">4字节</td>
-<td align="center">-3.403E38 ~ 3.403E38</td>
-</tr>
-<tr>
-<td align="center">double</td>
-<td align="center">8字节</td>
-<td align="center">-1.798E308 ~ 1.798E308</td>
-</tr>
-</tbody></table>
-<ul>
-<li><strong>java的整型常量默认为 int 型，声明long型常量须后加‘l’或‘L’</strong> </li>
-<li><strong>java程序中变量通常声明为int型，除非不足以表示较大的数，才使用long</strong></li>
-</ul>
-<p>转义字符：</p>
-<table>
-<thead>
-<tr>
-<th>转义字符</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>\b</td>
-<td>退格符</td>
-</tr>
-<tr>
-<td>\n</td>
-<td>换行符</td>
-</tr>
-<tr>
-<td>\r</td>
-<td>回车符</td>
-</tr>
-<tr>
-<td>\t</td>
-<td>制表符</td>
-</tr>
-<tr>
-<td>\“</td>
-<td>双引号</td>
-</tr>
-<tr>
-<td>\‘</td>
-<td>单引号</td>
-</tr>
-<tr>
-<td>\\</td>
-<td>反斜线</td>
-</tr>
-</tbody></table>
-<ol start="2">
-<li><p>变量在类中声明的位置：</p>
-<p>​    成员变量 vs 局部变量</p>
-</li>
-</ol>
-<h3 id="定义格式"><a href="#定义格式" class="headerlink" title="定义格式"></a>定义格式</h3><ol>
-<li><p>java定义变量的格式：数据类型 变量名 &#x3D; 变量值;</p>
-</li>
-<li><p>说明：</p>
-<p>  ① 变量必须先声明，后使用</p>
-<p>  ② 变量都定义在其作用域内。在作用域内，它是有效的。换句话说，出了作用域，就失效了</p>
-<p>  ③ 同一个作用域内，不可以声明两个同名的变量</p>
-</li>
-</ol>
-<h3 id="运算规则"><a href="#运算规则" class="headerlink" title="运算规则"></a>运算规则</h3><p>基本数据类型之间的运算规则：</p>
-<p>前提：这里讨论只是7种基本数据类型变量间的运算。不包含boolean类型的。</p>
-<ol>
-<li><p>自动类型提升：</p>
-<p> 结论：当容量小的数据类型的变量与容量大的数据类型的变量做运算时，结果自动提升为容量大的数据类型。</p>
-  <pre class="mermaid">   graph LR
-char --> int
-byte --> int
-short --> int --> long --> float --> double</pre>
-
-<p> 特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。</p>
-</li>
-<li><p>强制类型转换：</p>
-<p>a.需要使用强转符：()</p>
-<p>b.注意点：强制类型转换，可能导致精度损失。</p>
-</li>
-<li><p>说明：此时的容量大小指的是，表示数的范围的大和小。比如：float容量要大于long的容量</p>
-</li>
-</ol>
-<h3 id="String类型变量的使用"><a href="#String类型变量的使用" class="headerlink" title="String类型变量的使用"></a>String类型变量的使用</h3><ol>
-<li><p>String属于引用数据类型,翻译为：字符串</p>
-</li>
-<li><p>声明String类型变量时，使用一对” “</p>
-</li>
-<li><p>String可以和8种基本数据类型变量做运算，且运算只能是连接运算：+</p>
-</li>
-<li><p>运算的结果仍然是String类型</p>
-<hr>
-</li>
-</ol>
-<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h3><p>太简单，不说了</p>
-<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>介绍一个特别的：instanceof</p>
-<p>作用是检查是否是类的对象，例如： “Hello” instanceof String &#x3D; true</p>
-<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;—逻辑与	 	| —逻辑或 	  ！—逻辑非 </p>
-<p>&amp;&amp; —短路与 	|| —短路或 	^ —逻辑异或</p>
-<ul>
-<li>“&amp;”和“&amp;&amp;”的区别： <ul>
-<li>单&amp;时，左边无论真假，右边都进行运算； </li>
-<li>双&amp;时，如果左边为真，右边参与运算，如果左边为假，那么右边不参与运算。</li>
-</ul>
-</li>
-<li>“|”和“||”的区别同理，||表示：当左边为真，右边不参与运算。</li>
-</ul>
-<h3 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符"></a>三元运算符</h3><p>格式： (表达式1)?表达式2：表达式3；</p>
-<p>若表达式1的结果为真则执行<strong>表达式2</strong>，若为假则执行<strong>表达式3</strong></p>
-<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
-<li><p>表达式1,表达式2,表达式3的类型可以不同，进行自动类型转换（提升）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="literal">true</span> ? <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1</span>) : <span class="keyword">new</span> <span class="title class_">Double</span>(<span class="number">2.0</span>);</span><br><span class="line">System.out.println(o1);<span class="comment">//1.0</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>条件表达式不能取代一般的if语句,仅当if语句中内嵌的语句为赋值语句(且两个分支都给同一变量赋值)时才能代替if语句，例如：</p>
-</li>
-</ol>
-   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line">  printf(<span class="string">&quot;even/n&quot;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//不能写成</span></span><br><span class="line">(a%<span class="number">2</span>==<span class="number">0</span>)?printf(<span class="string">&quot;even/n&quot;</span>):printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//但是可以写成</span></span><br><span class="line">printf(<span class="string">&quot;%s/n&quot;</span>,(a%<span class="number">2</span>==<span class="number">0</span>?<span class="string">&quot;even&quot;</span>:<span class="string">&quot;odd&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<h3 id="运算符的优先级"><a href="#运算符的优先级" class="headerlink" title="运算符的优先级"></a>运算符的优先级</h3><table>
-<thead>
-<tr>
-<th align="center">运算顺序（从左往右或从右往左）</th>
-<th align="center">运算符</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"></td>
-<td align="center">.    ()      {}      ;      ,</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">++  –  ~    !()</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">*      &#x2F;     %</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&lt;&lt;  &gt;&gt;   &gt;&gt;&gt;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&lt;  &gt;  &lt;&#x3D;  &gt;&#x3D;    instanceof</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&#x3D;&#x3D;      !&#x3D;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&amp;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">^</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">|</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&amp;&amp;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">||</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">?    :</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">&#x3D;    *&#x3D;    &#x2F;&#x3D;   %&#x3D;</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
-<li>数组本身是引用数据类型，而数组中的元素可以是任何数据类型，包括 基本数据类型和引用数据类型。</li>
-<li>创建数组对象会在内存中开辟一整块连续的空间，而数组名中引用的是 这块连续空间的首地址。 </li>
-<li>数组的长度一旦确定，就不能修改。 </li>
-<li>我们可以直接通过下标(或索引)的方式调用指定位置的元素，速度很快。</li>
-</ul>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h4><ol>
-<li><p>一维数组的声明</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">type <span class="keyword">var</span>[] 或 type[] <span class="keyword">var</span>；</span><br></pre></td></tr></table></figure>
-
-<p>Java语言中声明数组时不能指定其长度(数组中元素的数)， 例如： int a[5]; <strong>&#x2F;&#x2F;非法</strong></p>
-</li>
-<li><p>初始化</p>
-<ul>
-<li><p>动态初始化：数组声明且为数组元素分配空间与赋值的操作分开进行</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">3</span>];</span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">3</span>;</span><br><span class="line">arr[<span class="number">1</span>] = <span class="number">9</span>;</span><br><span class="line">arr[<span class="number">2</span>] = <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">String names[];</span><br><span class="line">names = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">3</span>];</span><br><span class="line">names[<span class="number">0</span>] = “钱学森”;</span><br><span class="line">names[<span class="number">1</span>] = “邓稼先”;</span><br><span class="line">names[<span class="number">2</span>] = “袁隆平”;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<ul>
-<li><p>静态初始化：在定义数组的同时就为数组元素分配空间并赋值。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> arr[] = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123; <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>&#125;;</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="type">int</span>[] arr = &#123;<span class="number">3</span>,<span class="number">9</span>,<span class="number">8</span>&#125;;</span><br><span class="line"></span><br><span class="line">String names[] = &#123;</span><br><span class="line">“李四光”,“茅以升”,“华罗庚”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="数组元素的默认初始化值"><a href="#数组元素的默认初始化值" class="headerlink" title="数组元素的默认初始化值"></a>数组元素的默认初始化值</h3><table>
-<thead>
-<tr>
-<th align="center">数组元素类型</th>
-<th align="center">元素默认初始值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">byte</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">short</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">0L</td>
-</tr>
-<tr>
-<td align="center">float</td>
-<td align="center">0.0F</td>
-</tr>
-<tr>
-<td align="center">double</td>
-<td align="center">0.0</td>
-</tr>
-<tr>
-<td align="center">char</td>
-<td align="center">0或‘\u0000’(表现为空)</td>
-</tr>
-<tr>
-<td align="center">boolean</td>
-<td align="center">false</td>
-</tr>
-<tr>
-<td align="center">应用类型</td>
-<td align="center">null</td>
-</tr>
-</tbody></table>
-<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><ol>
-<li><p>声明和初始化</p>
-<ul>
-<li><p>格式1（动态初始化）：int[][] arr &#x3D; new int[3][2];</p>
-<p>定义了名称为arr的二维数组 </p>
-<p>二维数组中有3个一维数组 </p>
-<p>每一个一维数组中有2个元素 一维数组的名称分别为arr[0], arr[1], arr[2] </p>
-<p>给第一个一维数组1脚标位赋值为78写法是：arr[0][1] &#x3D; 78;</p>
-</li>
-<li><p>格式2（动态初始化）：int[][] arr &#x3D; new int[3][];</p>
-<p>二维数组中有3个一维数组。 </p>
-<p>每个一维数组都是默认初始化值null (注意：区别于格式1）</p>
-<p> 可以对这个三个一维数组分别进行初始化 </p>
-<p>arr[0] &#x3D; new int[3]; arr[1] &#x3D; new int[1]; </p>
-<p>arr[2] &#x3D; new int[2];</p>
-</li>
-</ul>
-<p><strong>注： int[][]arr &#x3D; new int[][3]; &#x2F;&#x2F;非法</strong></p>
-</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>java</category>
-      </categories>
-      <tags>
         <tag>Java</tag>
-        <tag>学习笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -1626,8 +1267,367 @@ short --> int --> long --> float --> double</pre>
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java基础知识总结（上）</title>
+    <url>/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="Java中的注释"><a href="#Java中的注释" class="headerlink" title="Java中的注释"></a>Java中的注释</h2><ol>
+<li><p>单行注释   &#x2F;&#x2F;</p>
+</li>
+<li><p>多行注释  &#x2F;*   *&#x2F;</p>
+<p>单行注释和多行注释的作用：</p>
+<p>① 对所写的程序进行解释说明，增强可读性。方便自己，方便别人</p>
+<p>② 调试所写的代码</p>
+</li>
+<li><p>文档注释  &#x2F;**   *&#x2F;</p>
+<p>注释内容可以被JDK提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档。</p>
+<hr>
+</li>
+</ol>
+<h2 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h2><ol>
+<li><p>标识符：凡是自己可以起名字的地方都叫标识符。</p>
+<p>  比如：类名、变量名、方法名、接口名、包名…</p>
+</li>
+<li><p>标识符的命名规则：–&gt; 如果不遵守如下的规则，编译不通过！</p>
+<p>① 由26个英文字母大小写，0-9 ，_或 $ 组成 </p>
+<p>②数字不可以开头。</p>
+<p>③不可以使用关键字和保留字，但能包含关键字和保留字。</p>
+<p>④Java中严格区分大小写，长度无限制。</p>
+<p>⑤标识符不能包含空格。</p>
+</li>
+<li><p>Java中的名称命名规范： —&gt;如果不遵守如下的规范，编译可以通过！</p>
+<p>包名：多单词组成时所有字母都小写：xxxyyyzzz</p>
+<p>类名、接口名：多单词组成时，所有单词的首字母大写：XxxYyyZzz</p>
+<p>变量名、方法名：多单词组成时，第一个单词首字母小写，第二个单词开始每个单词首字母大写：xxxYyyZzz</p>
+<p>常量名：所有字母都大写。多单词时每个单词用下划线连接：XXX_YYY_ZZZ</p>
+</li>
+<li><p>注意1：在起名字时，为了提高阅读性，要尽量有意义，“见名知意”。</p>
+<p>注意2：java采用unicode字符集，因此标识符也可以使用汉字声明，但是不建议使用。 </p>
+<hr>
+</li>
+</ol>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><ol>
+<li><p>变量按照数据类型来分：<br>a. 基本数据类型：</p>
+<p>​    整型：byte \ short \ int \ long</p>
+<p>​    浮点型：float \ double</p>
+<p>​    字符型：char</p>
+<p>​    布尔型：boolean</p>
+<p> b. 引用数据类型：</p>
+<pre><code>   类(class)
+
+      接口(interface)
+
+      数组(array)
+</code></pre>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">占用存储空间</th>
+<th align="center">表示数据范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">byte</td>
+<td align="center">1字节&#x3D;8bit</td>
+<td align="center">-128~127</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">2字节</td>
+<td align="center">-2^15 ~2^15 -1</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">4字节</td>
+<td align="center">-2^31 ~2^31 -1</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">8字节</td>
+<td align="center">-2^62 ~2^62 -1</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">4字节</td>
+<td align="center">-3.403E38 ~ 3.403E38</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">8字节</td>
+<td align="center">-1.798E308 ~ 1.798E308</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>java的整型常量默认为 int 型，声明long型常量须后加‘l’或‘L’</strong> </li>
+<li><strong>java程序中变量通常声明为int型，除非不足以表示较大的数，才使用long</strong></li>
+</ul>
+<p>转义字符：</p>
+<table>
+<thead>
+<tr>
+<th>转义字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\b</td>
+<td>退格符</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行符</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>回车符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>制表符</td>
+</tr>
+<tr>
+<td>\“</td>
+<td>双引号</td>
+</tr>
+<tr>
+<td>\‘</td>
+<td>单引号</td>
+</tr>
+<tr>
+<td>\\</td>
+<td>反斜线</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><p>变量在类中声明的位置：</p>
+<p>​    成员变量 vs 局部变量</p>
+</li>
+</ol>
+<h3 id="定义格式"><a href="#定义格式" class="headerlink" title="定义格式"></a>定义格式</h3><ol>
+<li><p>java定义变量的格式：数据类型 变量名 &#x3D; 变量值;</p>
+</li>
+<li><p>说明：</p>
+<p>  ① 变量必须先声明，后使用</p>
+<p>  ② 变量都定义在其作用域内。在作用域内，它是有效的。换句话说，出了作用域，就失效了</p>
+<p>  ③ 同一个作用域内，不可以声明两个同名的变量</p>
+</li>
+</ol>
+<h3 id="运算规则"><a href="#运算规则" class="headerlink" title="运算规则"></a>运算规则</h3><p>基本数据类型之间的运算规则：</p>
+<p>前提：这里讨论只是7种基本数据类型变量间的运算。不包含boolean类型的。</p>
+<ol>
+<li><p>自动类型提升：</p>
+<p> 结论：当容量小的数据类型的变量与容量大的数据类型的变量做运算时，结果自动提升为容量大的数据类型。</p>
+  <pre class="mermaid">   graph LR
+char --> int
+byte --> int
+short --> int --> long --> float --> double</pre>
+
+<p> 特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。</p>
+</li>
+<li><p>强制类型转换：</p>
+<p>a.需要使用强转符：()</p>
+<p>b.注意点：强制类型转换，可能导致精度损失。</p>
+</li>
+<li><p>说明：此时的容量大小指的是，表示数的范围的大和小。比如：float容量要大于long的容量</p>
+</li>
+</ol>
+<h3 id="String类型变量的使用"><a href="#String类型变量的使用" class="headerlink" title="String类型变量的使用"></a>String类型变量的使用</h3><ol>
+<li><p>String属于引用数据类型,翻译为：字符串</p>
+</li>
+<li><p>声明String类型变量时，使用一对” “</p>
+</li>
+<li><p>String可以和8种基本数据类型变量做运算，且运算只能是连接运算：+</p>
+</li>
+<li><p>运算的结果仍然是String类型</p>
+<hr>
+</li>
+</ol>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h3><p>太简单，不说了</p>
+<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>介绍一个特别的：instanceof</p>
+<p>作用是检查是否是类的对象，例如： “Hello” instanceof String &#x3D; true</p>
+<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;—逻辑与	 	| —逻辑或 	  ！—逻辑非 </p>
+<p>&amp;&amp; —短路与 	|| —短路或 	^ —逻辑异或</p>
+<ul>
+<li>“&amp;”和“&amp;&amp;”的区别： <ul>
+<li>单&amp;时，左边无论真假，右边都进行运算； </li>
+<li>双&amp;时，如果左边为真，右边参与运算，如果左边为假，那么右边不参与运算。</li>
+</ul>
+</li>
+<li>“|”和“||”的区别同理，||表示：当左边为真，右边不参与运算。</li>
+</ul>
+<h3 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符"></a>三元运算符</h3><p>格式： (表达式1)?表达式2：表达式3；</p>
+<p>若表达式1的结果为真则执行<strong>表达式2</strong>，若为假则执行<strong>表达式3</strong></p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
+<li><p>表达式1,表达式2,表达式3的类型可以不同，进行自动类型转换（提升）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="literal">true</span> ? <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1</span>) : <span class="keyword">new</span> <span class="title class_">Double</span>(<span class="number">2.0</span>);</span><br><span class="line">System.out.println(o1);<span class="comment">//1.0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>条件表达式不能取代一般的if语句,仅当if语句中内嵌的语句为赋值语句(且两个分支都给同一变量赋值)时才能代替if语句，例如：</p>
+</li>
+</ol>
+   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line">  printf(<span class="string">&quot;even/n&quot;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//不能写成</span></span><br><span class="line">(a%<span class="number">2</span>==<span class="number">0</span>)?printf(<span class="string">&quot;even/n&quot;</span>):printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//但是可以写成</span></span><br><span class="line">printf(<span class="string">&quot;%s/n&quot;</span>,(a%<span class="number">2</span>==<span class="number">0</span>?<span class="string">&quot;even&quot;</span>:<span class="string">&quot;odd&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="运算符的优先级"><a href="#运算符的优先级" class="headerlink" title="运算符的优先级"></a>运算符的优先级</h3><table>
+<thead>
+<tr>
+<th align="center">运算顺序（从左往右或从右往左）</th>
+<th align="center">运算符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"></td>
+<td align="center">.    ()      {}      ;      ,</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">++  –  ~    !()</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">*      &#x2F;     %</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&lt;&lt;  &gt;&gt;   &gt;&gt;&gt;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&lt;  &gt;  &lt;&#x3D;  &gt;&#x3D;    instanceof</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&#x3D;&#x3D;      !&#x3D;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&amp;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">^</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">|</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&amp;&amp;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">||</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">?    :</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">&#x3D;    *&#x3D;    &#x2F;&#x3D;   %&#x3D;</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
+<li>数组本身是引用数据类型，而数组中的元素可以是任何数据类型，包括 基本数据类型和引用数据类型。</li>
+<li>创建数组对象会在内存中开辟一整块连续的空间，而数组名中引用的是 这块连续空间的首地址。 </li>
+<li>数组的长度一旦确定，就不能修改。 </li>
+<li>我们可以直接通过下标(或索引)的方式调用指定位置的元素，速度很快。</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h4><ol>
+<li><p>一维数组的声明</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">type <span class="keyword">var</span>[] 或 type[] <span class="keyword">var</span>；</span><br></pre></td></tr></table></figure>
+
+<p>Java语言中声明数组时不能指定其长度(数组中元素的数)， 例如： int a[5]; <strong>&#x2F;&#x2F;非法</strong></p>
+</li>
+<li><p>初始化</p>
+<ul>
+<li><p>动态初始化：数组声明且为数组元素分配空间与赋值的操作分开进行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">3</span>];</span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">3</span>;</span><br><span class="line">arr[<span class="number">1</span>] = <span class="number">9</span>;</span><br><span class="line">arr[<span class="number">2</span>] = <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">String names[];</span><br><span class="line">names = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">3</span>];</span><br><span class="line">names[<span class="number">0</span>] = “钱学森”;</span><br><span class="line">names[<span class="number">1</span>] = “邓稼先”;</span><br><span class="line">names[<span class="number">2</span>] = “袁隆平”;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ul>
+<li><p>静态初始化：在定义数组的同时就为数组元素分配空间并赋值。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> arr[] = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123; <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>&#125;;</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="type">int</span>[] arr = &#123;<span class="number">3</span>,<span class="number">9</span>,<span class="number">8</span>&#125;;</span><br><span class="line"></span><br><span class="line">String names[] = &#123;</span><br><span class="line">“李四光”,“茅以升”,“华罗庚”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="数组元素的默认初始化值"><a href="#数组元素的默认初始化值" class="headerlink" title="数组元素的默认初始化值"></a>数组元素的默认初始化值</h3><table>
+<thead>
+<tr>
+<th align="center">数组元素类型</th>
+<th align="center">元素默认初始值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">byte</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">0L</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">0.0F</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">0.0</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">0或‘\u0000’(表现为空)</td>
+</tr>
+<tr>
+<td align="center">boolean</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center">应用类型</td>
+<td align="center">null</td>
+</tr>
+</tbody></table>
+<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><ol>
+<li><p>声明和初始化</p>
+<ul>
+<li><p>格式1（动态初始化）：int[][] arr &#x3D; new int[3][2];</p>
+<p>定义了名称为arr的二维数组 </p>
+<p>二维数组中有3个一维数组 </p>
+<p>每一个一维数组中有2个元素 一维数组的名称分别为arr[0], arr[1], arr[2] </p>
+<p>给第一个一维数组1脚标位赋值为78写法是：arr[0][1] &#x3D; 78;</p>
+</li>
+<li><p>格式2（动态初始化）：int[][] arr &#x3D; new int[3][];</p>
+<p>二维数组中有3个一维数组。 </p>
+<p>每个一维数组都是默认初始化值null (注意：区别于格式1）</p>
+<p> 可以对这个三个一维数组分别进行初始化 </p>
+<p>arr[0] &#x3D; new int[3]; arr[1] &#x3D; new int[1]; </p>
+<p>arr[2] &#x3D; new int[2];</p>
+</li>
+</ul>
+<p><strong>注： int[][]arr &#x3D; new int[][3]; &#x2F;&#x2F;非法</strong></p>
+</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -2278,8 +2278,54 @@ short --> int --> long --> float --> double</pre>
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java枚举类</title>
+    <url>/2020/06/16/Java%E6%9E%9A%E4%B8%BE%E7%B1%BB/</url>
+    <content><![CDATA[<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><p>在JDK5.0之前需要自定义枚举类，JDK5.0中新增了enum关键字，用来定义枚举类</p>
+<h2 id="枚举类的特点"><a href="#枚举类的特点" class="headerlink" title="枚举类的特点"></a>枚举类的特点</h2><ul>
+<li>枚举类对象的属性不允许被改动，所以应该使用private final修饰</li>
+<li>枚举类的被private final修饰的属性要在构造器中为期赋值</li>
+<li>若枚举类显式的定义了带参数的构造器，则在列出枚举值时也必须传入对应参数</li>
+</ul>
+<h1 id="自定义枚举类"><a href="#自定义枚举类" class="headerlink" title="自定义枚举类"></a>自定义枚举类</h1><ol>
+<li>私有化类的构造器，保证不能再类的外部创建其对象</li>
+<li>在类的内部穿件枚举类的实例，并用public static final修饰</li>
+<li>对象如果有实例变量，应该声明为private final，并在构造器中初始化</li>
+</ol>
+<span id="more"></span>
+
+<p>用季节来举例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Season</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String NAME;<span class="comment">//季节的名称</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String DESC;<span class="comment">//季节的描述</span></span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">Season</span><span class="params">(String seasonName,String seasonDesc)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.NAME = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.DESC = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SPRING</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SUMMER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">AUTUMN</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">WINTER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;白雪皑皑&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="enum关键字定义枚举类"><a href="#enum关键字定义枚举类" class="headerlink" title="enum关键字定义枚举类"></a>enum关键字定义枚举类</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul>
+<li>用enum定义的枚举类默认继承了java.lang.Enum类，因此不能再继承其他类</li>
+<li>枚举类的构造器只能用private修饰</li>
+<li>枚举类的所有实例必须在枚举类中显式列出（用“,”分隔，“;”）结尾，列出的实例会自动添加public static final修饰</li>
+<li>必须要在枚举类的第一行声明枚举类对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">SeasonEnum</span> &#123;</span><br><span class="line">  SPRING(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春风又绿江南岸&quot;</span>),</span><br><span class="line">  SUMMER(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;映日荷花别样红&quot;</span>),</span><br><span class="line">  AUTUMN(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋水共长天一色&quot;</span>),</span><br><span class="line">  WINTER(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;窗含西岭千秋雪&quot;</span>);</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonName;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonDesc;</span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">SeasonEnum</span><span class="params">(String seasonName, String seasonDesc)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.seasonName = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.seasonDesc = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonName</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonName;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonDesc</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Enum类的主要方法"><a href="#Enum类的主要方法" class="headerlink" title="Enum类的主要方法"></a>Enum类的主要方法</h1><ul>
+<li>values()方法：返回枚举类型的对象数组。该方法可以很方便地遍历所有的枚举值。 </li>
+<li>valueOf(String str)：可以把一个字符串转为对应的枚举类对象。要求字符串必须是枚举类对象的“名字”。如不是，会有运行时异常： IllegalArgumentException。 </li>
+<li>toString()：返回当前枚举类对象常量的名称</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -2750,8 +2796,8 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -3193,46 +3239,19 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
         <category>java</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>学习笔记</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
-    <title>Java枚举类</title>
-    <url>/2020/06/16/Java%E6%9E%9A%E4%B8%BE%E7%B1%BB/</url>
-    <content><![CDATA[<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><p>在JDK5.0之前需要自定义枚举类，JDK5.0中新增了enum关键字，用来定义枚举类</p>
-<h2 id="枚举类的特点"><a href="#枚举类的特点" class="headerlink" title="枚举类的特点"></a>枚举类的特点</h2><ul>
-<li>枚举类对象的属性不允许被改动，所以应该使用private final修饰</li>
-<li>枚举类的被private final修饰的属性要在构造器中为期赋值</li>
-<li>若枚举类显式的定义了带参数的构造器，则在列出枚举值时也必须传入对应参数</li>
-</ul>
-<h1 id="自定义枚举类"><a href="#自定义枚举类" class="headerlink" title="自定义枚举类"></a>自定义枚举类</h1><ol>
-<li>私有化类的构造器，保证不能再类的外部创建其对象</li>
-<li>在类的内部穿件枚举类的实例，并用public static final修饰</li>
-<li>对象如果有实例变量，应该声明为private final，并在构造器中初始化</li>
+    <title>Java标识符命名规范</title>
+    <url>/2020/03/28/Java%E6%A0%87%E8%AF%86%E7%AC%A6%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</url>
+    <content><![CDATA[<ol>
+<li>包名：多单词组合时多有字母都小写，例如：helloworld</li>
+<li>类名和接口名：多单词组合所有单词第一个字母大写，例如：HelloWorld</li>
+<li>变量名和方法名：多单词组合时，除了第一个单词其他单词的第一个字母大写，例如：helloWorld</li>
+<li>常量名：所有字母都大写，多单词组合时下划线连接，例如：HELLO_WORLD</li>
 </ol>
-<span id="more"></span>
-
-<p>用季节来举例：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Season</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String NAME;<span class="comment">//季节的名称</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String DESC;<span class="comment">//季节的描述</span></span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">Season</span><span class="params">(String seasonName,String seasonDesc)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.NAME = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.DESC = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SPRING</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SUMMER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">AUTUMN</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">WINTER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;白雪皑皑&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="enum关键字定义枚举类"><a href="#enum关键字定义枚举类" class="headerlink" title="enum关键字定义枚举类"></a>enum关键字定义枚举类</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul>
-<li>用enum定义的枚举类默认继承了java.lang.Enum类，因此不能再继承其他类</li>
-<li>枚举类的构造器只能用private修饰</li>
-<li>枚举类的所有实例必须在枚举类中显式列出（用“,”分隔，“;”）结尾，列出的实例会自动添加public static final修饰</li>
-<li>必须要在枚举类的第一行声明枚举类对象</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">SeasonEnum</span> &#123;</span><br><span class="line">  SPRING(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春风又绿江南岸&quot;</span>),</span><br><span class="line">  SUMMER(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;映日荷花别样红&quot;</span>),</span><br><span class="line">  AUTUMN(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋水共长天一色&quot;</span>),</span><br><span class="line">  WINTER(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;窗含西岭千秋雪&quot;</span>);</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonName;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonDesc;</span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">SeasonEnum</span><span class="params">(String seasonName, String seasonDesc)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.seasonName = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.seasonDesc = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonName</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonName;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonDesc</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="Enum类的主要方法"><a href="#Enum类的主要方法" class="headerlink" title="Enum类的主要方法"></a>Enum类的主要方法</h1><ul>
-<li>values()方法：返回枚举类型的对象数组。该方法可以很方便地遍历所有的枚举值。 </li>
-<li>valueOf(String str)：可以把一个字符串转为对应的枚举类对象。要求字符串必须是枚举类对象的“名字”。如不是，会有运行时异常： IllegalArgumentException。 </li>
-<li>toString()：返回当前枚举类对象常量的名称</li>
-</ul>
 ]]></content>
       <categories>
         <category>学习笔记</category>
@@ -3240,7 +3259,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>Java</tag>
-        <tag>学习笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -3281,24 +3299,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
         <tag>LeetCode</tag>
         <tag>算法</tag>
         <tag>数据结构</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java标识符命名规范</title>
-    <url>/2020/03/28/Java%E6%A0%87%E8%AF%86%E7%AC%A6%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</url>
-    <content><![CDATA[<ol>
-<li>包名：多单词组合时多有字母都小写，例如：helloworld</li>
-<li>类名和接口名：多单词组合所有单词第一个字母大写，例如：HelloWorld</li>
-<li>变量名和方法名：多单词组合时，除了第一个单词其他单词的第一个字母大写，例如：helloWorld</li>
-<li>常量名：所有字母都大写，多单词组合时下划线连接，例如：HELLO_WORLD</li>
-</ol>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -3417,6 +3417,30 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>Linux中的进程管理</title>
+    <url>/2020/05/22/Linux%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p>pa a    显示终端机下所有进程</p>
+<p>ps -A   查看所有进程（ps -e和-A是一样的效果，-e更常用一点）（这两个看到的比上面那个多些）</p>
+<p>ps u 以用户为主的格式来显示程序状况</p>
+<p>ps x 显示所有程序，不以终端机来区分</p>
+<p>lsof -i:端口号   根据指定的端口查询进程</p>
+<p>常用的组合命令：</p>
+<p>ps aux,然后再通过管道使用grep命令过滤查找特定的进程,然后再对特定的进程进行操作。</p>
+<p><strong>ps -ef|grep java|grep -v grep</strong> 显示出所有的java进程，去处掉当前的grep进程。</p>
+<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><p>kill -9 进程PID  	根据进程号结束进程</p>
+<p>killall -9 进程名 	根据进程名结束进程</p>
+<blockquote>
+<p>参考资料：<a href="https://blog.csdn.net/wojiaopanpan/article/details/7286430">https://blog.csdn.net/wojiaopanpan/article/details/7286430</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>markdown基本语法</title>
     <url>/2020/02/27/Markdown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</url>
     <content><![CDATA[<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><h4 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="comment">###### 六级标题</span></span><br></pre></td></tr></table></figure>
@@ -3481,30 +3505,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>Linux中的进程管理</title>
-    <url>/2020/05/22/Linux%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p>pa a    显示终端机下所有进程</p>
-<p>ps -A   查看所有进程（ps -e和-A是一样的效果，-e更常用一点）（这两个看到的比上面那个多些）</p>
-<p>ps u 以用户为主的格式来显示程序状况</p>
-<p>ps x 显示所有程序，不以终端机来区分</p>
-<p>lsof -i:端口号   根据指定的端口查询进程</p>
-<p>常用的组合命令：</p>
-<p>ps aux,然后再通过管道使用grep命令过滤查找特定的进程,然后再对特定的进程进行操作。</p>
-<p><strong>ps -ef|grep java|grep -v grep</strong> 显示出所有的java进程，去处掉当前的grep进程。</p>
-<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><p>kill -9 进程PID  	根据进程号结束进程</p>
-<p>killall -9 进程名 	根据进程名结束进程</p>
-<blockquote>
-<p>参考资料：<a href="https://blog.csdn.net/wojiaopanpan/article/details/7286430">https://blog.csdn.net/wojiaopanpan/article/details/7286430</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MySQL8允许远程访问</title>
     <url>/2020/11/23/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/</url>
     <content><![CDATA[<h2 id="Ubuntu安装MySQL8"><a href="#Ubuntu安装MySQL8" class="headerlink" title="Ubuntu安装MySQL8"></a>Ubuntu安装MySQL8</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt install mysql-server</span><br></pre></td></tr></table></figure>
@@ -3535,6 +3535,32 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       <tags>
         <tag>服务器</tag>
         <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx配置反向代理</title>
+    <url>/2021/09/19/Nginx%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<h1 id="前后端分离项目的部署配置"><a href="#前后端分离项目的部署配置" class="headerlink" title="前后端分离项目的部署配置"></a>前后端分离项目的部署配置</h1><p>Nginx就非常离谱，也不知道为什么，前端静态资源也需要单独配置，而且这配置方式还非常的离谱，贴一下配置文件</p>
+<p>配置文件路径<code>/etc/nginx/sites-enabled</code></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">server <span class="punctuation">&#123;</span></span><br><span class="line">    listen      <span class="number">80</span>;   			#监听<span class="number">80</span>端口</span><br><span class="line">    server_name	<span class="number">10.100</span><span class="number">.128</span><span class="number">.8</span>;   #监听访问的host</span><br><span class="line"></span><br><span class="line">    location /EleLabSys/ <span class="punctuation">&#123;</span></span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files $uri $uri/ EleLabSys/;	#此处非常离谱，是经过不断尝试出来的，子文件夹必须要写在这个地方才行</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line">	# 后端api代理还比较正常</span><br><span class="line">	location /prod-api/ <span class="punctuation">&#123;</span></span><br><span class="line">		proxy_set_header Host $http_host;</span><br><span class="line">		proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">		proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">		proxy_pass http<span class="punctuation">:</span><span class="comment">//localhost:8080/;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>具体是什么原因导致的暂且不深究。。。</p>
+<p>等有空再研究</p>
+<hr>
+<p>更新来了。。。</p>
+<p>经过再次的尝试，发现是需要把根路径放到最后面，这样才能正常地访问静态资源，不需要手动配置，并且代理也有效果</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;   <span class="comment">#监听80端口</span></span><br><span class="line">    server_name	10.100.128.8;   <span class="comment">#监听访问的host</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 实验室系统后端</span></span><br><span class="line">	location /prod-api/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:8080/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室代码仓库</span></span><br><span class="line">    location /gitea/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:3000/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室系统云盘</span></span><br><span class="line">	location /cloudDisk/ &#123;</span><br><span class="line">		<span class="comment"># proxy_set_header Host $http_host;</span></span><br><span class="line">		<span class="comment"># proxy_set_header X-Real-IP $remote_addr;</span></span><br><span class="line">		<span class="comment"># proxy_set_header REMOTE-HOST $remote_addr;</span></span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:9999/;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 需要放到最后面，匹配优先级最低</span></span><br><span class="line">	location / &#123;</span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /;</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -3621,32 +3647,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>Nginx配置反向代理</title>
-    <url>/2021/09/19/Nginx%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
-    <content><![CDATA[<h1 id="前后端分离项目的部署配置"><a href="#前后端分离项目的部署配置" class="headerlink" title="前后端分离项目的部署配置"></a>前后端分离项目的部署配置</h1><p>Nginx就非常离谱，也不知道为什么，前端静态资源也需要单独配置，而且这配置方式还非常的离谱，贴一下配置文件</p>
-<p>配置文件路径<code>/etc/nginx/sites-enabled</code></p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">server <span class="punctuation">&#123;</span></span><br><span class="line">    listen      <span class="number">80</span>;   			#监听<span class="number">80</span>端口</span><br><span class="line">    server_name	<span class="number">10.100</span><span class="number">.128</span><span class="number">.8</span>;   #监听访问的host</span><br><span class="line"></span><br><span class="line">    location /EleLabSys/ <span class="punctuation">&#123;</span></span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files $uri $uri/ EleLabSys/;	#此处非常离谱，是经过不断尝试出来的，子文件夹必须要写在这个地方才行</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line">	# 后端api代理还比较正常</span><br><span class="line">	location /prod-api/ <span class="punctuation">&#123;</span></span><br><span class="line">		proxy_set_header Host $http_host;</span><br><span class="line">		proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">		proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">		proxy_pass http<span class="punctuation">:</span><span class="comment">//localhost:8080/;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>具体是什么原因导致的暂且不深究。。。</p>
-<p>等有空再研究</p>
-<hr>
-<p>更新来了。。。</p>
-<p>经过再次的尝试，发现是需要把根路径放到最后面，这样才能正常地访问静态资源，不需要手动配置，并且代理也有效果</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;   <span class="comment">#监听80端口</span></span><br><span class="line">    server_name	10.100.128.8;   <span class="comment">#监听访问的host</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 实验室系统后端</span></span><br><span class="line">	location /prod-api/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:8080/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室代码仓库</span></span><br><span class="line">    location /gitea/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:3000/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室系统云盘</span></span><br><span class="line">	location /cloudDisk/ &#123;</span><br><span class="line">		<span class="comment"># proxy_set_header Host $http_host;</span></span><br><span class="line">		<span class="comment"># proxy_set_header X-Real-IP $remote_addr;</span></span><br><span class="line">		<span class="comment"># proxy_set_header REMOTE-HOST $remote_addr;</span></span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:9999/;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 需要放到最后面，匹配优先级最低</span></span><br><span class="line">	location / &#123;</span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /;</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-        <category>Nginx</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>Nginx</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PVE直通硬盘到TrueNAS</title>
     <url>/2022/07/16/PVE%20%E7%9B%B4%E9%80%9A%E7%A1%AC%E7%9B%98%E5%88%B0TrueNAS/</url>
     <content><![CDATA[<h1 id="1-查询所有的硬盘识别码"><a href="#1-查询所有的硬盘识别码" class="headerlink" title="1.查询所有的硬盘识别码"></a>1.查询所有的硬盘识别码</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -la /dev/disk/by-id/|grep -v dm|grep -v lvm|grep -v part</span><br></pre></td></tr></table></figure>
@@ -3715,7 +3715,7 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
   <entry>
     <title>TCP三次握手与四次挥手</title>
     <url>/2022/08/11/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
-    <content><![CDATA[<h1 id="TCP头格式"><a href="#TCP头格式" class="headerlink" title="TCP头格式"></a>TCP头格式</h1><img data-src="../images/TCP三次握手与四次挥手/format,png.png" alt="TCP 头格式"  />
+    <content><![CDATA[<h1 id="基本认识"><a href="#基本认识" class="headerlink" title="基本认识"></a>基本认识</h1><h2 id="TCP头格式"><a href="#TCP头格式" class="headerlink" title="TCP头格式"></a>TCP头格式</h2><img data-src="/images/TCP三次握手与四次挥手/format,png.png" alt="TCP 头格式"  />
 
 <p><strong>序列号</strong>：在建立连接时，由计算机生成的随机数作为初始值，通过SYN包传给接收端主机，每发送一次数据，就累加一次该「数据字节数」的大小，<strong>来解决网络包乱序的问题</strong>。</p>
 <p><strong>确认应答号</strong>：指下次期望收到的数据序列号，发送端收到这个确认应答后可以认为在这个序号之前的数据都已经被正常接收，<strong>用来解决丢包问题</strong>。</p>
@@ -3727,7 +3727,103 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
 <li><code>FIN </code>：为1时，表示之后不会再有数据发送，希望断开连接。当通信结束希望断开连接时，通信双方的主机之间相互交换<code>FIN</code>位位1的TCP段。</li>
 </ul>
 <span id="more"></span>
-]]></content>
+
+<p>TCP层的存在，是因为IP层是「不可靠」的，他不能保证网络包的交付，网络包的交付，也不能保证网络包中数据的完整性性。</p>
+<img data-src="/images/TCP三次握手与四次挥手/format,png-16602776701853.png" alt="OSI 参考模型与 TCP/IP 的关系"  />
+
+<p>为了保证网络数据包的可靠性，上层就需要<code>TCP</code>协议。</p>
+<h2 id="什么是TCP"><a href="#什么是TCP" class="headerlink" title="什么是TCP"></a>什么是TCP</h2><p>TCP是面向连接的、可靠的、基于字节流的传输层通信协议。</p>
+<ul>
+<li>面向连接：一定是「一对一」才能连接，不像UDP协议可以一个主机同时向多个主机发送消息，也就是一对多是无法做到的。</li>
+<li>可靠的：无论网络链路中出现了怎样的变化，TCP都可以保证一个报文一定可以到达接收端。</li>
+<li>字节流：用户消息通过TCP传输协议时，消息可能会被操作系统分组成多个TCP报文，如果接收方的程序不知道「消息的边界」，是无法读出一个有效的用户消息。并且TCP报文是有序的，当前一个TCP报文没有收到的时候，即使它先收到后面的TCP报文，那么也不能扔给应用层去处理，而碰到重复的TCP报文会自动丢弃。</li>
+</ul>
+<h2 id="什么是TCP连接"><a href="#什么是TCP连接" class="headerlink" title="什么是TCP连接"></a>什么是TCP连接</h2><p>简单来说，用来保证可靠性和流量控制维护的某些信息，这些信息的组合，包括Socket、序列号和窗口大小称为连接。</p>
+<p>所以建立一个TCP连接需要客户端与服务器达成上述三个信息的共识。</p>
+<ul>
+<li>Socket：由IP地址和端口号组成</li>
+<li>序列号：用来解决乱序问题</li>
+<li>窗口大小：用来做流量控制</li>
+</ul>
+<blockquote>
+<p>如何唯一确定一个 TCP 连接呢？</p>
+</blockquote>
+<p>通过TCP的四元组可以唯一的确定一个连接，四元组包括：源地址、源端口、目标地址和目标端口。</p>
+<p>源地址和目标地址的字段（32位）是在IP头中，作用是通过IP协议发送报文给对方的主机。</p>
+<p>源端口和目标端口的字段是在TCP头中，作用是告诉TCP协议应该把报文发送给哪一个进程。</p>
+<h2 id="UDP和TCP的区别"><a href="#UDP和TCP的区别" class="headerlink" title="UDP和TCP的区别"></a>UDP和TCP的区别</h2><p>UDP不提供复杂的控制机制，利用IP提供面向「无连接」的通信服务。</p>
+<p>UDP协议非常的简单，头部只有8个字节（64位），UDP的头部格式如下：</p>
+<img data-src="/images/TCP三次握手与四次挥手/format,png-16602898407406.png" alt="UDP 头部格式" />
+
+<ul>
+<li>目标和源端口：主要告诉UDP协议应该把报文发送给那个进程。</li>
+<li>包长度：该字段保存了UDP头部的长度和数据的长度之和。</li>
+<li>校验和：校验和是为了提供可靠的UDP首部和数据而设计的，防止收到在网络传输受损的UDP包。</li>
+</ul>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><ol>
+<li><p>连接</p>
+<ul>
+<li>TCP是面向连接的传输层协议，传输数据前先要建立连接。</li>
+<li>UDP是不需要连接的，可以直接开始传输数据。</li>
+</ul>
+</li>
+<li><p>服务对象</p>
+<ul>
+<li>TCP是一对一的两点服务，即一条连接只有两个端点。</li>
+<li>UDP支持一对一、一对多的交互通信。</li>
+</ul>
+</li>
+<li><p>可靠性</p>
+<ul>
+<li>TCP是可靠交付数据的，数据库无差错、不丢失、不重复、按序到达。</li>
+<li>UDP是尽最大努力交付，不保证数据的可靠的交付。</li>
+</ul>
+</li>
+<li><p>拥塞控制、流量控制</p>
+<ul>
+<li>TCP有拥塞控制和流量控制机制，保证数据传输的安全性。</li>
+<li>UDP则不同，即使网络非常拥堵了，也不会影响UDP的发送速率。</li>
+</ul>
+</li>
+<li><p>首部开销</p>
+<ul>
+<li><p>TCP首部长度较长，会有一定的开销，首部在没有使用选项字段时是<code>20</code>个字节，如果使用了选择字段则会变得更长。-</p>
+</li>
+<li><p>UDP首部只有8个字节，并且是固定不变的，开销很小。</p>
+</li>
+</ul>
+</li>
+<li><p>传输方式</p>
+<ul>
+<li><p>TCP是流式传输，没有边界，但保证顺序和可靠性。</p>
+</li>
+<li><p>UDP是一个包一个包的发送，是有边界的，但可能会存在丢包和乱序。</p>
+</li>
+</ul>
+</li>
+<li><p>分片不同</p>
+<ul>
+<li>TCP的数据大小如果大于MSS的大小，会在传输层进行分片，目标主机收到之后，也同样会在传输层组装TCP数据包，如果中途叠了一个分片，只需要传输丢失的这一个分片就行。</li>
+<li>UDP的数据大小如果大于MTU的大小，就会在IP层进行分片，目标主机接收到之后，在IP层组装完数据，接着再传给传输层。</li>
+</ul>
+</li>
+</ol>
+<h3 id="TCP和UDP的应用场景"><a href="#TCP和UDP的应用场景" class="headerlink" title="TCP和UDP的应用场景"></a>TCP和UDP的应用场景</h3><p>由于TCP是面向连接的，可以保证，数据额交付的可靠性，因此常用于：</p>
+<ul>
+<li><code>FTP</code>文件传输</li>
+<li>HTTP&#x2F;HTTPS</li>
+</ul>
+<p>而UDP面向无连接，他可以随时发送数据，再加上UDP本身的处理既简单又高效，因此常用于：</p>
+<ul>
+<li>包总量较少的通信，如<code>DNS</code>、<code>SMTP</code>等</li>
+<li>视频、音频等多媒体通信</li>
+<li>广播通信</li>
+</ul>
+<blockquote>
+<p>为什么UDP头部没有首部长度字段，而TCP头部有首部长度字段？</p>
+</blockquote>
+<p>原因是TCP首部中的选项字段长度是可变的，而UDP首部是固定长度的，不会发生变化，所以使用UDP通信的双方都按照约定好的UDP首部长度来进行通信，不需要一个专门的字段来记录首部长度。</p>
+<h1 id="TCP连接建立"><a href="#TCP连接建立" class="headerlink" title="TCP连接建立"></a>TCP连接建立</h1>]]></content>
       <categories>
         <category>学习笔记，计算机网络</category>
       </categories>
@@ -3992,22 +4088,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>Ubuntu中设置http强制重定向为https</title>
-    <url>/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/</url>
-    <content><![CDATA[<h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
-<h3 id="2-设置http端口重定向"><a href="#2-设置http端口重定向" class="headerlink" title="2.设置http端口重定向"></a>2.设置http端口重定向</h3><p>将下面这段放到要重定向的站点配置文件里面，放在&lt;\VirtualHost *:80&gt;&lt;\VirtualHost&gt; 标签内的任何位置都行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">RewriteEngine on</span><br><span class="line">RewriteCond  %&#123;HTTPS&#125; !=on</span><br><span class="line">RewriteRule  ^(.*)  https://%&#123;SERVER_NAME&#125;<span class="variable">$1</span> [L,R]</span><br></pre></td></tr></table></figure>
-
-<h3 id="重启apach2"><a href="#重启apach2" class="headerlink" title="重启apach2"></a>重启apach2</h3><p>service apache2 restart</p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo一键部署到云服务器</title>
     <url>/2020/03/01/hexo%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
     <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><blockquote>
@@ -4048,6 +4128,22 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       <tags>
         <tag>服务器</tag>
         <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ubuntu中设置http强制重定向为https</title>
+    <url>/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/</url>
+    <content><![CDATA[<h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
+<h3 id="2-设置http端口重定向"><a href="#2-设置http端口重定向" class="headerlink" title="2.设置http端口重定向"></a>2.设置http端口重定向</h3><p>将下面这段放到要重定向的站点配置文件里面，放在&lt;\VirtualHost *:80&gt;&lt;\VirtualHost&gt; 标签内的任何位置都行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">RewriteEngine on</span><br><span class="line">RewriteCond  %&#123;HTTPS&#125; !=on</span><br><span class="line">RewriteRule  ^(.*)  https://%&#123;SERVER_NAME&#125;<span class="variable">$1</span> [L,R]</span><br></pre></td></tr></table></figure>
+
+<h3 id="重启apach2"><a href="#重启apach2" class="headerlink" title="重启apach2"></a>重启apach2</h3><p>service apache2 restart</p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -4137,25 +4233,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>软件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>令人心动的offer观后感</title>
-    <url>/2020/03/12/%E4%BB%A4%E4%BA%BA%E5%BF%83%E5%8A%A8%E7%9A%84offer%E8%A7%82%E5%90%8E%E6%84%9F/</url>
-    <content><![CDATA[<p>经过差不多一星期，把令人心动的offer给看完了，其实很舍不得的，不管是电视剧还是综艺或者是小说，只要有情节的，每次看完我都挺舍不得的，因为之后就看不到那些人了。在看的那段时间，或许自己心里就把他们给当成朋友了，看完一部之后就像和好友惜别，所以总是心里会有点难过。</p>
-<p>就不多扯了，说说自己这些天看的感受吧！</p>
-<span id="more"></span>
-
-<p>这八位实习生真的都十分优秀，除了李晨还要加把油，其实李晨这一个月的实习成长也是非常之快的，从第一期开始几乎算是没入律师的门，说话也结结巴巴、比较拖沓，到第二期第三期一点一点的进步，到最后一期说话都流畅很多了，可以及时get导对手的点并给予反击，成长是很大的。而且，李晨除了能力，他也有很多其他的优点，比如可爱的表情，有一期就是因为他的可爱让邓冰莹选择他为队友，在职场中让别人和自己相处的很舒适也别人选择你作为队友、同事的一个优点。然后李浩源真的是才华横溢，总是出口成章，每句从他嘴里出来的话都是金句，逻辑思维也是十分的强，还参加过诗词大会，和我这种俗人真的是比不了，写个感受都写成这样（手动滑稽）。摘记一下他在节目中说过的金句，第一次面试的时候说的：<strong>作为一只“菜鸟”，希望能得到一次宝贵的机会。我期望这里能是“菜鸟”翱翔的起点，我亦深知，若是鲲鹏，而非北海不就的道理。</strong>在最后的面试的时候说的：<strong>我有足够的积累，但是又一直在路上，所以有无限的可能。</strong>这两句真的都是非常非常的喜欢。优秀的人总是这么优秀，太喜欢浩源的才华了。何运晨也是相当的优秀，他和浩源一起配合简直是完美，两个人十分的契合，互相都能get到对方的点，知音相遇啊，好运来组合这得是完美。其他人就不一个一个说了。（感觉我在记流水账，毫无才华可言，和这些优秀的人比起来简直是无地自容）</p>
-<p>这部综艺真正吸引我的地方，是让我了解到从象牙塔初入社会实习的这样的一个状况是怎样的，这也是我一直都想知道的，在这部综艺中一点一滴的体现着。我是从知乎上面看到的一点小片段，当时那个片段我觉得很励志，就把名字记了下来，本来都忘这回事了，一个无聊的下午想起来了，就搜了一下，然后就一发不可收拾，一集一集的看完了，每天都看，一天不看就觉得心里空落落的，每集也都很有趣，也很励志，最后也被这些人给成功圈粉了，人格魅力啊，这真的太强了。</p>
-<p>看完之后也自己反省了一下，第一个，自己是不是应该多看些书，多积累些知识，什么是腹有诗书气自华，李浩源就是最好的解释了，整个人的气场都是完全不一样，我觉得这是我应该要学习的地方，还要多读书，现在应该要从读小说，到读那些无聊的书了，那些书才能真正的提升人的一个认知，就比如：乌合之众，买了放那好久没看，几次拿起来看看不下去，又给放回书架上面，这个学期静下心来把这本书给啃完，在好多地方都看到推荐这本书了。第二个是口头的表达能力，我觉得自己就是李晨吧，可能李晨都不如，表达能力太差了，有的时候说一件事都说不清楚，这也是自己需要提升的地方。第三个是人际交往的能力，这一方面现在来说我觉得自己还是可以的，比之前有很大的进步了，但还是可以继续提升。其实，我觉得人际交往和自己的自信有关，自信又和第一点提到的，自己的知识储备有关，也和第二点提到的口头表达能里有关，也是人际交往的一个基本能力吧。</p>
-]]></content>
-      <categories>
-        <category>感悟</category>
-        <category>影视</category>
-      </categories>
-      <tags>
-        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -4262,6 +4339,25 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>令人心动的offer观后感</title>
+    <url>/2020/03/12/%E4%BB%A4%E4%BA%BA%E5%BF%83%E5%8A%A8%E7%9A%84offer%E8%A7%82%E5%90%8E%E6%84%9F/</url>
+    <content><![CDATA[<p>经过差不多一星期，把令人心动的offer给看完了，其实很舍不得的，不管是电视剧还是综艺或者是小说，只要有情节的，每次看完我都挺舍不得的，因为之后就看不到那些人了。在看的那段时间，或许自己心里就把他们给当成朋友了，看完一部之后就像和好友惜别，所以总是心里会有点难过。</p>
+<p>就不多扯了，说说自己这些天看的感受吧！</p>
+<span id="more"></span>
+
+<p>这八位实习生真的都十分优秀，除了李晨还要加把油，其实李晨这一个月的实习成长也是非常之快的，从第一期开始几乎算是没入律师的门，说话也结结巴巴、比较拖沓，到第二期第三期一点一点的进步，到最后一期说话都流畅很多了，可以及时get导对手的点并给予反击，成长是很大的。而且，李晨除了能力，他也有很多其他的优点，比如可爱的表情，有一期就是因为他的可爱让邓冰莹选择他为队友，在职场中让别人和自己相处的很舒适也别人选择你作为队友、同事的一个优点。然后李浩源真的是才华横溢，总是出口成章，每句从他嘴里出来的话都是金句，逻辑思维也是十分的强，还参加过诗词大会，和我这种俗人真的是比不了，写个感受都写成这样（手动滑稽）。摘记一下他在节目中说过的金句，第一次面试的时候说的：<strong>作为一只“菜鸟”，希望能得到一次宝贵的机会。我期望这里能是“菜鸟”翱翔的起点，我亦深知，若是鲲鹏，而非北海不就的道理。</strong>在最后的面试的时候说的：<strong>我有足够的积累，但是又一直在路上，所以有无限的可能。</strong>这两句真的都是非常非常的喜欢。优秀的人总是这么优秀，太喜欢浩源的才华了。何运晨也是相当的优秀，他和浩源一起配合简直是完美，两个人十分的契合，互相都能get到对方的点，知音相遇啊，好运来组合这得是完美。其他人就不一个一个说了。（感觉我在记流水账，毫无才华可言，和这些优秀的人比起来简直是无地自容）</p>
+<p>这部综艺真正吸引我的地方，是让我了解到从象牙塔初入社会实习的这样的一个状况是怎样的，这也是我一直都想知道的，在这部综艺中一点一滴的体现着。我是从知乎上面看到的一点小片段，当时那个片段我觉得很励志，就把名字记了下来，本来都忘这回事了，一个无聊的下午想起来了，就搜了一下，然后就一发不可收拾，一集一集的看完了，每天都看，一天不看就觉得心里空落落的，每集也都很有趣，也很励志，最后也被这些人给成功圈粉了，人格魅力啊，这真的太强了。</p>
+<p>看完之后也自己反省了一下，第一个，自己是不是应该多看些书，多积累些知识，什么是腹有诗书气自华，李浩源就是最好的解释了，整个人的气场都是完全不一样，我觉得这是我应该要学习的地方，还要多读书，现在应该要从读小说，到读那些无聊的书了，那些书才能真正的提升人的一个认知，就比如：乌合之众，买了放那好久没看，几次拿起来看看不下去，又给放回书架上面，这个学期静下心来把这本书给啃完，在好多地方都看到推荐这本书了。第二个是口头的表达能力，我觉得自己就是李晨吧，可能李晨都不如，表达能力太差了，有的时候说一件事都说不清楚，这也是自己需要提升的地方。第三个是人际交往的能力，这一方面现在来说我觉得自己还是可以的，比之前有很大的进步了，但还是可以继续提升。其实，我觉得人际交往和自己的自信有关，自信又和第一点提到的，自己的知识储备有关，也和第二点提到的口头表达能里有关，也是人际交往的一个基本能力吧。</p>
+]]></content>
+      <categories>
+        <category>感悟</category>
+        <category>影视</category>
+      </categories>
+      <tags>
+        <tag>感悟</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>《摔跤吧！爸爸》观后感</title>
     <url>/2020/06/25/%E3%80%8A%E6%91%94%E8%B7%A4%E5%90%A7%EF%BC%81%E7%88%B8%E7%88%B8%E3%80%8B%E8%A7%82%E5%90%8E%E6%84%9F/</url>
     <content><![CDATA[<p>好久没看过电影了，从开学之后好像就没看了，一方面是开学确实时间紧一点，主要还是我自己没去找电影看吧。OK，下面进入正题。</p>
@@ -4303,22 +4399,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>感悟</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在Ubuntu服务器上安装MySQL8</title>
-    <url>/2020/03/01/%E5%9C%A8Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql8/</url>
-    <content><![CDATA[<p>在<a href="http://dev.mysql.com/downloads/repo/apt/%EF%BC%8C%E4%B8%8B%E8%BD%BD%E4%B8%80%E4%B8%AAmysql-apt-config_0%E2%80%A6%E2%80%A6._all.deb%EF%BC%8C%E4%BC%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%EF%BC%8C%E7%94%A8dpkg">http://dev.mysql.com/downloads/repo/apt/，下载一个mysql-apt-config_0……._all.deb，传到服务器上，用dpkg</a> -i mysql-apt-config_0._…..all.deb安装执行，选择mysql8，OK之后回到终端窗口</p>
-<p>执行sudo apt update</p>
-<p>然后使用sudo apt install mysql-server命令，就会安装MySQL8.0</p>
-]]></content>
-      <categories>
-        <category>软件</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>软件</tag>
       </tags>
   </entry>
   <entry>
@@ -4447,6 +4527,22 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>在Ubuntu服务器上安装MySQL8</title>
+    <url>/2020/03/01/%E5%9C%A8Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql8/</url>
+    <content><![CDATA[<p>在<a href="http://dev.mysql.com/downloads/repo/apt/%EF%BC%8C%E4%B8%8B%E8%BD%BD%E4%B8%80%E4%B8%AAmysql-apt-config_0%E2%80%A6%E2%80%A6._all.deb%EF%BC%8C%E4%BC%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%EF%BC%8C%E7%94%A8dpkg">http://dev.mysql.com/downloads/repo/apt/，下载一个mysql-apt-config_0……._all.deb，传到服务器上，用dpkg</a> -i mysql-apt-config_0._…..all.deb安装执行，选择mysql8，OK之后回到终端窗口</p>
+<p>执行sudo apt update</p>
+<p>然后使用sudo apt install mysql-server命令，就会安装MySQL8.0</p>
+]]></content>
+      <categories>
+        <category>软件</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>大二下学期总结</title>
     <url>/2020/07/09/%E5%A4%A7%E4%BA%8C%E4%B8%8B%E5%AD%A6%E6%9C%9F%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
@@ -4464,89 +4560,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       <tags>
         <tag>感悟</tag>
         <tag>总结</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何利用好学生优惠</title>
-    <url>/2020/02/27/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/</url>
-    <content><![CDATA[<p><img data-src="/images/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/loq428.png" alt=" loq428.png"></p>
-<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>本文介绍的是利用学生身份可以享受到的相关学生优惠权益，但也希望各位享受权利的同时不要忘记自己的义务，不要售卖、转手自己的学生优惠资格，使得其他同学无法受益。</p>
-<p><strong>欢迎提交 issue 给我们你发现的实用资源！</strong> | 本文更新于 2019 年 05 月 12 日</p>
-<p>点击 <code>watch</code> 可以得到更新信息哟！</p>
-<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><ul>
-<li>查看、利用、转载、引用本集锦请查看 <a href="https://github.com/ivmm/Student-resources/blob/master/lisence">License</a>。</li>
-<li>一切官方的助学资金等，请咨询学校领导、辅导员、班主任，请勿向陌生账户转账！</li>
-<li>校园借贷风险极高，请谨慎尝试。</li>
-<li>对需要出示身份证、手持身份证的资源请保持谨慎。</li>
-<li>保管好自己的学生证、身份证，不要随意丢弃。</li>
-</ul>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>高考已经过去，你们也将迎来不同于以往的大学生活，大学或许对之前的12年管制式生活来说是解放了，不过你也知道的，解放后面是什么，脱离了父母和老师的管束以及适当的财务自主，你的生活并不会就无比精彩。</p>
-<p>让自己的大学生活过得积极而精彩：</p>
-<ol>
-<li>多参加校级、省级、国家级的比赛，你的比较对象就不会是同班同学了而是同龄人，视野更大。</li>
-<li>多上台讲讲，第一次第二次第三次可能会小心脏砰砰跳，后面真的就见怪不怪了，会自信很多。</li>
-<li>不要再默默无闻了，让老师们注意到你，都大学了上课还不敢举个手？</li>
-<li>做点义工，为社会做点贡献，工作了就真没时间了。</li>
-<li>做人做事记得留个证据，留个发票，留个单子。</li>
-<li>多向长辈们问候问候，偶尔放个长假了就去看看。</li>
-</ol>
-<p>那么就期待着9月开启你的上当受骗之旅吧，不过可能在6月买电脑买手机的时候就已经上当受骗。（逃～）</p>
-<h1 id="学生包"><a href="#学生包" class="headerlink" title="学生包"></a>学生包</h1><p>各类学生优惠项目经过许多年的发展，很多学生包已经不单单只通过 edu 邮箱验证身份了，而且使用 @edu.cn 反而会降低申请成功率。 建议使用学生证、入学通知书等有学院官方标志和日期的工具来证明自己的身份。</p>
-<ul>
-<li>**<a href="https://education.github.com/pack">Github 学生包</a>**，高质量的开发工具集合，并提供 DIgitalocean 的 50美元代金券，免费域名一枚。</li>
-<li>**<a href="https://imagine.microsoft.com/zh-cn/catalog">Microsoft Imagine 学生包</a>**，免费使用微软的开发软件，包括 Windows Server 系统，以及 Azure 学生订阅。</li>
-<li>**<a href="https://aws.amazon.com/cn/education/awseducate/">AWS 学生包</a>**，亚马逊云计算的学生包，可以获得至少 $40 的优惠和教育培训。</li>
-<li>**<a href="http://www.autodesk.com.cn/education/home">Autodesk 学生包</a>**，旗下 AutoCAD , 3DMAX , Maya 等软件，其（教育版）免费试用期可延长至三年。</li>
-<li>**<a href="https://www.jetbrains.com/student/">JetBrains 学生包</a>**，免费使用各类开发工具和集成工具。</li>
-<li>**<a href="https://edu.google.com/products/productivity-tools/">G Suite for Education</a>**，为教育用户提供的谷歌生产力工具套件（大陆不在申请区之内）。</li>
-<li><strong><a href="http://www.lindo.com/index.php?option=com_content&view=article&id=120&Itemid=45">LINGO Educational Research License</a></strong>, LINGO 教育授权，著名线性与非线性求解器，求解优化模型的最佳选择，数学建模必备。</li>
-</ul>
-<h1 id="学生优惠"><a href="#学生优惠" class="headerlink" title="学生优惠"></a>学生优惠</h1><ul>
-<li>**<a href="https://products.office.com/en-us/student?tab=students">Office in Education</a>**，微软家提供的免费 Office 365 教育优惠，中国大多数学校无缘申请。</li>
-<li>**<a href="https://promotion.aliyun.com/ntms/act/campus2018.html?accounttraceid=22aca9b8-8f26-44f2-b514-d97cf21a6654&userCode=oitiwrd3">阿里云+云翼计划</a>**，118元&#x2F;年，阿里云ECS+OSS+域名+机器学习API+Clouder认证。  24岁以下实名认证即可获得，无需验证学生身份!!</li>
-<li>**<a href="https://www.qcloud.com/act/campus">腾讯云+校园计划</a>**，10元一个月的云服务器租用，免费域名、云储存，需要抢购。</li>
-<li>**<a href="https://developer.huaweicloud.com/campus">华为云+云创校园计划</a>**，9元&#x2F;月 24岁及以下免学生认证，实名认证即可购买，需要抢购。</li>
-<li>**<a href="https://cloud.baidu.com/campaign/campus-2018/index.html">百度云启航校园计划</a>**，云服务器半年124元</li>
-<li>**<a href="http://www.apple.com/cn-k12/shop">苹果教育商店</a>**，苹果设备优惠，Music和 Pro APP 优惠，暑假还会有学生优惠大促销。</li>
-<li>**<a href="https://www.microsoftstore.com.cn/student?Icid=StoreNavi_EDU">微软教育商店</a>**，9折购买微软旗下的各种硬件设备。</li>
-<li>**<a href="http://www.onthehub.com/">OnTheHub 教育商店</a>**，PD 和 VMware 的虚拟机优惠，以及更多软件优惠。</li>
-<li>**<a href="https://www.siteground.com/student-hosting.htm">SiteGroud 学生计划</a>**，WP 官方推荐的主机托管商提供 $1.99&#x2F;月 高性能 CP 托管。</li>
-<li>**<a href="https://www.spotify.com/hk-zh/student/">Spotify 学生优惠</a>**，Spotify Premium学生订阅半价优惠。</li>
-<li>**<a href="https://pantheon.io/edu">Pantheon 学生版</a>**，专业高性能网站托管的学生优惠。</li>
-<li>**<a href="http://coupon.dji.com/cn/edu">大疆教育优惠</a>**，大疆产品的教育折扣。</li>
-<li>**<a href="https://todoist.com/education">Todoist教育优惠</a>**，强大的任务、思路整理工具提供半价教育优惠。</li>
-<li>**<a href="https://setapp.com/educational-discount">SetAPP教育优惠</a>**，macOS 应用合集订阅包半价优惠，非常适合MAC学生党，每月4.99刀</li>
-<li><strong><a href="http://app.eagle.cool/forum/topic/5354/%E6%88%91%E6%98%AF%E5%AD%A6%E7%94%9F%E6%88%96%E6%95%99%E5%B8%88-%E6%98%AF%E5%90%A6%E4%BA%AB%E6%9C%89%E4%BC%98%E6%83%A0%E4%BB%B7%E6%A0%BC">Eagle教育优惠</a></strong>, Win&#x2F;Mac系统，设计师图片管理工具，支持试用一个月，原价199，优惠价139，需提供身份和证件信息。优秀的本地图片管理工具，搭配学生版OneDrive进行同步管理，美滋滋。（目前已支持图片、视频、字体等类型文件的管理）</li>
-</ul>
-<h1 id="实用干货"><a href="#实用干货" class="headerlink" title="实用干货"></a>实用干货</h1><ul>
-<li>**<a href="https://creativemarket.com/free-goods">CreativeMarket Free Goods</a>**，每周免费六款设计资源，电商、前端必备。</li>
-<li>**<a href="https://www.axure.com/edu">Axure</a>**， 原型设计工具，产品、运营必备，学生、教师免费。</li>
-<li>**<a href="https://www.adobe.com/cn/products/xd.html">Adobe XD</a>**，原型设计工具，<del>没想到吧我Adobe也有免费的东西啦XD</del> 官网直接提供免费版，奋起直追Mac的Sketch，Win党难得的福利。此外Adobe还提供对XD插件设计的奖励，<a href="https://www.adobe.io/apis/creativecloud/xd.html">可参与设计开发可供XD使用的插件</a>。</li>
-<li>**<a href="http://education.minecraft.net/get-started">Minecraft</a>**， 我的世界教育免费版 ，仅支持邮箱。</li>
-<li>**<a href="http://www.wolfram.com/mathematica/pricing/students-individuals.php">Mathematica</a>**， 现代科学计算软件，3折优惠 50刀，添加购物车后显示。</li>
-<li>**<a href="https://www.tableau.com/zh-cn/academic">Tableau</a>**， 数据可视化分析软件，对学生、教室以及教育组织提供免费使用。</li>
-</ul>
-<h1 id="推荐软件"><a href="#推荐软件" class="headerlink" title="推荐软件"></a>推荐软件</h1><ul>
-<li>**<a href="https://cloudconvert.com/">CloudConvert</a>**，转码神器，格式齐全的在线转码利器。</li>
-<li>**<a href="https://smallpdf.com/">Smallpdf</a>**，专业文档转PDF，PDF转文档神器。</li>
-<li>**<a href="https://github.com/drew-royster/canvasFileSync">Canvas File Sync</a>**，Syncs Canvas-LMS课程文件</li>
-</ul>
-<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><ul>
-<li><strong>少数派：</strong><a href="https://sspai.com/post/39430">在校师生福利：Apple、微软、Adobe 等产品如何通过教育优惠购买</a></li>
-<li><strong>少数派：</strong><a href="https://sspai.com/post/43533">学生专属福利，你可能还不知道这些常用服务其实可以更便宜</a></li>
-</ul>
-<h1 id="相关推荐"><a href="#相关推荐" class="headerlink" title="相关推荐"></a>相关推荐</h1><p><strong>买电脑：</strong> 学生购买电脑多为笔记本，可关注 <a href="http://tieba.baidu.com/f?kw=%E7%AC%94%E8%AE%B0%E6%9C%AC&ie=utf-8">笔记本吧</a><br>如果为台式可关注 显卡吧&#x2F;图拉丁吧&#x2F;电脑吧 等专业硬件社区，或直接关注微信公众号“笔吧评测室”，由笔记本吧吧主和吧务团队运营，质量保证。</p>
-<p><strong>如何科学提问：</strong> 《<a href="http://git.oschina.net/mifar/How-To-Ask-Questions-The-Smart-Way">提问的智慧</a>》 《<a href="https://github.com/octowhale/Stop-Ask-Questions-The-Stupid-Ways/blob/master/README.md">别像弱智一样提问</a>》</p>
-<p><strong>搜索引擎：</strong> 为了你的身体健康、事业有成，请尽量<strong>减少使用百度</strong>的频率。</p>
-<p><strong>PPT 制作：</strong>《<a href="https://www.mf8.biz/ppt-tips/">放 PPT 之前，请你注意这一些！</a>》</p>
-<p>原作者博客：<a href="https://www.mf8.biz/">https://www.mf8.biz/</a></p>
-]]></content>
-      <categories>
-        <category>羊毛</category>
-      </categories>
-      <tags>
-        <tag>羊毛</tag>
-        <tag>转载</tag>
       </tags>
   </entry>
   <entry>
@@ -4614,6 +4627,45 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
 <li>易移植性</li>
 </ol>
 ]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统--操作系统的形成与发展</title>
+    <url>/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%A2%E6%88%90%E4%B8%8E%E5%8F%91%E5%B1%95/</url>
+    <content><![CDATA[<h2 id="操作系统的形成时期"><a href="#操作系统的形成时期" class="headerlink" title="操作系统的形成时期"></a>操作系统的形成时期</h2><h3 id="手动操作时期"><a href="#手动操作时期" class="headerlink" title="手动操作时期"></a>手动操作时期</h3><img data-src="/images/操作系统的形成与发展/vuMCXHTLqJBOh5t.png" alt="image.png" style="zoom:80%;" />
+
+<h4 id="存在缺点"><a href="#存在缺点" class="headerlink" title="存在缺点"></a>存在缺点</h4><ol>
+<li><p>用户独占全部计算机资源</p>
+</li>
+<li><p>CPU等待人工操作</p>
+</li>
+<li><p>CPU与I&#x2F;O设备串行操作</p>
+</li>
+</ol>
+<h3 id="监控程序阶段（早起批处理阶段）"><a href="#监控程序阶段（早起批处理阶段）" class="headerlink" title="监控程序阶段（早起批处理阶段）"></a>监控程序阶段（早起批处理阶段）</h3><img data-src="/images/操作系统的形成与发展/4QMJfoxRIXGiu9C.png" alt="单道批处理系统流程图" style="zoom:67%;" />
+
+<p>单道批处理系统流程图  </p>
+<span id="more"></span>
+
+<h2 id="操作系统的成熟阶段"><a href="#操作系统的成熟阶段" class="headerlink" title="操作系统的成熟阶段"></a>操作系统的成熟阶段</h2><h3 id="多道批处理系统"><a href="#多道批处理系统" class="headerlink" title="多道批处理系统"></a>多道批处理系统</h3><h4 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h4><ol>
+<li>程序浮动与存储保护问题</li>
+<li>CPU的调度和管理问题</li>
+<li>其他资源的管理和调度问题</li>
+</ol>
+<h3 id="分时操作系统"><a href="#分时操作系统" class="headerlink" title="分时操作系统"></a>分时操作系统</h3><h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h4><ol>
+<li>人机交互</li>
+<li>共享主机</li>
+<li>便于用户上机</li>
+</ol>
+<img data-src="/images/操作系统的形成与发展/vrjo1l8dPaFKY7c.png" alt="image.png" style="zoom:67%;" />
+
+<h2 id="进一步发展时期"><a href="#进一步发展时期" class="headerlink" title="进一步发展时期"></a>进一步发展时期</h2>]]></content>
       <categories>
         <category>学习笔记</category>
         <category>操作系统</category>
@@ -4715,42 +4767,86 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
       </tags>
   </entry>
   <entry>
-    <title>操作系统--操作系统的形成与发展</title>
-    <url>/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%A2%E6%88%90%E4%B8%8E%E5%8F%91%E5%B1%95/</url>
-    <content><![CDATA[<h2 id="操作系统的形成时期"><a href="#操作系统的形成时期" class="headerlink" title="操作系统的形成时期"></a>操作系统的形成时期</h2><h3 id="手动操作时期"><a href="#手动操作时期" class="headerlink" title="手动操作时期"></a>手动操作时期</h3><img data-src="/images/操作系统的形成与发展/vuMCXHTLqJBOh5t.png" alt="image.png" style="zoom:80%;" />
-
-<h4 id="存在缺点"><a href="#存在缺点" class="headerlink" title="存在缺点"></a>存在缺点</h4><ol>
-<li><p>用户独占全部计算机资源</p>
-</li>
-<li><p>CPU等待人工操作</p>
-</li>
-<li><p>CPU与I&#x2F;O设备串行操作</p>
-</li>
+    <title>如何利用好学生优惠</title>
+    <url>/2020/02/27/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/</url>
+    <content><![CDATA[<p><img data-src="/images/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/loq428.png" alt=" loq428.png"></p>
+<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>本文介绍的是利用学生身份可以享受到的相关学生优惠权益，但也希望各位享受权利的同时不要忘记自己的义务，不要售卖、转手自己的学生优惠资格，使得其他同学无法受益。</p>
+<p><strong>欢迎提交 issue 给我们你发现的实用资源！</strong> | 本文更新于 2019 年 05 月 12 日</p>
+<p>点击 <code>watch</code> 可以得到更新信息哟！</p>
+<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><ul>
+<li>查看、利用、转载、引用本集锦请查看 <a href="https://github.com/ivmm/Student-resources/blob/master/lisence">License</a>。</li>
+<li>一切官方的助学资金等，请咨询学校领导、辅导员、班主任，请勿向陌生账户转账！</li>
+<li>校园借贷风险极高，请谨慎尝试。</li>
+<li>对需要出示身份证、手持身份证的资源请保持谨慎。</li>
+<li>保管好自己的学生证、身份证，不要随意丢弃。</li>
+</ul>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>高考已经过去，你们也将迎来不同于以往的大学生活，大学或许对之前的12年管制式生活来说是解放了，不过你也知道的，解放后面是什么，脱离了父母和老师的管束以及适当的财务自主，你的生活并不会就无比精彩。</p>
+<p>让自己的大学生活过得积极而精彩：</p>
+<ol>
+<li>多参加校级、省级、国家级的比赛，你的比较对象就不会是同班同学了而是同龄人，视野更大。</li>
+<li>多上台讲讲，第一次第二次第三次可能会小心脏砰砰跳，后面真的就见怪不怪了，会自信很多。</li>
+<li>不要再默默无闻了，让老师们注意到你，都大学了上课还不敢举个手？</li>
+<li>做点义工，为社会做点贡献，工作了就真没时间了。</li>
+<li>做人做事记得留个证据，留个发票，留个单子。</li>
+<li>多向长辈们问候问候，偶尔放个长假了就去看看。</li>
 </ol>
-<h3 id="监控程序阶段（早起批处理阶段）"><a href="#监控程序阶段（早起批处理阶段）" class="headerlink" title="监控程序阶段（早起批处理阶段）"></a>监控程序阶段（早起批处理阶段）</h3><img data-src="/images/操作系统的形成与发展/4QMJfoxRIXGiu9C.png" alt="单道批处理系统流程图" style="zoom:67%;" />
-
-<p>单道批处理系统流程图  </p>
-<span id="more"></span>
-
-<h2 id="操作系统的成熟阶段"><a href="#操作系统的成熟阶段" class="headerlink" title="操作系统的成熟阶段"></a>操作系统的成熟阶段</h2><h3 id="多道批处理系统"><a href="#多道批处理系统" class="headerlink" title="多道批处理系统"></a>多道批处理系统</h3><h4 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h4><ol>
-<li>程序浮动与存储保护问题</li>
-<li>CPU的调度和管理问题</li>
-<li>其他资源的管理和调度问题</li>
-</ol>
-<h3 id="分时操作系统"><a href="#分时操作系统" class="headerlink" title="分时操作系统"></a>分时操作系统</h3><h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h4><ol>
-<li>人机交互</li>
-<li>共享主机</li>
-<li>便于用户上机</li>
-</ol>
-<img data-src="/images/操作系统的形成与发展/vrjo1l8dPaFKY7c.png" alt="image.png" style="zoom:67%;" />
-
-<h2 id="进一步发展时期"><a href="#进一步发展时期" class="headerlink" title="进一步发展时期"></a>进一步发展时期</h2>]]></content>
+<p>那么就期待着9月开启你的上当受骗之旅吧，不过可能在6月买电脑买手机的时候就已经上当受骗。（逃～）</p>
+<h1 id="学生包"><a href="#学生包" class="headerlink" title="学生包"></a>学生包</h1><p>各类学生优惠项目经过许多年的发展，很多学生包已经不单单只通过 edu 邮箱验证身份了，而且使用 @edu.cn 反而会降低申请成功率。 建议使用学生证、入学通知书等有学院官方标志和日期的工具来证明自己的身份。</p>
+<ul>
+<li>**<a href="https://education.github.com/pack">Github 学生包</a>**，高质量的开发工具集合，并提供 DIgitalocean 的 50美元代金券，免费域名一枚。</li>
+<li>**<a href="https://imagine.microsoft.com/zh-cn/catalog">Microsoft Imagine 学生包</a>**，免费使用微软的开发软件，包括 Windows Server 系统，以及 Azure 学生订阅。</li>
+<li>**<a href="https://aws.amazon.com/cn/education/awseducate/">AWS 学生包</a>**，亚马逊云计算的学生包，可以获得至少 $40 的优惠和教育培训。</li>
+<li>**<a href="http://www.autodesk.com.cn/education/home">Autodesk 学生包</a>**，旗下 AutoCAD , 3DMAX , Maya 等软件，其（教育版）免费试用期可延长至三年。</li>
+<li>**<a href="https://www.jetbrains.com/student/">JetBrains 学生包</a>**，免费使用各类开发工具和集成工具。</li>
+<li>**<a href="https://edu.google.com/products/productivity-tools/">G Suite for Education</a>**，为教育用户提供的谷歌生产力工具套件（大陆不在申请区之内）。</li>
+<li><strong><a href="http://www.lindo.com/index.php?option=com_content&view=article&id=120&Itemid=45">LINGO Educational Research License</a></strong>, LINGO 教育授权，著名线性与非线性求解器，求解优化模型的最佳选择，数学建模必备。</li>
+</ul>
+<h1 id="学生优惠"><a href="#学生优惠" class="headerlink" title="学生优惠"></a>学生优惠</h1><ul>
+<li>**<a href="https://products.office.com/en-us/student?tab=students">Office in Education</a>**，微软家提供的免费 Office 365 教育优惠，中国大多数学校无缘申请。</li>
+<li>**<a href="https://promotion.aliyun.com/ntms/act/campus2018.html?accounttraceid=22aca9b8-8f26-44f2-b514-d97cf21a6654&userCode=oitiwrd3">阿里云+云翼计划</a>**，118元&#x2F;年，阿里云ECS+OSS+域名+机器学习API+Clouder认证。  24岁以下实名认证即可获得，无需验证学生身份!!</li>
+<li>**<a href="https://www.qcloud.com/act/campus">腾讯云+校园计划</a>**，10元一个月的云服务器租用，免费域名、云储存，需要抢购。</li>
+<li>**<a href="https://developer.huaweicloud.com/campus">华为云+云创校园计划</a>**，9元&#x2F;月 24岁及以下免学生认证，实名认证即可购买，需要抢购。</li>
+<li>**<a href="https://cloud.baidu.com/campaign/campus-2018/index.html">百度云启航校园计划</a>**，云服务器半年124元</li>
+<li>**<a href="http://www.apple.com/cn-k12/shop">苹果教育商店</a>**，苹果设备优惠，Music和 Pro APP 优惠，暑假还会有学生优惠大促销。</li>
+<li>**<a href="https://www.microsoftstore.com.cn/student?Icid=StoreNavi_EDU">微软教育商店</a>**，9折购买微软旗下的各种硬件设备。</li>
+<li>**<a href="http://www.onthehub.com/">OnTheHub 教育商店</a>**，PD 和 VMware 的虚拟机优惠，以及更多软件优惠。</li>
+<li>**<a href="https://www.siteground.com/student-hosting.htm">SiteGroud 学生计划</a>**，WP 官方推荐的主机托管商提供 $1.99&#x2F;月 高性能 CP 托管。</li>
+<li>**<a href="https://www.spotify.com/hk-zh/student/">Spotify 学生优惠</a>**，Spotify Premium学生订阅半价优惠。</li>
+<li>**<a href="https://pantheon.io/edu">Pantheon 学生版</a>**，专业高性能网站托管的学生优惠。</li>
+<li>**<a href="http://coupon.dji.com/cn/edu">大疆教育优惠</a>**，大疆产品的教育折扣。</li>
+<li>**<a href="https://todoist.com/education">Todoist教育优惠</a>**，强大的任务、思路整理工具提供半价教育优惠。</li>
+<li>**<a href="https://setapp.com/educational-discount">SetAPP教育优惠</a>**，macOS 应用合集订阅包半价优惠，非常适合MAC学生党，每月4.99刀</li>
+<li><strong><a href="http://app.eagle.cool/forum/topic/5354/%E6%88%91%E6%98%AF%E5%AD%A6%E7%94%9F%E6%88%96%E6%95%99%E5%B8%88-%E6%98%AF%E5%90%A6%E4%BA%AB%E6%9C%89%E4%BC%98%E6%83%A0%E4%BB%B7%E6%A0%BC">Eagle教育优惠</a></strong>, Win&#x2F;Mac系统，设计师图片管理工具，支持试用一个月，原价199，优惠价139，需提供身份和证件信息。优秀的本地图片管理工具，搭配学生版OneDrive进行同步管理，美滋滋。（目前已支持图片、视频、字体等类型文件的管理）</li>
+</ul>
+<h1 id="实用干货"><a href="#实用干货" class="headerlink" title="实用干货"></a>实用干货</h1><ul>
+<li>**<a href="https://creativemarket.com/free-goods">CreativeMarket Free Goods</a>**，每周免费六款设计资源，电商、前端必备。</li>
+<li>**<a href="https://www.axure.com/edu">Axure</a>**， 原型设计工具，产品、运营必备，学生、教师免费。</li>
+<li>**<a href="https://www.adobe.com/cn/products/xd.html">Adobe XD</a>**，原型设计工具，<del>没想到吧我Adobe也有免费的东西啦XD</del> 官网直接提供免费版，奋起直追Mac的Sketch，Win党难得的福利。此外Adobe还提供对XD插件设计的奖励，<a href="https://www.adobe.io/apis/creativecloud/xd.html">可参与设计开发可供XD使用的插件</a>。</li>
+<li>**<a href="http://education.minecraft.net/get-started">Minecraft</a>**， 我的世界教育免费版 ，仅支持邮箱。</li>
+<li>**<a href="http://www.wolfram.com/mathematica/pricing/students-individuals.php">Mathematica</a>**， 现代科学计算软件，3折优惠 50刀，添加购物车后显示。</li>
+<li>**<a href="https://www.tableau.com/zh-cn/academic">Tableau</a>**， 数据可视化分析软件，对学生、教室以及教育组织提供免费使用。</li>
+</ul>
+<h1 id="推荐软件"><a href="#推荐软件" class="headerlink" title="推荐软件"></a>推荐软件</h1><ul>
+<li>**<a href="https://cloudconvert.com/">CloudConvert</a>**，转码神器，格式齐全的在线转码利器。</li>
+<li>**<a href="https://smallpdf.com/">Smallpdf</a>**，专业文档转PDF，PDF转文档神器。</li>
+<li>**<a href="https://github.com/drew-royster/canvasFileSync">Canvas File Sync</a>**，Syncs Canvas-LMS课程文件</li>
+</ul>
+<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><ul>
+<li><strong>少数派：</strong><a href="https://sspai.com/post/39430">在校师生福利：Apple、微软、Adobe 等产品如何通过教育优惠购买</a></li>
+<li><strong>少数派：</strong><a href="https://sspai.com/post/43533">学生专属福利，你可能还不知道这些常用服务其实可以更便宜</a></li>
+</ul>
+<h1 id="相关推荐"><a href="#相关推荐" class="headerlink" title="相关推荐"></a>相关推荐</h1><p><strong>买电脑：</strong> 学生购买电脑多为笔记本，可关注 <a href="http://tieba.baidu.com/f?kw=%E7%AC%94%E8%AE%B0%E6%9C%AC&ie=utf-8">笔记本吧</a><br>如果为台式可关注 显卡吧&#x2F;图拉丁吧&#x2F;电脑吧 等专业硬件社区，或直接关注微信公众号“笔吧评测室”，由笔记本吧吧主和吧务团队运营，质量保证。</p>
+<p><strong>如何科学提问：</strong> 《<a href="http://git.oschina.net/mifar/How-To-Ask-Questions-The-Smart-Way">提问的智慧</a>》 《<a href="https://github.com/octowhale/Stop-Ask-Questions-The-Stupid-Ways/blob/master/README.md">别像弱智一样提问</a>》</p>
+<p><strong>搜索引擎：</strong> 为了你的身体健康、事业有成，请尽量<strong>减少使用百度</strong>的频率。</p>
+<p><strong>PPT 制作：</strong>《<a href="https://www.mf8.biz/ppt-tips/">放 PPT 之前，请你注意这一些！</a>》</p>
+<p>原作者博客：<a href="https://www.mf8.biz/">https://www.mf8.biz/</a></p>
+]]></content>
       <categories>
-        <category>学习笔记</category>
-        <category>操作系统</category>
+        <category>羊毛</category>
       </categories>
       <tags>
-        <tag>学习笔记</tag>
+        <tag>羊毛</tag>
+        <tag>转载</tag>
       </tags>
   </entry>
   <entry>
@@ -4803,23 +4899,6 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
       </tags>
   </entry>
   <entry>
-    <title>《时生》读后感</title>
-    <url>/2020/03/13/%E6%97%B6%E7%94%9F%E8%AF%BB%E5%90%8E%E6%84%9F/</url>
-    <content><![CDATA[<p>&amp;emsp;&amp;emsp;这本书也是很符合东野圭吾的风格，讲的是穿越的故事，很像我看的他的第一本书——《解忧杂货店》，但是给人的感觉却不一样。</p>
-<p>&amp;emsp;&amp;emsp;小说主人公是时生，也就是拓实的儿子，拓实与丽子生下的有重病的儿子。故事是以插叙的手法进描绘的，这也很符合东野圭吾的风格。从拓实和丽子结婚开始，中间插叙了他们认识之前的那些故事，时生穿越时空主要是帮助他爸爸拓实，重新认识自己的身份，放下对其生母美须子的恨意，通过这件事之后也改变了拓实为人处世的态度，让他的生活一步步走向正轨。</p>
-<p>&amp;emsp;&amp;emsp;最喜欢的几句原文：</p>
-<p>&amp;emsp;&amp;emsp;“未来不仅仅是明天，未来在人心中，只要心中有未来，人就能幸福起来，因为有人教了你母亲这个，她才将你生下来，可你看着自己们整天牢骚满腹，不思进取，你感受不到未来不能怪别人，要怪你自己，因为你是个混蛋！”</p>
-<p>&amp;emsp;&amp;emsp;“确信自己喜欢的人能好好地活着，即便面对死亡，也看到了未来。”</p>
-]]></content>
-      <categories>
-        <category>感悟</category>
-        <category>小说</category>
-      </categories>
-      <tags>
-        <tag>感悟</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>用ssh公钥配对登录服务器</title>
     <url>/2020/03/01/%E7%94%A8ssh%E5%85%AC%E9%92%A5%E9%85%8D%E5%AF%B9%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
     <content><![CDATA[<h3 id="1-生成公钥"><a href="#1-生成公钥" class="headerlink" title="1.生成公钥"></a>1.生成公钥</h3><p>ssh-keygen -t rsa -b 4096 -C “你的邮箱地址”</p>
@@ -4839,6 +4918,23 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
       <tags>
         <tag>服务器</tag>
         <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《时生》读后感</title>
+    <url>/2020/03/13/%E6%97%B6%E7%94%9F%E8%AF%BB%E5%90%8E%E6%84%9F/</url>
+    <content><![CDATA[<p>&amp;emsp;&amp;emsp;这本书也是很符合东野圭吾的风格，讲的是穿越的故事，很像我看的他的第一本书——《解忧杂货店》，但是给人的感觉却不一样。</p>
+<p>&amp;emsp;&amp;emsp;小说主人公是时生，也就是拓实的儿子，拓实与丽子生下的有重病的儿子。故事是以插叙的手法进描绘的，这也很符合东野圭吾的风格。从拓实和丽子结婚开始，中间插叙了他们认识之前的那些故事，时生穿越时空主要是帮助他爸爸拓实，重新认识自己的身份，放下对其生母美须子的恨意，通过这件事之后也改变了拓实为人处世的态度，让他的生活一步步走向正轨。</p>
+<p>&amp;emsp;&amp;emsp;最喜欢的几句原文：</p>
+<p>&amp;emsp;&amp;emsp;“未来不仅仅是明天，未来在人心中，只要心中有未来，人就能幸福起来，因为有人教了你母亲这个，她才将你生下来，可你看着自己们整天牢骚满腹，不思进取，你感受不到未来不能怪别人，要怪你自己，因为你是个混蛋！”</p>
+<p>&amp;emsp;&amp;emsp;“确信自己喜欢的人能好好地活着，即便面对死亡，也看到了未来。”</p>
+]]></content>
+      <categories>
+        <category>感悟</category>
+        <category>小说</category>
+      </categories>
+      <tags>
+        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -4874,34 +4970,6 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
       <tags>
         <tag>服务器</tag>
         <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>蓝桥杯单片机基本模块</title>
-    <url>/2020/03/08/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%9D%97/</url>
-    <content><![CDATA[<h2 id="锁存器"><a href="#锁存器" class="headerlink" title="锁存器"></a>锁存器</h2><p>蓝桥杯这款单片机是用锁存器来实现引脚的复用的，所以代码写起来很麻烦，总是要开关锁存器</p>
-<p>为了偷懒，可以用宏定义来定义每个锁存器打开的代码，也可以用函数来实现</p>
-<p><strong>用宏定义：</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> Y4 P2 = (P2&amp;0x1f)|0x80;  <span class="comment">//led</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y5 P2 = (P2&amp;0x1f)|0xa0;  <span class="comment">//蜂鸣器和继电器</span></span></span><br><span class="line">P0 = <span class="number">0x40</span>; <span class="comment">//蜂鸣器</span></span><br><span class="line">P0 = <span class="number">0x10</span>；<span class="comment">//继电器</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y6 P2 = (P2&amp;0x1f)|0xc0; <span class="comment">//数码管位选</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y7 P2 = (P2&amp;0x1f)|0xe0; <span class="comment">//数码管段选</span></span></span><br></pre></td></tr></table></figure>
-
-<p><strong>用函数：</strong></p>
-<span id="more"></span>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(channel)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>; <span class="comment">//led</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>; <span class="comment">//蜂鸣器和继电器</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>; <span class="comment">//数码管位选</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>; <span class="comment">//数码管段选</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="数码管的显示问题"><a href="#数码管的显示问题" class="headerlink" title="数码管的显示问题"></a>数码管的显示问题</h2><p>初学者一般都是用延时来实现动态数码管的，但是当要实现的功能多起来了，用延时来实现动态数码管，数码管很容易会闪烁，整体效果就很不好了。</p>
-<p>另外一种方法可以是用定时器来扫描数码管，每隔一段时间就进入中断服务函数执行数码管的扫描，只要中断间隔的时间小于人眼的视觉暂留（大概是0.1~0.4s），就看不出来数码管会闪烁了。但是这个方法也有缺点，缺点是整个系统每隔这么短的时间就必须要进入这个中断服务函数，很容易会影响、打断其他程序的执行。现在也有解决方法就是在不能被中断打断的功能执行前关掉中断的开关，执行完之后再打开，显然这个解决方法也只是权宜之计，关掉中断的开关有的时候会影响这个计时器的计时，获得的时间就不是很准确，但是误差会很小吧，十行代码51单片机几毫秒甚至更短的时间就可以执行完。所以第二种方法算是比较好的一种方法了，相对于第一种方法来说。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[]=&#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[]=&#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],smg_num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(channel)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>; <span class="comment">//led</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;	<span class="comment">//蜂鸣器和继电器</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>; <span class="comment">//数码管位选</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>; <span class="comment">//数码管段选</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>  <span class="comment">//总的初始化函数</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> i;</span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; <span class="number">8</span>;i++)</span><br><span class="line">    smgbuf[i] = <span class="number">10</span>;	<span class="comment">//做初始化，上电数码管全部是熄灭的</span></span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0xff</span>;  <span class="comment">//关掉所有的LED</span></span><br><span class="line">  select_channel(<span class="number">4</span>);</span><br><span class="line">  P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0x00</span>;  <span class="comment">//关掉继电器和蜂鸣器</span></span><br><span class="line">  select_channel(<span class="number">5</span>);</span><br><span class="line">  P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>	<span class="comment">//初始化计时器</span></span><br><span class="line">&#123;</span><br><span class="line">  TMOD = <span class="number">0x01</span>;</span><br><span class="line">  TH1 = <span class="number">0xf8</span>;</span><br><span class="line">  TL1 = <span class="number">0x2f</span>;<span class="comment">//2ms</span></span><br><span class="line">  EA = <span class="number">1</span>;</span><br><span class="line">  ET1 = <span class="number">1</span>;</span><br><span class="line">  TR1 = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>  <span class="comment">//数码管显示函数</span></span><br><span class="line">&#123;</span><br><span class="line">  smg_num++;</span><br><span class="line">  <span class="keyword">if</span>(smg_num &gt;= <span class="number">8</span>)</span><br><span class="line">    smg_num = <span class="number">0</span>;  <span class="comment">//从0-7循环扫描每一个数码管</span></span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;		<span class="comment">//消影</span></span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[smg_num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[smg_num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> i;</span><br><span class="line">  init();</span><br><span class="line">  init_timer();</span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">      smgbuf[i] = i;  <span class="comment">//数码管一次显示0-7</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer1</span><span class="params">()</span> interrupt 3</span><br><span class="line">&#123;</span><br><span class="line">  display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面的代码是直接在Typora上面写的，没有编译，应该没有很大问题（手动滑稽）</p>
-<p>这样写要改变数码管的值只要改变数组smgbuf[]中的值就行了0-9的数字是和编号一一对应的，其他的特殊符号可以自己手动加。</p>
-]]></content>
-      <categories>
-        <category>备赛</category>
-        <category>蓝桥杯</category>
-      </categories>
-      <tags>
-        <tag>蓝桥杯</tag>
       </tags>
   </entry>
   <entry>
@@ -4943,33 +5011,24 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
       </tags>
   </entry>
   <entry>
-    <title>蓝桥杯单片机超声波模块</title>
-    <url>/2020/03/13/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</url>
-    <content><![CDATA[<blockquote>
-<p>这个超声波模块的工作原理很简单，传感器像两个喇叭一样的东西，一个是负责发送超声波的，另一个负责接收超声波，根据发出到接收的时间间隔就可以算出距离了。</p>
-<p>s &#x3D; v*t&#x2F;2 </p>
-<p>初中物理知识哦。</p>
-</blockquote>
-<p>就不多说了直接上代码</p>
+    <title>蓝桥杯单片机基本模块</title>
+    <url>/2020/03/08/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%9D%97/</url>
+    <content><![CDATA[<h2 id="锁存器"><a href="#锁存器" class="headerlink" title="锁存器"></a>锁存器</h2><p>蓝桥杯这款单片机是用锁存器来实现引脚的复用的，所以代码写起来很麻烦，总是要开关锁存器</p>
+<p>为了偷懒，可以用宏定义来定义每个锁存器打开的代码，也可以用函数来实现</p>
+<p><strong>用宏定义：</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> Y4 P2 = (P2&amp;0x1f)|0x80;  <span class="comment">//led</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y5 P2 = (P2&amp;0x1f)|0xa0;  <span class="comment">//蜂鸣器和继电器</span></span></span><br><span class="line">P0 = <span class="number">0x40</span>; <span class="comment">//蜂鸣器</span></span><br><span class="line">P0 = <span class="number">0x10</span>；<span class="comment">//继电器</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y6 P2 = (P2&amp;0x1f)|0xc0; <span class="comment">//数码管位选</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y7 P2 = (P2&amp;0x1f)|0xe0; <span class="comment">//数码管段选</span></span></span><br></pre></td></tr></table></figure>
+
+<p><strong>用函数：</strong></p>
 <span id="more"></span>
 
-<p>main.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> sonic_counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> smgbuf[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	init();</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(sonic_counter &gt;= <span class="number">40</span>)<span class="comment">//每隔一定的时间测量一次，必须要加否则测的数据不正确</span></span><br><span class="line">		&#123;</span><br><span class="line">			distance = measure_distance();</span><br><span class="line">			sonic_counter = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		smgbuf[<span class="number">5</span>] = distance/<span class="number">100</span>;</span><br><span class="line">		smgbuf[<span class="number">6</span>] = distance%<span class="number">100</span>/<span class="number">10</span>;</span><br><span class="line">		smgbuf[<span class="number">7</span>] = distance%<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer2</span><span class="params">()</span> interrupt 12<span class="comment">//定时器2（52单片机多出来的一个定时器）</span></span><br><span class="line">&#123;</span><br><span class="line">	sonic_counter++;</span><br><span class="line">	display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(channel)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>; <span class="comment">//led</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>; <span class="comment">//蜂鸣器和继电器</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>; <span class="comment">//数码管位选</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>; <span class="comment">//数码管段选</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>common.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _COMMON_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _COMMON_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;intrins.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sfr AUXR = <span class="number">0x8e</span>;</span><br><span class="line">sfr IE2 = <span class="number">0xaf</span>;</span><br><span class="line">sfr T2H = <span class="number">0xd6</span>;</span><br><span class="line">sfr T2L = <span class="number">0xd7</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="数码管的显示问题"><a href="#数码管的显示问题" class="headerlink" title="数码管的显示问题"></a>数码管的显示问题</h2><p>初学者一般都是用延时来实现动态数码管的，但是当要实现的功能多起来了，用延时来实现动态数码管，数码管很容易会闪烁，整体效果就很不好了。</p>
+<p>另外一种方法可以是用定时器来扫描数码管，每隔一段时间就进入中断服务函数执行数码管的扫描，只要中断间隔的时间小于人眼的视觉暂留（大概是0.1~0.4s），就看不出来数码管会闪烁了。但是这个方法也有缺点，缺点是整个系统每隔这么短的时间就必须要进入这个中断服务函数，很容易会影响、打断其他程序的执行。现在也有解决方法就是在不能被中断打断的功能执行前关掉中断的开关，执行完之后再打开，显然这个解决方法也只是权宜之计，关掉中断的开关有的时候会影响这个计时器的计时，获得的时间就不是很准确，但是误差会很小吧，十行代码51单片机几毫秒甚至更短的时间就可以执行完。所以第二种方法算是比较好的一种方法了，相对于第一种方法来说。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[]=&#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[]=&#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],smg_num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(channel)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>; <span class="comment">//led</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;	<span class="comment">//蜂鸣器和继电器</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>; <span class="comment">//数码管位选</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>; <span class="comment">//数码管段选</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>  <span class="comment">//总的初始化函数</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> i;</span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; <span class="number">8</span>;i++)</span><br><span class="line">    smgbuf[i] = <span class="number">10</span>;	<span class="comment">//做初始化，上电数码管全部是熄灭的</span></span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0xff</span>;  <span class="comment">//关掉所有的LED</span></span><br><span class="line">  select_channel(<span class="number">4</span>);</span><br><span class="line">  P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0x00</span>;  <span class="comment">//关掉继电器和蜂鸣器</span></span><br><span class="line">  select_channel(<span class="number">5</span>);</span><br><span class="line">  P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>	<span class="comment">//初始化计时器</span></span><br><span class="line">&#123;</span><br><span class="line">  TMOD = <span class="number">0x01</span>;</span><br><span class="line">  TH1 = <span class="number">0xf8</span>;</span><br><span class="line">  TL1 = <span class="number">0x2f</span>;<span class="comment">//2ms</span></span><br><span class="line">  EA = <span class="number">1</span>;</span><br><span class="line">  ET1 = <span class="number">1</span>;</span><br><span class="line">  TR1 = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>  <span class="comment">//数码管显示函数</span></span><br><span class="line">&#123;</span><br><span class="line">  smg_num++;</span><br><span class="line">  <span class="keyword">if</span>(smg_num &gt;= <span class="number">8</span>)</span><br><span class="line">    smg_num = <span class="number">0</span>;  <span class="comment">//从0-7循环扫描每一个数码管</span></span><br><span class="line">  </span><br><span class="line">  P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;		<span class="comment">//消影</span></span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[smg_num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[smg_num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> i;</span><br><span class="line">  init();</span><br><span class="line">  init_timer();</span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">      smgbuf[i] = i;  <span class="comment">//数码管一次显示0-7</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer1</span><span class="params">()</span> interrupt 3</span><br><span class="line">&#123;</span><br><span class="line">  display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>common.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[<span class="number">8</span>] = &#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[] = &#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">switch</span>(channel)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">		smgbuf[i] = <span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">4</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">5</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	init_timer();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	AUXR = AUXR&amp;<span class="number">0x33</span>|<span class="number">0x10</span>;<span class="comment">//定时器2的配置</span></span><br><span class="line">	IE2 = <span class="number">0x04</span>;</span><br><span class="line">	T2H = <span class="number">0xf8</span>;</span><br><span class="line">	T2L = <span class="number">0x2f</span>;</span><br><span class="line">	EA = <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	TMOD = <span class="number">0x01</span>;<span class="comment">//定时器1的配置，用于计算发送和接收之间的时间间隔</span></span><br><span class="line">	TH1 = <span class="number">0</span>;</span><br><span class="line">	TL1 = <span class="number">0</span>;</span><br><span class="line">	TR1 = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	num++;</span><br><span class="line">	<span class="keyword">if</span>(num &gt;= <span class="number">8</span>)</span><br><span class="line">		num = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>sonic.h</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _SONIC_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _SONIC_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> somenop &#123;_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();&#125;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//可以参照原理图</span></span><br><span class="line">sbit tx = P1^<span class="number">0</span>;<span class="comment">//发送波传感器的引脚</span></span><br><span class="line">sbit rx = P1^<span class="number">1</span>;<span class="comment">//接收波传感器的引脚</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>sonic.c</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span><span class="comment">//发送超声波</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)<span class="comment">//发送一组超声波</span></span><br><span class="line">	&#123;</span><br><span class="line">		tx = <span class="number">1</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">		tx = <span class="number">0</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">	&#125;</span><br><span class="line">	TR1 = <span class="number">1</span>;<span class="comment">//定时器1开始计时</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span><span class="comment">//计算、测量距离</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	send_wave();<span class="comment">//先发送</span></span><br><span class="line">	<span class="keyword">while</span>(rx == <span class="number">1</span>&amp;&amp;TF1 == <span class="number">0</span>);<span class="comment">//等待接收完毕或者定时器1溢出</span></span><br><span class="line">	TR1 = <span class="number">0</span>;<span class="comment">//定时器1停止计时</span></span><br><span class="line">	<span class="keyword">if</span>(rx == <span class="number">0</span>&amp;&amp;TF1 == <span class="number">0</span>)<span class="comment">//正常量程之内</span></span><br><span class="line">	&#123;</span><br><span class="line">		distance = ((TH1&lt;&lt;<span class="number">8</span>)+TL1)*<span class="number">0.017</span>;<span class="comment">//计算距离</span></span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> </span><br><span class="line">	&#123;</span><br><span class="line">		distance = <span class="number">999</span>;<span class="comment">//超出量程</span></span><br><span class="line">		TF1 = <span class="number">0</span>;</span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> distance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
+<p>上面的代码是直接在Typora上面写的，没有编译，应该没有很大问题（手动滑稽）</p>
+<p>这样写要改变数码管的值只要改变数组smgbuf[]中的值就行了0-9的数字是和编号一一对应的，其他的特殊符号可以自己手动加。</p>
 ]]></content>
       <categories>
         <category>备赛</category>
@@ -5007,6 +5066,43 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
 <h3 id="ds1302-h"><a href="#ds1302-h" class="headerlink" title="ds1302.h"></a>ds1302.h</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> __DS1302_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __DS1302_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Write_Ds1302_Byte</span><span class="params">(<span class="type">unsigned</span>  <span class="type">char</span> temp)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">Write_Ds1302</span><span class="params">( <span class="type">unsigned</span> <span class="type">char</span> address,<span class="type">unsigned</span> <span class="type">char</span> dat )</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> <span class="title function_">Read_Ds1302</span> <span class="params">( <span class="type">unsigned</span> <span class="type">char</span> address )</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_ds1302</span><span class="params">(<span class="type">char</span> h,m,s)</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h3 id="ds1302-c"><a href="#ds1302-c" class="headerlink" title="ds1302.c"></a>ds1302.c</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ds1302.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sbit SCK=P1^<span class="number">7</span>;		</span><br><span class="line">sbit SDA=P2^<span class="number">3</span>;		</span><br><span class="line">sbit RST = P1^<span class="number">3</span>;  			</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Write_Ds1302_Byte</span><span class="params">(<span class="type">unsigned</span>  <span class="type">char</span> temp)</span> </span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++)     	</span><br><span class="line">	&#123; </span><br><span class="line">		SCK=<span class="number">0</span>;</span><br><span class="line">		SDA=temp&amp;<span class="number">0x01</span>;</span><br><span class="line">		temp&gt;&gt;=<span class="number">1</span>; </span><br><span class="line">		SCK=<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;   </span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Write_Ds1302</span><span class="params">( <span class="type">unsigned</span> <span class="type">char</span> address,<span class="type">unsigned</span> <span class="type">char</span> dat )</span>     </span><br><span class="line">&#123;</span><br><span class="line"> 	RST=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line"> 	SCK=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line"> 	RST=<span class="number">1</span>;	</span><br><span class="line">   	_nop_();  </span><br><span class="line"> 	Write_Ds1302_Byte(address);	</span><br><span class="line"> 	Write_Ds1302_Byte(dat);		</span><br><span class="line"> 	RST=<span class="number">0</span>; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> <span class="title function_">Read_Ds1302</span> <span class="params">( <span class="type">unsigned</span> <span class="type">char</span> address )</span></span><br><span class="line">&#123;</span><br><span class="line"> 	<span class="type">unsigned</span> <span class="type">char</span> i,temp=<span class="number">0x00</span>;</span><br><span class="line"> 	RST=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line"> 	SCK=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line"> 	RST=<span class="number">1</span>;</span><br><span class="line">	_nop_();</span><br><span class="line"> 	Write_Ds1302_Byte(address);</span><br><span class="line"> 	<span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++) 	</span><br><span class="line"> 	&#123;		</span><br><span class="line">		SCK=<span class="number">0</span>;</span><br><span class="line">		temp&gt;&gt;=<span class="number">1</span>;	</span><br><span class="line"> 		<span class="keyword">if</span>(SDA)</span><br><span class="line"> 		temp|=<span class="number">0x80</span>;	</span><br><span class="line"> 		SCK=<span class="number">1</span>;</span><br><span class="line">	&#125; </span><br><span class="line"> 	RST=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line"> 	RST=<span class="number">0</span>;</span><br><span class="line">	SCK=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line">	SCK=<span class="number">1</span>;</span><br><span class="line">	_nop_();</span><br><span class="line">	SDA=<span class="number">0</span>;</span><br><span class="line">	_nop_();</span><br><span class="line">	SDA=<span class="number">1</span>;</span><br><span class="line">	_nop_();</span><br><span class="line">	<span class="keyword">return</span> (temp);			</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_ds1302</span><span class="params">(<span class="type">char</span> h,m,s)</span></span><br><span class="line">&#123;</span><br><span class="line">	Write_Ds1302(<span class="number">0x8e</span>,<span class="number">0x00</span>);</span><br><span class="line">	Write_Ds1302(<span class="number">0x84</span>,h);</span><br><span class="line">	Write_Ds1302(<span class="number">0x82</span>,m);</span><br><span class="line">	Write_Ds1302(<span class="number">0x80</span>,s);</span><br><span class="line">	Write_Ds1302(<span class="number">0x8e</span>,<span class="number">0x80</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>备赛</category>
+        <category>蓝桥杯</category>
+      </categories>
+      <tags>
+        <tag>蓝桥杯</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>蓝桥杯单片机超声波模块</title>
+    <url>/2020/03/13/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%A8%A1%E5%9D%97/</url>
+    <content><![CDATA[<blockquote>
+<p>这个超声波模块的工作原理很简单，传感器像两个喇叭一样的东西，一个是负责发送超声波的，另一个负责接收超声波，根据发出到接收的时间间隔就可以算出距离了。</p>
+<p>s &#x3D; v*t&#x2F;2 </p>
+<p>初中物理知识哦。</p>
+</blockquote>
+<p>就不多说了直接上代码</p>
+<span id="more"></span>
+
+<p>main.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> sonic_counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> smgbuf[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	init();</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(sonic_counter &gt;= <span class="number">40</span>)<span class="comment">//每隔一定的时间测量一次，必须要加否则测的数据不正确</span></span><br><span class="line">		&#123;</span><br><span class="line">			distance = measure_distance();</span><br><span class="line">			sonic_counter = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		smgbuf[<span class="number">5</span>] = distance/<span class="number">100</span>;</span><br><span class="line">		smgbuf[<span class="number">6</span>] = distance%<span class="number">100</span>/<span class="number">10</span>;</span><br><span class="line">		smgbuf[<span class="number">7</span>] = distance%<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">timer2</span><span class="params">()</span> interrupt 12<span class="comment">//定时器2（52单片机多出来的一个定时器）</span></span><br><span class="line">&#123;</span><br><span class="line">	sonic_counter++;</span><br><span class="line">	display();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>common.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _COMMON_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _COMMON_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;reg52.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;intrins.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">sfr AUXR = <span class="number">0x8e</span>;</span><br><span class="line">sfr IE2 = <span class="number">0xaf</span>;</span><br><span class="line">sfr T2H = <span class="number">0xd6</span>;</span><br><span class="line">sfr T2L = <span class="number">0xd7</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>common.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgw[<span class="number">8</span>] = &#123;<span class="number">0x01</span>,<span class="number">0x02</span>,<span class="number">0x04</span>,<span class="number">0x08</span>,<span class="number">0x10</span>,<span class="number">0x20</span>,<span class="number">0x40</span>,<span class="number">0x80</span>&#125;;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> smgd[] = &#123;<span class="number">0x3F</span>,<span class="number">0x06</span>,<span class="number">0x5B</span>,<span class="number">0x4F</span>,<span class="number">0x66</span>,<span class="number">0x6D</span>,<span class="number">0x7D</span>,<span class="number">0x07</span>,<span class="number">0x7F</span>,<span class="number">0x6F</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"><span class="type">char</span> smgbuf[<span class="number">8</span>],num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">select_channel</span><span class="params">(<span class="type">char</span> channel)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">switch</span>(channel)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">4</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0x80</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">5</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xa0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">6</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xc0</span>; <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">7</span>: P2 = P2&amp;<span class="number">0x1f</span>|<span class="number">0xe0</span>; <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">		smgbuf[i] = <span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">4</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">5</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	init_timer();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init_timer</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	AUXR = AUXR&amp;<span class="number">0x33</span>|<span class="number">0x10</span>;<span class="comment">//定时器2的配置</span></span><br><span class="line">	IE2 = <span class="number">0x04</span>;</span><br><span class="line">	T2H = <span class="number">0xf8</span>;</span><br><span class="line">	T2L = <span class="number">0x2f</span>;</span><br><span class="line">	EA = <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	TMOD = <span class="number">0x01</span>;<span class="comment">//定时器1的配置，用于计算发送和接收之间的时间间隔</span></span><br><span class="line">	TH1 = <span class="number">0</span>;</span><br><span class="line">	TL1 = <span class="number">0</span>;</span><br><span class="line">	TR1 = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">display</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	num++;</span><br><span class="line">	<span class="keyword">if</span>(num &gt;= <span class="number">8</span>)</span><br><span class="line">		num = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0x00</span>;</span><br><span class="line">	select_channel(<span class="number">6</span>);</span><br><span class="line">	P0 = smgw[num];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">	</span><br><span class="line">	P0 = <span class="number">0xff</span>;</span><br><span class="line">	select_channel(<span class="number">7</span>);</span><br><span class="line">	P0 = ~smgd[smgbuf[num]];</span><br><span class="line">	P2&amp;= <span class="number">0x1f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>sonic.h</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _SONIC_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _SONIC_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> somenop &#123;_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();&#125;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//可以参照原理图</span></span><br><span class="line">sbit tx = P1^<span class="number">0</span>;<span class="comment">//发送波传感器的引脚</span></span><br><span class="line">sbit rx = P1^<span class="number">1</span>;<span class="comment">//接收波传感器的引脚</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>sonic.c</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sonic.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">send_wave</span><span class="params">()</span><span class="comment">//发送超声波</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;<span class="number">8</span>;i++)<span class="comment">//发送一组超声波</span></span><br><span class="line">	&#123;</span><br><span class="line">		tx = <span class="number">1</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">		tx = <span class="number">0</span>;</span><br><span class="line">		somenop;somenop;somenop;somenop;somenop;somenop;somenop;somenop;</span><br><span class="line">	&#125;</span><br><span class="line">	TR1 = <span class="number">1</span>;<span class="comment">//定时器1开始计时</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">measure_distance</span><span class="params">()</span><span class="comment">//计算、测量距离</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> distance;</span><br><span class="line">	send_wave();<span class="comment">//先发送</span></span><br><span class="line">	<span class="keyword">while</span>(rx == <span class="number">1</span>&amp;&amp;TF1 == <span class="number">0</span>);<span class="comment">//等待接收完毕或者定时器1溢出</span></span><br><span class="line">	TR1 = <span class="number">0</span>;<span class="comment">//定时器1停止计时</span></span><br><span class="line">	<span class="keyword">if</span>(rx == <span class="number">0</span>&amp;&amp;TF1 == <span class="number">0</span>)<span class="comment">//正常量程之内</span></span><br><span class="line">	&#123;</span><br><span class="line">		distance = ((TH1&lt;&lt;<span class="number">8</span>)+TL1)*<span class="number">0.017</span>;<span class="comment">//计算距离</span></span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> </span><br><span class="line">	&#123;</span><br><span class="line">		distance = <span class="number">999</span>;<span class="comment">//超出量程</span></span><br><span class="line">		TF1 = <span class="number">0</span>;</span><br><span class="line">		TH1 = <span class="number">0</span>;</span><br><span class="line">		TL1 = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> distance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
