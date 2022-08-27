@@ -1,39 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Apache配置反向代理</title>
-    <url>/2020/07/23/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
-    <content><![CDATA[<blockquote>
-<p>为了让自己的spring boot项目能被域名直接访问，而不是IP:端口号的形式访问，需要用到反向代理，简单来讲就是把一个程序运行的地址映射到域名上，实现直接用域名访问。网上很多教程都是针对nignx的，而我用的是apache，也不想折腾把apache换成nignx，找了很久才找到一个可以用的，这里记录一下，方便下次使用。</p>
-</blockquote>
-<h1 id="1-开启Apache的代理模块"><a href="#1-开启Apache的代理模块" class="headerlink" title="1.开启Apache的代理模块"></a>1.开启Apache的代理模块</h1><p>在确保Apache安装好之后，通过<code>a2enmod proxy proxy_balancer proxy_http</code>开启Apache的代理模块。</p>
-<p>我用的是Ubuntu的Apache和centos下的Apache目录结构似乎有点不一样。</p>
-<span id="more"></span>
-
-<h1 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2.修改配置文件"></a>2.修改配置文件</h1><p>切换到 <code>/etc/apache2/sites-enabled</code> 目录下，打开需要修改网站对应的配置</p>
-<img data-src="/images/Apache配置反向代理/image-20200723085537548.png" alt="image-20200723085537548" style="zoom:80%;" />
-
-<p>没有的话就新建一个对应的配置文件，文件的名字是二级域名的前缀.conf，比如我的域名是steventan.top，</p>
-<p>那么test.conf对应的网站是test.steventan.top，这个好像也只是一个命名的习惯，不一样也没多大问题，这样主要是方便管理。</p>
-<p>旧版Apache：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">	ServerName autoclock.steventan.top <span class="comment">#这里填代理服务器的IP或域名</span></span><br><span class="line">	ProxyRequests off <span class="comment">#off表示开启反向代理  on表示开启正向代理</span></span><br><span class="line">	ProxyPass / http://localhost:8080/  <span class="comment">#被代理的网站，中间的那个/千万别少了，少了的话重启报错</span></span><br><span class="line">	ProxyPassReverse / http://localhost:8080/  <span class="comment">#被代理的网站</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment"># RewriteEngine on</span></span><br><span class="line">	<span class="comment"># RewriteCond   %&#123;HTTPS&#125; !=on</span></span><br><span class="line">	<span class="comment"># RewriteRule   ^(.*)  https://%&#123;SERVER_NAME&#125;$1 [L,R]</span></span><br><span class="line"></span><br><span class="line">	ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">	CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
-
-<p>新版Apache：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">	ServerAdmin webmaster@localhost</span><br><span class="line">	</span><br><span class="line">	&lt;Proxy *&gt;</span><br><span class="line">		Order Deny,Allow</span><br><span class="line">		Allow from all</span><br><span class="line">	&lt;/Proxy&gt;</span><br><span class="line"></span><br><span class="line">	ServerName 10.100.128.8</span><br><span class="line">	ProxyRequests off</span><br><span class="line">	ProxyPass /api http://localhost:8080/</span><br><span class="line">	ProxyPassReverse /api http://localhost:8080/</span><br><span class="line">  	</span><br><span class="line"></span><br><span class="line">	ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">	CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<p>上面的配置是将本地的8080端口运行的程序映射到autoclock.steventan.top这个域名上，这就达到了我的目的，服务器上运行的spring boot项目，能通过域名直接在公网访问。</p>
-<h1 id="3-重启apache生效配置"><a href="#3-重启apache生效配置" class="headerlink" title="3.重启apache生效配置"></a>3.重启apache生效配置</h1><p>通过<code>service apache2 restart</code> 重启Apache，让配置文件生效。 </p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HTTPS建立的过程</title>
     <url>/2022/08/10/HTTPS%E5%BB%BA%E7%AB%8B%E7%9A%84%E8%BF%87%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="SSL-x2F-TLS协商基本流程"><a href="#SSL-x2F-TLS协商基本流程" class="headerlink" title="SSL&#x2F;TLS协商基本流程"></a>SSL&#x2F;TLS协商基本流程</h1><ol>
@@ -101,66 +68,36 @@
       </tags>
   </entry>
   <entry>
-    <title>Java中看似简单实际很坑的题目</title>
-    <url>/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/</url>
-    <content><![CDATA[<h3 id="第一题（貌似是考察方法的参数传递）"><a href="#第一题（貌似是考察方法的参数传递）" class="headerlink" title="第一题（貌似是考察方法的参数传递）"></a>第一题（貌似是考察方法的参数传递）</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 20;</span><br><span class="line">    method(a,b);//在调用method()方法之后输出a = 100,b = 200</span><br><span class="line">    System.out.println(&quot;a = &quot; + a);</span><br><span class="line">    System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  &#125;</span><br><span class="line">  static void method(int a,int b)&#123;</span><br><span class="line">    //代码编写处</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果在method中直接写</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = 100;</span><br><span class="line">b = 200;</span><br></pre></td></tr></table></figure>
-
-<p>这个样子会直接被别人鄙视</p>
-<p>其实这是一个脑筋急转弯的题目，直接像上面这样把一个基本数据类型的变量，作为形参传入函数，等于是直接把值赋给了函数中的实参，改变函数中的实参并不会影响主函数中a和b的值，在method()方法调用完之后，方法中的实参a和b就出栈了，此时在主函数输出的仍然是10和20。</p>
+    <title>Apache配置反向代理</title>
+    <url>/2020/07/23/Apache%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<blockquote>
+<p>为了让自己的spring boot项目能被域名直接访问，而不是IP:端口号的形式访问，需要用到反向代理，简单来讲就是把一个程序运行的地址映射到域名上，实现直接用域名访问。网上很多教程都是针对nignx的，而我用的是apache，也不想折腾把apache换成nignx，找了很久才找到一个可以用的，这里记录一下，方便下次使用。</p>
+</blockquote>
+<h1 id="1-开启Apache的代理模块"><a href="#1-开启Apache的代理模块" class="headerlink" title="1.开启Apache的代理模块"></a>1.开启Apache的代理模块</h1><p>在确保Apache安装好之后，通过<code>a2enmod proxy proxy_balancer proxy_http</code>开启Apache的代理模块。</p>
+<p>我用的是Ubuntu的Apache和centos下的Apache目录结构似乎有点不一样。</p>
 <span id="more"></span>
 
-<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>机智的方法，调用完method()方法之后就直接退出程序，不让他执行主函数中的print方法。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  a = 100;</span><br><span class="line">  b = 200;</span><br><span class="line">  System.out.println(&quot;a = &quot; + a);</span><br><span class="line">  System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  System.exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2.修改配置文件"></a>2.修改配置文件</h1><p>切换到 <code>/etc/apache2/sites-enabled</code> 目录下，打开需要修改网站对应的配置</p>
+<img data-src="/images/Apache配置反向代理/image-20200723085537548.png" alt="image-20200723085537548" style="zoom:80%;" />
 
-<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  PrintStream ps = new PrintStream(System.out)&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void println(String x)&#123;</span><br><span class="line">            if(&quot;a = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;a = 100&quot;;</span><br><span class="line">            &#125;else if(&quot;b = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;b = 200&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            super.println(x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    System.setOut(ps);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>没有的话就新建一个对应的配置文件，文件的名字是二级域名的前缀.conf，比如我的域名是steventan.top，</p>
+<p>那么test.conf对应的网站是test.steventan.top，这个好像也只是一个命名的习惯，不一样也没多大问题，这样主要是方便管理。</p>
+<p>旧版Apache：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">	ServerName autoclock.steventan.top <span class="comment">#这里填代理服务器的IP或域名</span></span><br><span class="line">	ProxyRequests off <span class="comment">#off表示开启反向代理  on表示开启正向代理</span></span><br><span class="line">	ProxyPass / http://localhost:8080/  <span class="comment">#被代理的网站，中间的那个/千万别少了，少了的话重启报错</span></span><br><span class="line">	ProxyPassReverse / http://localhost:8080/  <span class="comment">#被代理的网站</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment"># RewriteEngine on</span></span><br><span class="line">	<span class="comment"># RewriteCond   %&#123;HTTPS&#125; !=on</span></span><br><span class="line">	<span class="comment"># RewriteRule   ^(.*)  https://%&#123;SERVER_NAME&#125;$1 [L,R]</span></span><br><span class="line"></span><br><span class="line">	ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">	CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
 
-<p>这种方法用的是重写，当要调用println()这个方法分时候不是调用Java库中的println()方法，而是调用这里自己写的这个，就把要输出的“a &#x3D; 10”替换成了”a &#x3D; 100”。</p>
-<h3 id="第二题（微软面试题）"><a href="#第二题（微软面试题）" class="headerlink" title="第二题（微软面试题）"></a>第二题（微软面试题）</h3><blockquote>
-<p> 定义一个int型的数组: int[] arr &#x3D; new int]{12,3,3,34,56,77,432};让数组的每个位置上的值去除以首位置的元素,得到的结果,作为该位置上的新值。遍历新的数组。 </p>
-</blockquote>
-<p>这个题其实很简单，但是一不小心就会出错，比如：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for(int i = 0;i &lt; arr.length;i++)</span><br><span class="line">  arr[i] = arr[i]/arr[0];</span><br></pre></td></tr></table></figure>
+<p>新版Apache：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line"></span><br><span class="line">	ServerAdmin webmaster@localhost</span><br><span class="line">	</span><br><span class="line">	&lt;Proxy *&gt;</span><br><span class="line">		Order Deny,Allow</span><br><span class="line">		Allow from all</span><br><span class="line">	&lt;/Proxy&gt;</span><br><span class="line"></span><br><span class="line">	ServerName 10.100.128.8</span><br><span class="line">	ProxyRequests off</span><br><span class="line">	ProxyPass /api http://localhost:8080/</span><br><span class="line">	ProxyPassReverse /api http://localhost:8080/</span><br><span class="line">  	</span><br><span class="line"></span><br><span class="line">	ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">	CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>自己一顿操作之后以为稳了，实际上结果和原数组是一样的。这样从前面向后面遍历，数组第一个值在第一次就变成1了，之后每次除的arr[0]都是1，所以后面的值都没有发生变化。</p>
-<p>所以简单的题不要掉以轻心。</p>
-<p>正确的写法很简单也不止一种方法，可以从后向前遍历数组，也可以把数组的第一个值赋给一个临时变量，后面的数都除以这个临时变量。</p>
-<h3 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">  public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">    int[] arr1 = new int[]&#123;1,2,3&#125;;</span><br><span class="line">    System.out.println(arr1);</span><br><span class="line"></span><br><span class="line">    char[] arr2 = new char[]&#123;&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;&#125;;</span><br><span class="line">    System.out.println(arr2); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>问输出的分别是什么？</p>
-<p>正确答案是arr1输出的是地址值，arr2输出的是abc。</p>
-<p>这其实考的是一个很细的知识点，了解过后就会感觉这个题很low，简直是在是在侮辱自己的智商，不了解的话可能就认为两个都是输出一个地址值。</p>
-<p>这里涉及到了Java中方法的重载，同一个函数名，但是传的参数个数或者参数类型不同的话，他调的方法是不一样的。</p>
-<p>第一个整型的数组，传入的是object类型，调用的是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(Object x) &#123;</span><br><span class="line">  String s = String.valueOf(x);</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(s);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>第二个字符型的数组，传入的是char型的数组，调用的是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(char x[]) &#123;</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(x);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="第四题"><a href="#第四题" class="headerlink" title="第四题"></a>第四题</h3><blockquote>
-<p> 如下两个题目输出结果相同吗？各是什么： </p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Object o1 = true ? new Integer(1) : new Double(2.0);</span><br><span class="line">System.out.println(o1);</span><br><span class="line"></span><br><span class="line">Object o2;</span><br><span class="line">if (true)</span><br><span class="line">    o2 = new Integer(1);</span><br><span class="line">else</span><br><span class="line">    o2 = new Double(2.0);</span><br><span class="line">System.out.println(o2);</span><br></pre></td></tr></table></figure>
-
-<p>正确答案：</p>
-<p>o1输出的是1.0，o2输出的是1</p>
-<p>这个题是看似在考Object类中的方法，但是实际上，这里的三元运算符涉及到一个自动类型提升的问题</p>
-<p>(表达式1)?(表达式2):(表达式3)</p>
-<p>三元运算的最后结果是这三个表达式中的类型“最高”的一种，在计算的过程个中会有自动类型提升</p>
-<h3 id="第五题"><a href="#第五题" class="headerlink" title="第五题"></a>第五题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void method1() &#123;</span><br><span class="line">  Integer i = new Integer(1);</span><br><span class="line">  Integer j = new Integer(1);</span><br><span class="line">  System.out.println(i == j);</span><br><span class="line">  Integer m = 1;</span><br><span class="line">  Integer n = 1;</span><br><span class="line">  System.out.println(m == n);//</span><br><span class="line">  Integer x = 128;</span><br><span class="line">  Integer y = 128;</span><br><span class="line">  System.out.println(x == y);//</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>第一个输出为false，第二个输出为true，第三个输出为false。</p>
-<p>Integer内部定义了IntegerCache结构，IntegerCache中定义了Integer[],保存了从-128<del>127范围的整数。如果我们使用自动装箱的方式，给Integer赋值的范围在 -128</del>127范围内时，可以直接使用数组中的元素，不用再去new了。目的：提高效率。</p>
-<p>Integer类中的源码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">private static class IntegerCache &#123;</span><br><span class="line">  static final int low = -128;</span><br><span class="line">  static final int high;</span><br><span class="line">  static final Integer cache[];</span><br><span class="line">  static &#123;</span><br><span class="line">    // high value may be configured by property</span><br><span class="line">    int h = 127;</span><br><span class="line">    String integerCacheHighPropValue =</span><br><span class="line">      sun.misc.VM.getSavedProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">    if (integerCacheHighPropValue != null) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        int i = parseInt(integerCacheHighPropValue);</span><br><span class="line">        i = Math.max(i, 127);</span><br><span class="line">        // Maximum array size is Integer.MAX_VALUE</span><br><span class="line">        h = Math.min(i, Integer.MAX_VALUE - (-low) -1);</span><br><span class="line">      &#125; catch( NumberFormatException nfe) &#123;</span><br><span class="line">        // If the property cannot be parsed into an int, ignore it.</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    high = h;</span><br><span class="line"></span><br><span class="line">    cache = new Integer[(high - low) + 1];</span><br><span class="line">    int j = low;</span><br><span class="line">    for(int k = 0; k &lt; cache.length; k++)</span><br><span class="line">      cache[k] = new Integer(j++);</span><br><span class="line"></span><br><span class="line">    // range [-128, 127] must be interned (JLS7 5.1.7)</span><br><span class="line">    assert IntegerCache.high &gt;= 127;</span><br><span class="line">  &#125;</span><br><span class="line">  private IntegerCache() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+<p>上面的配置是将本地的8080端口运行的程序映射到autoclock.steventan.top这个域名上，这就达到了我的目的，服务器上运行的spring boot项目，能通过域名直接在公网访问。</p>
+<h1 id="3-重启apache生效配置"><a href="#3-重启apache生效配置" class="headerlink" title="3.重启apache生效配置"></a>3.重启apache生效配置</h1><p>通过<code>service apache2 restart</code> 重启Apache，让配置文件生效。 </p>
+]]></content>
       <categories>
-        <category>算法</category>
-        <category>LeetCode</category>
+        <category>建站</category>
       </categories>
       <tags>
-        <tag>java</tag>
+        <tag>服务器</tag>
       </tags>
   </entry>
   <entry>
@@ -501,6 +438,199 @@
       </tags>
   </entry>
   <entry>
+    <title>Java中看似简单实际很坑的题目</title>
+    <url>/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/</url>
+    <content><![CDATA[<h3 id="第一题（貌似是考察方法的参数传递）"><a href="#第一题（貌似是考察方法的参数传递）" class="headerlink" title="第一题（貌似是考察方法的参数传递）"></a>第一题（貌似是考察方法的参数传递）</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 20;</span><br><span class="line">    method(a,b);//在调用method()方法之后输出a = 100,b = 200</span><br><span class="line">    System.out.println(&quot;a = &quot; + a);</span><br><span class="line">    System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  &#125;</span><br><span class="line">  static void method(int a,int b)&#123;</span><br><span class="line">    //代码编写处</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果在method中直接写</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">a = 100;</span><br><span class="line">b = 200;</span><br></pre></td></tr></table></figure>
+
+<p>这个样子会直接被别人鄙视</p>
+<p>其实这是一个脑筋急转弯的题目，直接像上面这样把一个基本数据类型的变量，作为形参传入函数，等于是直接把值赋给了函数中的实参，改变函数中的实参并不会影响主函数中a和b的值，在method()方法调用完之后，方法中的实参a和b就出栈了，此时在主函数输出的仍然是10和20。</p>
+<span id="more"></span>
+
+<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>机智的方法，调用完method()方法之后就直接退出程序，不让他执行主函数中的print方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  a = 100;</span><br><span class="line">  b = 200;</span><br><span class="line">  System.out.println(&quot;a = &quot; + a);</span><br><span class="line">  System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  System.exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  PrintStream ps = new PrintStream(System.out)&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void println(String x)&#123;</span><br><span class="line">            if(&quot;a = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;a = 100&quot;;</span><br><span class="line">            &#125;else if(&quot;b = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;b = 200&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            super.println(x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    System.setOut(ps);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方法用的是重写，当要调用println()这个方法分时候不是调用Java库中的println()方法，而是调用这里自己写的这个，就把要输出的“a &#x3D; 10”替换成了”a &#x3D; 100”。</p>
+<h3 id="第二题（微软面试题）"><a href="#第二题（微软面试题）" class="headerlink" title="第二题（微软面试题）"></a>第二题（微软面试题）</h3><blockquote>
+<p> 定义一个int型的数组: int[] arr &#x3D; new int]{12,3,3,34,56,77,432};让数组的每个位置上的值去除以首位置的元素,得到的结果,作为该位置上的新值。遍历新的数组。 </p>
+</blockquote>
+<p>这个题其实很简单，但是一不小心就会出错，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for(int i = 0;i &lt; arr.length;i++)</span><br><span class="line">  arr[i] = arr[i]/arr[0];</span><br></pre></td></tr></table></figure>
+
+<p>自己一顿操作之后以为稳了，实际上结果和原数组是一样的。这样从前面向后面遍历，数组第一个值在第一次就变成1了，之后每次除的arr[0]都是1，所以后面的值都没有发生变化。</p>
+<p>所以简单的题不要掉以轻心。</p>
+<p>正确的写法很简单也不止一种方法，可以从后向前遍历数组，也可以把数组的第一个值赋给一个临时变量，后面的数都除以这个临时变量。</p>
+<h3 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">  public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">    int[] arr1 = new int[]&#123;1,2,3&#125;;</span><br><span class="line">    System.out.println(arr1);</span><br><span class="line"></span><br><span class="line">    char[] arr2 = new char[]&#123;&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;&#125;;</span><br><span class="line">    System.out.println(arr2); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>问输出的分别是什么？</p>
+<p>正确答案是arr1输出的是地址值，arr2输出的是abc。</p>
+<p>这其实考的是一个很细的知识点，了解过后就会感觉这个题很low，简直是在是在侮辱自己的智商，不了解的话可能就认为两个都是输出一个地址值。</p>
+<p>这里涉及到了Java中方法的重载，同一个函数名，但是传的参数个数或者参数类型不同的话，他调的方法是不一样的。</p>
+<p>第一个整型的数组，传入的是object类型，调用的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(Object x) &#123;</span><br><span class="line">  String s = String.valueOf(x);</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(s);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二个字符型的数组，传入的是char型的数组，调用的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void println(char x[]) &#123;</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(x);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="第四题"><a href="#第四题" class="headerlink" title="第四题"></a>第四题</h3><blockquote>
+<p> 如下两个题目输出结果相同吗？各是什么： </p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Object o1 = true ? new Integer(1) : new Double(2.0);</span><br><span class="line">System.out.println(o1);</span><br><span class="line"></span><br><span class="line">Object o2;</span><br><span class="line">if (true)</span><br><span class="line">    o2 = new Integer(1);</span><br><span class="line">else</span><br><span class="line">    o2 = new Double(2.0);</span><br><span class="line">System.out.println(o2);</span><br></pre></td></tr></table></figure>
+
+<p>正确答案：</p>
+<p>o1输出的是1.0，o2输出的是1</p>
+<p>这个题是看似在考Object类中的方法，但是实际上，这里的三元运算符涉及到一个自动类型提升的问题</p>
+<p>(表达式1)?(表达式2):(表达式3)</p>
+<p>三元运算的最后结果是这三个表达式中的类型“最高”的一种，在计算的过程个中会有自动类型提升</p>
+<h3 id="第五题"><a href="#第五题" class="headerlink" title="第五题"></a>第五题</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public void method1() &#123;</span><br><span class="line">  Integer i = new Integer(1);</span><br><span class="line">  Integer j = new Integer(1);</span><br><span class="line">  System.out.println(i == j);</span><br><span class="line">  Integer m = 1;</span><br><span class="line">  Integer n = 1;</span><br><span class="line">  System.out.println(m == n);//</span><br><span class="line">  Integer x = 128;</span><br><span class="line">  Integer y = 128;</span><br><span class="line">  System.out.println(x == y);//</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个输出为false，第二个输出为true，第三个输出为false。</p>
+<p>Integer内部定义了IntegerCache结构，IntegerCache中定义了Integer[],保存了从-128<del>127范围的整数。如果我们使用自动装箱的方式，给Integer赋值的范围在 -128</del>127范围内时，可以直接使用数组中的元素，不用再去new了。目的：提高效率。</p>
+<p>Integer类中的源码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">private static class IntegerCache &#123;</span><br><span class="line">  static final int low = -128;</span><br><span class="line">  static final int high;</span><br><span class="line">  static final Integer cache[];</span><br><span class="line">  static &#123;</span><br><span class="line">    // high value may be configured by property</span><br><span class="line">    int h = 127;</span><br><span class="line">    String integerCacheHighPropValue =</span><br><span class="line">      sun.misc.VM.getSavedProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">    if (integerCacheHighPropValue != null) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        int i = parseInt(integerCacheHighPropValue);</span><br><span class="line">        i = Math.max(i, 127);</span><br><span class="line">        // Maximum array size is Integer.MAX_VALUE</span><br><span class="line">        h = Math.min(i, Integer.MAX_VALUE - (-low) -1);</span><br><span class="line">      &#125; catch( NumberFormatException nfe) &#123;</span><br><span class="line">        // If the property cannot be parsed into an int, ignore it.</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    high = h;</span><br><span class="line"></span><br><span class="line">    cache = new Integer[(high - low) + 1];</span><br><span class="line">    int j = low;</span><br><span class="line">    for(int k = 0; k &lt; cache.length; k++)</span><br><span class="line">      cache[k] = new Integer(j++);</span><br><span class="line"></span><br><span class="line">    // range [-128, 127] must be interned (JLS7 5.1.7)</span><br><span class="line">    assert IntegerCache.high &gt;= 127;</span><br><span class="line">  &#125;</span><br><span class="line">  private IntegerCache() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>算法</category>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java基础之泛型</title>
+    <url>/2020/06/28/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%B3%9B%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="泛型的概念"><a href="#泛型的概念" class="headerlink" title="泛型的概念"></a>泛型的概念</h1><h2 id="设计背景"><a href="#设计背景" class="headerlink" title="设计背景"></a>设计背景</h2><p>集合容器类在设计阶段&#x2F;声明阶段不能确定这个容器到底实际存的是什么类型的对象，所以在JDK1.5之前只能把元素类型设计为Object，JDK1.5之后使用泛型来解决。因为这个时候除了元素的类型不确定，其他的部分是确定的，例如关于这个元素如何保存，如何管理等是确定的，因此此时把元素的类型设计成一个参数，这个类型参数叫做泛型。Collection&lt;E&gt;，List&lt;E&gt;，ArrayList&lt;E&gt; 这个就&lt;E&gt;是类型参数，即泛型。</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>所谓泛型，就是允许在定义类、接口时通过一个标识表示类中某个属性的类型或者是某个方法的返回值及参数类型。这个类型参数将在使用时（例如， 继承或实现这个接口，用这个类型声明变量、创建对象时）确定（即传入实 际的类型参数，也称为类型实参）。</p>
+<p>从JDK1.5以后，Java引入了“参数化类型（Parameterized type）”的概念， 允许我们在创建集合时指定集合元素的类型，正如：List&lt;String&gt;，这表明该List只能保存字符串类型的对象。</p>
+<p>JDK1.5改写了集合框架中的全部接口和类，为这些接口、类增加了泛型支持，从而可以在声明集合变量、创建集合对象时传入类型实参。</p>
+<span id="more"></span>
+
+<h2 id="泛型的作用"><a href="#泛型的作用" class="headerlink" title="泛型的作用"></a>泛型的作用</h2><ol>
+<li>解决元素存储的安全性问题，好比商品、药品标签，不会弄错。 </li>
+<li>解决获取数据元素时，需要类型强制转换的问题，好比不用每回拿商品、药品都要辨别。</li>
+</ol>
+<img data-src="/images/Java基础之泛型/image-20200628145513962.png" alt="image-20200628145513962" style="zoom:80%;" />
+
+<p><img data-src="/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%B3%9B%E5%9E%8B/image-20200628145525503.png" alt="image-20200628145525503"></p>
+<p><img data-src="/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%B3%9B%E5%9E%8B/image-20200628145525503.png" alt="image-20200628145525503"></p>
+<p>Java泛型可以保证如果程序在编译时没有发出警告，运行时就不会产生ClassCastException异常。同时，代码更加简洁、健壮。</p>
+<h1 id="在集合中使用泛型"><a href="#在集合中使用泛型" class="headerlink" title="在集合中使用泛型"></a>在集合中使用泛型</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();<span class="comment">//类型推断</span></span><br><span class="line">list.add(<span class="number">78</span>);</span><br><span class="line">list.add(<span class="number">88</span>);</span><br><span class="line">list.add(<span class="number">77</span>);</span><br><span class="line">list.add(<span class="number">66</span>);</span><br><span class="line"><span class="comment">//遍历方式一：</span></span><br><span class="line"><span class="keyword">for</span>(Integer i : list)&#123;</span><br><span class="line"><span class="comment">//不需要强转</span></span><br><span class="line">System.out.println(i);</span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line"><span class="comment">//遍历方式二：</span></span><br><span class="line">Iterator&lt;Integer&gt; iterator = list.iterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">  System.out.println(iterator.next());</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line">Map&lt;String,Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String,Integer&gt;();</span><br><span class="line">map.put(<span class="string">&quot;Tom1&quot;</span>,<span class="number">34</span>);</span><br><span class="line">map.put(<span class="string">&quot;Tom2&quot;</span>,<span class="number">44</span>);</span><br><span class="line">map.put(<span class="string">&quot;Tom3&quot;</span>,<span class="number">33</span>);</span><br><span class="line">map.put(<span class="string">&quot;Tom4&quot;</span>,<span class="number">32</span>);</span><br><span class="line"><span class="comment">//添加失败</span></span><br><span class="line"><span class="comment">//map.put(33, &quot;Tom&quot;);</span></span><br><span class="line">Set&lt;Entry&lt;String,Integer&gt;&gt; entrySet = map.entrySet();</span><br><span class="line">Iterator&lt;Entry&lt;String,Integer&gt;&gt; iterator = entrySet.iterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">  Entry&lt;String,Integer&gt; entry = iterator.next();</span><br><span class="line">  System.out.println(entry.getKey() + <span class="string">&quot;---&gt;&quot;</span> + entry.getValue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="自定义泛型结构"><a href="#自定义泛型结构" class="headerlink" title="自定义泛型结构"></a>自定义泛型结构</h1><ol>
+<li><p>泛型的声明</p>
+<p>interface List&lt;T&gt;和class GenTest&lt;K,V&gt;</p>
+<p>其中T、K、V不代表值，而是代表类型，使用任意字母都可以。</p>
+<p>常用T表示（Type）</p>
+</li>
+<li><p>泛型的实例化</p>
+<p>一定要在类名后面指定类型参数的值（类型）。 如：<br>List&lt;String&gt; strList &#x3D; new ArrayList&lt;String&gt;();<br>Iterator&lt;Customer&gt; iterator &#x3D; customers.iterator();</p>
+</li>
+</ol>
+<p><strong>注意：</strong></p>
+<ul>
+<li>T只能是类名，不能用基本数据类型填充，可以用包装类填充。</li>
+<li><strong>把一个集合中的内容限制为一个特定的数据类型，这就是generics背后的核心思想</strong></li>
+</ul>
+<p>使用泛型的主要一个有点就是能够在编译时而不是在运行时检测错误。</p>
+<h2 id="泛型类、泛型接口"><a href="#泛型类、泛型接口" class="headerlink" title="泛型类、泛型接口"></a>泛型类、泛型接口</h2><ol>
+<li><p>泛型类堪忧多个参数，此时应将多个参数一起放到尖括号内，例如：&lt;E1,E2,E3&gt;</p>
+</li>
+<li><p>泛型类的构造器：public GenericClass(){}  错误写法：public GenericClass&lt;E&gt;(){}</p>
+</li>
+<li><p>实例化之后，操作原来泛型位置的结构必须与指定的泛型结构一致</p>
+</li>
+<li><p>泛型不同的引用不能互相赋值</p>
+</li>
+<li><p>泛型如果不指定，将被擦除，泛型对应的类型均按照Object处理，但不等价 于Object。</p>
+<p>泛型要使用一路都用。要不用，一路都不要用。</p>
+</li>
+<li><p>jdk1.7，泛型的简化操作：ArrayList&lt;Fruit&gt; flist &#x3D; new ArrayList&lt;&gt;();</p>
+</li>
+<li><p>泛型的指定中不能使用基本数据类型，可以使用包装类代替</p>
+</li>
+<li><p>不能使用new E[]。但是可以：E[] elements &#x3D; (E[])new Object[capacity]; </p>
+<p>参考：ArrayList源码中声明：Object[] elementData，而非泛型参数类型数组。</p>
+</li>
+<li><p>父类有泛型，子类可以选择保留泛型，也可以选择指定的泛型类型</p>
+<p>子类不保留父类的泛型：按需实现，子类没有指定泛型类型的话，默认为Object</p>
+<p>子类保留弗雷德泛型：泛型子类</p>
+<p>结论：子类必须是“富二代”，子类除了指定或保留父类的泛型，还可以增加自己的泛型</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类不保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)没有类型 擦除</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son1</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;<span class="comment">// 等价于class Son extends Father&lt;Object,Object&gt;&#123;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)具体类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son2</span> <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, String&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)全部保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son3</span>&lt;T1, T2&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)部分保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son4</span>&lt;T2&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类不保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)没有类型 擦除</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son</span>&lt;A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&#123;<span class="comment">//等价于class Son extends Father&lt;Object,Object&gt;&#123;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)具体类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son2</span>&lt;A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, String&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)全部保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son3</span>&lt;T1, T2, A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)部分保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son4</span>&lt;T2, A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, T2&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><p>方法，也可以被泛型化，不管此时定义在其中的类是不是泛型类。在泛型方法中可以定义泛型参数，此时，参数的类型就是传入数据的类型。</p>
+<p>泛型方法格式：[访问权限] &lt;泛型&gt; 返回类型 方法名([泛型标识 参数名称]) 抛出的异常</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="keyword">void</span> <span class="title function_">fromArrayToCollection</span><span class="params">(T[] a, Collection&lt;T&gt; c)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (T o : a) &#123;</span><br><span class="line">    c.add(o);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">  Object[] ao = <span class="keyword">new</span> <span class="title class_">Object</span>[<span class="number">100</span>];</span><br><span class="line">  Collection&lt;Object&gt; co = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Object&gt;();</span><br><span class="line">  fromArrayToCollection(ao, co);</span><br><span class="line">  String[] sa = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">20</span>];</span><br><span class="line">  Collection&lt;String&gt; cs = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">  fromArrayToCollection(sa, cs);</span><br><span class="line">  Collection&lt;Double&gt; cd = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">  <span class="comment">// 下面代码中T是Double类，但sa是String类型，编译错误。</span></span><br><span class="line">  <span class="comment">// fromArrayToCollection(sa, cd);</span></span><br><span class="line">  <span class="comment">// 下面代码中T是Object类型，sa是String类型，可以赋值成功。</span></span><br><span class="line">  fromArrayToCollection(sa, co);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Creature</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> <span class="keyword">extends</span> <span class="title class_">Creature</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Man</span> <span class="keyword">extends</span> <span class="title class_">Person</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PersonTest</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T <span class="keyword">extends</span> <span class="title class_">Person</span>&gt; <span class="keyword">void</span> <span class="title function_">test</span><span class="params">(T t)</span>&#123;</span><br><span class="line">    System.out.println(t);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    test(<span class="keyword">new</span> <span class="title class_">Person</span>());</span><br><span class="line">    test(<span class="keyword">new</span> <span class="title class_">Man</span>());</span><br><span class="line">    <span class="comment">//The method test(T) in the type PersonTest is not</span></span><br><span class="line">    <span class="comment">//applicable for the arguments (Creature)</span></span><br><span class="line">    test(<span class="keyword">new</span> <span class="title class_">Creature</span>());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="泛型在继承上的体现"><a href="#泛型在继承上的体现" class="headerlink" title="泛型在继承上的体现"></a>泛型在继承上的体现</h1><p>如果B是A的一个子类型（子类或者子接口），而G是具有泛型声明的类或接口，G&lt;B&gt;并不是G的子类型&lt;A&gt;</p>
+<p>比如：String是Object的子类，但是List&lt;String&gt;并不是List&lt;Object&gt;的子类。</p>
+<h1 id="通配符的使用"><a href="#通配符的使用" class="headerlink" title="通配符的使用"></a>通配符的使用</h1><ul>
+<li><p>使用类型通配符：“？” </p>
+<p>比如：List&lt;?&gt; ，Map&lt;?,?&gt; </p>
+<p>List&lt;?&gt;是List&lt;String&gt;、List&lt;Object&gt;等各种泛型List的父类。</p>
+</li>
+<li><p>读取List&lt;?&gt;的对象list中的元素时，永远是安全的，因为不管list的真实类型是什么，它包含的都是Object。</p>
+</li>
+<li><p>不能向list写入元素，因为我们不知道c的元素类型，我们不能向其中添加对象，唯一的例外是null，它是所有类型的成员</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">  List&lt;?&gt; list = <span class="literal">null</span>;</span><br><span class="line">  list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line">  list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Double&gt;();</span><br><span class="line">  <span class="comment">// list.add(3);//编译不通过</span></span><br><span class="line">  list.add(<span class="literal">null</span>);</span><br><span class="line">  List&lt;String&gt; l1 = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line">  List&lt;Integer&gt; l2 = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">  l1.add(<span class="string">&quot;123&quot;</span>);</span><br><span class="line">  l2.add(<span class="number">15</span>);</span><br><span class="line">  read(l1);</span><br><span class="line">  read(l2);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">read</span><span class="params">(List&lt;?&gt; list)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (Object o : list) &#123;</span><br><span class="line">    System.out.println(o);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ol>
+<li><p>编译错误：不能用在泛型方法声明上，返回值类型前面的&lt;&gt;不能使用“?”，例如：</p>
+<p>public static &lt;?&gt; void test(ArrayList list){}</p>
+</li>
+<li><p>编译错误：不能用在泛型类的声明上</p>
+<p>class GenericTypeClass &lt;?&gt;{}</p>
+</li>
+<li><p>编译错误：不能用在创建对象上，右边属于创建集合对象</p>
+<p>ArrayList&lt;?&gt; list2 &#x3D; new ArrayList&lt;?&gt;();</p>
+</li>
+</ol>
+<h2 id="有限制的通配符"><a href="#有限制的通配符" class="headerlink" title="有限制的通配符"></a>有限制的通配符</h2><ul>
+<li><p>通配符指定上限 </p>
+<p>上限extends：使用时指定的类型必须是继承某个类，或者实现某个接口，即&lt;&#x3D; </p>
+</li>
+<li><p>通配符指定下限 </p>
+<p>下限super：使用时指定的类型不能小于操作的类，即&gt;&#x3D;</p>
+</li>
+<li><p>举例：</p>
+<ul>
+<li><p>&lt;? extends Number&gt;   (无穷小, Number]</p>
+<p>只允许泛型为Number及Number子类的引用调用</p>
+</li>
+<li><p>&lt;? super Number&gt;   [Number, 无穷大)</p>
+<p>只允许泛型为Number及其父类的引用调用</p>
+</li>
+<li><p>&lt;? entends Conparable&gt;</p>
+<p>只允许泛型为实现Comparable接口的实现类的引用调用</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">printCollection3</span><span class="params">(Collection&lt;? extends Person&gt; coll)</span> &#123;</span><br><span class="line">  <span class="comment">//Iterator只能用Iterator&lt;?&gt;或Iterator&lt;? extends Person&gt;.why?</span></span><br><span class="line">  Iterator&lt;?&gt; iterator = coll.iterator();</span><br><span class="line">  <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.println(iterator.next());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">printCollection4</span><span class="params">(Collection&lt;? <span class="built_in">super</span> Person&gt; coll)</span> &#123;</span><br><span class="line">  <span class="comment">//Iterator只能用Iterator&lt;?&gt;或Iterator&lt;? super Person&gt;.why?</span></span><br><span class="line">  Iterator&lt;?&gt; iterator = coll.iterator();</span><br><span class="line">  <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.println(iterator.next());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="泛型嵌套举例"><a href="#泛型嵌套举例" class="headerlink" title="泛型嵌套举例"></a>泛型嵌套举例</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">  HashMap&lt;String, ArrayList&lt;Citizen&gt;&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String, ArrayList&lt;Citizen&gt;&gt;();</span><br><span class="line">  ArrayList&lt;Citizen&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Citizen&gt;();</span><br><span class="line">  list.add(<span class="keyword">new</span> <span class="title class_">Citizen</span>(<span class="string">&quot;刘恺威&quot;</span>));</span><br><span class="line">  list.add(<span class="keyword">new</span> <span class="title class_">Citizen</span>(<span class="string">&quot;杨幂&quot;</span>));</span><br><span class="line">  list.add(<span class="keyword">new</span> <span class="title class_">Citizen</span>(<span class="string">&quot;小糯米&quot;</span>));</span><br><span class="line">  map.put(<span class="string">&quot;刘恺威&quot;</span>, list);</span><br><span class="line">  Set&lt;Entry&lt;String, ArrayList&lt;Citizen&gt;&gt;&gt; entrySet = map.entrySet();</span><br><span class="line">  Iterator&lt;Entry&lt;String, ArrayList&lt;Citizen&gt;&gt;&gt; iterator = entrySet.iterator();</span><br><span class="line">  <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    Entry&lt;String, ArrayList&lt;Citizen&gt;&gt; entry = iterator.next();</span><br><span class="line">    <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> entry.getKey();</span><br><span class="line">    ArrayList&lt;Citizen&gt; value = entry.getValue();</span><br><span class="line">    System.out.println(<span class="string">&quot;户主：&quot;</span> + key);</span><br><span class="line">    System.out.println(<span class="string">&quot;家庭成员：&quot;</span> + value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java基础之多线程</title>
     <url>/2020/05/17/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="程序、进程、线程的基本概念"><a href="#程序、进程、线程的基本概念" class="headerlink" title="程序、进程、线程的基本概念"></a>程序、进程、线程的基本概念</h1><h2 id="程序（program）"><a href="#程序（program）" class="headerlink" title="程序（program）"></a>程序（program）</h2><p>是为完成特定任务、用某种语言编写的一组指令的集合。即指一段静态的代码，静态对象。</p>
@@ -752,136 +882,6 @@
 <li><p>Executors.newScheduledThreadPool(n)：创建一个线程池，它可安排在给定延迟后运 行命令或者定期地执行。</p>
 </li>
 </ul>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java基础之泛型</title>
-    <url>/2020/06/28/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%B3%9B%E5%9E%8B/</url>
-    <content><![CDATA[<h1 id="泛型的概念"><a href="#泛型的概念" class="headerlink" title="泛型的概念"></a>泛型的概念</h1><h2 id="设计背景"><a href="#设计背景" class="headerlink" title="设计背景"></a>设计背景</h2><p>集合容器类在设计阶段&#x2F;声明阶段不能确定这个容器到底实际存的是什么类型的对象，所以在JDK1.5之前只能把元素类型设计为Object，JDK1.5之后使用泛型来解决。因为这个时候除了元素的类型不确定，其他的部分是确定的，例如关于这个元素如何保存，如何管理等是确定的，因此此时把元素的类型设计成一个参数，这个类型参数叫做泛型。Collection&lt;E&gt;，List&lt;E&gt;，ArrayList&lt;E&gt; 这个就&lt;E&gt;是类型参数，即泛型。</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>所谓泛型，就是允许在定义类、接口时通过一个标识表示类中某个属性的类型或者是某个方法的返回值及参数类型。这个类型参数将在使用时（例如， 继承或实现这个接口，用这个类型声明变量、创建对象时）确定（即传入实 际的类型参数，也称为类型实参）。</p>
-<p>从JDK1.5以后，Java引入了“参数化类型（Parameterized type）”的概念， 允许我们在创建集合时指定集合元素的类型，正如：List&lt;String&gt;，这表明该List只能保存字符串类型的对象。</p>
-<p>JDK1.5改写了集合框架中的全部接口和类，为这些接口、类增加了泛型支持，从而可以在声明集合变量、创建集合对象时传入类型实参。</p>
-<span id="more"></span>
-
-<h2 id="泛型的作用"><a href="#泛型的作用" class="headerlink" title="泛型的作用"></a>泛型的作用</h2><ol>
-<li>解决元素存储的安全性问题，好比商品、药品标签，不会弄错。 </li>
-<li>解决获取数据元素时，需要类型强制转换的问题，好比不用每回拿商品、药品都要辨别。</li>
-</ol>
-<img data-src="/images/Java基础之泛型/image-20200628145513962.png" alt="image-20200628145513962" style="zoom:80%;" />
-
-<p><img data-src="/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%B3%9B%E5%9E%8B/image-20200628145525503.png" alt="image-20200628145525503"></p>
-<p><img data-src="/images/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%B3%9B%E5%9E%8B/image-20200628145525503.png" alt="image-20200628145525503"></p>
-<p>Java泛型可以保证如果程序在编译时没有发出警告，运行时就不会产生ClassCastException异常。同时，代码更加简洁、健壮。</p>
-<h1 id="在集合中使用泛型"><a href="#在集合中使用泛型" class="headerlink" title="在集合中使用泛型"></a>在集合中使用泛型</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();<span class="comment">//类型推断</span></span><br><span class="line">list.add(<span class="number">78</span>);</span><br><span class="line">list.add(<span class="number">88</span>);</span><br><span class="line">list.add(<span class="number">77</span>);</span><br><span class="line">list.add(<span class="number">66</span>);</span><br><span class="line"><span class="comment">//遍历方式一：</span></span><br><span class="line"><span class="keyword">for</span>(Integer i : list)&#123;</span><br><span class="line"><span class="comment">//不需要强转</span></span><br><span class="line">System.out.println(i);</span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line"><span class="comment">//遍历方式二：</span></span><br><span class="line">Iterator&lt;Integer&gt; iterator = list.iterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">  System.out.println(iterator.next());</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line">Map&lt;String,Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String,Integer&gt;();</span><br><span class="line">map.put(<span class="string">&quot;Tom1&quot;</span>,<span class="number">34</span>);</span><br><span class="line">map.put(<span class="string">&quot;Tom2&quot;</span>,<span class="number">44</span>);</span><br><span class="line">map.put(<span class="string">&quot;Tom3&quot;</span>,<span class="number">33</span>);</span><br><span class="line">map.put(<span class="string">&quot;Tom4&quot;</span>,<span class="number">32</span>);</span><br><span class="line"><span class="comment">//添加失败</span></span><br><span class="line"><span class="comment">//map.put(33, &quot;Tom&quot;);</span></span><br><span class="line">Set&lt;Entry&lt;String,Integer&gt;&gt; entrySet = map.entrySet();</span><br><span class="line">Iterator&lt;Entry&lt;String,Integer&gt;&gt; iterator = entrySet.iterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">  Entry&lt;String,Integer&gt; entry = iterator.next();</span><br><span class="line">  System.out.println(entry.getKey() + <span class="string">&quot;---&gt;&quot;</span> + entry.getValue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="自定义泛型结构"><a href="#自定义泛型结构" class="headerlink" title="自定义泛型结构"></a>自定义泛型结构</h1><ol>
-<li><p>泛型的声明</p>
-<p>interface List&lt;T&gt;和class GenTest&lt;K,V&gt;</p>
-<p>其中T、K、V不代表值，而是代表类型，使用任意字母都可以。</p>
-<p>常用T表示（Type）</p>
-</li>
-<li><p>泛型的实例化</p>
-<p>一定要在类名后面指定类型参数的值（类型）。 如：<br>List&lt;String&gt; strList &#x3D; new ArrayList&lt;String&gt;();<br>Iterator&lt;Customer&gt; iterator &#x3D; customers.iterator();</p>
-</li>
-</ol>
-<p><strong>注意：</strong></p>
-<ul>
-<li>T只能是类名，不能用基本数据类型填充，可以用包装类填充。</li>
-<li><strong>把一个集合中的内容限制为一个特定的数据类型，这就是generics背后的核心思想</strong></li>
-</ul>
-<p>使用泛型的主要一个有点就是能够在编译时而不是在运行时检测错误。</p>
-<h2 id="泛型类、泛型接口"><a href="#泛型类、泛型接口" class="headerlink" title="泛型类、泛型接口"></a>泛型类、泛型接口</h2><ol>
-<li><p>泛型类堪忧多个参数，此时应将多个参数一起放到尖括号内，例如：&lt;E1,E2,E3&gt;</p>
-</li>
-<li><p>泛型类的构造器：public GenericClass(){}  错误写法：public GenericClass&lt;E&gt;(){}</p>
-</li>
-<li><p>实例化之后，操作原来泛型位置的结构必须与指定的泛型结构一致</p>
-</li>
-<li><p>泛型不同的引用不能互相赋值</p>
-</li>
-<li><p>泛型如果不指定，将被擦除，泛型对应的类型均按照Object处理，但不等价 于Object。</p>
-<p>泛型要使用一路都用。要不用，一路都不要用。</p>
-</li>
-<li><p>jdk1.7，泛型的简化操作：ArrayList&lt;Fruit&gt; flist &#x3D; new ArrayList&lt;&gt;();</p>
-</li>
-<li><p>泛型的指定中不能使用基本数据类型，可以使用包装类代替</p>
-</li>
-<li><p>不能使用new E[]。但是可以：E[] elements &#x3D; (E[])new Object[capacity]; </p>
-<p>参考：ArrayList源码中声明：Object[] elementData，而非泛型参数类型数组。</p>
-</li>
-<li><p>父类有泛型，子类可以选择保留泛型，也可以选择指定的泛型类型</p>
-<p>子类不保留父类的泛型：按需实现，子类没有指定泛型类型的话，默认为Object</p>
-<p>子类保留弗雷德泛型：泛型子类</p>
-<p>结论：子类必须是“富二代”，子类除了指定或保留父类的泛型，还可以增加自己的泛型</p>
-</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类不保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)没有类型 擦除</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son1</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;<span class="comment">// 等价于class Son extends Father&lt;Object,Object&gt;&#123;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)具体类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son2</span> <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, String&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)全部保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son3</span>&lt;T1, T2&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)部分保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son4</span>&lt;T2&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类不保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)没有类型 擦除</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son</span>&lt;A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&#123;<span class="comment">//等价于class Son extends Father&lt;Object,Object&gt;&#123;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)具体类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son2</span>&lt;A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, String&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 子类保留父类的泛型</span></span><br><span class="line"><span class="comment">// 1)全部保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son3</span>&lt;T1, T2, A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;T1, T2&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2)部分保留</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son4</span>&lt;T2, A, B&gt; <span class="keyword">extends</span> <span class="title class_">Father</span>&lt;Integer, T2&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><p>方法，也可以被泛型化，不管此时定义在其中的类是不是泛型类。在泛型方法中可以定义泛型参数，此时，参数的类型就是传入数据的类型。</p>
-<p>泛型方法格式：[访问权限] &lt;泛型&gt; 返回类型 方法名([泛型标识 参数名称]) 抛出的异常</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="keyword">void</span> <span class="title function_">fromArrayToCollection</span><span class="params">(T[] a, Collection&lt;T&gt; c)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (T o : a) &#123;</span><br><span class="line">    c.add(o);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">  Object[] ao = <span class="keyword">new</span> <span class="title class_">Object</span>[<span class="number">100</span>];</span><br><span class="line">  Collection&lt;Object&gt; co = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Object&gt;();</span><br><span class="line">  fromArrayToCollection(ao, co);</span><br><span class="line">  String[] sa = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">20</span>];</span><br><span class="line">  Collection&lt;String&gt; cs = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">  fromArrayToCollection(sa, cs);</span><br><span class="line">  Collection&lt;Double&gt; cd = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">  <span class="comment">// 下面代码中T是Double类，但sa是String类型，编译错误。</span></span><br><span class="line">  <span class="comment">// fromArrayToCollection(sa, cd);</span></span><br><span class="line">  <span class="comment">// 下面代码中T是Object类型，sa是String类型，可以赋值成功。</span></span><br><span class="line">  fromArrayToCollection(sa, co);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Creature</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> <span class="keyword">extends</span> <span class="title class_">Creature</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Man</span> <span class="keyword">extends</span> <span class="title class_">Person</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PersonTest</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T <span class="keyword">extends</span> <span class="title class_">Person</span>&gt; <span class="keyword">void</span> <span class="title function_">test</span><span class="params">(T t)</span>&#123;</span><br><span class="line">    System.out.println(t);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    test(<span class="keyword">new</span> <span class="title class_">Person</span>());</span><br><span class="line">    test(<span class="keyword">new</span> <span class="title class_">Man</span>());</span><br><span class="line">    <span class="comment">//The method test(T) in the type PersonTest is not</span></span><br><span class="line">    <span class="comment">//applicable for the arguments (Creature)</span></span><br><span class="line">    test(<span class="keyword">new</span> <span class="title class_">Creature</span>());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="泛型在继承上的体现"><a href="#泛型在继承上的体现" class="headerlink" title="泛型在继承上的体现"></a>泛型在继承上的体现</h1><p>如果B是A的一个子类型（子类或者子接口），而G是具有泛型声明的类或接口，G&lt;B&gt;并不是G的子类型&lt;A&gt;</p>
-<p>比如：String是Object的子类，但是List&lt;String&gt;并不是List&lt;Object&gt;的子类。</p>
-<h1 id="通配符的使用"><a href="#通配符的使用" class="headerlink" title="通配符的使用"></a>通配符的使用</h1><ul>
-<li><p>使用类型通配符：“？” </p>
-<p>比如：List&lt;?&gt; ，Map&lt;?,?&gt; </p>
-<p>List&lt;?&gt;是List&lt;String&gt;、List&lt;Object&gt;等各种泛型List的父类。</p>
-</li>
-<li><p>读取List&lt;?&gt;的对象list中的元素时，永远是安全的，因为不管list的真实类型是什么，它包含的都是Object。</p>
-</li>
-<li><p>不能向list写入元素，因为我们不知道c的元素类型，我们不能向其中添加对象，唯一的例外是null，它是所有类型的成员</p>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">  List&lt;?&gt; list = <span class="literal">null</span>;</span><br><span class="line">  list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line">  list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Double&gt;();</span><br><span class="line">  <span class="comment">// list.add(3);//编译不通过</span></span><br><span class="line">  list.add(<span class="literal">null</span>);</span><br><span class="line">  List&lt;String&gt; l1 = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line">  List&lt;Integer&gt; l2 = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">  l1.add(<span class="string">&quot;123&quot;</span>);</span><br><span class="line">  l2.add(<span class="number">15</span>);</span><br><span class="line">  read(l1);</span><br><span class="line">  read(l2);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">read</span><span class="params">(List&lt;?&gt; list)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (Object o : list) &#123;</span><br><span class="line">    System.out.println(o);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意：</p>
-<ol>
-<li><p>编译错误：不能用在泛型方法声明上，返回值类型前面的&lt;&gt;不能使用“?”，例如：</p>
-<p>public static &lt;?&gt; void test(ArrayList list){}</p>
-</li>
-<li><p>编译错误：不能用在泛型类的声明上</p>
-<p>class GenericTypeClass &lt;?&gt;{}</p>
-</li>
-<li><p>编译错误：不能用在创建对象上，右边属于创建集合对象</p>
-<p>ArrayList&lt;?&gt; list2 &#x3D; new ArrayList&lt;?&gt;();</p>
-</li>
-</ol>
-<h2 id="有限制的通配符"><a href="#有限制的通配符" class="headerlink" title="有限制的通配符"></a>有限制的通配符</h2><ul>
-<li><p>通配符指定上限 </p>
-<p>上限extends：使用时指定的类型必须是继承某个类，或者实现某个接口，即&lt;&#x3D; </p>
-</li>
-<li><p>通配符指定下限 </p>
-<p>下限super：使用时指定的类型不能小于操作的类，即&gt;&#x3D;</p>
-</li>
-<li><p>举例：</p>
-<ul>
-<li><p>&lt;? extends Number&gt;   (无穷小, Number]</p>
-<p>只允许泛型为Number及Number子类的引用调用</p>
-</li>
-<li><p>&lt;? super Number&gt;   [Number, 无穷大)</p>
-<p>只允许泛型为Number及其父类的引用调用</p>
-</li>
-<li><p>&lt;? entends Conparable&gt;</p>
-<p>只允许泛型为实现Comparable接口的实现类的引用调用</p>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">printCollection3</span><span class="params">(Collection&lt;? extends Person&gt; coll)</span> &#123;</span><br><span class="line">  <span class="comment">//Iterator只能用Iterator&lt;?&gt;或Iterator&lt;? extends Person&gt;.why?</span></span><br><span class="line">  Iterator&lt;?&gt; iterator = coll.iterator();</span><br><span class="line">  <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.println(iterator.next());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">printCollection4</span><span class="params">(Collection&lt;? <span class="built_in">super</span> Person&gt; coll)</span> &#123;</span><br><span class="line">  <span class="comment">//Iterator只能用Iterator&lt;?&gt;或Iterator&lt;? super Person&gt;.why?</span></span><br><span class="line">  Iterator&lt;?&gt; iterator = coll.iterator();</span><br><span class="line">  <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.println(iterator.next());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="泛型嵌套举例"><a href="#泛型嵌套举例" class="headerlink" title="泛型嵌套举例"></a>泛型嵌套举例</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">  HashMap&lt;String, ArrayList&lt;Citizen&gt;&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String, ArrayList&lt;Citizen&gt;&gt;();</span><br><span class="line">  ArrayList&lt;Citizen&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Citizen&gt;();</span><br><span class="line">  list.add(<span class="keyword">new</span> <span class="title class_">Citizen</span>(<span class="string">&quot;刘恺威&quot;</span>));</span><br><span class="line">  list.add(<span class="keyword">new</span> <span class="title class_">Citizen</span>(<span class="string">&quot;杨幂&quot;</span>));</span><br><span class="line">  list.add(<span class="keyword">new</span> <span class="title class_">Citizen</span>(<span class="string">&quot;小糯米&quot;</span>));</span><br><span class="line">  map.put(<span class="string">&quot;刘恺威&quot;</span>, list);</span><br><span class="line">  Set&lt;Entry&lt;String, ArrayList&lt;Citizen&gt;&gt;&gt; entrySet = map.entrySet();</span><br><span class="line">  Iterator&lt;Entry&lt;String, ArrayList&lt;Citizen&gt;&gt;&gt; iterator = entrySet.iterator();</span><br><span class="line">  <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">    Entry&lt;String, ArrayList&lt;Citizen&gt;&gt; entry = iterator.next();</span><br><span class="line">    <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> entry.getKey();</span><br><span class="line">    ArrayList&lt;Citizen&gt; value = entry.getValue();</span><br><span class="line">    System.out.println(<span class="string">&quot;户主：&quot;</span> + key);</span><br><span class="line">    System.out.println(<span class="string">&quot;家庭成员：&quot;</span> + value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 ]]></content>
       <categories>
         <category>学习笔记</category>
@@ -1317,11 +1317,9 @@
 <p>​    布尔型：boolean</p>
 <p> b. 引用数据类型：</p>
 <pre><code>   类(class)
-
-      接口(interface)
-
-      数组(array)
 </code></pre>
+<p>   接口(interface)</p>
+<p>   数组(array)</p>
 </li>
 </ol>
 <table>
@@ -2103,52 +2101,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>Java枚举类</title>
-    <url>/2020/06/16/Java%E6%9E%9A%E4%B8%BE%E7%B1%BB/</url>
-    <content><![CDATA[<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><p>在JDK5.0之前需要自定义枚举类，JDK5.0中新增了enum关键字，用来定义枚举类</p>
-<h2 id="枚举类的特点"><a href="#枚举类的特点" class="headerlink" title="枚举类的特点"></a>枚举类的特点</h2><ul>
-<li>枚举类对象的属性不允许被改动，所以应该使用private final修饰</li>
-<li>枚举类的被private final修饰的属性要在构造器中为期赋值</li>
-<li>若枚举类显式的定义了带参数的构造器，则在列出枚举值时也必须传入对应参数</li>
-</ul>
-<h1 id="自定义枚举类"><a href="#自定义枚举类" class="headerlink" title="自定义枚举类"></a>自定义枚举类</h1><ol>
-<li>私有化类的构造器，保证不能再类的外部创建其对象</li>
-<li>在类的内部穿件枚举类的实例，并用public static final修饰</li>
-<li>对象如果有实例变量，应该声明为private final，并在构造器中初始化</li>
-</ol>
-<span id="more"></span>
-
-<p>用季节来举例：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Season</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String NAME;<span class="comment">//季节的名称</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String DESC;<span class="comment">//季节的描述</span></span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">Season</span><span class="params">(String seasonName,String seasonDesc)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.NAME = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.DESC = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SPRING</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SUMMER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">AUTUMN</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">WINTER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;白雪皑皑&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="enum关键字定义枚举类"><a href="#enum关键字定义枚举类" class="headerlink" title="enum关键字定义枚举类"></a>enum关键字定义枚举类</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul>
-<li>用enum定义的枚举类默认继承了java.lang.Enum类，因此不能再继承其他类</li>
-<li>枚举类的构造器只能用private修饰</li>
-<li>枚举类的所有实例必须在枚举类中显式列出（用“,”分隔，“;”）结尾，列出的实例会自动添加public static final修饰</li>
-<li>必须要在枚举类的第一行声明枚举类对象</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">SeasonEnum</span> &#123;</span><br><span class="line">  SPRING(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春风又绿江南岸&quot;</span>),</span><br><span class="line">  SUMMER(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;映日荷花别样红&quot;</span>),</span><br><span class="line">  AUTUMN(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋水共长天一色&quot;</span>),</span><br><span class="line">  WINTER(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;窗含西岭千秋雪&quot;</span>);</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonName;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonDesc;</span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">SeasonEnum</span><span class="params">(String seasonName, String seasonDesc)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.seasonName = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.seasonDesc = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonName</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonName;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonDesc</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="Enum类的主要方法"><a href="#Enum类的主要方法" class="headerlink" title="Enum类的主要方法"></a>Enum类的主要方法</h1><ul>
-<li>values()方法：返回枚举类型的对象数组。该方法可以很方便地遍历所有的枚举值。 </li>
-<li>valueOf(String str)：可以把一个字符串转为对应的枚举类对象。要求字符串必须是枚举类对象的“名字”。如不是，会有运行时异常： IllegalArgumentException。 </li>
-<li>toString()：返回当前枚举类对象常量的名称</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java基础知识总结（中）</title>
     <url>/2020/04/15/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/</url>
     <content><![CDATA[<h2 id="面向对象与面向过程"><a href="#面向对象与面向过程" class="headerlink" title="面向对象与面向过程"></a>面向对象与面向过程</h2><ul>
@@ -2801,6 +2753,179 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>Java标识符命名规范</title>
+    <url>/2020/03/28/Java%E6%A0%87%E8%AF%86%E7%AC%A6%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</url>
+    <content><![CDATA[<ol>
+<li>包名：多单词组合时多有字母都小写，例如：helloworld</li>
+<li>类名和接口名：多单词组合所有单词第一个字母大写，例如：HelloWorld</li>
+<li>变量名和方法名：多单词组合时，除了第一个单词其他单词的第一个字母大写，例如：helloWorld</li>
+<li>常量名：所有字母都大写，多单词组合时下划线连接，例如：HELLO_WORLD</li>
+</ol>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux中的权限管理</title>
+    <url>/2020/05/15/Linux%E4%B8%AD%E7%9A%84%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h1 id="文件基本权限"><a href="#文件基本权限" class="headerlink" title="文件基本权限"></a>文件基本权限</h1><p>首先看一下Linux中的文件权限，可以用ll命令或者带-l的ls命令查看</p>
+<img data-src="/images/Linux中的权限管理/image-20200515135526284.png" alt="image-20200515135526284" style="zoom:80%;" />
+
+<p>第一个字符代表文件的类型，然后是权限、链接数、所属用户、所属用户组、文件大小、最后修改时间、文件名</p>
+<p>Linux中的文件权限一共有7种：</p>
+<span id="more"></span>
+
+<p>前面三种为常见的文件类型，后面四种是特殊文件类型</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>文件类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-</td>
+<td>普通文件（如上图第三列）</td>
+</tr>
+<tr>
+<td>d</td>
+<td>文件目录（也就是文件夹）</td>
+</tr>
+<tr>
+<td>l</td>
+<td>软连接（和Windows中的快捷方式相似）</td>
+</tr>
+<tr>
+<td>b</td>
+<td>设备块文件（例如硬盘和光驱）</td>
+</tr>
+<tr>
+<td>p</td>
+<td>管道文件</td>
+</tr>
+<tr>
+<td>c</td>
+<td>字符设备文件</td>
+</tr>
+<tr>
+<td>s</td>
+<td>套接口文件&#x2F;数据接口文件</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>权限</th>
+<th>对应数字</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>r</td>
+<td>4</td>
+<td>可读</td>
+</tr>
+<tr>
+<td>w</td>
+<td>2</td>
+<td>可写</td>
+</tr>
+<tr>
+<td>x</td>
+<td>1</td>
+<td>可执行</td>
+</tr>
+</tbody></table>
+<p>在看上面图中的第一个文件权限</p>
+<p><strong>rwx——</strong></p>
+<p>每三个字符为一组，-代表没有相关的权限</p>
+<p>第一组是表示文件所有者（u表示）的权限，这里是root，root对该文件拥有所有的权限</p>
+<p>第二组是表示所属组（g表示）的权限，这里也是root，这里所属组对该文件没有任何权限</p>
+<p>第三组是表示其他人（o表示）的权限，这里也是没有任何权限的</p>
+<p>新创建的文件默认权限：</p>
+<img data-src="/images/Linux中的权限管理/image-20200515141738439.png" alt="image-20200515141738439" style="zoom:80%;" />
+
+<h1 id="修改文件权限"><a href="#修改文件权限" class="headerlink" title="修改文件权限"></a>修改文件权限</h1><p>Linux中修改权限用的是chmod命令</p>
+<p>具体用法见下图：</p>
+<h2 id="方式一："><a href="#方式一：" class="headerlink" title="方式一："></a>方式一：</h2><p>给所属组加上写的权限</p>
+<img data-src="/images/Linux中的权限管理/image-20200515141537125.png" alt="image-20200515141537125" style="zoom:80%;" />
+
+<p>也可以同时给所属用户和用户组还有其他用户加权限</p>
+<img data-src="/images/Linux中的权限管理/image-20200515142243765.png" alt="image-20200515142243765" style="zoom:80%;" />
+
+<p>如果是要给全部的三个组同时加权限可以直接用a代表ugo，是就是all</p>
+<p><img data-src="/images/Linux%E4%B8%AD%E7%9A%84%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/image-20200515142524794.png" alt="image-20200515142524794"></p>
+<p>减权限，这里同理也可以用a代替ugo</p>
+<img data-src="/images/Linux中的权限管理/image-20200515142333848.png" alt="image-20200515142333848" style="zoom:80%;" />
+
+<h2 id="方式二："><a href="#方式二：" class="headerlink" title="方式二："></a>方式二：</h2><p>直接用代号赋予相应的权限，当要更改多个组的权限时，中间用逗号隔开</p>
+<img data-src="/images/Linux中的权限管理/image-20200515142801089.png" alt="image-20200515142801089" style="zoom:80%;" />
+
+<p><img data-src="/images/Linux%E4%B8%AD%E7%9A%84%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/image-20200515143020204.png" alt="image-20200515143020204"></p>
+<p><img data-src="/images/Linux%E4%B8%AD%E7%9A%84%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/image-20200515143020204.png" alt="image-20200515143020204"></p>
+<h2 id="方式三："><a href="#方式三：" class="headerlink" title="方式三："></a>方式三：</h2><p>用的比较多的其实是这一种</p>
+<img data-src="/images/Linux中的权限管理/image-20200515143154536.png" alt="image-20200515143154536" style="zoom:80%;" />
+
+<p>这里的每个数字就是刚刚对应权限代表的二进制转换过来的，这里544转换为方式二就是：u&#x3D;rx,g&#x3D;r,o&#x3D;r，x的权重为1，w的权重为2，r的权重为4，把每个组的所有权限的权重加起来就是方式三的数字了。</p>
+<p>这里再顺便介绍一个和权限相关的命令：</p>
+<p>chown: 用来改变文件或目录的所有者</p>
+<p>格式：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chown</span> user:user fileName</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode第一天</title>
+    <url>/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/</url>
+    <content><![CDATA[<blockquote>
+<p>LeetCode第350题</p>
+<p>给定两个数组，编写一个函数来计算它们的交集。</p>
+<p>示例 1：</p>
+<p>输入：nums1 &#x3D; [1,2,2,1], nums2 &#x3D; [2,2]<br>输出：[2,2]<br>示例 2:</p>
+<p>输入：nums1 &#x3D; [4,9,5], nums2 &#x3D; [9,4,9,8,4]<br>输出：[4,9]</p>
+<p>说明：</p>
+<p>输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。<br>我们可以不考虑输出结果的顺序。</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii">https://leetcode-cn.com/problems/intersection-of-two-arrays-ii</a></p>
+</blockquote>
+<p>方法一：</p>
+<p>用哈希表映射，先把较短的那个数组遍历，存入哈希表中，键是数组中元素的值，值是数组中元素出现的次数<br>再遍历另外一个数组，从哈希表中找这个数组中的值，看是否存在，存在就将其存入新造的数组中，再将哈希表中该键对应的值减一，如果值减到了0，就将这个键移除去，否则将这个键对应的值减一，在存入哈希表中。</p>
+<span id="more"></span>
+
+<p>这个方法LeetCode上的一张图看的明明白白：</p>
+<p><img data-src="/images/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/350_fig1.gif" alt="fig1"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect1(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  <span class="keyword">if</span> (nums1.length &gt; nums2.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> intersect1(nums2, nums1);</span><br><span class="line">  &#125;</span><br><span class="line">  Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums1) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>;</span><br><span class="line">    map.put(num, count);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[nums2.length];</span><br><span class="line">  <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums2) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      arr[index++] = num;</span><br><span class="line">      <span class="keyword">if</span> (count != <span class="number">1</span>) &#123;</span><br><span class="line">        map.put(num, --count);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        map.remove(num);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法二：</p>
+<p>先对两个数组进行排序，然后设置两个指针来遍历这两个数组。将比较结果较小的那个数组的指针后移，如果两数相等，则将两个数组的指针都向后移，并将这个数存入新造好的数组。遍历直到有一个指针到了数组的结尾，结束遍历。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect2(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  Arrays.sort(nums1);</span><br><span class="line">  Arrays.sort(nums2);</span><br><span class="line">  <span class="type">int</span> <span class="variable">len1</span> <span class="operator">=</span> nums1.length, len2 = nums2.length;</span><br><span class="line">  <span class="type">int</span> <span class="variable">index1</span> <span class="operator">=</span> <span class="number">0</span>, index2 = <span class="number">0</span>, index = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[Math.min(len1, len2)];</span><br><span class="line">  <span class="keyword">while</span> (index1 &lt; len1 &amp;&amp; index2 &lt; len2) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums1[index1] &lt; nums2[index2]) &#123;</span><br><span class="line">      index1++;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums1[index1] &gt; nums2[index2]) &#123;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      arr[index++] = nums1[index1];</span><br><span class="line">      index1++;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>结语</p>
+<p>如果 nums2的元素存储在磁盘上，磁盘内存是有限的，并且你不能一次加载所有的元素到内存中。那么就无法高效地对 nums2进行排序，因此推荐使用方法一而不是方法二。在方法一中，nums2 只关系到查询操作，因此每次读取nums2中的一部分数据，并进行处理即可。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>LeetCode</tag>
+        <tag>算法</tag>
+        <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java常用类</title>
     <url>/2020/06/06/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/</url>
     <content><![CDATA[<h1 id="字符串相关的类"><a href="#字符串相关的类" class="headerlink" title="字符串相关的类"></a>字符串相关的类</h1><h2 id="String类"><a href="#String类" class="headerlink" title="String类"></a>String类</h2><h3 id="String类的特性"><a href="#String类的特性" class="headerlink" title="String类的特性"></a>String类的特性</h3><ul>
@@ -3244,14 +3369,41 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>Java标识符命名规范</title>
-    <url>/2020/03/28/Java%E6%A0%87%E8%AF%86%E7%AC%A6%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</url>
-    <content><![CDATA[<ol>
-<li>包名：多单词组合时多有字母都小写，例如：helloworld</li>
-<li>类名和接口名：多单词组合所有单词第一个字母大写，例如：HelloWorld</li>
-<li>变量名和方法名：多单词组合时，除了第一个单词其他单词的第一个字母大写，例如：helloWorld</li>
-<li>常量名：所有字母都大写，多单词组合时下划线连接，例如：HELLO_WORLD</li>
+    <title>Java枚举类</title>
+    <url>/2020/06/16/Java%E6%9E%9A%E4%B8%BE%E7%B1%BB/</url>
+    <content><![CDATA[<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><p>在JDK5.0之前需要自定义枚举类，JDK5.0中新增了enum关键字，用来定义枚举类</p>
+<h2 id="枚举类的特点"><a href="#枚举类的特点" class="headerlink" title="枚举类的特点"></a>枚举类的特点</h2><ul>
+<li>枚举类对象的属性不允许被改动，所以应该使用private final修饰</li>
+<li>枚举类的被private final修饰的属性要在构造器中为期赋值</li>
+<li>若枚举类显式的定义了带参数的构造器，则在列出枚举值时也必须传入对应参数</li>
+</ul>
+<h1 id="自定义枚举类"><a href="#自定义枚举类" class="headerlink" title="自定义枚举类"></a>自定义枚举类</h1><ol>
+<li>私有化类的构造器，保证不能再类的外部创建其对象</li>
+<li>在类的内部穿件枚举类的实例，并用public static final修饰</li>
+<li>对象如果有实例变量，应该声明为private final，并在构造器中初始化</li>
 </ol>
+<span id="more"></span>
+
+<p>用季节来举例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Season</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String NAME;<span class="comment">//季节的名称</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String DESC;<span class="comment">//季节的描述</span></span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">Season</span><span class="params">(String seasonName,String seasonDesc)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.NAME = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.DESC = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SPRING</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SUMMER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">AUTUMN</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">WINTER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;白雪皑皑&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="enum关键字定义枚举类"><a href="#enum关键字定义枚举类" class="headerlink" title="enum关键字定义枚举类"></a>enum关键字定义枚举类</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul>
+<li>用enum定义的枚举类默认继承了java.lang.Enum类，因此不能再继承其他类</li>
+<li>枚举类的构造器只能用private修饰</li>
+<li>枚举类的所有实例必须在枚举类中显式列出（用“,”分隔，“;”）结尾，列出的实例会自动添加public static final修饰</li>
+<li>必须要在枚举类的第一行声明枚举类对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">SeasonEnum</span> &#123;</span><br><span class="line">  SPRING(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春风又绿江南岸&quot;</span>),</span><br><span class="line">  SUMMER(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;映日荷花别样红&quot;</span>),</span><br><span class="line">  AUTUMN(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋水共长天一色&quot;</span>),</span><br><span class="line">  WINTER(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;窗含西岭千秋雪&quot;</span>);</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonName;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonDesc;</span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">SeasonEnum</span><span class="params">(String seasonName, String seasonDesc)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.seasonName = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.seasonDesc = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonName</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonName;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonDesc</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Enum类的主要方法"><a href="#Enum类的主要方法" class="headerlink" title="Enum类的主要方法"></a>Enum类的主要方法</h1><ul>
+<li>values()方法：返回枚举类型的对象数组。该方法可以很方便地遍历所有的枚举值。 </li>
+<li>valueOf(String str)：可以把一个字符串转为对应的枚举类对象。要求字符串必须是枚举类对象的“名字”。如不是，会有运行时异常： IllegalArgumentException。 </li>
+<li>toString()：返回当前枚举类对象常量的名称</li>
+</ul>
 ]]></content>
       <categories>
         <category>学习笔记</category>
@@ -3259,185 +3411,71 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>Java</tag>
+        <tag>学习笔记</tag>
       </tags>
   </entry>
   <entry>
-    <title>LeetCode第一天</title>
-    <url>/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/</url>
-    <content><![CDATA[<blockquote>
-<p>LeetCode第350题</p>
-<p>给定两个数组，编写一个函数来计算它们的交集。</p>
-<p>示例 1：</p>
-<p>输入：nums1 &#x3D; [1,2,2,1], nums2 &#x3D; [2,2]<br>输出：[2,2]<br>示例 2:</p>
-<p>输入：nums1 &#x3D; [4,9,5], nums2 &#x3D; [9,4,9,8,4]<br>输出：[4,9]</p>
-<p>说明：</p>
-<p>输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。<br>我们可以不考虑输出结果的顺序。</p>
-<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii">https://leetcode-cn.com/problems/intersection-of-two-arrays-ii</a></p>
-</blockquote>
-<p>方法一：</p>
-<p>用哈希表映射，先把较短的那个数组遍历，存入哈希表中，键是数组中元素的值，值是数组中元素出现的次数<br>再遍历另外一个数组，从哈希表中找这个数组中的值，看是否存在，存在就将其存入新造的数组中，再将哈希表中该键对应的值减一，如果值减到了0，就将这个键移除去，否则将这个键对应的值减一，在存入哈希表中。</p>
+    <title>markdown基本语法</title>
+    <url>/2020/02/27/Markdown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><h4 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="comment">###### 六级标题</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>注意#和标题之间要有空格才会有效果</strong>   这简直是初学者的一大坑  </p>
 <span id="more"></span>
 
-<p>这个方法LeetCode上的一张图看的明明白白：</p>
-<p><img data-src="/images/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/350_fig1.gif" alt="fig1"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect1(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  <span class="keyword">if</span> (nums1.length &gt; nums2.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> intersect1(nums2, nums1);</span><br><span class="line">  &#125;</span><br><span class="line">  Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums1) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>;</span><br><span class="line">    map.put(num, count);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[nums2.length];</span><br><span class="line">  <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums2) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      arr[index++] = num;</span><br><span class="line">      <span class="keyword">if</span> (count != <span class="number">1</span>) &#123;</span><br><span class="line">        map.put(num, --count);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        map.remove(num);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="文本样式"><a href="#文本样式" class="headerlink" title="文本样式"></a>文本样式</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">*斜体1*	 _斜体2_</span><br><span class="line">**加粗1**  __加粗2__</span><br><span class="line">~~删除线~~</span><br><span class="line">H~2~O	（hexo要用&lt;sub&gt;&lt;/sub&gt;标签，如H&lt;sub&gt;2&lt;/sub&gt;O）</span><br><span class="line">2^10^   （hexo要用&lt;sup&gt;&lt;/sup&gt;标签，如2&lt;sup&gt;10&lt;/sup&gt;）</span><br><span class="line">&gt; 引用</span><br></pre></td></tr></table></figure>
 
-<p>方法二：</p>
-<p>先对两个数组进行排序，然后设置两个指针来遍历这两个数组。将比较结果较小的那个数组的指针后移，如果两数相等，则将两个数组的指针都向后移，并将这个数存入新造好的数组。遍历直到有一个指针到了数组的结尾，结束遍历。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect2(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  Arrays.sort(nums1);</span><br><span class="line">  Arrays.sort(nums2);</span><br><span class="line">  <span class="type">int</span> <span class="variable">len1</span> <span class="operator">=</span> nums1.length, len2 = nums2.length;</span><br><span class="line">  <span class="type">int</span> <span class="variable">index1</span> <span class="operator">=</span> <span class="number">0</span>, index2 = <span class="number">0</span>, index = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[Math.min(len1, len2)];</span><br><span class="line">  <span class="keyword">while</span> (index1 &lt; len1 &amp;&amp; index2 &lt; len2) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums1[index1] &lt; nums2[index2]) &#123;</span><br><span class="line">      index1++;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums1[index1] &gt; nums2[index2]) &#123;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      arr[index++] = nums1[index1];</span><br><span class="line">      index1++;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p><strong>效果显示</strong></p>
+<p><em>斜体1</em>	 <em>斜体2</em><br><strong>加粗1</strong>     <strong>加粗2</strong><br><del>删除线</del></p>
+<p>H<sub>2</sub>O<br>2<sup>10</sup></p>
 <blockquote>
-<p>结语</p>
-<p>如果 nums2的元素存储在磁盘上，磁盘内存是有限的，并且你不能一次加载所有的元素到内存中。那么就无法高效地对 nums2进行排序，因此推荐使用方法一而不是方法二。在方法一中，nums2 只关系到查询操作，因此每次读取nums2中的一部分数据，并进行处理即可。</p>
+<p>引用</p>
 </blockquote>
+<p><strong>后面两个要在偏好里面设置，Markdown扩展语法那几个选项打上勾</strong></p>
+<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">- 项目1</span><br><span class="line">  </span><br><span class="line">  - 项目2</span><br><span class="line">  </span><br><span class="line">    - 项目3</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>项目1</p>
+<ul>
+<li><p>项目2</p>
+<ul>
+<li>项目3</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1. 项目</span><br><span class="line">2. 项目</span><br><span class="line">3. 项目</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>项目</li>
+<li>项目</li>
+<li>项目</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- [ ] 计划任务</span><br><span class="line">- [x] 完成任务 </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><input disabled="" type="checkbox"> 计划任务</li>
+<li><input checked="" disabled="" type="checkbox"> 完成任务</li>
+</ul>
+<h4 id="插入代码"><a href="#插入代码" class="headerlink" title="插入代码"></a>插入代码</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">```c</span><br><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line">void <span class="function"><span class="title">main</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">return</span> 0;</span><br><span class="line">&#125;</span><br><span class="line">​```</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">![](图片链接)</span><br></pre></td></tr></table></figure>
+
+<p>今天先写到这，睡觉去了🌛 🌜</p>
+<hr>
+<h4 id="文字"><a href="#文字" class="headerlink" title="文字"></a>文字</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[文字描述](链接)</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://www.baidu.com/">百度</a></p>
 ]]></content>
       <categories>
-        <category>算法</category>
-        <category>LeetCode</category>
+        <category>学习笔记</category>
+        <category>markdown</category>
       </categories>
       <tags>
-        <tag>LeetCode</tag>
-        <tag>算法</tag>
-        <tag>数据结构</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>linux中的权限管理</title>
-    <url>/2020/05/15/Linux%E4%B8%AD%E7%9A%84%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h1 id="文件基本权限"><a href="#文件基本权限" class="headerlink" title="文件基本权限"></a>文件基本权限</h1><p>首先看一下Linux中的文件权限，可以用ll命令或者带-l的ls命令查看</p>
-<img data-src="/images/Linux中的权限管理/image-20200515135526284.png" alt="image-20200515135526284" style="zoom:80%;" />
-
-<p>第一个字符代表文件的类型，然后是权限、链接数、所属用户、所属用户组、文件大小、最后修改时间、文件名</p>
-<p>Linux中的文件权限一共有7种：</p>
-<span id="more"></span>
-
-<p>前面三种为常见的文件类型，后面四种是特殊文件类型</p>
-<table>
-<thead>
-<tr>
-<th>符号</th>
-<th>文件类型</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-</td>
-<td>普通文件（如上图第三列）</td>
-</tr>
-<tr>
-<td>d</td>
-<td>文件目录（也就是文件夹）</td>
-</tr>
-<tr>
-<td>l</td>
-<td>软连接（和Windows中的快捷方式相似）</td>
-</tr>
-<tr>
-<td>b</td>
-<td>设备块文件（例如硬盘和光驱）</td>
-</tr>
-<tr>
-<td>p</td>
-<td>管道文件</td>
-</tr>
-<tr>
-<td>c</td>
-<td>字符设备文件</td>
-</tr>
-<tr>
-<td>s</td>
-<td>套接口文件&#x2F;数据接口文件</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th>权限</th>
-<th>对应数字</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>r</td>
-<td>4</td>
-<td>可读</td>
-</tr>
-<tr>
-<td>w</td>
-<td>2</td>
-<td>可写</td>
-</tr>
-<tr>
-<td>x</td>
-<td>1</td>
-<td>可执行</td>
-</tr>
-</tbody></table>
-<p>在看上面图中的第一个文件权限</p>
-<p><strong>rwx——</strong></p>
-<p>每三个字符为一组，-代表没有相关的权限</p>
-<p>第一组是表示文件所有者（u表示）的权限，这里是root，root对该文件拥有所有的权限</p>
-<p>第二组是表示所属组（g表示）的权限，这里也是root，这里所属组对该文件没有任何权限</p>
-<p>第三组是表示其他人（o表示）的权限，这里也是没有任何权限的</p>
-<p>新创建的文件默认权限：</p>
-<img data-src="/images/Linux中的权限管理/image-20200515141738439.png" alt="image-20200515141738439" style="zoom:80%;" />
-
-<h1 id="修改文件权限"><a href="#修改文件权限" class="headerlink" title="修改文件权限"></a>修改文件权限</h1><p>Linux中修改权限用的是chmod命令</p>
-<p>具体用法见下图：</p>
-<h2 id="方式一："><a href="#方式一：" class="headerlink" title="方式一："></a>方式一：</h2><p>给所属组加上写的权限</p>
-<img data-src="/images/Linux中的权限管理/image-20200515141537125.png" alt="image-20200515141537125" style="zoom:80%;" />
-
-<p>也可以同时给所属用户和用户组还有其他用户加权限</p>
-<img data-src="/images/Linux中的权限管理/image-20200515142243765.png" alt="image-20200515142243765" style="zoom:80%;" />
-
-<p>如果是要给全部的三个组同时加权限可以直接用a代表ugo，是就是all</p>
-<p><img data-src="/images/Linux%E4%B8%AD%E7%9A%84%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/image-20200515142524794.png" alt="image-20200515142524794"></p>
-<p>减权限，这里同理也可以用a代替ugo</p>
-<img data-src="/images/Linux中的权限管理/image-20200515142333848.png" alt="image-20200515142333848" style="zoom:80%;" />
-
-<h2 id="方式二："><a href="#方式二：" class="headerlink" title="方式二："></a>方式二：</h2><p>直接用代号赋予相应的权限，当要更改多个组的权限时，中间用逗号隔开</p>
-<img data-src="/images/Linux中的权限管理/image-20200515142801089.png" alt="image-20200515142801089" style="zoom:80%;" />
-
-<p><img data-src="/images/Linux%E4%B8%AD%E7%9A%84%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/image-20200515143020204.png" alt="image-20200515143020204"></p>
-<p><img data-src="/images/Linux%E4%B8%AD%E7%9A%84%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/image-20200515143020204.png" alt="image-20200515143020204"></p>
-<h2 id="方式三："><a href="#方式三：" class="headerlink" title="方式三："></a>方式三：</h2><p>用的比较多的其实是这一种</p>
-<img data-src="/images/Linux中的权限管理/image-20200515143154536.png" alt="image-20200515143154536" style="zoom:80%;" />
-
-<p>这里的每个数字就是刚刚对应权限代表的二进制转换过来的，这里544转换为方式二就是：u&#x3D;rx,g&#x3D;r,o&#x3D;r，x的权重为1，w的权重为2，r的权重为4，把每个组的所有权限的权重加起来就是方式三的数字了。</p>
-<p>这里再顺便介绍一个和权限相关的命令：</p>
-<p>chown: 用来改变文件或目录的所有者</p>
-<p>格式：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chown</span> user:user fileName</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux中的进程管理</title>
-    <url>/2020/05/22/Linux%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p>pa a    显示终端机下所有进程</p>
-<p>ps -A   查看所有进程（ps -e和-A是一样的效果，-e更常用一点）（这两个看到的比上面那个多些）</p>
-<p>ps u 以用户为主的格式来显示程序状况</p>
-<p>ps x 显示所有程序，不以终端机来区分</p>
-<p>lsof -i:端口号   根据指定的端口查询进程</p>
-<p>常用的组合命令：</p>
-<p>ps aux,然后再通过管道使用grep命令过滤查找特定的进程,然后再对特定的进程进行操作。</p>
-<p><strong>ps -ef|grep java|grep -v grep</strong> 显示出所有的java进程，去处掉当前的grep进程。</p>
-<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><p>kill -9 进程PID  	根据进程号结束进程</p>
-<p>killall -9 进程名 	根据进程名结束进程</p>
-<blockquote>
-<p>参考资料：<a href="https://blog.csdn.net/wojiaopanpan/article/details/7286430">https://blog.csdn.net/wojiaopanpan/article/details/7286430</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
+        <tag>markdown</tag>
       </tags>
   </entry>
   <entry>
@@ -3471,6 +3509,32 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       <tags>
         <tag>服务器</tag>
         <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx配置反向代理</title>
+    <url>/2021/09/19/Nginx%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<h1 id="前后端分离项目的部署配置"><a href="#前后端分离项目的部署配置" class="headerlink" title="前后端分离项目的部署配置"></a>前后端分离项目的部署配置</h1><p>Nginx就非常离谱，也不知道为什么，前端静态资源也需要单独配置，而且这配置方式还非常的离谱，贴一下配置文件</p>
+<p>配置文件路径<code>/etc/nginx/sites-enabled</code></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">server <span class="punctuation">&#123;</span></span><br><span class="line">    listen      <span class="number">80</span>;   			#监听<span class="number">80</span>端口</span><br><span class="line">    server_name	<span class="number">10.100</span><span class="number">.128</span><span class="number">.8</span>;   #监听访问的host</span><br><span class="line"></span><br><span class="line">    location /EleLabSys/ <span class="punctuation">&#123;</span></span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files $uri $uri/ EleLabSys/;	#此处非常离谱，是经过不断尝试出来的，子文件夹必须要写在这个地方才行</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line">	# 后端api代理还比较正常</span><br><span class="line">	location /prod-api/ <span class="punctuation">&#123;</span></span><br><span class="line">		proxy_set_header Host $http_host;</span><br><span class="line">		proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">		proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">		proxy_pass http<span class="punctuation">:</span><span class="comment">//localhost:8080/;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>具体是什么原因导致的暂且不深究。。。</p>
+<p>等有空再研究</p>
+<hr>
+<p>更新来了。。。</p>
+<p>经过再次的尝试，发现是需要把根路径放到最后面，这样才能正常地访问静态资源，不需要手动配置，并且代理也有效果</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;   <span class="comment">#监听80端口</span></span><br><span class="line">    server_name	10.100.128.8;   <span class="comment">#监听访问的host</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 实验室系统后端</span></span><br><span class="line">	location /prod-api/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:8080/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室代码仓库</span></span><br><span class="line">    location /gitea/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:3000/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室系统云盘</span></span><br><span class="line">	location /cloudDisk/ &#123;</span><br><span class="line">		<span class="comment"># proxy_set_header Host $http_host;</span></span><br><span class="line">		<span class="comment"># proxy_set_header X-Real-IP $remote_addr;</span></span><br><span class="line">		<span class="comment"># proxy_set_header REMOTE-HOST $remote_addr;</span></span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:9999/;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 需要放到最后面，匹配优先级最低</span></span><br><span class="line">	location / &#123;</span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /;</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -3557,116 +3621,27 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>Nginx配置反向代理</title>
-    <url>/2021/09/19/Nginx%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
-    <content><![CDATA[<h1 id="前后端分离项目的部署配置"><a href="#前后端分离项目的部署配置" class="headerlink" title="前后端分离项目的部署配置"></a>前后端分离项目的部署配置</h1><p>Nginx就非常离谱，也不知道为什么，前端静态资源也需要单独配置，而且这配置方式还非常的离谱，贴一下配置文件</p>
-<p>配置文件路径<code>/etc/nginx/sites-enabled</code></p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">server <span class="punctuation">&#123;</span></span><br><span class="line">    listen      <span class="number">80</span>;   			#监听<span class="number">80</span>端口</span><br><span class="line">    server_name	<span class="number">10.100</span><span class="number">.128</span><span class="number">.8</span>;   #监听访问的host</span><br><span class="line"></span><br><span class="line">    location /EleLabSys/ <span class="punctuation">&#123;</span></span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files $uri $uri/ EleLabSys/;	#此处非常离谱，是经过不断尝试出来的，子文件夹必须要写在这个地方才行</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line">	# 后端api代理还比较正常</span><br><span class="line">	location /prod-api/ <span class="punctuation">&#123;</span></span><br><span class="line">		proxy_set_header Host $http_host;</span><br><span class="line">		proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">		proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">		proxy_pass http<span class="punctuation">:</span><span class="comment">//localhost:8080/;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>具体是什么原因导致的暂且不深究。。。</p>
-<p>等有空再研究</p>
-<hr>
-<p>更新来了。。。</p>
-<p>经过再次的尝试，发现是需要把根路径放到最后面，这样才能正常地访问静态资源，不需要手动配置，并且代理也有效果</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;   <span class="comment">#监听80端口</span></span><br><span class="line">    server_name	10.100.128.8;   <span class="comment">#监听访问的host</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 实验室系统后端</span></span><br><span class="line">	location /prod-api/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:8080/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室代码仓库</span></span><br><span class="line">    location /gitea/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:3000/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室系统云盘</span></span><br><span class="line">	location /cloudDisk/ &#123;</span><br><span class="line">		<span class="comment"># proxy_set_header Host $http_host;</span></span><br><span class="line">		<span class="comment"># proxy_set_header X-Real-IP $remote_addr;</span></span><br><span class="line">		<span class="comment"># proxy_set_header REMOTE-HOST $remote_addr;</span></span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:9999/;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 需要放到最后面，匹配优先级最低</span></span><br><span class="line">	location / &#123;</span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /;</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
+    <title>Linux中的进程管理</title>
+    <url>/2020/05/22/Linux%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p>pa a    显示终端机下所有进程</p>
+<p>ps -A   查看所有进程（ps -e和-A是一样的效果，-e更常用一点）（这两个看到的比上面那个多些）</p>
+<p>ps u 以用户为主的格式来显示程序状况</p>
+<p>ps x 显示所有程序，不以终端机来区分</p>
+<p>lsof -i:端口号   根据指定的端口查询进程</p>
+<p>常用的组合命令：</p>
+<p>ps aux,然后再通过管道使用grep命令过滤查找特定的进程,然后再对特定的进程进行操作。</p>
+<p><strong>ps -ef|grep java|grep -v grep</strong> 显示出所有的java进程，去处掉当前的grep进程。</p>
+<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><p>kill -9 进程PID  	根据进程号结束进程</p>
+<p>killall -9 进程名 	根据进程名结束进程</p>
+<blockquote>
+<p>参考资料：<a href="https://blog.csdn.net/wojiaopanpan/article/details/7286430">https://blog.csdn.net/wojiaopanpan/article/details/7286430</a></p>
+</blockquote>
 ]]></content>
       <categories>
         <category>Linux</category>
-        <category>Nginx</category>
       </categories>
       <tags>
-        <tag>服务器</tag>
-        <tag>Nginx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>markdown基本语法</title>
-    <url>/2020/02/27/Markdown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</url>
-    <content><![CDATA[<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><h4 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="comment">###### 六级标题</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>注意#和标题之间要有空格才会有效果</strong>   这简直是初学者的一大坑  </p>
-<span id="more"></span>
-
-<h4 id="文本样式"><a href="#文本样式" class="headerlink" title="文本样式"></a>文本样式</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">*斜体1*	 _斜体2_</span><br><span class="line">**加粗1**  __加粗2__</span><br><span class="line">~~删除线~~</span><br><span class="line">H~2~O	（hexo要用&lt;sub&gt;&lt;/sub&gt;标签，如H&lt;sub&gt;2&lt;/sub&gt;O）</span><br><span class="line">2^10^   （hexo要用&lt;sup&gt;&lt;/sup&gt;标签，如2&lt;sup&gt;10&lt;/sup&gt;）</span><br><span class="line">&gt; 引用</span><br></pre></td></tr></table></figure>
-
-<p><strong>效果显示</strong></p>
-<p><em>斜体1</em>	 <em>斜体2</em><br><strong>加粗1</strong>     <strong>加粗2</strong><br><del>删除线</del></p>
-<p>H<sub>2</sub>O<br>2<sup>10</sup></p>
-<blockquote>
-<p>引用</p>
-</blockquote>
-<p><strong>后面两个要在偏好里面设置，Markdown扩展语法那几个选项打上勾</strong></p>
-<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">- 项目1</span><br><span class="line">  </span><br><span class="line">  - 项目2</span><br><span class="line">  </span><br><span class="line">    - 项目3</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>项目1</p>
-<ul>
-<li><p>项目2</p>
-<ul>
-<li>项目3</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1. 项目</span><br><span class="line">2. 项目</span><br><span class="line">3. 项目</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>项目</li>
-<li>项目</li>
-<li>项目</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- [ ] 计划任务</span><br><span class="line">- [x] 完成任务 </span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><input disabled="" type="checkbox"> 计划任务</li>
-<li><input checked="" disabled="" type="checkbox"> 完成任务</li>
-</ul>
-<h4 id="插入代码"><a href="#插入代码" class="headerlink" title="插入代码"></a>插入代码</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">```c</span><br><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line">void <span class="function"><span class="title">main</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">return</span> 0;</span><br><span class="line">&#125;</span><br><span class="line">​```</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">![](图片链接)</span><br></pre></td></tr></table></figure>
-
-<p>今天先写到这，睡觉去了🌛 🌜</p>
-<hr>
-<h4 id="文字"><a href="#文字" class="headerlink" title="文字"></a>文字</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[文字描述](链接)</span><br></pre></td></tr></table></figure>
-
-<p><a href="https://www.baidu.com/">百度</a></p>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>markdown</category>
-      </categories>
-      <tags>
-        <tag>markdown</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>TCP三次握手与四次挥手</title>
-    <url>/2022/08/11/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
-    <content><![CDATA[<h1 id="TCP头格式"><a href="#TCP头格式" class="headerlink" title="TCP头格式"></a>TCP头格式</h1><img data-src="../images/TCP三次握手与四次挥手/format,png.png" alt="TCP 头格式"  />
-
-<p><strong>序列号</strong>：在建立连接时，由计算机生成的随机数作为初始值，通过SYN包传给接收端主机，每发送一次数据，就累加一次该「数据字节数」的大小，<strong>来解决网络包乱序的问题</strong>。</p>
-<p><strong>确认应答号</strong>：指下次期望收到的数据序列号，发送端收到这个确认应答后可以认为在这个序号之前的数据都已经被正常接收，<strong>用来解决丢包问题</strong>。</p>
-<p><strong>控制位</strong>：</p>
-<ul>
-<li><code>ACK</code>：为1时，「确认应答」的字段变为有效，TCP规定除了最初建立连接时的<code>SYN </code>包之外该位必须为1。</li>
-<li><code>RST</code>：为1时，表示TCP连接中出现异常，必须强制断开连接。</li>
-<li><code>SYN</code>：为1时，表示希望建立连接，并在其「序列号」的字段就行序列号初始值的设定。</li>
-<li><code>FIN </code>：为1时，表示之后不会再有数据发送，希望断开连接。当通信结束希望断开连接时，通信双方的主机之间相互交换<code>FIN</code>位位1的TCP段。</li>
-</ul>
-<span id="more"></span>
-]]></content>
-      <categories>
-        <category>学习笔记，计算机网络</category>
-      </categories>
-      <tags>
-        <tag>计算机网络</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -3683,49 +3658,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       <tags>
         <tag>配置</tag>
         <tag>PVE</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo一键部署到云服务器</title>
-    <url>/2020/03/01/hexo%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><blockquote>
-<p>&amp;emsp;&amp;emsp;之前折腾了好久，用Rsync，ftp，stfp都试过了，都没弄成，在网上看的教程很多也是基于git的，也就是在服务器建一个git的钩子，指定一个目录作为远程仓库地址，可以通过ssh连接，然后在本地可以直接上传，最后才选择的这个方案。在成功之前踩了好多坑，配sftp的时候用百度上的坑爹教程，导致服务器都连不上，最后还是选择则了用git做仓库的方式来上传，这个教程很简单，相对于其他的同样的方法，只是不知道会不会有安全问题。</p>
-</blockquote>
-<h2 id="正式开始"><a href="#正式开始" class="headerlink" title="正式开始"></a>正式开始</h2><h3 id="1-配置Git-hooks"><a href="#1-配置Git-hooks" class="headerlink" title="1. 配置Git hooks"></a>1. 配置Git hooks</h3><ol>
-<li><p>创建Git裸仓库</p>
-<p>blog.git作为远程Git仓库，Hexo在本地生成的博客静态文件可以通过push与其同步。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/blog.git &amp;&amp; <span class="built_in">cd</span> ~/blog.git</span><br><span class="line">git init --bare</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在hooks目录下新建一个脚本文件<code>post-receive</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">touch</span> hooks/post-receive</span><br></pre></td></tr></table></figure>
-
-<p>   <code>post-receive</code>脚本将在blog.git仓库接收到push时执行</p>
-<p>   脚本非常简单，就是删除原有的&#x2F;var&#x2F;www&#x2F;html&#x2F;blog目录，然后从blog.git仓库clone新的博客静态文件</p>
-<p>   <code>vim hooks/post-receive</code> 将下面内容写入<code>post-receive</code>文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">        </span><br><span class="line"><span class="built_in">rm</span> -rf /var/www/html/blog</span><br><span class="line">git <span class="built_in">clone</span> /root/blog.git /var/www/html/blog</span><br></pre></td></tr></table></figure>
-
-
-</li>
-<li><p>给post-receive脚本执行权限</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x hooks/post-receive</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置好之后可以测试一下，就在本地clone那个远程仓库</p>
-</li>
-</ol>
-<h3 id="2-修改hexo配置文件"><a href="#2-修改hexo配置文件" class="headerlink" title="2.修改hexo配置文件"></a>2.修改hexo配置文件</h3><p>修改hexo根目录下的_config.yml文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: <span class="string">&#x27;git&#x27;</span></span><br><span class="line">  repo: <span class="string">&#x27;root@服务器IP:blog.git&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="补充一点"><a href="#补充一点" class="headerlink" title="补充一点"></a>补充一点</h3><p>如果之前有在同一台服务器上配置过git的裸库，需要在用户目录的<code>.ssh</code>目录下，将<code>known_hosts</code>文件中的主机记录删除掉，否则可能会报错。</p>
-<img data-src="https://i.loli.net/2020/04/25/Nk1QSac4IE2TxRz.png" alt="image.png" style="zoom:80%;" />
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>&amp;emsp;&amp;emsp;这个方法和其他复杂一点的方法区别就是，没有专门建一个git的用户用来上传，就直接用root用户上传，就自己用的话应该问题也不大🤔</p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -3843,19 +3775,122 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>Ubuntu中设置http强制重定向为https</title>
-    <url>/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/</url>
-    <content><![CDATA[<h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
-<h3 id="2-设置http端口重定向"><a href="#2-设置http端口重定向" class="headerlink" title="2.设置http端口重定向"></a>2.设置http端口重定向</h3><p>将下面这段放到要重定向的站点配置文件里面，放在&lt;\VirtualHost *:80&gt;&lt;\VirtualHost&gt; 标签内的任何位置都行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">RewriteEngine on</span><br><span class="line">RewriteCond  %&#123;HTTPS&#125; !=on</span><br><span class="line">RewriteRule  ^(.*)  https://%&#123;SERVER_NAME&#125;<span class="variable">$1</span> [L,R]</span><br></pre></td></tr></table></figure>
+    <title>TCP三次握手与四次挥手</title>
+    <url>/2022/08/11/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
+    <content><![CDATA[<h1 id="基本认识"><a href="#基本认识" class="headerlink" title="基本认识"></a>基本认识</h1><h2 id="TCP头格式"><a href="#TCP头格式" class="headerlink" title="TCP头格式"></a>TCP头格式</h2><img data-src="/images/TCP三次握手与四次挥手/format,png.png" alt="TCP 头格式"  />
 
-<h3 id="重启apach2"><a href="#重启apach2" class="headerlink" title="重启apach2"></a>重启apach2</h3><p>service apache2 restart</p>
-]]></content>
+<p><strong>序列号</strong>：在建立连接时，由计算机生成的随机数作为初始值，通过SYN包传给接收端主机，每发送一次数据，就累加一次该「数据字节数」的大小，<strong>来解决网络包乱序的问题</strong>。</p>
+<p><strong>确认应答号</strong>：指下次期望收到的数据序列号，发送端收到这个确认应答后可以认为在这个序号之前的数据都已经被正常接收，<strong>用来解决丢包问题</strong>。</p>
+<p><strong>控制位</strong>：</p>
+<ul>
+<li><code>ACK</code>：为1时，「确认应答」的字段变为有效，TCP规定除了最初建立连接时的<code>SYN </code>包之外该位必须为1。</li>
+<li><code>RST</code>：为1时，表示TCP连接中出现异常，必须强制断开连接。</li>
+<li><code>SYN</code>：为1时，表示希望建立连接，并在其「序列号」的字段就行序列号初始值的设定。</li>
+<li><code>FIN </code>：为1时，表示之后不会再有数据发送，希望断开连接。当通信结束希望断开连接时，通信双方的主机之间相互交换<code>FIN</code>位位1的TCP段。</li>
+</ul>
+<span id="more"></span>
+
+<p>TCP层的存在，是因为IP层是「不可靠」的，他不能保证网络包的交付，网络包的交付，也不能保证网络包中数据的完整性性。</p>
+<img data-src="/images/TCP三次握手与四次挥手/format,png-16602776701853.png" alt="OSI 参考模型与 TCP/IP 的关系"  />
+
+<p>为了保证网络数据包的可靠性，上层就需要<code>TCP</code>协议。</p>
+<h2 id="什么是TCP"><a href="#什么是TCP" class="headerlink" title="什么是TCP"></a>什么是TCP</h2><p>TCP是面向连接的、可靠的、基于字节流的传输层通信协议。</p>
+<ul>
+<li>面向连接：一定是「一对一」才能连接，不像UDP协议可以一个主机同时向多个主机发送消息，也就是一对多是无法做到的。</li>
+<li>可靠的：无论网络链路中出现了怎样的变化，TCP都可以保证一个报文一定可以到达接收端。</li>
+<li>字节流：用户消息通过TCP传输协议时，消息可能会被操作系统分组成多个TCP报文，如果接收方的程序不知道「消息的边界」，是无法读出一个有效的用户消息。并且TCP报文是有序的，当前一个TCP报文没有收到的时候，即使它先收到后面的TCP报文，那么也不能扔给应用层去处理，而碰到重复的TCP报文会自动丢弃。</li>
+</ul>
+<h2 id="什么是TCP连接"><a href="#什么是TCP连接" class="headerlink" title="什么是TCP连接"></a>什么是TCP连接</h2><p>简单来说，用来保证可靠性和流量控制维护的某些信息，这些信息的组合，包括Socket、序列号和窗口大小称为连接。</p>
+<p>所以建立一个TCP连接需要客户端与服务器达成上述三个信息的共识。</p>
+<ul>
+<li>Socket：由IP地址和端口号组成</li>
+<li>序列号：用来解决乱序问题</li>
+<li>窗口大小：用来做流量控制</li>
+</ul>
+<blockquote>
+<p>如何唯一确定一个 TCP 连接呢？</p>
+</blockquote>
+<p>通过TCP的四元组可以唯一的确定一个连接，四元组包括：源地址、源端口、目标地址和目标端口。</p>
+<p>源地址和目标地址的字段（32位）是在IP头中，作用是通过IP协议发送报文给对方的主机。</p>
+<p>源端口和目标端口的字段是在TCP头中，作用是告诉TCP协议应该把报文发送给哪一个进程。</p>
+<h2 id="UDP和TCP的区别"><a href="#UDP和TCP的区别" class="headerlink" title="UDP和TCP的区别"></a>UDP和TCP的区别</h2><p>UDP不提供复杂的控制机制，利用IP提供面向「无连接」的通信服务。</p>
+<p>UDP协议非常的简单，头部只有8个字节（64位），UDP的头部格式如下：</p>
+<img data-src="/images/TCP三次握手与四次挥手/format,png-16602898407406.png" alt="UDP 头部格式" />
+
+<ul>
+<li>目标和源端口：主要告诉UDP协议应该把报文发送给那个进程。</li>
+<li>包长度：该字段保存了UDP头部的长度和数据的长度之和。</li>
+<li>校验和：校验和是为了提供可靠的UDP首部和数据而设计的，防止收到在网络传输受损的UDP包。</li>
+</ul>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><ol>
+<li><p>连接</p>
+<ul>
+<li>TCP是面向连接的传输层协议，传输数据前先要建立连接。</li>
+<li>UDP是不需要连接的，可以直接开始传输数据。</li>
+</ul>
+</li>
+<li><p>服务对象</p>
+<ul>
+<li>TCP是一对一的两点服务，即一条连接只有两个端点。</li>
+<li>UDP支持一对一、一对多的交互通信。</li>
+</ul>
+</li>
+<li><p>可靠性</p>
+<ul>
+<li>TCP是可靠交付数据的，数据库无差错、不丢失、不重复、按序到达。</li>
+<li>UDP是尽最大努力交付，不保证数据的可靠的交付。</li>
+</ul>
+</li>
+<li><p>拥塞控制、流量控制</p>
+<ul>
+<li>TCP有拥塞控制和流量控制机制，保证数据传输的安全性。</li>
+<li>UDP则不同，即使网络非常拥堵了，也不会影响UDP的发送速率。</li>
+</ul>
+</li>
+<li><p>首部开销</p>
+<ul>
+<li><p>TCP首部长度较长，会有一定的开销，首部在没有使用选项字段时是<code>20</code>个字节，如果使用了选择字段则会变得更长。-</p>
+</li>
+<li><p>UDP首部只有8个字节，并且是固定不变的，开销很小。</p>
+</li>
+</ul>
+</li>
+<li><p>传输方式</p>
+<ul>
+<li><p>TCP是流式传输，没有边界，但保证顺序和可靠性。</p>
+</li>
+<li><p>UDP是一个包一个包的发送，是有边界的，但可能会存在丢包和乱序。</p>
+</li>
+</ul>
+</li>
+<li><p>分片不同</p>
+<ul>
+<li>TCP的数据大小如果大于MSS的大小，会在传输层进行分片，目标主机收到之后，也同样会在传输层组装TCP数据包，如果中途叠了一个分片，只需要传输丢失的这一个分片就行。</li>
+<li>UDP的数据大小如果大于MTU的大小，就会在IP层进行分片，目标主机接收到之后，在IP层组装完数据，接着再传给传输层。</li>
+</ul>
+</li>
+</ol>
+<h3 id="TCP和UDP的应用场景"><a href="#TCP和UDP的应用场景" class="headerlink" title="TCP和UDP的应用场景"></a>TCP和UDP的应用场景</h3><p>由于TCP是面向连接的，可以保证，数据额交付的可靠性，因此常用于：</p>
+<ul>
+<li><code>FTP</code>文件传输</li>
+<li>HTTP&#x2F;HTTPS</li>
+</ul>
+<p>而UDP面向无连接，他可以随时发送数据，再加上UDP本身的处理既简单又高效，因此常用于：</p>
+<ul>
+<li>包总量较少的通信，如<code>DNS</code>、<code>SMTP</code>等</li>
+<li>视频、音频等多媒体通信</li>
+<li>广播通信</li>
+</ul>
+<blockquote>
+<p>为什么UDP头部没有首部长度字段，而TCP头部有首部长度字段？</p>
+</blockquote>
+<p>原因是TCP首部中的选项字段长度是可变的，而UDP首部是固定长度的，不会发生变化，所以使用UDP通信的双方都按照约定好的UDP首部长度来进行通信，不需要一个专门的字段来记录首部长度。</p>
+<h1 id="TCP连接建立"><a href="#TCP连接建立" class="headerlink" title="TCP连接建立"></a>TCP连接建立</h1>]]></content>
       <categories>
-        <category>建站</category>
+        <category>学习笔记，计算机网络</category>
       </categories>
       <tags>
-        <tag>服务器</tag>
+        <tag>计算机网络</tag>
       </tags>
   </entry>
   <entry>
@@ -4051,6 +4086,65 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>Ubuntu中设置http强制重定向为https</title>
+    <url>/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/</url>
+    <content><![CDATA[<h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
+<h3 id="2-设置http端口重定向"><a href="#2-设置http端口重定向" class="headerlink" title="2.设置http端口重定向"></a>2.设置http端口重定向</h3><p>将下面这段放到要重定向的站点配置文件里面，放在&lt;\VirtualHost *:80&gt;&lt;\VirtualHost&gt; 标签内的任何位置都行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">RewriteEngine on</span><br><span class="line">RewriteCond  %&#123;HTTPS&#125; !=on</span><br><span class="line">RewriteRule  ^(.*)  https://%&#123;SERVER_NAME&#125;<span class="variable">$1</span> [L,R]</span><br></pre></td></tr></table></figure>
+
+<h3 id="重启apach2"><a href="#重启apach2" class="headerlink" title="重启apach2"></a>重启apach2</h3><p>service apache2 restart</p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo一键部署到云服务器</title>
+    <url>/2020/03/01/hexo%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><blockquote>
+<p>&amp;emsp;&amp;emsp;之前折腾了好久，用Rsync，ftp，stfp都试过了，都没弄成，在网上看的教程很多也是基于git的，也就是在服务器建一个git的钩子，指定一个目录作为远程仓库地址，可以通过ssh连接，然后在本地可以直接上传，最后才选择的这个方案。在成功之前踩了好多坑，配sftp的时候用百度上的坑爹教程，导致服务器都连不上，最后还是选择则了用git做仓库的方式来上传，这个教程很简单，相对于其他的同样的方法，只是不知道会不会有安全问题。</p>
+</blockquote>
+<h2 id="正式开始"><a href="#正式开始" class="headerlink" title="正式开始"></a>正式开始</h2><h3 id="1-配置Git-hooks"><a href="#1-配置Git-hooks" class="headerlink" title="1. 配置Git hooks"></a>1. 配置Git hooks</h3><ol>
+<li><p>创建Git裸仓库</p>
+<p>blog.git作为远程Git仓库，Hexo在本地生成的博客静态文件可以通过push与其同步。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/blog.git &amp;&amp; <span class="built_in">cd</span> ~/blog.git</span><br><span class="line">git init --bare</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在hooks目录下新建一个脚本文件<code>post-receive</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">touch</span> hooks/post-receive</span><br></pre></td></tr></table></figure>
+
+<p>   <code>post-receive</code>脚本将在blog.git仓库接收到push时执行</p>
+<p>   脚本非常简单，就是删除原有的&#x2F;var&#x2F;www&#x2F;html&#x2F;blog目录，然后从blog.git仓库clone新的博客静态文件</p>
+<p>   <code>vim hooks/post-receive</code> 将下面内容写入<code>post-receive</code>文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">        </span><br><span class="line"><span class="built_in">rm</span> -rf /var/www/html/blog</span><br><span class="line">git <span class="built_in">clone</span> /root/blog.git /var/www/html/blog</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>给post-receive脚本执行权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x hooks/post-receive</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置好之后可以测试一下，就在本地clone那个远程仓库</p>
+</li>
+</ol>
+<h3 id="2-修改hexo配置文件"><a href="#2-修改hexo配置文件" class="headerlink" title="2.修改hexo配置文件"></a>2.修改hexo配置文件</h3><p>修改hexo根目录下的_config.yml文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: <span class="string">&#x27;git&#x27;</span></span><br><span class="line">  repo: <span class="string">&#x27;root@服务器IP:blog.git&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="补充一点"><a href="#补充一点" class="headerlink" title="补充一点"></a>补充一点</h3><p>如果之前有在同一台服务器上配置过git的裸库，需要在用户目录的<code>.ssh</code>目录下，将<code>known_hosts</code>文件中的主机记录删除掉，否则可能会报错。</p>
+<img data-src="https://i.loli.net/2020/04/25/Nk1QSac4IE2TxRz.png" alt="image.png" style="zoom:80%;" />
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>&amp;emsp;&amp;emsp;这个方法和其他复杂一点的方法区别就是，没有专门建一个git的用户用来上传，就直接用root用户上传，就自己用的话应该问题也不大🤔</p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>IntelliJ Idea配置类和方法的注释模板</title>
     <url>/2020/04/15/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/</url>
     <content><![CDATA[<h2 id="设置类的注释模板"><a href="#设置类的注释模板" class="headerlink" title="设置类的注释模板"></a>设置类的注释模板</h2><p><img data-src="/images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/SZLA4oF5vn3hMyG.png" alt="image.png"></p>
@@ -4137,6 +4231,30 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《摔跤吧！爸爸》观后感</title>
+    <url>/2020/06/25/%E3%80%8A%E6%91%94%E8%B7%A4%E5%90%A7%EF%BC%81%E7%88%B8%E7%88%B8%E3%80%8B%E8%A7%82%E5%90%8E%E6%84%9F/</url>
+    <content><![CDATA[<p>好久没看过电影了，从开学之后好像就没看了，一方面是开学确实时间紧一点，主要还是我自己没去找电影看吧。OK，下面进入正题。</p>
+<p>电影主要讲的是两个女儿帮爸爸实现了摔跤世界冠军的梦想。年轻的时候，电影的主人公爸爸（名字忘了叫啥了）年轻的时候是一个摔跤全国冠军，但是因为国家贫穷落后，再加上官员的贪污腐败、不重视体育，导致运动员得不到好的训练，这真是“食马者，不知其能千里而食也！”。所以这个爸爸一直很好遗憾，后来他就想要生个儿子，来替自己实现摔跤世界冠军的梦想，但是造化弄人啊，生了三个全是女儿。</p>
+<p>故事的转机发生在他的有一次这两个女儿因为两个男孩骂了她们俩，就把那两个男孩打得鼻青脸肿，这个时候他就突然意识到，为什么女孩就不能摔跤，来帮自己实现梦想呢？于是乎，他就不顾全村人异样的眼光，开始对这两个女儿开始进行摔跤训练，女儿们也反抗过，开始是找借口说训练太累了坚持不了了，后来调慢他们爸爸的闹钟，故意把灯泡烧坏，各种小伎俩都使了出来，还是没有用。但是在他们朋友的一个婚礼上，故事又出现了转机。</p>
+<p>她们逃掉了一次训练，去参加一个好朋友的婚礼，被她们的父亲发现了，她们的父亲当着所有人的面，将“我”扇了一巴掌（故事前面一段是以主人公爸爸的侄子的回忆展开的，这里就用第一人称了），后来她们两个人和这个朋友聊天的时候，朋友点醒了他们，她们的爸爸这样对她们，至少还在乎他们，而不是像其他的父亲一样，只盼着女儿快点长到14岁，把女儿嫁出去，帮别人做洗衣做饭生孩子，像摆脱了一个累赘似的，而他们这样至少可以不要像大多数女人一样，可以实现真正意义上的自由。</p>
+<p>从这之后，她们俩就开始认真训练，大女儿geeta第一次去村里参加比赛，和男孩摔跤比赛，她在四个男孩中选了看起来最强壮的那个。观众都在猜geeta能坚持几秒，但是开局出乎观众们所料，两个旗鼓相当，geeta完全不落下风，但是最后还是败下阵来，不过父亲并不失望。回去之后，geeta不甘心，问爸爸下次比赛是什么时候，之后geeta越发抓紧训练，在后面的比赛中一路披荆斩棘，战胜了邦里的所有男孩，后来参加国家比赛，尽管体重不达标，但是任然蝉联了三年的全国女子摔跤冠军。</p>
+<p>孩子长大了总是要出去的，geeta要去印度国家体育中心去接收新的训练。在那呆了一段时间，第一次回家的时候，geeta似乎不再是那个geeta了，头发留长了，心思也不全部在摔跤上面。更要命的是她觉得她在国家体育中心接受的训练技巧比之前父亲的的技巧要好。父亲也不服气，于是他们俩就比了一场，开始是不相上下的，但是随着时间越来越长，上了年纪的父亲体力跟不上，最后被干翻在泥地里。就这样geeta和父亲之间就产生了隔阂。</p>
+<p>之后geeta参加的各种国际赛事都是非常的不顺利，再后来geeta的妹妹也拿下了全国总冠军，进入到国家体育中心训练。再和geeta的相处过程中，她潜移默化的改变了geeta，老家那边，妈妈也在不断的劝爸爸好好地和geeta谈谈。在一次国际赛事之前，终于等到了这个契机，教练要geeta从55公斤级降级到51公斤级的比赛，geeta就给父亲打了电话，把情况告诉了父亲，这个片段也是很感人的一个片段，父亲就决定亲自去到帕提亚拉给geeta训练，指导geeta比赛。geeta确实找回了以前的状态，但是新的矛盾又出现了。</p>
+<p>在比赛中前夕，测体重的时候教练发现geeta的体重没有减下来，提名要将geeta取消比赛资格。经过geeta的父亲向印度体育委员会求情，体育委员会同意再给geeta一次机会。</p>
+<p>比赛正式开始之后，geeta经过父亲的指导，一次次的顺利晋级，最后拿下了全英赛的摔跤世界冠军。</p>
+<p>这部电影挺感人的，泪点低的我，流下了感动的泪水。第一次是geeta和父亲和好的时候，第二次是geeta顺利晋级决赛，最后是geeta拿下冠军。</p>
+<p>看完之后也有几个想法在我心里洒下了种子，第一个，人应该不忘初心，知道自己是怎么一路走到现在的，对geeta来说就是始终得牢记父亲的教诲，不要因为长大了换了一个环境，就把父亲之前交的都丢掉，应该记住自己是怎么一路拿下全国冠军的。第二个，也是之前在B站看见跳水世界冠军吴敏霞的视频里面说的，我们应该尊重每一位运动员，特别是小国家的运动员，因为他们能走到国际比赛的舞台很不容易，小国家的训练设施不齐全，也得不到专业的训练，因此运动员就得不到专业的训练，在之前仅仅听吴敏霞说了之后还没有太多的感触，看完这部电影之后，对这句话的感触特别深。</p>
+<p>​		</p>
+]]></content>
+      <categories>
+        <category>感悟</category>
+        <category>影视</category>
+      </categories>
+      <tags>
+        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -4240,30 +4358,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       <tags>
         <tag>Linux</tag>
         <tag>软件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《摔跤吧！爸爸》观后感</title>
-    <url>/2020/06/25/%E3%80%8A%E6%91%94%E8%B7%A4%E5%90%A7%EF%BC%81%E7%88%B8%E7%88%B8%E3%80%8B%E8%A7%82%E5%90%8E%E6%84%9F/</url>
-    <content><![CDATA[<p>好久没看过电影了，从开学之后好像就没看了，一方面是开学确实时间紧一点，主要还是我自己没去找电影看吧。OK，下面进入正题。</p>
-<p>电影主要讲的是两个女儿帮爸爸实现了摔跤世界冠军的梦想。年轻的时候，电影的主人公爸爸（名字忘了叫啥了）年轻的时候是一个摔跤全国冠军，但是因为国家贫穷落后，再加上官员的贪污腐败、不重视体育，导致运动员得不到好的训练，这真是“食马者，不知其能千里而食也！”。所以这个爸爸一直很好遗憾，后来他就想要生个儿子，来替自己实现摔跤世界冠军的梦想，但是造化弄人啊，生了三个全是女儿。</p>
-<p>故事的转机发生在他的有一次这两个女儿因为两个男孩骂了她们俩，就把那两个男孩打得鼻青脸肿，这个时候他就突然意识到，为什么女孩就不能摔跤，来帮自己实现梦想呢？于是乎，他就不顾全村人异样的眼光，开始对这两个女儿开始进行摔跤训练，女儿们也反抗过，开始是找借口说训练太累了坚持不了了，后来调慢他们爸爸的闹钟，故意把灯泡烧坏，各种小伎俩都使了出来，还是没有用。但是在他们朋友的一个婚礼上，故事又出现了转机。</p>
-<p>她们逃掉了一次训练，去参加一个好朋友的婚礼，被她们的父亲发现了，她们的父亲当着所有人的面，将“我”扇了一巴掌（故事前面一段是以主人公爸爸的侄子的回忆展开的，这里就用第一人称了），后来她们两个人和这个朋友聊天的时候，朋友点醒了他们，她们的爸爸这样对她们，至少还在乎他们，而不是像其他的父亲一样，只盼着女儿快点长到14岁，把女儿嫁出去，帮别人做洗衣做饭生孩子，像摆脱了一个累赘似的，而他们这样至少可以不要像大多数女人一样，可以实现真正意义上的自由。</p>
-<p>从这之后，她们俩就开始认真训练，大女儿geeta第一次去村里参加比赛，和男孩摔跤比赛，她在四个男孩中选了看起来最强壮的那个。观众都在猜geeta能坚持几秒，但是开局出乎观众们所料，两个旗鼓相当，geeta完全不落下风，但是最后还是败下阵来，不过父亲并不失望。回去之后，geeta不甘心，问爸爸下次比赛是什么时候，之后geeta越发抓紧训练，在后面的比赛中一路披荆斩棘，战胜了邦里的所有男孩，后来参加国家比赛，尽管体重不达标，但是任然蝉联了三年的全国女子摔跤冠军。</p>
-<p>孩子长大了总是要出去的，geeta要去印度国家体育中心去接收新的训练。在那呆了一段时间，第一次回家的时候，geeta似乎不再是那个geeta了，头发留长了，心思也不全部在摔跤上面。更要命的是她觉得她在国家体育中心接受的训练技巧比之前父亲的的技巧要好。父亲也不服气，于是他们俩就比了一场，开始是不相上下的，但是随着时间越来越长，上了年纪的父亲体力跟不上，最后被干翻在泥地里。就这样geeta和父亲之间就产生了隔阂。</p>
-<p>之后geeta参加的各种国际赛事都是非常的不顺利，再后来geeta的妹妹也拿下了全国总冠军，进入到国家体育中心训练。再和geeta的相处过程中，她潜移默化的改变了geeta，老家那边，妈妈也在不断的劝爸爸好好地和geeta谈谈。在一次国际赛事之前，终于等到了这个契机，教练要geeta从55公斤级降级到51公斤级的比赛，geeta就给父亲打了电话，把情况告诉了父亲，这个片段也是很感人的一个片段，父亲就决定亲自去到帕提亚拉给geeta训练，指导geeta比赛。geeta确实找回了以前的状态，但是新的矛盾又出现了。</p>
-<p>在比赛中前夕，测体重的时候教练发现geeta的体重没有减下来，提名要将geeta取消比赛资格。经过geeta的父亲向印度体育委员会求情，体育委员会同意再给geeta一次机会。</p>
-<p>比赛正式开始之后，geeta经过父亲的指导，一次次的顺利晋级，最后拿下了全英赛的摔跤世界冠军。</p>
-<p>这部电影挺感人的，泪点低的我，流下了感动的泪水。第一次是geeta和父亲和好的时候，第二次是geeta顺利晋级决赛，最后是geeta拿下冠军。</p>
-<p>看完之后也有几个想法在我心里洒下了种子，第一个，人应该不忘初心，知道自己是怎么一路走到现在的，对geeta来说就是始终得牢记父亲的教诲，不要因为长大了换了一个环境，就把父亲之前交的都丢掉，应该记住自己是怎么一路拿下全国冠军的。第二个，也是之前在B站看见跳水世界冠军吴敏霞的视频里面说的，我们应该尊重每一位运动员，特别是小国家的运动员，因为他们能走到国际比赛的舞台很不容易，小国家的训练设施不齐全，也得不到专业的训练，因此运动员就得不到专业的训练，在之前仅仅听吴敏霞说了之后还没有太多的感触，看完这部电影之后，对这句话的感触特别深。</p>
-<p>​		</p>
-]]></content>
-      <categories>
-        <category>感悟</category>
-        <category>影视</category>
-      </categories>
-      <tags>
-        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -4467,6 +4561,98 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>操作系统--操作系统的中断</title>
+    <url>/2020/03/03/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%AD%E6%96%AD/</url>
+    <content><![CDATA[<h2 id="中断的概念"><a href="#中断的概念" class="headerlink" title="中断的概念"></a>中断的概念</h2><blockquote>
+<p>中断是指在计算机执行期间，系统内发生任何非寻常的或非预期的急需处理事件，使得CPU暂时中断当前正在执行的程序而转去执行相应的时间处理程序。待处理完毕后又返回原来被中断处继续执行或调度新的进程执行的过程。</p>
+</blockquote>
+<h3 id="引入目的"><a href="#引入目的" class="headerlink" title="引入目的"></a>引入目的</h3><ol>
+<li>解决CPU和I&#x2F;O设备之间的并行工作问题</li>
+<li>实时实现控制</li>
+</ol>
+<h3 id="中断的作用"><a href="#中断的作用" class="headerlink" title="中断的作用"></a>中断的作用</h3><span id="more"></span>
+
+<ol>
+<li>实现CPU和I&#x2F;O设备并行工作</li>
+<li>实现硬件故障处理</li>
+<li>实现人机-联系</li>
+<li>实现多道程序和分时操作</li>
+<li>实现实时处理</li>
+<li>实现应用程序和操作系统的联系</li>
+<li>实现多处理机系统中处理机之间的联系</li>
+</ol>
+<h3 id="中断的特点"><a href="#中断的特点" class="headerlink" title="中断的特点"></a>中断的特点</h3><ul>
+<li>随机性：在系统的运行过程中，中断事件随时可能出现</li>
+<li>可恢复性：完成对某一事件的中断处理程序之后，系统会返回到原程序的断点处继续执行</li>
+<li>自动性：在中断时间发生之后，进入中断、执行中断处理程序以及中断返回都是由系统自动完成的</li>
+</ul>
+<h3 id="中断在操作系统中的地位"><a href="#中断在操作系统中的地位" class="headerlink" title="中断在操作系统中的地位"></a>中断在操作系统中的地位</h3><ol>
+<li>是多道程序并发执行的推动力</li>
+<li>操作系统是由中断驱动的</li>
+</ol>
+<h2 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h2><pre class="mermaid">graph LR
+A[中断]-->B[外中断]
+B-->D[可屏蔽中断]
+B-->E[不可屏蔽中断]
+A-->C[内中断]
+C-->F[自愿中断]
+F-->G[系统调用]
+F-->H[缺页中断]
+F-->I[断点指令]
+F-->J[其他程序性异常]
+C-->K[强迫性中断]
+K-->O[硬件故障中断]
+K-->L[程序性中断]
+K-->M[输入输出中断]
+K-->N[外部中断]</pre>
+
+<ul>
+<li><p>内中断和外中断：中断来源是否来自计算机内部</p>
+</li>
+<li><p>外中断：来自CPU外的外部设备，通过硬件请求方式产生的强迫性中断</p>
+</li>
+<li><p>不可屏蔽中断：有就一定会执行中断</p>
+</li>
+<li><p>可屏蔽中断：在当前指令结束后，CPU根据中断允许标志位判断是否响应中断，通常用于CPU和外部设备之间的数据交换</p>
+</li>
+<li><p>强迫性中断：由随机事件和外部请求所引发的，引起强迫性中断的事件不是当前运行程序所期待的</p>
+</li>
+<li><p>自愿性中断：用户程序在使用中请求操作系统提供某种功能服务，通过执行一条访管指令，称为访管中断或陷阱，是当前运行程序所期待的，用户程序对操作系统的某种需求</p>
+</li>
+</ul>
+<h2 id="中断的响应过程"><a href="#中断的响应过程" class="headerlink" title="中断的响应过程"></a>中断的响应过程</h2><pre class="mermaid">graph TB
+A[发出中断信号]-->B[CPU完成当前指令的执行]
+B-->C[CPU发送中断答应信号]-->D[关中断]
+D-->E[CPU将PWS,PC和CS压入核心栈中]
+E-->F[将中断处理程序的入口地址送入IP和CS]
+F-->G[保存剩余的CPU状态信息]-->H[开中断]-->I[处理中断]
+I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
+
+<h3 id="简单概括"><a href="#简单概括" class="headerlink" title="简单概括"></a>简单概括</h3><ol>
+<li><p>发现中断源</p>
+</li>
+<li><p>保护和恢复现场</p>
+</li>
+<li><p>中断响应</p>
+</li>
+<li><p>保护现场和传递参数</p>
+</li>
+<li><p>执行相应的中断服务函数</p>
+</li>
+<li><p>恢复现场并退出中断</p>
+</li>
+</ol>
+<h2 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h2><p><img data-src="/images/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%AD%E6%96%AD/RXkpNUiVHOa2Y48.png"></p>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>如何利用好学生优惠</title>
     <url>/2020/02/27/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/</url>
     <content><![CDATA[<p><img data-src="/images/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/loq428.png" alt=" loq428.png"></p>
@@ -4662,98 +4848,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>操作系统--操作系统的中断</title>
-    <url>/2020/03/03/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%AD%E6%96%AD/</url>
-    <content><![CDATA[<h2 id="中断的概念"><a href="#中断的概念" class="headerlink" title="中断的概念"></a>中断的概念</h2><blockquote>
-<p>中断是指在计算机执行期间，系统内发生任何非寻常的或非预期的急需处理事件，使得CPU暂时中断当前正在执行的程序而转去执行相应的时间处理程序。待处理完毕后又返回原来被中断处继续执行或调度新的进程执行的过程。</p>
-</blockquote>
-<h3 id="引入目的"><a href="#引入目的" class="headerlink" title="引入目的"></a>引入目的</h3><ol>
-<li>解决CPU和I&#x2F;O设备之间的并行工作问题</li>
-<li>实时实现控制</li>
-</ol>
-<h3 id="中断的作用"><a href="#中断的作用" class="headerlink" title="中断的作用"></a>中断的作用</h3><span id="more"></span>
-
-<ol>
-<li>实现CPU和I&#x2F;O设备并行工作</li>
-<li>实现硬件故障处理</li>
-<li>实现人机-联系</li>
-<li>实现多道程序和分时操作</li>
-<li>实现实时处理</li>
-<li>实现应用程序和操作系统的联系</li>
-<li>实现多处理机系统中处理机之间的联系</li>
-</ol>
-<h3 id="中断的特点"><a href="#中断的特点" class="headerlink" title="中断的特点"></a>中断的特点</h3><ul>
-<li>随机性：在系统的运行过程中，中断事件随时可能出现</li>
-<li>可恢复性：完成对某一事件的中断处理程序之后，系统会返回到原程序的断点处继续执行</li>
-<li>自动性：在中断时间发生之后，进入中断、执行中断处理程序以及中断返回都是由系统自动完成的</li>
-</ul>
-<h3 id="中断在操作系统中的地位"><a href="#中断在操作系统中的地位" class="headerlink" title="中断在操作系统中的地位"></a>中断在操作系统中的地位</h3><ol>
-<li>是多道程序并发执行的推动力</li>
-<li>操作系统是由中断驱动的</li>
-</ol>
-<h2 id="中断的分类"><a href="#中断的分类" class="headerlink" title="中断的分类"></a>中断的分类</h2><pre class="mermaid">graph LR
-A[中断]-->B[外中断]
-B-->D[可屏蔽中断]
-B-->E[不可屏蔽中断]
-A-->C[内中断]
-C-->F[自愿中断]
-F-->G[系统调用]
-F-->H[缺页中断]
-F-->I[断点指令]
-F-->J[其他程序性异常]
-C-->K[强迫性中断]
-K-->O[硬件故障中断]
-K-->L[程序性中断]
-K-->M[输入输出中断]
-K-->N[外部中断]</pre>
-
-<ul>
-<li><p>内中断和外中断：中断来源是否来自计算机内部</p>
-</li>
-<li><p>外中断：来自CPU外的外部设备，通过硬件请求方式产生的强迫性中断</p>
-</li>
-<li><p>不可屏蔽中断：有就一定会执行中断</p>
-</li>
-<li><p>可屏蔽中断：在当前指令结束后，CPU根据中断允许标志位判断是否响应中断，通常用于CPU和外部设备之间的数据交换</p>
-</li>
-<li><p>强迫性中断：由随机事件和外部请求所引发的，引起强迫性中断的事件不是当前运行程序所期待的</p>
-</li>
-<li><p>自愿性中断：用户程序在使用中请求操作系统提供某种功能服务，通过执行一条访管指令，称为访管中断或陷阱，是当前运行程序所期待的，用户程序对操作系统的某种需求</p>
-</li>
-</ul>
-<h2 id="中断的响应过程"><a href="#中断的响应过程" class="headerlink" title="中断的响应过程"></a>中断的响应过程</h2><pre class="mermaid">graph TB
-A[发出中断信号]-->B[CPU完成当前指令的执行]
-B-->C[CPU发送中断答应信号]-->D[关中断]
-D-->E[CPU将PWS,PC和CS压入核心栈中]
-E-->F[将中断处理程序的入口地址送入IP和CS]
-F-->G[保存剩余的CPU状态信息]-->H[开中断]-->I[处理中断]
-I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
-
-<h3 id="简单概括"><a href="#简单概括" class="headerlink" title="简单概括"></a>简单概括</h3><ol>
-<li><p>发现中断源</p>
-</li>
-<li><p>保护和恢复现场</p>
-</li>
-<li><p>中断响应</p>
-</li>
-<li><p>保护现场和传递参数</p>
-</li>
-<li><p>执行相应的中断服务函数</p>
-</li>
-<li><p>恢复现场并退出中断</p>
-</li>
-</ol>
-<h2 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h2><p><img data-src="/images/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%AD%E6%96%AD/RXkpNUiVHOa2Y48.png"></p>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>操作系统--操作系统的概述</title>
     <url>/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%A6%82%E8%BF%B0/</url>
     <content><![CDATA[<h3 id="计算机的组成"><a href="#计算机的组成" class="headerlink" title="计算机的组成"></a>计算机的组成</h3><p>硬件+软件</p>
@@ -4820,28 +4914,6 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
       </tags>
   </entry>
   <entry>
-    <title>用ssh公钥配对登录服务器</title>
-    <url>/2020/03/01/%E7%94%A8ssh%E5%85%AC%E9%92%A5%E9%85%8D%E5%AF%B9%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<h3 id="1-生成公钥"><a href="#1-生成公钥" class="headerlink" title="1.生成公钥"></a>1.生成公钥</h3><p>ssh-keygen -t rsa -b 4096 -C “你的邮箱地址”</p>
-<p><em>-t 指定加密算法； -b 指定生成的密钥长度； -C 一句话，一般都填邮箱地址。</em></p>
-<p><em>更多参数说明可以在终端输入：ssh-keygen –help 查看</em></p>
-<h3 id="2-将公钥写入远程主机"><a href="#2-将公钥写入远程主机" class="headerlink" title="2.将公钥写入远程主机"></a>2.将公钥写入远程主机</h3><p>在自己电脑上打开用户目录下的&#x2F;.ssh&#x2F;id_rsa.pub公钥文件，将其中的内容粘贴到服务器的、root&#x2F;.ssh&#x2F;authorized_keys目录的文件里面</p>
-<h3 id="3-修改ssh配置文件，禁止密码登录，允许秘钥登录"><a href="#3-修改ssh配置文件，禁止密码登录，允许秘钥登录" class="headerlink" title="3.修改ssh配置文件，禁止密码登录，允许秘钥登录"></a>3.修改ssh配置文件，禁止密码登录，允许秘钥登录</h3><p>vim &#x2F;etc&#x2F;ssh&#x2F;sshd_config </p>
-<p>将里面的内容修改如下所示：</p>
-<p># PubkeyAuthentication yes   中将#删除，允许秘钥登录</p>
-<p>PasswordAuthentication yes  中yes修改为no，禁止密码登录</p>
-<p><em>禁止密码登录可以防止暴力破解，虽然也没人来攻击</em></p>
-<h3 id="4-重启ssh服务"><a href="#4-重启ssh服务" class="headerlink" title="4.重启ssh服务"></a>4.重启ssh服务</h3><p>service ssh restart</p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>脚本一键部署hexo</title>
     <url>/2020/04/29/%E8%84%9A%E6%9C%AC%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2hexo/</url>
     <content><![CDATA[<blockquote>
@@ -4874,6 +4946,28 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
       <tags>
         <tag>服务器</tag>
         <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用ssh公钥配对登录服务器</title>
+    <url>/2020/03/01/%E7%94%A8ssh%E5%85%AC%E9%92%A5%E9%85%8D%E5%AF%B9%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<h3 id="1-生成公钥"><a href="#1-生成公钥" class="headerlink" title="1.生成公钥"></a>1.生成公钥</h3><p>ssh-keygen -t rsa -b 4096 -C “你的邮箱地址”</p>
+<p><em>-t 指定加密算法； -b 指定生成的密钥长度； -C 一句话，一般都填邮箱地址。</em></p>
+<p><em>更多参数说明可以在终端输入：ssh-keygen –help 查看</em></p>
+<h3 id="2-将公钥写入远程主机"><a href="#2-将公钥写入远程主机" class="headerlink" title="2.将公钥写入远程主机"></a>2.将公钥写入远程主机</h3><p>在自己电脑上打开用户目录下的&#x2F;.ssh&#x2F;id_rsa.pub公钥文件，将其中的内容粘贴到服务器的、root&#x2F;.ssh&#x2F;authorized_keys目录的文件里面</p>
+<h3 id="3-修改ssh配置文件，禁止密码登录，允许秘钥登录"><a href="#3-修改ssh配置文件，禁止密码登录，允许秘钥登录" class="headerlink" title="3.修改ssh配置文件，禁止密码登录，允许秘钥登录"></a>3.修改ssh配置文件，禁止密码登录，允许秘钥登录</h3><p>vim &#x2F;etc&#x2F;ssh&#x2F;sshd_config </p>
+<p>将里面的内容修改如下所示：</p>
+<p># PubkeyAuthentication yes   中将#删除，允许秘钥登录</p>
+<p>PasswordAuthentication yes  中yes修改为no，禁止密码登录</p>
+<p><em>禁止密码登录可以防止暴力破解，虽然也没人来攻击</em></p>
+<h3 id="4-重启ssh服务"><a href="#4-重启ssh服务" class="headerlink" title="4.重启ssh服务"></a>4.重启ssh服务</h3><p>service ssh restart</p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>教程</tag>
       </tags>
   </entry>
   <entry>

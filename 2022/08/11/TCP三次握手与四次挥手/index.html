@@ -23,20 +23,22 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":true,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="TCP头格式  序列号：在建立连接时，由计算机生成的随机数作为初始值，通过SYN包传给接收端主机，每发送一次数据，就累加一次该「数据字节数」的大小，来解决网络包乱序的问题。 确认应答号：指下次期望收到的数据序列号，发送端收到这个确认应答后可以认为在这个序号之前的数据都已经被正常接收，用来解决丢包问题。 控制位：  ACK：为1时，「确认应答」的字段变为有效，TCP规定除了最初建立连接时的SYN 包">
+    <meta name="description" content="基本认识TCP头格式  序列号：在建立连接时，由计算机生成的随机数作为初始值，通过SYN包传给接收端主机，每发送一次数据，就累加一次该「数据字节数」的大小，来解决网络包乱序的问题。 确认应答号：指下次期望收到的数据序列号，发送端收到这个确认应答后可以认为在这个序号之前的数据都已经被正常接收，用来解决丢包问题。 控制位：  ACK：为1时，「确认应答」的字段变为有效，TCP规定除了最初建立连接时的S">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TCP三次握手与四次挥手">
 <meta property="og:url" content="http://muggletan.github.io/2022/08/11/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/index.html">
 <meta property="og:site_name" content="这边风景独好">
-<meta property="og:description" content="TCP头格式  序列号：在建立连接时，由计算机生成的随机数作为初始值，通过SYN包传给接收端主机，每发送一次数据，就累加一次该「数据字节数」的大小，来解决网络包乱序的问题。 确认应答号：指下次期望收到的数据序列号，发送端收到这个确认应答后可以认为在这个序号之前的数据都已经被正常接收，用来解决丢包问题。 控制位：  ACK：为1时，「确认应答」的字段变为有效，TCP规定除了最初建立连接时的SYN 包">
+<meta property="og:description" content="基本认识TCP头格式  序列号：在建立连接时，由计算机生成的随机数作为初始值，通过SYN包传给接收端主机，每发送一次数据，就累加一次该「数据字节数」的大小，来解决网络包乱序的问题。 确认应答号：指下次期望收到的数据序列号，发送端收到这个确认应答后可以认为在这个序号之前的数据都已经被正常接收，用来解决丢包问题。 控制位：  ACK：为1时，「确认应答」的字段变为有效，TCP规定除了最初建立连接时的S">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://muggletan.github.io/2022/08/11/images/TCP三次握手与四次挥手/format,png.png">
+<meta property="og:image" content="http://muggletan.github.io/images/TCP三次握手与四次挥手/format,png.png">
+<meta property="og:image" content="http://muggletan.github.io/images/TCP三次握手与四次挥手/format,png-16602776701853.png">
+<meta property="og:image" content="http://muggletan.github.io/images/TCP三次握手与四次挥手/format,png-16602898407406.png">
 <meta property="article:published_time" content="2022-08-11T05:35:33.000Z">
-<meta property="article:modified_time" content="2022-08-16T06:45:05.800Z">
+<meta property="article:modified_time" content="2022-08-16T07:09:22.550Z">
 <meta property="article:author" content="muggle">
 <meta property="article:tag" content="计算机网络">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://muggletan.github.io/2022/08/11/images/TCP三次握手与四次挥手/format,png.png">
+<meta name="twitter:image" content="http://muggletan.github.io/images/TCP三次握手与四次挥手/format,png.png">
 
 
 <link rel="canonical" href="http://muggletan.github.io/2022/08/11/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/">
@@ -149,7 +151,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP%E5%A4%B4%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">TCP头格式</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%AE%A4%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">基本认识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP%E5%A4%B4%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">TCP头格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFTCP"><span class="nav-number">1.2.</span> <span class="nav-text">什么是TCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFTCP%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.3.</span> <span class="nav-text">什么是TCP连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP%E5%92%8CTCP%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.4.</span> <span class="nav-text">UDP和TCP的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB"><span class="nav-number">1.4.1.</span> <span class="nav-text">区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E5%92%8CUDP%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.4.2.</span> <span class="nav-text">TCP和UDP的应用场景</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B"><span class="nav-number">2.</span> <span class="nav-text">TCP连接建立</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -264,7 +266,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-16 14:45:05" itemprop="dateModified" datetime="2022-08-16T14:45:05+08:00">2022-08-16</time>
+      <time title="修改时间：2022-08-16 15:09:22" itemprop="dateModified" datetime="2022-08-16T15:09:22+08:00">2022-08-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -293,7 +295,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="TCP头格式"><a href="#TCP头格式" class="headerlink" title="TCP头格式"></a>TCP头格式</h1><img data-src="../images/TCP三次握手与四次挥手/format,png.png" alt="TCP 头格式"  />
+        <h1 id="基本认识"><a href="#基本认识" class="headerlink" title="基本认识"></a>基本认识</h1><h2 id="TCP头格式"><a href="#TCP头格式" class="headerlink" title="TCP头格式"></a>TCP头格式</h2><img data-src="/images/TCP三次握手与四次挥手/format,png.png" alt="TCP 头格式"  />
 
 <p><strong>序列号</strong>：在建立连接时，由计算机生成的随机数作为初始值，通过SYN包传给接收端主机，每发送一次数据，就累加一次该「数据字节数」的大小，<strong>来解决网络包乱序的问题</strong>。</p>
 <p><strong>确认应答号</strong>：指下次期望收到的数据序列号，发送端收到这个确认应答后可以认为在这个序号之前的数据都已经被正常接收，<strong>用来解决丢包问题</strong>。</p>
@@ -306,6 +308,102 @@
 </ul>
 <span id="more"></span>
 
+<p>TCP层的存在，是因为IP层是「不可靠」的，他不能保证网络包的交付，网络包的交付，也不能保证网络包中数据的完整性性。</p>
+<img data-src="/images/TCP三次握手与四次挥手/format,png-16602776701853.png" alt="OSI 参考模型与 TCP/IP 的关系"  />
+
+<p>为了保证网络数据包的可靠性，上层就需要<code>TCP</code>协议。</p>
+<h2 id="什么是TCP"><a href="#什么是TCP" class="headerlink" title="什么是TCP"></a>什么是TCP</h2><p>TCP是面向连接的、可靠的、基于字节流的传输层通信协议。</p>
+<ul>
+<li>面向连接：一定是「一对一」才能连接，不像UDP协议可以一个主机同时向多个主机发送消息，也就是一对多是无法做到的。</li>
+<li>可靠的：无论网络链路中出现了怎样的变化，TCP都可以保证一个报文一定可以到达接收端。</li>
+<li>字节流：用户消息通过TCP传输协议时，消息可能会被操作系统分组成多个TCP报文，如果接收方的程序不知道「消息的边界」，是无法读出一个有效的用户消息。并且TCP报文是有序的，当前一个TCP报文没有收到的时候，即使它先收到后面的TCP报文，那么也不能扔给应用层去处理，而碰到重复的TCP报文会自动丢弃。</li>
+</ul>
+<h2 id="什么是TCP连接"><a href="#什么是TCP连接" class="headerlink" title="什么是TCP连接"></a>什么是TCP连接</h2><p>简单来说，用来保证可靠性和流量控制维护的某些信息，这些信息的组合，包括Socket、序列号和窗口大小称为连接。</p>
+<p>所以建立一个TCP连接需要客户端与服务器达成上述三个信息的共识。</p>
+<ul>
+<li>Socket：由IP地址和端口号组成</li>
+<li>序列号：用来解决乱序问题</li>
+<li>窗口大小：用来做流量控制</li>
+</ul>
+<blockquote>
+<p>如何唯一确定一个 TCP 连接呢？</p>
+</blockquote>
+<p>通过TCP的四元组可以唯一的确定一个连接，四元组包括：源地址、源端口、目标地址和目标端口。</p>
+<p>源地址和目标地址的字段（32位）是在IP头中，作用是通过IP协议发送报文给对方的主机。</p>
+<p>源端口和目标端口的字段是在TCP头中，作用是告诉TCP协议应该把报文发送给哪一个进程。</p>
+<h2 id="UDP和TCP的区别"><a href="#UDP和TCP的区别" class="headerlink" title="UDP和TCP的区别"></a>UDP和TCP的区别</h2><p>UDP不提供复杂的控制机制，利用IP提供面向「无连接」的通信服务。</p>
+<p>UDP协议非常的简单，头部只有8个字节（64位），UDP的头部格式如下：</p>
+<img data-src="/images/TCP三次握手与四次挥手/format,png-16602898407406.png" alt="UDP 头部格式" />
+
+<ul>
+<li>目标和源端口：主要告诉UDP协议应该把报文发送给那个进程。</li>
+<li>包长度：该字段保存了UDP头部的长度和数据的长度之和。</li>
+<li>校验和：校验和是为了提供可靠的UDP首部和数据而设计的，防止收到在网络传输受损的UDP包。</li>
+</ul>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><ol>
+<li><p>连接</p>
+<ul>
+<li>TCP是面向连接的传输层协议，传输数据前先要建立连接。</li>
+<li>UDP是不需要连接的，可以直接开始传输数据。</li>
+</ul>
+</li>
+<li><p>服务对象</p>
+<ul>
+<li>TCP是一对一的两点服务，即一条连接只有两个端点。</li>
+<li>UDP支持一对一、一对多的交互通信。</li>
+</ul>
+</li>
+<li><p>可靠性</p>
+<ul>
+<li>TCP是可靠交付数据的，数据库无差错、不丢失、不重复、按序到达。</li>
+<li>UDP是尽最大努力交付，不保证数据的可靠的交付。</li>
+</ul>
+</li>
+<li><p>拥塞控制、流量控制</p>
+<ul>
+<li>TCP有拥塞控制和流量控制机制，保证数据传输的安全性。</li>
+<li>UDP则不同，即使网络非常拥堵了，也不会影响UDP的发送速率。</li>
+</ul>
+</li>
+<li><p>首部开销</p>
+<ul>
+<li><p>TCP首部长度较长，会有一定的开销，首部在没有使用选项字段时是<code>20</code>个字节，如果使用了选择字段则会变得更长。-</p>
+</li>
+<li><p>UDP首部只有8个字节，并且是固定不变的，开销很小。</p>
+</li>
+</ul>
+</li>
+<li><p>传输方式</p>
+<ul>
+<li><p>TCP是流式传输，没有边界，但保证顺序和可靠性。</p>
+</li>
+<li><p>UDP是一个包一个包的发送，是有边界的，但可能会存在丢包和乱序。</p>
+</li>
+</ul>
+</li>
+<li><p>分片不同</p>
+<ul>
+<li>TCP的数据大小如果大于MSS的大小，会在传输层进行分片，目标主机收到之后，也同样会在传输层组装TCP数据包，如果中途叠了一个分片，只需要传输丢失的这一个分片就行。</li>
+<li>UDP的数据大小如果大于MTU的大小，就会在IP层进行分片，目标主机接收到之后，在IP层组装完数据，接着再传给传输层。</li>
+</ul>
+</li>
+</ol>
+<h3 id="TCP和UDP的应用场景"><a href="#TCP和UDP的应用场景" class="headerlink" title="TCP和UDP的应用场景"></a>TCP和UDP的应用场景</h3><p>由于TCP是面向连接的，可以保证，数据额交付的可靠性，因此常用于：</p>
+<ul>
+<li><code>FTP</code>文件传输</li>
+<li>HTTP&#x2F;HTTPS</li>
+</ul>
+<p>而UDP面向无连接，他可以随时发送数据，再加上UDP本身的处理既简单又高效，因此常用于：</p>
+<ul>
+<li>包总量较少的通信，如<code>DNS</code>、<code>SMTP</code>等</li>
+<li>视频、音频等多媒体通信</li>
+<li>广播通信</li>
+</ul>
+<blockquote>
+<p>为什么UDP头部没有首部长度字段，而TCP头部有首部长度字段？</p>
+</blockquote>
+<p>原因是TCP首部中的选项字段长度是可变的，而UDP首部是固定长度的，不会发生变化，所以使用UDP通信的双方都按照约定好的UDP首部长度来进行通信，不需要一个专门的字段来记录首部长度。</p>
+<h1 id="TCP连接建立"><a href="#TCP连接建立" class="headerlink" title="TCP连接建立"></a>TCP连接建立</h1>
     </div>
 
     
