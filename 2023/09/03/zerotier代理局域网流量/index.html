@@ -23,15 +23,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":true,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="在ubuntu或debian下安装zerotier，并代理局域网所有流量  首先去zerotier官网按照其安装命令安装zerotier 1curl -s https:&#x2F;&#x2F;install.zerotier.com | bash  开启流量转发 1echo &quot;1&quot; &gt;&#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;ip_forward  添加路由规则 只需要修改第一行的两个变量值，第">
+    <meta name="description" content="在ubuntu或debian下安装zerotier，并代理局域网所有流量  首先去zerotier官网按照其安装命令安装zerotier 1curl -s https:&#x2F;&#x2F;install.zerotier.com | bash  加入zerotier虚拟局域网 1zerotier-cli joint &lt;network id&gt;  开启流量转发 1echo &quot;1&quot; &amp;g">
 <meta property="og:type" content="article">
 <meta property="og:title" content="zerotier代理局域网流量">
 <meta property="og:url" content="http://muggletan.github.io/2023/09/03/zerotier%E4%BB%A3%E7%90%86%E5%B1%80%E5%9F%9F%E7%BD%91%E6%B5%81%E9%87%8F/index.html">
 <meta property="og:site_name" content="这边风景独好">
-<meta property="og:description" content="在ubuntu或debian下安装zerotier，并代理局域网所有流量  首先去zerotier官网按照其安装命令安装zerotier 1curl -s https:&#x2F;&#x2F;install.zerotier.com | bash  开启流量转发 1echo &quot;1&quot; &gt;&#x2F;proc&#x2F;sys&#x2F;net&#x2F;ipv4&#x2F;ip_forward  添加路由规则 只需要修改第一行的两个变量值，第">
+<meta property="og:description" content="在ubuntu或debian下安装zerotier，并代理局域网所有流量  首先去zerotier官网按照其安装命令安装zerotier 1curl -s https:&#x2F;&#x2F;install.zerotier.com | bash  加入zerotier虚拟局域网 1zerotier-cli joint &lt;network id&gt;  开启流量转发 1echo &quot;1&quot; &amp;g">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-03T04:30:37.000Z">
-<meta property="article:modified_time" content="2023-09-08T14:21:11.116Z">
+<meta property="article:modified_time" content="2023-10-11T11:50:53.351Z">
 <meta property="article:author" content="muggle">
 <meta property="article:tag" content="zerotier">
 <meta name="twitter:card" content="summary">
@@ -262,7 +262,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-08 22:21:11" itemprop="dateModified" datetime="2023-09-08T22:21:11+08:00">2023-09-08</time>
+      <time title="修改时间：2023-10-11 19:50:53" itemprop="dateModified" datetime="2023-10-11T19:50:53+08:00">2023-10-11</time>
     </span>
 
   
@@ -287,6 +287,9 @@
 <li><p>首先去zerotier官网按照其安装命令安装zerotier</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s https://install.zerotier.com | bash</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>加入zerotier虚拟局域网</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zerotier-cli joint &lt;network <span class="built_in">id</span>&gt;</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>开启流量转发</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;1&quot;</span> &gt;/proc/sys/net/ipv4/ip_forward</span><br></pre></td></tr></table></figure>
 </li>
@@ -297,7 +300,7 @@
 <li><p>若是使用的PVE下的lxc容器，则需要再PVE的shell中修改该lxc容器配置文件，加上一下两行:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lxc.cgroup2.devices.allow: c 10:200 rwm</span><br><span class="line">lxc.mount.entry: /dev/net/tun dev/net/tun none <span class="built_in">bind</span>,create=file</span><br></pre></td></tr></table></figure></li>
 </ol>
-<p>因为系统重启后iptables中的内容会丢失，所以需要每次开机对其进行设置，下面有两种方法</p>
+<p>​	因为系统重启后iptables中的内容会丢失，所以需要每次开机对其进行设置，下面有两种方法</p>
 <h3 id="一、使用cron定时任务"><a href="#一、使用cron定时任务" class="headerlink" title="一、使用cron定时任务"></a>一、使用cron定时任务</h3><p>将上面的路由规则写成一个脚本，取名为<code>route_config.sh</code></p>
 <p>然后再定时任务中加上：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@reboot /path/to/your/script   #脚本的位置</span><br></pre></td></tr></table></figure>
