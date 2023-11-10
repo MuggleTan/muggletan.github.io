@@ -258,7 +258,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-10-11 21:23:39" itemprop="dateModified" datetime="2023-10-11T21:23:39+08:00">2023-10-11</time>
+      <time title="修改时间：2023-11-10 22:50:10" itemprop="dateModified" datetime="2023-11-10T22:50:10+08:00">2023-11-10</time>
     </span>
 
   
@@ -289,7 +289,7 @@
 </li>
 <li><p>添加路由规则</p>
 <p>只需要修改第一行的两个变量值，第一个为物理网卡的名称，第二个变量是zerotier虚拟网卡的名称，可用<code>ip addr</code>或<code>ifconfig</code>查看</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PHY_IFACE=eth0; ZT_IFACE=zt6ovszj4d</span><br><span class="line">iptables -t nat -A POSTROUTING -o <span class="variable">$PHY_IFACE</span> -j MASQUERADE</span><br><span class="line">iptables -A FORWARD -i <span class="variable">$ZT_IFACE</span> -j ACCEPT</span><br><span class="line">iptables -A FORWARD -o <span class="variable">$ZT_IFACE</span> -j ACCEPT</span><br><span class="line">iptables-save</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PHY_IFACE=eth0; ZT_IFACE=zt6ovszj4d</span><br><span class="line">iptables -t nat -A POSTROUTING ! -o <span class="variable">$PHY_IFACE</span> -j MASQUERADE</span><br><span class="line">iptables -A FORWARD -i <span class="variable">$ZT_IFACE</span> -j ACCEPT</span><br><span class="line">iptables -A FORWARD -o <span class="variable">$ZT_IFACE</span> -j ACCEPT</span><br><span class="line">iptables-save</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>若是使用的PVE下的lxc容器，则需要再PVE的shell中修改该lxc容器配置文件，加上一下两行:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lxc.cgroup2.devices.allow: c 10:200 rwm</span><br><span class="line">lxc.mount.entry: /dev/net/tun dev/net/tun none <span class="built_in">bind</span>,create=file</span><br></pre></td></tr></table></figure></li>
