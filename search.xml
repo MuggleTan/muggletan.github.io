@@ -1466,13 +1466,16 @@
 <ol>
 <li><p>自动类型提升：</p>
 <p> 结论：当容量小的数据类型的变量与容量大的数据类型的变量做运算时，结果自动提升为容量大的数据类型。</p>
-  <pre class="mermaid">   graph LR
+</li>
+</ol>
+<pre class="mermaid">graph LR
 char --> int
 byte --> int
 short --> int --> long --> float --> double</pre>
 
-<p> 特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。</p>
-</li>
+<pre><code>特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。
+</code></pre>
+<ol start="2">
 <li><p>强制类型转换：</p>
 <p>a.需要使用强转符：()</p>
 <p>b.注意点：强制类型转换，可能导致精度损失。</p>
@@ -1494,8 +1497,8 @@ short --> int --> long --> float --> double</pre>
 <h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h3><p>太简单，不说了</p>
 <h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>介绍一个特别的：instanceof</p>
 <p>作用是检查是否是类的对象，例如： “Hello” instanceof String &#x3D; true</p>
-<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;—逻辑与	 	| —逻辑或 	  ！—逻辑非 </p>
-<p>&amp;&amp; —短路与 	|| —短路或 	^ —逻辑异或</p>
+<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;—逻辑与         | —逻辑或       ！—逻辑非 </p>
+<p>&amp;&amp; —短路与     || —短路或     ^ —逻辑异或</p>
 <ul>
 <li>“&amp;”和“&amp;&amp;”的区别： <ul>
 <li>单&amp;时，左边无论真假，右边都进行运算； </li>
@@ -1511,10 +1514,8 @@ short --> int --> long --> float --> double</pre>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="literal">true</span> ? <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1</span>) : <span class="keyword">new</span> <span class="title class_">Double</span>(<span class="number">2.0</span>);</span><br><span class="line">System.out.println(o1);<span class="comment">//1.0</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>条件表达式不能取代一般的if语句,仅当if语句中内嵌的语句为赋值语句(且两个分支都给同一变量赋值)时才能代替if语句，例如：</p>
-</li>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line"> printf(<span class="string">&quot;even/n&quot;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//不能写成</span></span><br><span class="line">(a%<span class="number">2</span>==<span class="number">0</span>)?printf(<span class="string">&quot;even/n&quot;</span>):printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//但是可以写成</span></span><br><span class="line">printf(<span class="string">&quot;%s/n&quot;</span>,(a%<span class="number">2</span>==<span class="number">0</span>?<span class="string">&quot;even&quot;</span>:<span class="string">&quot;odd&quot;</span>);</span><br></pre></td></tr></table></figure></li>
 </ol>
-   <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line">  printf(<span class="string">&quot;even/n&quot;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//不能写成</span></span><br><span class="line">(a%<span class="number">2</span>==<span class="number">0</span>)?printf(<span class="string">&quot;even/n&quot;</span>):printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//但是可以写成</span></span><br><span class="line">printf(<span class="string">&quot;%s/n&quot;</span>,(a%<span class="number">2</span>==<span class="number">0</span>?<span class="string">&quot;even&quot;</span>:<span class="string">&quot;odd&quot;</span>);</span><br></pre></td></tr></table></figure>
-
 <h3 id="运算符的优先级"><a href="#运算符的优先级" class="headerlink" title="运算符的优先级"></a>运算符的优先级</h3><table>
 <thead>
 <tr>
@@ -2800,6 +2801,52 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>Java枚举类</title>
+    <url>/2020/06/16/Java%E6%9E%9A%E4%B8%BE%E7%B1%BB/</url>
+    <content><![CDATA[<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><p>在JDK5.0之前需要自定义枚举类，JDK5.0中新增了enum关键字，用来定义枚举类</p>
+<h2 id="枚举类的特点"><a href="#枚举类的特点" class="headerlink" title="枚举类的特点"></a>枚举类的特点</h2><ul>
+<li>枚举类对象的属性不允许被改动，所以应该使用private final修饰</li>
+<li>枚举类的被private final修饰的属性要在构造器中为期赋值</li>
+<li>若枚举类显式的定义了带参数的构造器，则在列出枚举值时也必须传入对应参数</li>
+</ul>
+<h1 id="自定义枚举类"><a href="#自定义枚举类" class="headerlink" title="自定义枚举类"></a>自定义枚举类</h1><ol>
+<li>私有化类的构造器，保证不能再类的外部创建其对象</li>
+<li>在类的内部穿件枚举类的实例，并用public static final修饰</li>
+<li>对象如果有实例变量，应该声明为private final，并在构造器中初始化</li>
+</ol>
+<span id="more"></span>
+
+<p>用季节来举例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Season</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String NAME;<span class="comment">//季节的名称</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String DESC;<span class="comment">//季节的描述</span></span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">Season</span><span class="params">(String seasonName,String seasonDesc)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.NAME = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.DESC = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SPRING</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SUMMER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">AUTUMN</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">WINTER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;白雪皑皑&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="enum关键字定义枚举类"><a href="#enum关键字定义枚举类" class="headerlink" title="enum关键字定义枚举类"></a>enum关键字定义枚举类</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul>
+<li>用enum定义的枚举类默认继承了java.lang.Enum类，因此不能再继承其他类</li>
+<li>枚举类的构造器只能用private修饰</li>
+<li>枚举类的所有实例必须在枚举类中显式列出（用“,”分隔，“;”）结尾，列出的实例会自动添加public static final修饰</li>
+<li>必须要在枚举类的第一行声明枚举类对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">SeasonEnum</span> &#123;</span><br><span class="line">  SPRING(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春风又绿江南岸&quot;</span>),</span><br><span class="line">  SUMMER(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;映日荷花别样红&quot;</span>),</span><br><span class="line">  AUTUMN(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋水共长天一色&quot;</span>),</span><br><span class="line">  WINTER(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;窗含西岭千秋雪&quot;</span>);</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonName;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonDesc;</span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">SeasonEnum</span><span class="params">(String seasonName, String seasonDesc)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.seasonName = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.seasonDesc = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonName</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonName;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonDesc</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Enum类的主要方法"><a href="#Enum类的主要方法" class="headerlink" title="Enum类的主要方法"></a>Enum类的主要方法</h1><ul>
+<li>values()方法：返回枚举类型的对象数组。该方法可以很方便地遍历所有的枚举值。 </li>
+<li>valueOf(String str)：可以把一个字符串转为对应的枚举类对象。要求字符串必须是枚举类对象的“名字”。如不是，会有运行时异常： IllegalArgumentException。 </li>
+<li>toString()：返回当前枚举类对象常量的名称</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java常用类</title>
     <url>/2020/06/06/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/</url>
     <content><![CDATA[<h1 id="字符串相关的类"><a href="#字符串相关的类" class="headerlink" title="字符串相关的类"></a>字符串相关的类</h1><h2 id="String类"><a href="#String类" class="headerlink" title="String类"></a>String类</h2><h3 id="String类的特性"><a href="#String类的特性" class="headerlink" title="String类的特性"></a>String类的特性</h3><ul>
@@ -3243,52 +3290,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>Java枚举类</title>
-    <url>/2020/06/16/Java%E6%9E%9A%E4%B8%BE%E7%B1%BB/</url>
-    <content><![CDATA[<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><p>在JDK5.0之前需要自定义枚举类，JDK5.0中新增了enum关键字，用来定义枚举类</p>
-<h2 id="枚举类的特点"><a href="#枚举类的特点" class="headerlink" title="枚举类的特点"></a>枚举类的特点</h2><ul>
-<li>枚举类对象的属性不允许被改动，所以应该使用private final修饰</li>
-<li>枚举类的被private final修饰的属性要在构造器中为期赋值</li>
-<li>若枚举类显式的定义了带参数的构造器，则在列出枚举值时也必须传入对应参数</li>
-</ul>
-<h1 id="自定义枚举类"><a href="#自定义枚举类" class="headerlink" title="自定义枚举类"></a>自定义枚举类</h1><ol>
-<li>私有化类的构造器，保证不能再类的外部创建其对象</li>
-<li>在类的内部穿件枚举类的实例，并用public static final修饰</li>
-<li>对象如果有实例变量，应该声明为private final，并在构造器中初始化</li>
-</ol>
-<span id="more"></span>
-
-<p>用季节来举例：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Season</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String NAME;<span class="comment">//季节的名称</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String DESC;<span class="comment">//季节的描述</span></span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">Season</span><span class="params">(String seasonName,String seasonDesc)</span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.NAME = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.DESC = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SPRING</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;春天&quot;</span>, <span class="string">&quot;春暖花开&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">SUMMER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;夏天&quot;</span>, <span class="string">&quot;夏日炎炎&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">AUTUMN</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;秋天&quot;</span>, <span class="string">&quot;秋高气爽&quot;</span>);</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Season</span> <span class="variable">WINTER</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Season</span>(<span class="string">&quot;冬天&quot;</span>, <span class="string">&quot;白雪皑皑&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="enum关键字定义枚举类"><a href="#enum关键字定义枚举类" class="headerlink" title="enum关键字定义枚举类"></a>enum关键字定义枚举类</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ul>
-<li>用enum定义的枚举类默认继承了java.lang.Enum类，因此不能再继承其他类</li>
-<li>枚举类的构造器只能用private修饰</li>
-<li>枚举类的所有实例必须在枚举类中显式列出（用“,”分隔，“;”）结尾，列出的实例会自动添加public static final修饰</li>
-<li>必须要在枚举类的第一行声明枚举类对象</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">SeasonEnum</span> &#123;</span><br><span class="line">  SPRING(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春风又绿江南岸&quot;</span>),</span><br><span class="line">  SUMMER(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;映日荷花别样红&quot;</span>),</span><br><span class="line">  AUTUMN(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋水共长天一色&quot;</span>),</span><br><span class="line">  WINTER(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;窗含西岭千秋雪&quot;</span>);</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonName;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> String seasonDesc;</span><br><span class="line">  <span class="keyword">private</span> <span class="title function_">SeasonEnum</span><span class="params">(String seasonName, String seasonDesc)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.seasonName = seasonName;</span><br><span class="line">    <span class="built_in">this</span>.seasonDesc = seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonName</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonName;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> String <span class="title function_">getSeasonDesc</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> seasonDesc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="Enum类的主要方法"><a href="#Enum类的主要方法" class="headerlink" title="Enum类的主要方法"></a>Enum类的主要方法</h1><ul>
-<li>values()方法：返回枚举类型的对象数组。该方法可以很方便地遍历所有的枚举值。 </li>
-<li>valueOf(String str)：可以把一个字符串转为对应的枚举类对象。要求字符串必须是枚举类对象的“名字”。如不是，会有运行时异常： IllegalArgumentException。 </li>
-<li>toString()：返回当前枚举类对象常量的名称</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java标识符命名规范</title>
     <url>/2020/03/28/Java%E6%A0%87%E8%AF%86%E7%AC%A6%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</url>
     <content><![CDATA[<ol>
@@ -3550,60 +3551,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>MySQL8安装与配置</title>
-    <url>/2020/11/23/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/</url>
-    <content><![CDATA[<h2 id="Ubuntu安装MySQL8"><a href="#Ubuntu安装MySQL8" class="headerlink" title="Ubuntu安装MySQL8"></a>Ubuntu安装MySQL8</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt install mysql-server</span><br></pre></td></tr></table></figure>
-
-<h2 id="Debian-安装MySQL8"><a href="#Debian-安装MySQL8" class="headerlink" title="Debian 安装MySQL8"></a>Debian 安装MySQL8</h2><p>因为Debian的源中没有MySQL，所以我们需要手动添加</p>
-<ol>
-<li><p>先去MySQL<a href="https://dev.mysql.com/downloads/mysql/">官网</a></p>
-<p>选择版本和系统之后，会出来下面这张图片，点击这张图片，进入到第二步</p>
-<p><img data-src="/../images/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/image-20230826144155692.png" alt="image-20230826144155692"></p>
-</li>
-<li><p>下载DEB package</p>
-<p>进入第二个页面后，点击下载按钮，之后会跳转到另外一个页面</p>
-<p><img data-src="/../images/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/image-20230826144328978.png" alt="image-20230826144328978"></p>
-<p>不需要登录，右键点击最下面的直接下载的链接，复制链接</p>
-<p><img data-src="/../images/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/image-20230826144446024.png" alt="image-20230826144446024"></p>
-<p>然后到Debian中用wget下载：</p>
-</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/mysql-apt-config_0.8.26-1_all.deb</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dpkg install mysql-apt-xxx.deb</span><br></pre></td></tr></table></figure>
-
-<p>然后<code>apt update</code>一下，<code>apt install mysql-server</code>就可以找到MySQL的包了。</p>
-<h2 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h2><p>登录MySQL</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mysql</span><br></pre></td></tr></table></figure>
-
-<p>可以直接登录，只要输入账户密码，登录之后再改密码</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">show databases;</span><br><span class="line"></span><br><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;你的新密码&#x27;;</span><br></pre></td></tr></table></figure>
-
-<p>更新域属性，’%’表示任何方式访问</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">update user set host=&#x27;%&#x27; where user =&#x27;root&#x27;;</span><br></pre></td></tr></table></figure>
-
-<p>执行以上语句之后再执行</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
-
-<p>再执行授权语句</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27;WITH GRANT OPTION;</span><br></pre></td></tr></table></figure>
-
-<p>Debian系统到这里一般就可以远程连接了，Ubuntu可能还需要修改配置文件，注释掉绑定地址。</p>
-<p><strong>!!! 若还是有问题，则将<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>文件中的<code>bind-address</code>注释掉。</strong></p>
-]]></content>
-      <categories>
-        <category>软件</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MySQL中常用的函数</title>
     <url>/2020/04/26/MySQL%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h2 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h2><ol>
@@ -3687,45 +3634,57 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>Nginx配置反向代理</title>
-    <url>/2021/09/19/Nginx%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
-    <content><![CDATA[<h1 id="前后端分离项目的部署配置"><a href="#前后端分离项目的部署配置" class="headerlink" title="前后端分离项目的部署配置"></a>前后端分离项目的部署配置</h1><p>Nginx就非常离谱，也不知道为什么，前端静态资源也需要单独配置，而且这配置方式还非常的离谱，贴一下配置文件</p>
-<p>配置文件路径<code>/etc/nginx/sites-enabled</code></p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">server <span class="punctuation">&#123;</span></span><br><span class="line">    listen      <span class="number">80</span>;   			#监听<span class="number">80</span>端口</span><br><span class="line">    server_name	<span class="number">10.100</span><span class="number">.128</span><span class="number">.8</span>;   #监听访问的host</span><br><span class="line"></span><br><span class="line">    location /EleLabSys/ <span class="punctuation">&#123;</span></span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files $uri $uri/ EleLabSys/;	#此处非常离谱，是经过不断尝试出来的，子文件夹必须要写在这个地方才行</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line">	# 后端api代理还比较正常</span><br><span class="line">	location /prod-api/ <span class="punctuation">&#123;</span></span><br><span class="line">		proxy_set_header Host $http_host;</span><br><span class="line">		proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">		proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">		proxy_pass http<span class="punctuation">:</span><span class="comment">//localhost:8080/;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+    <title>MySQL8安装与配置</title>
+    <url>/2020/11/23/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/</url>
+    <content><![CDATA[<h2 id="Ubuntu安装MySQL8"><a href="#Ubuntu安装MySQL8" class="headerlink" title="Ubuntu安装MySQL8"></a>Ubuntu安装MySQL8</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt install mysql-server</span><br></pre></td></tr></table></figure>
 
-<p>具体是什么原因导致的暂且不深究。。。</p>
-<p>等有空再研究</p>
-<hr>
-<p>更新来了。。。</p>
-<p>经过再次的尝试，发现是需要把根路径放到最后面，这样才能正常地访问静态资源，不需要手动配置，并且代理也有效果</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;   <span class="comment">#监听80端口</span></span><br><span class="line">    server_name	10.100.128.8;   <span class="comment">#监听访问的host</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 实验室系统后端</span></span><br><span class="line">	location /prod-api/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:8080/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室代码仓库</span></span><br><span class="line">    location /gitea/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:3000/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室系统云盘</span></span><br><span class="line">	location /cloudDisk/ &#123;</span><br><span class="line">		<span class="comment"># proxy_set_header Host $http_host;</span></span><br><span class="line">		<span class="comment"># proxy_set_header X-Real-IP $remote_addr;</span></span><br><span class="line">		<span class="comment"># proxy_set_header REMOTE-HOST $remote_addr;</span></span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:9999/;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 需要放到最后面，匹配优先级最低</span></span><br><span class="line">	location / &#123;</span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /;</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="Debian-安装MySQL8"><a href="#Debian-安装MySQL8" class="headerlink" title="Debian 安装MySQL8"></a>Debian 安装MySQL8</h2><p>因为Debian的源中没有MySQL，所以我们需要手动添加</p>
+<ol>
+<li><p>先去MySQL<a href="https://dev.mysql.com/downloads/mysql/">官网</a></p>
+<p>选择版本和系统之后，会出来下面这张图片，点击这张图片，进入到第二步</p>
+<p><img data-src="/../images/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/image-20230826144155692.png" alt="image-20230826144155692"></p>
+</li>
+<li><p>下载DEB package</p>
+<p>进入第二个页面后，点击下载按钮，之后会跳转到另外一个页面</p>
+<p><img data-src="/../images/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/image-20230826144328978.png" alt="image-20230826144328978"></p>
+<p>不需要登录，右键点击最下面的直接下载的链接，复制链接</p>
+<p><img data-src="/../images/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/image-20230826144446024.png" alt="image-20230826144446024"></p>
+<p>然后到Debian中用wget下载：</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/mysql-apt-config_0.8.26-1_all.deb</span><br></pre></td></tr></table></figure>
 
+<ol start="3">
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dpkg --install mysql-apt-xxx.deb</span><br></pre></td></tr></table></figure>
 
+<p>然后<code>apt update</code>一下，<code>apt install mysql-server</code>就可以找到MySQL的包了。</p>
+<h2 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h2><p>登录MySQL</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mysql</span><br></pre></td></tr></table></figure>
 
+<p>可以直接登录，只要输入账户密码，登录之后再改密码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">show databases;</span><br><span class="line"></span><br><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;你的新密码&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>更新域属性，’%’表示任何方式访问</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">update user set host=&#x27;%&#x27; where user =&#x27;root&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>执行以上语句之后再执行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+
+<p>再执行授权语句</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27;WITH GRANT OPTION;</span><br></pre></td></tr></table></figure>
+
+<p>Debian系统到这里一般就可以远程连接了，Ubuntu可能还需要修改配置文件，注释掉绑定地址。</p>
+<p><strong>!!! 若还是有问题，则将<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>文件中的<code>bind-address</code>注释掉。</strong></p>
 ]]></content>
       <categories>
+        <category>软件</category>
         <category>Linux</category>
-        <category>Nginx</category>
       </categories>
       <tags>
         <tag>服务器</tag>
-        <tag>Nginx</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PVE直通硬盘到TrueNAS</title>
-    <url>/2022/07/16/PVE%20%E7%9B%B4%E9%80%9A%E7%A1%AC%E7%9B%98%E5%88%B0TrueNAS/</url>
-    <content><![CDATA[<h1 id="1-查询所有的硬盘识别码"><a href="#1-查询所有的硬盘识别码" class="headerlink" title="1.查询所有的硬盘识别码"></a>1.查询所有的硬盘识别码</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -la /dev/disk/by-id/|grep -v dm|grep -v lvm|grep -v part</span><br></pre></td></tr></table></figure>
-
-<h1 id="2-将硬盘直通到TrueNAS"><a href="#2-将硬盘直通到TrueNAS" class="headerlink" title="2.将硬盘直通到TrueNAS"></a>2.将硬盘直通到TrueNAS</h1><p>vmid是TrueNAS虚拟机的编号，x是编号，若此虚拟机没有sata设备，则从从0开始，xxxx为硬盘识别码</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">qm set &lt;vmid&gt; --sata[x] /dev/disk/by-id/[xxxxxxx]</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>PVE</category>
-      </categories>
-      <tags>
-        <tag>配置</tag>
-        <tag>PVE</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -3776,6 +3735,22 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PVE直通硬盘到TrueNAS</title>
+    <url>/2022/07/16/PVE%20%E7%9B%B4%E9%80%9A%E7%A1%AC%E7%9B%98%E5%88%B0TrueNAS/</url>
+    <content><![CDATA[<h1 id="1-查询所有的硬盘识别码"><a href="#1-查询所有的硬盘识别码" class="headerlink" title="1.查询所有的硬盘识别码"></a>1.查询所有的硬盘识别码</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -la /dev/disk/by-id/|grep -v dm|grep -v lvm|grep -v part</span><br></pre></td></tr></table></figure>
+
+<h1 id="2-将硬盘直通到TrueNAS"><a href="#2-将硬盘直通到TrueNAS" class="headerlink" title="2.将硬盘直通到TrueNAS"></a>2.将硬盘直通到TrueNAS</h1><p>vmid是TrueNAS虚拟机的编号，x是编号，若此虚拟机没有sata设备，则从从0开始，xxxx为硬盘识别码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">qm set &lt;vmid&gt; --sata[x] /dev/disk/by-id/[xxxxxxx]</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>PVE</category>
+      </categories>
+      <tags>
+        <tag>配置</tag>
+        <tag>PVE</tag>
       </tags>
   </entry>
   <entry>
@@ -4228,49 +4203,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>hexo一键部署到云服务器</title>
-    <url>/2020/03/01/hexo%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><blockquote>
-<p>&amp;emsp;&amp;emsp;之前折腾了好久，用Rsync，ftp，stfp都试过了，都没弄成，在网上看的教程很多也是基于git的，也就是在服务器建一个git的钩子，指定一个目录作为远程仓库地址，可以通过ssh连接，然后在本地可以直接上传，最后才选择的这个方案。在成功之前踩了好多坑，配sftp的时候用百度上的坑爹教程，导致服务器都连不上，最后还是选择则了用git做仓库的方式来上传，这个教程很简单，相对于其他的同样的方法，只是不知道会不会有安全问题。</p>
-</blockquote>
-<h2 id="正式开始"><a href="#正式开始" class="headerlink" title="正式开始"></a>正式开始</h2><h3 id="1-配置Git-hooks"><a href="#1-配置Git-hooks" class="headerlink" title="1. 配置Git hooks"></a>1. 配置Git hooks</h3><ol>
-<li><p>创建Git裸仓库</p>
-<p>blog.git作为远程Git仓库，Hexo在本地生成的博客静态文件可以通过push与其同步。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/blog.git &amp;&amp; <span class="built_in">cd</span> ~/blog.git</span><br><span class="line">git init --bare</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在hooks目录下新建一个脚本文件<code>post-receive</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">touch</span> hooks/post-receive</span><br></pre></td></tr></table></figure>
-
-<p>   <code>post-receive</code>脚本将在blog.git仓库接收到push时执行</p>
-<p>   脚本非常简单，就是删除原有的&#x2F;var&#x2F;www&#x2F;html&#x2F;blog目录，然后从blog.git仓库clone新的博客静态文件</p>
-<p>   <code>vim hooks/post-receive</code> 将下面内容写入<code>post-receive</code>文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">        </span><br><span class="line"><span class="built_in">rm</span> -rf /var/www/html/blog</span><br><span class="line">git <span class="built_in">clone</span> /root/blog.git /var/www/html/blog</span><br></pre></td></tr></table></figure>
-
-
-</li>
-<li><p>给post-receive脚本执行权限</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x hooks/post-receive</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置好之后可以测试一下，就在本地clone那个远程仓库</p>
-</li>
-</ol>
-<h3 id="2-修改hexo配置文件"><a href="#2-修改hexo配置文件" class="headerlink" title="2.修改hexo配置文件"></a>2.修改hexo配置文件</h3><p>修改hexo根目录下的_config.yml文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: <span class="string">&#x27;git&#x27;</span></span><br><span class="line">  repo: <span class="string">&#x27;root@服务器IP:blog.git&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="补充一点"><a href="#补充一点" class="headerlink" title="补充一点"></a>补充一点</h3><p>如果之前有在同一台服务器上配置过git的裸库，需要在用户目录的<code>.ssh</code>目录下，将<code>known_hosts</code>文件中的主机记录删除掉，否则可能会报错。</p>
-<img data-src="https://i.loli.net/2020/04/25/Nk1QSac4IE2TxRz.png" alt="image.png" style="zoom:80%;" />
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>&amp;emsp;&amp;emsp;这个方法和其他复杂一点的方法区别就是，没有专门建一个git的用户用来上传，就直接用root用户上传，就自己用的话应该问题也不大🤔</p>
-]]></content>
-      <categories>
-        <category>建站</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Ubuntu中设置http强制重定向为https</title>
     <url>/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/</url>
     <content><![CDATA[<h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
@@ -4321,6 +4253,49 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>idea</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo一键部署到云服务器</title>
+    <url>/2020/03/01/hexo%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><blockquote>
+<p>&amp;emsp;&amp;emsp;之前折腾了好久，用Rsync，ftp，stfp都试过了，都没弄成，在网上看的教程很多也是基于git的，也就是在服务器建一个git的钩子，指定一个目录作为远程仓库地址，可以通过ssh连接，然后在本地可以直接上传，最后才选择的这个方案。在成功之前踩了好多坑，配sftp的时候用百度上的坑爹教程，导致服务器都连不上，最后还是选择则了用git做仓库的方式来上传，这个教程很简单，相对于其他的同样的方法，只是不知道会不会有安全问题。</p>
+</blockquote>
+<h2 id="正式开始"><a href="#正式开始" class="headerlink" title="正式开始"></a>正式开始</h2><h3 id="1-配置Git-hooks"><a href="#1-配置Git-hooks" class="headerlink" title="1. 配置Git hooks"></a>1. 配置Git hooks</h3><ol>
+<li><p>创建Git裸仓库</p>
+<p>blog.git作为远程Git仓库，Hexo在本地生成的博客静态文件可以通过push与其同步。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/blog.git &amp;&amp; <span class="built_in">cd</span> ~/blog.git</span><br><span class="line">git init --bare</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在hooks目录下新建一个脚本文件<code>post-receive</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">touch</span> hooks/post-receive</span><br></pre></td></tr></table></figure>
+
+<p>   <code>post-receive</code>脚本将在blog.git仓库接收到push时执行</p>
+<p>   脚本非常简单，就是删除原有的&#x2F;var&#x2F;www&#x2F;html&#x2F;blog目录，然后从blog.git仓库clone新的博客静态文件</p>
+<p>   <code>vim hooks/post-receive</code> 将下面内容写入<code>post-receive</code>文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">        </span><br><span class="line"><span class="built_in">rm</span> -rf /var/www/html/blog</span><br><span class="line">git <span class="built_in">clone</span> /root/blog.git /var/www/html/blog</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>给post-receive脚本执行权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x hooks/post-receive</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置好之后可以测试一下，就在本地clone那个远程仓库</p>
+</li>
+</ol>
+<h3 id="2-修改hexo配置文件"><a href="#2-修改hexo配置文件" class="headerlink" title="2.修改hexo配置文件"></a>2.修改hexo配置文件</h3><p>修改hexo根目录下的_config.yml文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: <span class="string">&#x27;git&#x27;</span></span><br><span class="line">  repo: <span class="string">&#x27;root@服务器IP:blog.git&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="补充一点"><a href="#补充一点" class="headerlink" title="补充一点"></a>补充一点</h3><p>如果之前有在同一台服务器上配置过git的裸库，需要在用户目录的<code>.ssh</code>目录下，将<code>known_hosts</code>文件中的主机记录删除掉，否则可能会报错。</p>
+<img data-src="https://i.loli.net/2020/04/25/Nk1QSac4IE2TxRz.png" alt="image.png" style="zoom:80%;" />
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>&amp;emsp;&amp;emsp;这个方法和其他复杂一点的方法区别就是，没有专门建一个git的用户用来上传，就直接用root用户上传，就自己用的话应该问题也不大🤔</p>
+]]></content>
+      <categories>
+        <category>建站</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -4511,6 +4486,8 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
 <p>永久生效：</p>
 <p>修改 <code>/etc/sysctl.conf</code> 文件，将 <code>net.ipv4.ip_forward=1</code> 注释去掉，并运行下列命令生效</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+<!--more>
 </li>
 <li><p>添加路由规则</p>
 <p>只需要修改第一行的两个变量值，第一个为物理网卡的名称，第二个变量是zerotier虚拟网卡的名称，可用<code>ip addr</code>或<code>ifconfig</code>查看</p>
@@ -4607,22 +4584,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>感悟</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在Ubuntu服务器上安装MySQL8</title>
-    <url>/2020/03/01/%E5%9C%A8Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql8/</url>
-    <content><![CDATA[<p>在<a href="http://dev.mysql.com/downloads/repo/apt/%EF%BC%8C%E4%B8%8B%E8%BD%BD%E4%B8%80%E4%B8%AAmysql-apt-config_0%E2%80%A6%E2%80%A6._all.deb%EF%BC%8C%E4%BC%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%EF%BC%8C%E7%94%A8dpkg">http://dev.mysql.com/downloads/repo/apt/，下载一个mysql-apt-config_0……._all.deb，传到服务器上，用dpkg</a> -i mysql-apt-config_0._…..all.deb安装执行，选择mysql8，OK之后回到终端窗口</p>
-<p>执行sudo apt update</p>
-<p>然后使用sudo apt install mysql-server命令，就会安装MySQL8.0</p>
-]]></content>
-      <categories>
-        <category>软件</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>软件</tag>
       </tags>
   </entry>
   <entry>
@@ -4748,6 +4709,48 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>数字与逻辑电路</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在Ubuntu服务器上安装MySQL8</title>
+    <url>/2020/03/01/%E5%9C%A8Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql8/</url>
+    <content><![CDATA[<p>在<a href="http://dev.mysql.com/downloads/repo/apt/%EF%BC%8C%E4%B8%8B%E8%BD%BD%E4%B8%80%E4%B8%AAmysql-apt-config_0%E2%80%A6%E2%80%A6._all.deb%EF%BC%8C%E4%BC%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%EF%BC%8C%E7%94%A8dpkg">http://dev.mysql.com/downloads/repo/apt/，下载一个mysql-apt-config_0……._all.deb，传到服务器上，用dpkg</a> -i mysql-apt-config_0._…..all.deb安装执行，选择mysql8，OK之后回到终端窗口</p>
+<p>执行sudo apt update</p>
+<p>然后使用sudo apt install mysql-server命令，就会安装MySQL8.0</p>
+]]></content>
+      <categories>
+        <category>软件</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基本数据类型和包装类型的区别</title>
+    <url>/2023/12/25/%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<p><img data-src="/../images/%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8C%BA%E5%88%AB/primitive-type-vs-packaging-type.png" alt="基本类型 vs 包装类型"></p>
+<ul>
+<li><strong>用途</strong>：除了定义一些常量和局部变量之外，我们在其他地方比如方法参数、对象属性中很少会使用基本类型来定义变量。并且，包装类型可用于泛型，而基本类型不可以。</li>
+<li><strong>存储方式</strong>：基本数据类型的局部变量存放在 Java 虚拟机栈中的局部变量表中，基本数据类型的成员变量（未被 <code>static</code> 修饰 ）存放在 Java 虚拟机的堆中。包装类型属于对象类型，我们知道几乎所有对象实例都存在于堆中。</li>
+<li><strong>占用空间</strong>：相比于包装类型（对象类型）， 基本数据类型占用的空间往往非常小。</li>
+<li><strong>默认值</strong>：成员变量包装类型不赋值就是 <code>null</code> ，而基本类型有默认值且不是 <code>null</code>。</li>
+<li><strong>比较方式</strong>：对于基本数据类型来说，<code>==</code> 比较的是值。对于包装数据类型来说，<code>==</code> 比较的是对象的内存地址。所有整型包装类对象之间值的比较，全部使用 <code>equals()</code> 方法。</li>
+</ul>
+<p><strong>为什么说是几乎所有对象实例都存在于堆中呢？</strong> 这是因为 HotSpot 虚拟机引入了 JIT 优化之后，会对对象进行逃逸分析，如果发现某一个对象并没有逃逸到方法外部，那么就可能通过标量替换来实现栈上分配，而避免堆上分配内存</p>
+<p>⚠️ 注意：<strong>基本数据类型存放在栈中是一个常见的误区！</strong> 基本数据类型的成员变量如果没有被 <code>static</code> 修饰的话（不建议这么使用，应该要使用基本数据类型对应的包装类型），就存放在堆中。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BasicTypeVar</span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="type">int</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>参考：<a href="https://javaguide.cn/java/basis/java-basic-questions-01.html">JavaGuide</a></p>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -5456,6 +5459,32 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
       <tags>
         <tag>配置</tag>
         <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx配置反向代理</title>
+    <url>/2021/09/19/Nginx%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<h1 id="前后端分离项目的部署配置"><a href="#前后端分离项目的部署配置" class="headerlink" title="前后端分离项目的部署配置"></a>前后端分离项目的部署配置</h1><p>Nginx就非常离谱，也不知道为什么，前端静态资源也需要单独配置，而且这配置方式还非常的离谱，贴一下配置文件</p>
+<p>配置文件路径<code>/etc/nginx/sites-enabled</code></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">server <span class="punctuation">&#123;</span></span><br><span class="line">    listen      <span class="number">80</span>;   			#监听<span class="number">80</span>端口</span><br><span class="line">    server_name	<span class="number">10.100</span><span class="number">.128</span><span class="number">.8</span>;   #监听访问的host</span><br><span class="line"></span><br><span class="line">    location /EleLabSys/ <span class="punctuation">&#123;</span></span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files $uri $uri/ EleLabSys/;	#此处非常离谱，是经过不断尝试出来的，子文件夹必须要写在这个地方才行</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line">	# 后端api代理还比较正常</span><br><span class="line">	location /prod-api/ <span class="punctuation">&#123;</span></span><br><span class="line">		proxy_set_header Host $http_host;</span><br><span class="line">		proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">		proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">		proxy_pass http<span class="punctuation">:</span><span class="comment">//localhost:8080/;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>具体是什么原因导致的暂且不深究。。。</p>
+<p>等有空再研究</p>
+<hr>
+<p>更新来了。。。</p>
+<p>经过再次的尝试，发现是需要把根路径放到最后面，这样才能正常地访问静态资源，不需要手动配置，并且代理也有效果</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;   <span class="comment">#监听80端口</span></span><br><span class="line">    server_name	10.100.128.8;   <span class="comment">#监听访问的host</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 实验室系统后端</span></span><br><span class="line">	location /prod-api/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:8080/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室代码仓库</span></span><br><span class="line">    location /gitea/ &#123;</span><br><span class="line">		proxy_set_header Host <span class="variable">$http_host</span>;</span><br><span class="line">		proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header REMOTE-HOST <span class="variable">$remote_addr</span>;</span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:3000/;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment"># 实验室系统云盘</span></span><br><span class="line">	location /cloudDisk/ &#123;</span><br><span class="line">		<span class="comment"># proxy_set_header Host $http_host;</span></span><br><span class="line">		<span class="comment"># proxy_set_header X-Real-IP $remote_addr;</span></span><br><span class="line">		<span class="comment"># proxy_set_header REMOTE-HOST $remote_addr;</span></span><br><span class="line">		proxy_set_header X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">		proxy_pass http://localhost:9999/;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 需要放到最后面，匹配优先级最低</span></span><br><span class="line">	location / &#123;</span><br><span class="line">		root   /var/www/html/;</span><br><span class="line">		try_files <span class="variable">$uri</span> <span class="variable">$uri</span>/ /;</span><br><span class="line">		index  index.html index.htm;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
 </search>
