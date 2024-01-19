@@ -77,6 +77,92 @@
       </tags>
   </entry>
   <entry>
+    <title>HTTPS建立的过程</title>
+    <url>/2022/08/10/HTTPS%E5%BB%BA%E7%AB%8B%E7%9A%84%E8%BF%87%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="SSL-x2F-TLS协商基本流程"><a href="#SSL-x2F-TLS协商基本流程" class="headerlink" title="SSL&#x2F;TLS协商基本流程"></a>SSL&#x2F;TLS协商基本流程</h1><ol>
+<li>客户端向服务器索要并验证服务器公钥</li>
+<li>双方协商产生「对话秘钥」</li>
+<li>双方使用「会话秘钥」进行加密通信</li>
+</ol>
+<p>前面两步是SSL&#x2F;TLS的建立过程，也就是TLS握手阶段，SSL&#x2F;TLS「握手阶段」设计的四次通信，如下图所示：</p>
+<img data-src="/images/HTTPS建立的过程/23-HTTPS工作流程.png" alt="HTTPS 连接建立过程"  />
+
+<span id="more"></span>
+
+<p>SSL&#x2F;TLS协议建立的详细流程：</p>
+<ol>
+<li><p>Client Hello</p>
+<p>首先，客户端向服务器发起加密通信的请求，也就是Client Hello请求。</p>
+<p>这一步，客户端向服务器发送如下信息：</p>
+<ul>
+<li>客户端支持的TLS版本，如TLS1.2版本。</li>
+<li>客户端产生的随机数（Client Random），后面用于生成「会话秘钥」条件之一。</li>
+<li>客户端支持的加密套件列表。</li>
+</ul>
+</li>
+<li><p>Server Hello</p>
+<p>服务器收到客户端请求后，向客户端发出响应，也就是<code>Server Hello</code>，服务器回应内容如下：</p>
+<ul>
+<li>确认SSL&#x2F;TLS协议版本，如果浏览器不支持，则关闭加密协议</li>
+<li>服务器产生随机数（Server Random），用于后面生成「会话秘钥」的条件之一</li>
+<li>确认加密套件列表</li>
+<li>服务器的数字证书</li>
+</ul>
+</li>
+<li><p>客户端回应</p>
+<p>客户端收到服务器的回应之后，首先通过浏览器或操作系统中的CA公钥，确认服务器证书的真实性。</p>
+<p>若证书没有问题，客户端会从数字证书中取出服务器的公钥，然后使用它加密报文，向服务器发送如下信息：</p>
+<ul>
+<li>一个随机数（pre-master key），该随机数使用服务器公钥加密。</li>
+<li>加密通信算法改变通知，表示之后的信息都使用会话秘钥进行加密通信。</li>
+<li>客户端握手结束通知，表示客户端的握手阶段已经结束。这一项同时把之前所有发送的数据做一个摘要，用来给服务器校验。</li>
+</ul>
+<p>服务端和客户端共有了三个随机数（Client Random、Server Random、pre-master key），接着就用双方协商的加密算法，各自生成本次通信的会话秘钥。</p>
+</li>
+<li><p>服务器的回应</p>
+<p>服务器收到客户端的第三个随机数（per-master key）之后，通过协商的加密算法，计算本次通信的「会话秘钥」。</p>
+<p>然后向客户端发送最后的信息：</p>
+<ul>
+<li>加密通信算法改变的通知，表示之后的信息都会使用「会话秘钥」加密通信。</li>
+<li>服务器握手结束通知，表示服务器的握手阶段已经结束。这一项同时把之前所有发送的内容做一个摘要，供客户端校验。</li>
+</ul>
+<p>至此，整个SSL&#x2F;TLS握手的阶段全部结束，接下来客户端和服务器进入加密通信，任然使用HTTP协议，但是内容会使用「会话秘钥」进行加密。</p>
+</li>
+</ol>
+<p>补充一个数字证书签发和验证的流程：</p>
+<img data-src="/images/HTTPS建立的过程/证书的校验.png" alt="img" />
+
+
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.xiaolincoding.com/network/2_http/http_interview.html#https-%E6%98%AF%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E7%9A%84-%E5%85%B6%E9%97%B4%E4%BA%A4%E4%BA%92%E4%BA%86%E4%BB%80%E4%B9%88"> 小林coding-HTTPS 是如何建立连接的？其间交互了什么？</a></p>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Debian中注册自定义服务</title>
+    <url>/2024/01/19/Debian%E4%B8%AD%E6%B3%A8%E5%86%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E6%9C%8D%E5%8A%A1/</url>
+    <content><![CDATA[<h1 id="编辑自定义的-service文件"><a href="#编辑自定义的-service文件" class="headerlink" title="编辑自定义的.service文件"></a>编辑自定义的.service文件</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=sun-panel		<span class="comment"># 服务描述</span></span><br><span class="line">After=syslog.target</span><br><span class="line">After=network.target		<span class="comment"># 等待网络启动之后再启动此服务</span></span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">RestartSec=3s						<span class="comment"># 失败后等待 3 秒再尝试重启</span></span><br><span class="line">Type=simple							</span><br><span class="line">User=root								<span class="comment"># 以指定的用户身份运行服务</span></span><br><span class="line">Group=root</span><br><span class="line">ExecStart=/root/sun-panel/sun-panel <span class="comment"># 启动命令 </span></span><br><span class="line">WorkingDirectory=/root/sun-panel    <span class="comment"># 启动程序所在目录</span></span><br><span class="line">Restart=always</span><br><span class="line">Environment=USER=root HOME=/root/</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<h1 id="注册服务"><a href="#注册服务" class="headerlink" title="注册服务"></a>注册服务</h1><p>在系统中注册你的服务，这样系统每次开机都会自动启动你的服务，并且可以通过service命令来启动、停止和查看你的服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> your-service-name.service</span><br></pre></td></tr></table></figure>
+
+<h1 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl start your-service <span class="comment"># 两种都可以</span></span><br><span class="line">service your-service start  </span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HTTP常见面试问题</title>
     <url>/2022/08/02/HTTP%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h1 id="HTTP基本概念"><a href="#HTTP基本概念" class="headerlink" title="HTTP基本概念"></a>HTTP基本概念</h1><h2 id="HTTP是什么"><a href="#HTTP是什么" class="headerlink" title="HTTP是什么"></a>HTTP是什么</h2><p>HTTP全称为超文本传输协议（HyperText Transfer Protocol）。</p>
@@ -379,74 +465,6 @@
 <p>通过数字证书的方式可以保证服务器公钥的身份，解决冒充的风险。</p>
 </li>
 </ol>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>计算机网络</category>
-      </categories>
-      <tags>
-        <tag>计算机网络</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>HTTPS建立的过程</title>
-    <url>/2022/08/10/HTTPS%E5%BB%BA%E7%AB%8B%E7%9A%84%E8%BF%87%E7%A8%8B/</url>
-    <content><![CDATA[<h1 id="SSL-x2F-TLS协商基本流程"><a href="#SSL-x2F-TLS协商基本流程" class="headerlink" title="SSL&#x2F;TLS协商基本流程"></a>SSL&#x2F;TLS协商基本流程</h1><ol>
-<li>客户端向服务器索要并验证服务器公钥</li>
-<li>双方协商产生「对话秘钥」</li>
-<li>双方使用「会话秘钥」进行加密通信</li>
-</ol>
-<p>前面两步是SSL&#x2F;TLS的建立过程，也就是TLS握手阶段，SSL&#x2F;TLS「握手阶段」设计的四次通信，如下图所示：</p>
-<img data-src="/images/HTTPS建立的过程/23-HTTPS工作流程.png" alt="HTTPS 连接建立过程"  />
-
-<span id="more"></span>
-
-<p>SSL&#x2F;TLS协议建立的详细流程：</p>
-<ol>
-<li><p>Client Hello</p>
-<p>首先，客户端向服务器发起加密通信的请求，也就是Client Hello请求。</p>
-<p>这一步，客户端向服务器发送如下信息：</p>
-<ul>
-<li>客户端支持的TLS版本，如TLS1.2版本。</li>
-<li>客户端产生的随机数（Client Random），后面用于生成「会话秘钥」条件之一。</li>
-<li>客户端支持的加密套件列表。</li>
-</ul>
-</li>
-<li><p>Server Hello</p>
-<p>服务器收到客户端请求后，向客户端发出响应，也就是<code>Server Hello</code>，服务器回应内容如下：</p>
-<ul>
-<li>确认SSL&#x2F;TLS协议版本，如果浏览器不支持，则关闭加密协议</li>
-<li>服务器产生随机数（Server Random），用于后面生成「会话秘钥」的条件之一</li>
-<li>确认加密套件列表</li>
-<li>服务器的数字证书</li>
-</ul>
-</li>
-<li><p>客户端回应</p>
-<p>客户端收到服务器的回应之后，首先通过浏览器或操作系统中的CA公钥，确认服务器证书的真实性。</p>
-<p>若证书没有问题，客户端会从数字证书中取出服务器的公钥，然后使用它加密报文，向服务器发送如下信息：</p>
-<ul>
-<li>一个随机数（pre-master key），该随机数使用服务器公钥加密。</li>
-<li>加密通信算法改变通知，表示之后的信息都使用会话秘钥进行加密通信。</li>
-<li>客户端握手结束通知，表示客户端的握手阶段已经结束。这一项同时把之前所有发送的数据做一个摘要，用来给服务器校验。</li>
-</ul>
-<p>服务端和客户端共有了三个随机数（Client Random、Server Random、pre-master key），接着就用双方协商的加密算法，各自生成本次通信的会话秘钥。</p>
-</li>
-<li><p>服务器的回应</p>
-<p>服务器收到客户端的第三个随机数（per-master key）之后，通过协商的加密算法，计算本次通信的「会话秘钥」。</p>
-<p>然后向客户端发送最后的信息：</p>
-<ul>
-<li>加密通信算法改变的通知，表示之后的信息都会使用「会话秘钥」加密通信。</li>
-<li>服务器握手结束通知，表示服务器的握手阶段已经结束。这一项同时把之前所有发送的内容做一个摘要，供客户端校验。</li>
-</ul>
-<p>至此，整个SSL&#x2F;TLS握手的阶段全部结束，接下来客户端和服务器进入加密通信，任然使用HTTP协议，但是内容会使用「会话秘钥」进行加密。</p>
-</li>
-</ol>
-<p>补充一个数字证书签发和验证的流程：</p>
-<img data-src="/images/HTTPS建立的过程/证书的校验.png" alt="img" />
-
-
-
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.xiaolincoding.com/network/2_http/http_interview.html#https-%E6%98%AF%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E7%9A%84-%E5%85%B6%E9%97%B4%E4%BA%A4%E4%BA%92%E4%BA%86%E4%BB%80%E4%B9%88"> 小林coding-HTTPS 是如何建立连接的？其间交互了什么？</a></p>
 ]]></content>
       <categories>
         <category>学习笔记</category>
@@ -2801,24 +2819,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>Java标识符命名规范</title>
-    <url>/2020/03/28/Java%E6%A0%87%E8%AF%86%E7%AC%A6%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</url>
-    <content><![CDATA[<ol>
-<li>包名：多单词组合时多有字母都小写，例如：helloworld</li>
-<li>类名和接口名：多单词组合所有单词第一个字母大写，例如：HelloWorld</li>
-<li>变量名和方法名：多单词组合时，除了第一个单词其他单词的第一个字母大写，例如：helloWorld</li>
-<li>常量名：所有字母都大写，多单词组合时下划线连接，例如：HELLO_WORLD</li>
-</ol>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java常用类</title>
     <url>/2020/06/06/Java%E5%B8%B8%E7%94%A8%E7%B1%BB/</url>
     <content><![CDATA[<h1 id="字符串相关的类"><a href="#字符串相关的类" class="headerlink" title="字符串相关的类"></a>字符串相关的类</h1><h2 id="String类"><a href="#String类" class="headerlink" title="String类"></a>String类</h2><h3 id="String类的特性"><a href="#String类的特性" class="headerlink" title="String类的特性"></a>String类的特性</h3><ul>
@@ -3308,6 +3308,24 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>Java标识符命名规范</title>
+    <url>/2020/03/28/Java%E6%A0%87%E8%AF%86%E7%AC%A6%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/</url>
+    <content><![CDATA[<ol>
+<li>包名：多单词组合时多有字母都小写，例如：helloworld</li>
+<li>类名和接口名：多单词组合所有单词第一个字母大写，例如：HelloWorld</li>
+<li>变量名和方法名：多单词组合时，除了第一个单词其他单词的第一个字母大写，例如：helloWorld</li>
+<li>常量名：所有字母都大写，多单词组合时下划线连接，例如：HELLO_WORLD</li>
+</ol>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LeetCode第一天</title>
     <url>/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/</url>
     <content><![CDATA[<blockquote>
@@ -3463,30 +3481,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>Linux中的进程管理</title>
-    <url>/2020/05/22/Linux%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p>pa a    显示终端机下所有进程</p>
-<p>ps -A   查看所有进程（ps -e和-A是一样的效果，-e更常用一点）（这两个看到的比上面那个多些）</p>
-<p>ps u 以用户为主的格式来显示程序状况</p>
-<p>ps x 显示所有程序，不以终端机来区分</p>
-<p>lsof -i:端口号   根据指定的端口查询进程</p>
-<p>常用的组合命令：</p>
-<p>ps aux,然后再通过管道使用grep命令过滤查找特定的进程,然后再对特定的进程进行操作。</p>
-<p><strong>ps -ef|grep java|grep -v grep</strong> 显示出所有的java进程，去处掉当前的grep进程。</p>
-<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><p>kill -9 进程PID  	根据进程号结束进程</p>
-<p>killall -9 进程名 	根据进程名结束进程</p>
-<blockquote>
-<p>参考资料：<a href="https://blog.csdn.net/wojiaopanpan/article/details/7286430">https://blog.csdn.net/wojiaopanpan/article/details/7286430</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>markdown基本语法</title>
     <url>/2020/02/27/Markdown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</url>
     <content><![CDATA[<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><h4 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="comment">###### 六级标题</span></span><br></pre></td></tr></table></figure>
@@ -3548,6 +3542,30 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>markdown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux中的进程管理</title>
+    <url>/2020/05/22/Linux%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h2 id="查看进程"><a href="#查看进程" class="headerlink" title="查看进程"></a>查看进程</h2><p>pa a    显示终端机下所有进程</p>
+<p>ps -A   查看所有进程（ps -e和-A是一样的效果，-e更常用一点）（这两个看到的比上面那个多些）</p>
+<p>ps u 以用户为主的格式来显示程序状况</p>
+<p>ps x 显示所有程序，不以终端机来区分</p>
+<p>lsof -i:端口号   根据指定的端口查询进程</p>
+<p>常用的组合命令：</p>
+<p>ps aux,然后再通过管道使用grep命令过滤查找特定的进程,然后再对特定的进程进行操作。</p>
+<p><strong>ps -ef|grep java|grep -v grep</strong> 显示出所有的java进程，去处掉当前的grep进程。</p>
+<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><p>kill -9 进程PID  	根据进程号结束进程</p>
+<p>killall -9 进程名 	根据进程名结束进程</p>
+<blockquote>
+<p>参考资料：<a href="https://blog.csdn.net/wojiaopanpan/article/details/7286430">https://blog.csdn.net/wojiaopanpan/article/details/7286430</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -3714,22 +3732,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>PVE直通硬盘到TrueNAS</title>
-    <url>/2022/07/16/PVE%20%E7%9B%B4%E9%80%9A%E7%A1%AC%E7%9B%98%E5%88%B0TrueNAS/</url>
-    <content><![CDATA[<h1 id="1-查询所有的硬盘识别码"><a href="#1-查询所有的硬盘识别码" class="headerlink" title="1.查询所有的硬盘识别码"></a>1.查询所有的硬盘识别码</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -la /dev/disk/by-id/|grep -v dm|grep -v lvm|grep -v part</span><br></pre></td></tr></table></figure>
-
-<h1 id="2-将硬盘直通到TrueNAS"><a href="#2-将硬盘直通到TrueNAS" class="headerlink" title="2.将硬盘直通到TrueNAS"></a>2.将硬盘直通到TrueNAS</h1><p>vmid是TrueNAS虚拟机的编号，x是编号，若此虚拟机没有sata设备，则从从0开始，xxxx为硬盘识别码</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">qm set &lt;vmid&gt; --sata[x] /dev/disk/by-id/[xxxxxxx]</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>PVE</category>
-      </categories>
-      <tags>
-        <tag>配置</tag>
-        <tag>PVE</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>TCP/IP四层模型</title>
     <url>/2022/08/01/TCP-IP%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<p>TCP&#x2F;IP网络模型适用于不同设备上进程间的通信，共分为四层分，从上到下分别是<strong>应用层、传输层、网络层、网络接口层</strong></p>
@@ -3777,6 +3779,22 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PVE直通硬盘到TrueNAS</title>
+    <url>/2022/07/16/PVE%20%E7%9B%B4%E9%80%9A%E7%A1%AC%E7%9B%98%E5%88%B0TrueNAS/</url>
+    <content><![CDATA[<h1 id="1-查询所有的硬盘识别码"><a href="#1-查询所有的硬盘识别码" class="headerlink" title="1.查询所有的硬盘识别码"></a>1.查询所有的硬盘识别码</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -la /dev/disk/by-id/|grep -v dm|grep -v lvm|grep -v part</span><br></pre></td></tr></table></figure>
+
+<h1 id="2-将硬盘直通到TrueNAS"><a href="#2-将硬盘直通到TrueNAS" class="headerlink" title="2.将硬盘直通到TrueNAS"></a>2.将硬盘直通到TrueNAS</h1><p>vmid是TrueNAS虚拟机的编号，x是编号，若此虚拟机没有sata设备，则从从0开始，xxxx为硬盘识别码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">qm set &lt;vmid&gt; --sata[x] /dev/disk/by-id/[xxxxxxx]</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>PVE</category>
+      </categories>
+      <tags>
+        <tag>配置</tag>
+        <tag>PVE</tag>
       </tags>
   </entry>
   <entry>
@@ -4613,6 +4631,22 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>在Ubuntu服务器上安装MySQL8</title>
+    <url>/2020/03/01/%E5%9C%A8Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql8/</url>
+    <content><![CDATA[<p>在<a href="http://dev.mysql.com/downloads/repo/apt/%EF%BC%8C%E4%B8%8B%E8%BD%BD%E4%B8%80%E4%B8%AAmysql-apt-config_0%E2%80%A6%E2%80%A6._all.deb%EF%BC%8C%E4%BC%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%EF%BC%8C%E7%94%A8dpkg">http://dev.mysql.com/downloads/repo/apt/，下载一个mysql-apt-config_0……._all.deb，传到服务器上，用dpkg</a> -i mysql-apt-config_0._…..all.deb安装执行，选择mysql8，OK之后回到终端窗口</p>
+<p>执行sudo apt update</p>
+<p>然后使用sudo apt install mysql-server命令，就会安装MySQL8.0</p>
+]]></content>
+      <categories>
+        <category>软件</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>八路抢答器课程设计报告</title>
     <url>/2020/05/31/%E5%85%AB%E8%B7%AF%E6%8A%A2%E7%AD%94%E5%99%A8%E8%AF%BE%E8%AE%BE%E6%8A%A5%E5%91%8A/</url>
     <content><![CDATA[<blockquote>
@@ -4738,22 +4772,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>在Ubuntu服务器上安装MySQL8</title>
-    <url>/2020/03/01/%E5%9C%A8Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql8/</url>
-    <content><![CDATA[<p>在<a href="http://dev.mysql.com/downloads/repo/apt/%EF%BC%8C%E4%B8%8B%E8%BD%BD%E4%B8%80%E4%B8%AAmysql-apt-config_0%E2%80%A6%E2%80%A6._all.deb%EF%BC%8C%E4%BC%A0%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%EF%BC%8C%E7%94%A8dpkg">http://dev.mysql.com/downloads/repo/apt/，下载一个mysql-apt-config_0……._all.deb，传到服务器上，用dpkg</a> -i mysql-apt-config_0._…..all.deb安装执行，选择mysql8，OK之后回到终端窗口</p>
-<p>执行sudo apt update</p>
-<p>然后使用sudo apt install mysql-server命令，就会安装MySQL8.0</p>
-]]></content>
-      <categories>
-        <category>软件</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>软件</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>基本数据类型和包装类型</title>
     <url>/2023/12/25/%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<h1 id="两者的区别"><a href="#两者的区别" class="headerlink" title="两者的区别"></a>两者的区别</h1><p><img data-src="/../images/%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8C%BA%E5%88%AB/primitive-type-vs-packaging-type.png" alt="基本类型 vs 包装类型"></p>
@@ -4806,26 +4824,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大二下学期总结</title>
-    <url>/2020/07/09/%E5%A4%A7%E4%BA%8C%E4%B8%8B%E5%AD%A6%E6%9C%9F%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="aa3dfea4f24cd683ddff13030c08f03c6e3f3ab355b2c8d36abdf37df33fdb61">99b23c07cf5459d82b841027c3c8076927a9f0a9aac67be1dcfd0dc9dc4fe5873617ad29598f65a1927df3de1b4486a33ba82c048b4287ace2fd325eb537aee8472803d5a6a9beaaf29fb27454f2159c92b55f972810575f0f04b1d25cc578a430dd703994e8226676683ef8147f3ab03ee00238849367a202a76f6d3263ff457db9c736eb09b1ae094d772ac18066704ea0c587ecf8a132f659b02f2b268fb2ed4e850d2714792add21de86591f2ace392abf28f83dbc72c129f285c122715d117b8df6d3e092d496607539a63bb81d4e0636fc7d22100d5bec9d8cbb84de997fe01eedfa98a3f5b4fc83ae9223acf8b1e62fd64d68ab75655a1891876a0eaf9c1b40b053db049c898629917977e5c6f2713fcf95abb1be87a544c96a807287d7af73c1495e30883a179da92cff7ffc11652e4b8cb8ef9c983d6ba2653a6d5c503e263711615d5d01176faf9c4346b2de6864cbb98f7cbcb0ff0970eb878769c2d1be18bea7ab79c4c99909867e82182c4b74b0ff6be0205c59a12474534a8068a95ed97350b8f9e8a2bab55150d150b0b48724156559bb5fb9a326ecfc5cfce23fe0132d6968c22603f80ef27947a3303f818ef7650fa7253c974f47aafd9ceded8ab760dee57747122c36f81f113ea2f66bb508cd64613da4a8a823bb48ad69b05fa97ce771ad90d30f8f181ef05924ac831089e7ceb8bbfe0dc71a57346a7e8679a9dbebd35a850e62c0e0cddd59e3bd787d4ea4f2af2e3b49d55e3ecdad4957a1c46a75a6f15f9bb156f129ae39c3683b87f83a14f799d8da9034eeb5906cd35701bc290ec38446b9d675c86544dcb6cfa8abddae5148b33f4b7e52a6e0a62146bd73b73dca82007833d99f28cff3619adcba7754f95aaca2785427fc6506d29d80504b1dcd371836b390be2af35d071d34c1d3ecd76d9def892b96d0c068878d07a53de69c9a8cd710c2118c722184f47dc80c088a0397c81e206a271c1c36ae3d2899176be2c485ac69f410bcd8d8341ea0cbda0d2f80903bf43ea3ec47a86cfa32d6f5a4c9e622427a12073d16f9549c72cbaa17ec86368bf23baf2348c3e296d23aaf996be69edcff05b7da49d97c8aeb425395eb3cf1c758896db6150555ffeb84fa6e1095c86a8e715c4cbd9cc37b1258a237a76732df1e67ecaa856925cb33be4ea5335fd5e3d30c633978cff52ee760810710863a285be8b2422581b08177ea7a6ec3c2388ea54053d62f78266095318a88b8c0d8cac123322ad042a8175457b0be922de9305bfd10640d8907876945e895af6250fc13fc52eae88a6d496bd2b354c00596de3a46afddebbd6dd2e282b87a67119154eda70388128502847e89d98b41f75baff04d0126bfe9fe3f79824ec3c059e60ea936acfd2293b109114ab3623ca5395614f73e20ceee9ffe980a9b11cb6fa17b1a1d93dbed45921bb111c7012a52961e0d16153ef8cd35ebb090b053769f85a7954ce80164081b00417f6e6d9321612b0f8ffb0ec5ce34ebb91a8537561e549df9a0cd8aaf32b0c861e42fa2a2ddcb86c3f940d2f6398923f355b67d179f344af1474558e004f556be8cadcd714cf4a48ac7f867e59fc96f51ae7af394be35c887ae4fe1296e2f2d0d46e11f48df030d6c380f5304a61a875a347831f6710bcdba6ba53c03101cbee0fff2949e2bde18005065a456e42b41cc397cb59b08a4f48d39968688acb209ba4010d808ff77458e077745e0dff8a63b30dcd1495149d1a1ca624d949de676631e1c5a133e63fc74443c4a96a2a43d28e554d06bf351499b6067ba6ec4b7e0b82bdb3e078c7b63a77a4adcd52700a0e4dfa884e41cdeea841f5af5c8f570f7d3bd0086d04c4fb6fac9467d5ec3a85a6cf4e8f20bdfb1b6c01e04fdf71c03c61fed9cac585b65952103ed657339d8a9649f38b5633bd0296ba21d84409f69dd9a78e8df565117ee9b4b070585223d32dc230f9e11a922e8aee3d3770eef9f1968b1df5b1cca26a3af5917cc66844b388ebe1f4e011e903065a07a6445fcaae7d68a2d16381244f9445b93afc996e93da5108f92c5cb29e0ffa438eb840002a57ae82e6a5938abfb06a245e34fc035af3913b789498666c66d086798feb4b92a7c6b415901a80bc8d063c07216446871c117f1206e5f2b788dea882d8a99e96dccba76e3ac15577d017ad6d480581b5f59b7ad88e9ceedd5641981edfbcd53d7df6ffeac490f426465009b009cf78c4a1154765cccbd59b0fbbcd6506ec0864fed170d048c2feaf729d7a3e01e33e050608a019eed1db0e98ee56c3e49a3b31b2058f7fb6b500adb2a1a7f653158d772aaf00ab0104ca17c7c31ce4e6d15b26a26ad88836edfadf4214d9141d6c77dd4de9f273dd21edce82a2313b1b9ae3517405d4836b39e8be5438b443d59c43c35809f173c40f7becefe44c0fe755d358dda0b1f7c895df24c22de424ae04d71ee14e513dd037b3a582db1a8d4a6a8531e333cc3d781687b6738548cc5d2ec7d64465e7e39f397be9101a92a1b29094ce747b106be19fc7474d1e4a42fb772baa0dd81bd6b59cb9ac80a089dc9f891213fc25a533f6275486fc5e2bcdd957aba940b388bc80bb66b8dab90c8beec3afcc93db542bc56487ae7049c80fbd5635cdd53f726c7c1f5a7e9a2bd09de49bd0e0bf618eaa1ce1b6cce34f78d3c726b2a1b99ac16d77015cb73f9e9647cda0bd7677848b869a209a099ecdf878553acfbcc6a90520a93396e8e9dd933acc33a055fadb0c181420f5b4557ae2251929f9a708255c54175977f2534e8bc5931395d649ca11dca124d791a1ca4266ef05bbbde676d6da6eb0ffb7cec23c6bca86a44b678871ee71debd002a94a2b83ae7470913ba9f7b34c8a239b73ab9ed5e3183f50914418f5cdaf694d522beb6890bc63ddc41e02fb965438ab3f3128d653f4f3dc52a7c70cdfc24679e756859fe4134998c126c44e2c8f65c54135ce16b92e8417b14163fa514bfb4ee174ae846a1b2e1b11d364cc20f945568d345a4e1b43ebf86f975561fa270d658cb5f9a599c2598a7a064f40ed7037ee14734f09d594c85649884634044746a2f89ecc0af6ad9a2a6c8ede9ad27c32b4f2711b91850dc63e702fc74cbe30a49b67678374</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">请输入密码进行查看</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <tags>
-        <tag>感悟</tag>
-        <tag>总结</tag>
       </tags>
   </entry>
   <entry>
@@ -4909,6 +4907,26 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       <tags>
         <tag>羊毛</tag>
         <tag>转载</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>大二下学期总结</title>
+    <url>/2020/07/09/%E5%A4%A7%E4%BA%8C%E4%B8%8B%E5%AD%A6%E6%9C%9F%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="aa3dfea4f24cd683ddff13030c08f03c6e3f3ab355b2c8d36abdf37df33fdb61">99b23c07cf5459d82b841027c3c8076927a9f0a9aac67be1dcfd0dc9dc4fe5873617ad29598f65a1927df3de1b4486a33ba82c048b4287ace2fd325eb537aee8472803d5a6a9beaaf29fb27454f2159c92b55f972810575f0f04b1d25cc578a430dd703994e8226676683ef8147f3ab03ee00238849367a202a76f6d3263ff457db9c736eb09b1ae094d772ac18066704ea0c587ecf8a132f659b02f2b268fb2ed4e850d2714792add21de86591f2ace392abf28f83dbc72c129f285c122715d117b8df6d3e092d496607539a63bb81d4e0636fc7d22100d5bec9d8cbb84de997fe01eedfa98a3f5b4fc83ae9223acf8b1e62fd64d68ab75655a1891876a0eaf9c1b40b053db049c898629917977e5c6f2713fcf95abb1be87a544c96a807287d7af73c1495e30883a179da92cff7ffc11652e4b8cb8ef9c983d6ba2653a6d5c503e263711615d5d01176faf9c4346b2de6864cbb98f7cbcb0ff0970eb878769c2d1be18bea7ab79c4c99909867e82182c4b74b0ff6be0205c59a12474534a8068a95ed97350b8f9e8a2bab55150d150b0b48724156559bb5fb9a326ecfc5cfce23fe0132d6968c22603f80ef27947a3303f818ef7650fa7253c974f47aafd9ceded8ab760dee57747122c36f81f113ea2f66bb508cd64613da4a8a823bb48ad69b05fa97ce771ad90d30f8f181ef05924ac831089e7ceb8bbfe0dc71a57346a7e8679a9dbebd35a850e62c0e0cddd59e3bd787d4ea4f2af2e3b49d55e3ecdad4957a1c46a75a6f15f9bb156f129ae39c3683b87f83a14f799d8da9034eeb5906cd35701bc290ec38446b9d675c86544dcb6cfa8abddae5148b33f4b7e52a6e0a62146bd73b73dca82007833d99f28cff3619adcba7754f95aaca2785427fc6506d29d80504b1dcd371836b390be2af35d071d34c1d3ecd76d9def892b96d0c068878d07a53de69c9a8cd710c2118c722184f47dc80c088a0397c81e206a271c1c36ae3d2899176be2c485ac69f410bcd8d8341ea0cbda0d2f80903bf43ea3ec47a86cfa32d6f5a4c9e622427a12073d16f9549c72cbaa17ec86368bf23baf2348c3e296d23aaf996be69edcff05b7da49d97c8aeb425395eb3cf1c758896db6150555ffeb84fa6e1095c86a8e715c4cbd9cc37b1258a237a76732df1e67ecaa856925cb33be4ea5335fd5e3d30c633978cff52ee760810710863a285be8b2422581b08177ea7a6ec3c2388ea54053d62f78266095318a88b8c0d8cac123322ad042a8175457b0be922de9305bfd10640d8907876945e895af6250fc13fc52eae88a6d496bd2b354c00596de3a46afddebbd6dd2e282b87a67119154eda70388128502847e89d98b41f75baff04d0126bfe9fe3f79824ec3c059e60ea936acfd2293b109114ab3623ca5395614f73e20ceee9ffe980a9b11cb6fa17b1a1d93dbed45921bb111c7012a52961e0d16153ef8cd35ebb090b053769f85a7954ce80164081b00417f6e6d9321612b0f8ffb0ec5ce34ebb91a8537561e549df9a0cd8aaf32b0c861e42fa2a2ddcb86c3f940d2f6398923f355b67d179f344af1474558e004f556be8cadcd714cf4a48ac7f867e59fc96f51ae7af394be35c887ae4fe1296e2f2d0d46e11f48df030d6c380f5304a61a875a347831f6710bcdba6ba53c03101cbee0fff2949e2bde18005065a456e42b41cc397cb59b08a4f48d39968688acb209ba4010d808ff77458e077745e0dff8a63b30dcd1495149d1a1ca624d949de676631e1c5a133e63fc74443c4a96a2a43d28e554d06bf351499b6067ba6ec4b7e0b82bdb3e078c7b63a77a4adcd52700a0e4dfa884e41cdeea841f5af5c8f570f7d3bd0086d04c4fb6fac9467d5ec3a85a6cf4e8f20bdfb1b6c01e04fdf71c03c61fed9cac585b65952103ed657339d8a9649f38b5633bd0296ba21d84409f69dd9a78e8df565117ee9b4b070585223d32dc230f9e11a922e8aee3d3770eef9f1968b1df5b1cca26a3af5917cc66844b388ebe1f4e011e903065a07a6445fcaae7d68a2d16381244f9445b93afc996e93da5108f92c5cb29e0ffa438eb840002a57ae82e6a5938abfb06a245e34fc035af3913b789498666c66d086798feb4b92a7c6b415901a80bc8d063c07216446871c117f1206e5f2b788dea882d8a99e96dccba76e3ac15577d017ad6d480581b5f59b7ad88e9ceedd5641981edfbcd53d7df6ffeac490f426465009b009cf78c4a1154765cccbd59b0fbbcd6506ec0864fed170d048c2feaf729d7a3e01e33e050608a019eed1db0e98ee56c3e49a3b31b2058f7fb6b500adb2a1a7f653158d772aaf00ab0104ca17c7c31ce4e6d15b26a26ad88836edfadf4214d9141d6c77dd4de9f273dd21edce82a2313b1b9ae3517405d4836b39e8be5438b443d59c43c35809f173c40f7becefe44c0fe755d358dda0b1f7c895df24c22de424ae04d71ee14e513dd037b3a582db1a8d4a6a8531e333cc3d781687b6738548cc5d2ec7d64465e7e39f397be9101a92a1b29094ce747b106be19fc7474d1e4a42fb772baa0dd81bd6b59cb9ac80a089dc9f891213fc25a533f6275486fc5e2bcdd957aba940b388bc80bb66b8dab90c8beec3afcc93db542bc56487ae7049c80fbd5635cdd53f726c7c1f5a7e9a2bd09de49bd0e0bf618eaa1ce1b6cce34f78d3c726b2a1b99ac16d77015cb73f9e9647cda0bd7677848b869a209a099ecdf878553acfbcc6a90520a93396e8e9dd933acc33a055fadb0c181420f5b4557ae2251929f9a708255c54175977f2534e8bc5931395d649ca11dca124d791a1ca4266ef05bbbde676d6da6eb0ffb7cec23c6bca86a44b678871ee71debd002a94a2b83ae7470913ba9f7b34c8a239b73ab9ed5e3183f50914418f5cdaf694d522beb6890bc63ddc41e02fb965438ab3f3128d653f4f3dc52a7c70cdfc24679e756859fe4134998c126c44e2c8f65c54135ce16b92e8417b14163fa514bfb4ee174ae846a1b2e1b11d364cc20f945568d345a4e1b43ebf86f975561fa270d658cb5f9a599c2598a7a064f40ed7037ee14734f09d594c85649884634044746a2f89ecc0af6ad9a2a6c8ede9ad27c32b4f2711b91850dc63e702fc74cbe30a49b67678374</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">请输入密码进行查看</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <tags>
+        <tag>感悟</tag>
+        <tag>总结</tag>
       </tags>
   </entry>
   <entry>
