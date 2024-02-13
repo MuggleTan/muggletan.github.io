@@ -412,7 +412,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-13 22:20:59" itemprop="dateModified" datetime="2024-02-13T22:20:59+08:00">2024-02-13</time>
+      <time title="修改时间：2024-02-13 22:30:38" itemprop="dateModified" datetime="2024-02-13T22:30:38+08:00">2024-02-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -434,7 +434,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="编辑自定义的-service文件"><a href="#编辑自定义的-service文件" class="headerlink" title="编辑自定义的.service文件"></a>编辑自定义的.service文件</h1><p>在<code>/lib/systemd/system </code>目录下创建自定义的<code>.service</code>文件</p>
+          <h1 id="编辑自定义的-service文件"><a href="#编辑自定义的-service文件" class="headerlink" title="编辑自定义的.service文件"></a>编辑自定义的.service文件</h1><p>在<code>/etc/systemd/system/ </code>目录下创建自定义的<code>.service</code>文件</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=sun-panel		<span class="comment"># 服务描述</span></span><br><span class="line">After=syslog.target</span><br><span class="line">After=network.target		<span class="comment"># 等待网络启动之后再启动此服务</span></span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">RestartSec=3s						<span class="comment"># 失败后等待 3 秒再尝试重启</span></span><br><span class="line">Type=simple							</span><br><span class="line">User=root								<span class="comment"># 以指定的用户身份运行服务</span></span><br><span class="line">Group=root</span><br><span class="line">ExecStart=/root/sun-panel/sun-panel <span class="comment"># 启动命令 </span></span><br><span class="line">WorkingDirectory=/root/sun-panel    <span class="comment"># 启动程序所在目录</span></span><br><span class="line">Restart=always</span><br><span class="line">Environment=USER=root HOME=/root/</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
 
 <h1 id="注册服务"><a href="#注册服务" class="headerlink" title="注册服务"></a>注册服务</h1><p>在系统中注册你的服务，这样系统每次开机都会自动启动你的服务，并且可以通过service命令来启动、停止和查看你的服务</p>
