@@ -88,7 +88,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">32</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">28</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">60</span></a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">32</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">28</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">61</span></a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -159,7 +159,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-count">61</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -222,6 +222,160 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2024/02/08/SpringBoot%20AOP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="muggle">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="这边风景独好">
+      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 这边风景独好">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/08/SpringBoot%20AOP/" class="post-title-link" itemprop="url">SpringBoot AOP</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-02-08 20:37:23 / 修改时间：21:14:46" itemprop="dateCreated datePublished" datetime="2024-02-08T20:37:23+08:00">2024-02-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="AOP是什么"><a href="#AOP是什么" class="headerlink" title="AOP是什么"></a>AOP是什么</h1><p>AOP（Aspect Oriented Programming）意为：面向切面编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。</p>
+<p>利用AOP可对业务逻辑进行增强，在不改变原有逻辑的基础上，在其前后进行处理。降低了耦合性，减少了大量冗余的操作。特别适合用于大量方法都需要进行相同处理的操作。</p>
+<h1 id="AOP相关概念"><a href="#AOP相关概念" class="headerlink" title="AOP相关概念"></a>AOP相关概念</h1><p>![AOP](..&#x2F;images&#x2F;SpringBoot AOP&#x2F;32938e240b174d589359defc6a4828cf.png)</p>
+<ul>
+<li>切入点（Pointcut）：被增强的方法。</li>
+<li>通知、增强方法（Advice）：对目标方法的增强，有五种增强类型。<ul>
+<li>环绕通知（@Around）：内部执行方法，在方法执行的前后操作。</li>
+<li>前置通知（@Before）：再发执行前执行。</li>
+<li>后置通知（@After）：方法执行后执行。</li>
+<li>返回通知（@AfterReturning）：方法返回之后执行。</li>
+<li>异常通知（@AfterThrowing）：方法抛出异常后执行。</li>
+</ul>
+</li>
+<li>切面（Aspect）：切入点+通知（增强方法），一般是指被<code>@Aspect</code>修饰的类，代表着某一具体功能的<code>AOP</code>逻辑。</li>
+</ul>
+<p>切入点的匹配方法：</p>
+<table>
+<thead>
+<tr>
+<th>表达式类型</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>execution()</td>
+<td>匹配方法，最全的一个</td>
+</tr>
+<tr>
+<td>args()</td>
+<td>匹配入参类型</td>
+</tr>
+<tr>
+<td>@args()</td>
+<td>匹配入参类型上的注解</td>
+</tr>
+<tr>
+<td>@annotation()</td>
+<td>匹配方法上的注解</td>
+</tr>
+<tr>
+<td>within()</td>
+<td>匹配类路径</td>
+</tr>
+<tr>
+<td>@within()</td>
+<td>匹配类上的注解</td>
+</tr>
+<tr>
+<td>this()</td>
+<td>匹配类路径，实际上AOP代理的类</td>
+</tr>
+<tr>
+<td>target()</td>
+<td>匹配类路径，目标类</td>
+</tr>
+<tr>
+<td>@target()</td>
+<td>匹配类上的注解</td>
+</tr>
+</tbody></table>
+<h1 id="AOP原理"><a href="#AOP原理" class="headerlink" title="AOP原理"></a>AOP原理</h1><p>AOP的代理使用JDK动态代理和CGLIB代理来实现，默认如果目标对象是接口则使用JDK动态代理，否则使用CGLIB来生成动态代理类。</p>
+<p>动态代理：程序在执行过程中使用JDK的反射机制，创建代理对象，并动态的指定要代理目标类。动态代理涉及的三个类：</p>
+<ul>
+<li><p>InvocationHandler接口：处理器，负责调用目标方法（被代理类中的方法），并事项增强功能；通过代理类对象执行目标接口中的方法，会把方法的调用分配给调用处理器的事项类，执行实现类中的invoke()方法，我们需要把在该invoke()方法中实现调用目标类的目标方法；</p>
+</li>
+<li><p>Proxy 类：通过 JDK 的 java.lang.reflect.Proxy 类实现动态代理 ，使用其静态方法 newProxyInstance()，依据目标对象（被代理类的对象）、业务接口及调用处理器三者，自动生成一个动态代理对象。</p>
+</li>
+<li><p>Method 类：Method 是实例化的对象，有一个方法叫 invoke()，该方法在反射中就是用来执行反射对象的方法的。</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2024/01/19/Debian%E4%B8%AD%E6%B3%A8%E5%86%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E6%9C%8D%E5%8A%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -258,7 +412,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-01-21 11:20:24" itemprop="dateModified" datetime="2024-01-21T11:20:24+08:00">2024-01-21</time>
+      <time title="修改时间：2024-02-13 22:20:59" itemprop="dateModified" datetime="2024-02-13T22:20:59+08:00">2024-02-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -280,7 +434,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="编辑自定义的-service文件"><a href="#编辑自定义的-service文件" class="headerlink" title="编辑自定义的.service文件"></a>编辑自定义的.service文件</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=sun-panel		<span class="comment"># 服务描述</span></span><br><span class="line">After=syslog.target</span><br><span class="line">After=network.target		<span class="comment"># 等待网络启动之后再启动此服务</span></span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">RestartSec=3s						<span class="comment"># 失败后等待 3 秒再尝试重启</span></span><br><span class="line">Type=simple							</span><br><span class="line">User=root								<span class="comment"># 以指定的用户身份运行服务</span></span><br><span class="line">Group=root</span><br><span class="line">ExecStart=/root/sun-panel/sun-panel <span class="comment"># 启动命令 </span></span><br><span class="line">WorkingDirectory=/root/sun-panel    <span class="comment"># 启动程序所在目录</span></span><br><span class="line">Restart=always</span><br><span class="line">Environment=USER=root HOME=/root/</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+          <h1 id="编辑自定义的-service文件"><a href="#编辑自定义的-service文件" class="headerlink" title="编辑自定义的.service文件"></a>编辑自定义的.service文件</h1><p>在<code>/lib/systemd/system </code>目录下创建自定义的<code>.service</code>文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=sun-panel		<span class="comment"># 服务描述</span></span><br><span class="line">After=syslog.target</span><br><span class="line">After=network.target		<span class="comment"># 等待网络启动之后再启动此服务</span></span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">RestartSec=3s						<span class="comment"># 失败后等待 3 秒再尝试重启</span></span><br><span class="line">Type=simple							</span><br><span class="line">User=root								<span class="comment"># 以指定的用户身份运行服务</span></span><br><span class="line">Group=root</span><br><span class="line">ExecStart=/root/sun-panel/sun-panel <span class="comment"># 启动命令 </span></span><br><span class="line">WorkingDirectory=/root/sun-panel    <span class="comment"># 启动程序所在目录</span></span><br><span class="line">Restart=always</span><br><span class="line">Environment=USER=root HOME=/root/</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
 
 <h1 id="注册服务"><a href="#注册服务" class="headerlink" title="注册服务"></a>注册服务</h1><p>在系统中注册你的服务，这样系统每次开机都会自动启动你的服务，并且可以通过service命令来启动、停止和查看你的服务</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> your-service-name.service</span><br></pre></td></tr></table></figure>
@@ -1078,116 +1233,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2022/08/02/HTTP%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="muggle">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="这边风景独好">
-      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 这边风景独好">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/02/HTTP%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">HTTP常见面试问题</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-08-02 18:42:22" itemprop="dateCreated datePublished" datetime="2022-08-02T18:42:22+08:00">2022-08-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-09-19 21:03:13" itemprop="dateModified" datetime="2022-09-19T21:03:13+08:00">2022-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="HTTP基本概念"><a href="#HTTP基本概念" class="headerlink" title="HTTP基本概念"></a>HTTP基本概念</h1><h2 id="HTTP是什么"><a href="#HTTP是什么" class="headerlink" title="HTTP是什么"></a>HTTP是什么</h2><p>HTTP全称为超文本传输协议（HyperText Transfer Protocol）。</p>
-<ol>
-<li><p>超文本</p>
-<p>如HTTP名字中所说的，其传输的是超文本，超文本从字面上理解是超过了普通的文本文字，也就是还包括文字以外的内容，如图片、视频、超链接等，超文本	就是这些内容的混合体。</p>
-<p>HTML（<strong>H</strong>yper <strong>T</strong>ext <strong>M</strong>arkup <strong>L</strong>anguage）就是最常见的超文本了，它本身只是纯文字的文件，但是内部用很多标签定义了图片、视频的链接，经过浏览器解释之后，呈现给我们的就是一个有文字、有图片和视频的网页了。</p>
-</li>
-<li><p>传输</p>
-<p>所谓“传输”，就是将东西从一个地方搬到另一个地方。</p>
-<p>HTTP协议是一个双向协议。</p>
-<p>我们上网的时候，浏览器是请求方A，访问的网站就是应答方B，双方约定使用HTTP协议来通信，于是浏览器把请求数据发送给网站，网站再把一些数据返回给浏览器，最后由浏览器渲染出来显示在屏幕上。</p>
-<img data-src="/images/HTTP常见面试问题/5-请求应答.png" alt="请求-应答"  />
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/08/02/HTTP%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      
-
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 </div>
