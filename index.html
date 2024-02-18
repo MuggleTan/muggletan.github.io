@@ -88,7 +88,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">32</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">28</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">61</span></a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">32</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">28</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -159,7 +159,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -213,6 +213,99 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2024/02/18/Redis%E4%B8%AD%E7%9A%84%E7%A9%BF%E9%80%8F%E3%80%81%E9%9B%AA%E5%B4%A9%E3%80%81%E5%87%BB%E7%A9%BF%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="muggle">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="这边风景独好">
+      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 这边风景独好">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/18/Redis%E4%B8%AD%E7%9A%84%E7%A9%BF%E9%80%8F%E3%80%81%E9%9B%AA%E5%B4%A9%E3%80%81%E5%87%BB%E7%A9%BF%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Redis中的穿透、雪崩、击穿问题</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-02-18 20:39:49 / 修改时间：21:22:19" itemprop="dateCreated datePublished" datetime="2024-02-18T20:39:49+08:00">2024-02-18</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h1><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>Redis中热点数据失效的瞬间，所有的请求都打到MySQL数据库上面，击穿了Redis的缓存，导致性能下降</p>
+<p><img data-src="/../images/Redis%E4%B8%AD%E7%9A%84%E7%A9%BF%E9%80%8F%E3%80%81%E9%9B%AA%E5%B4%A9%E3%80%81%E5%87%BB%E7%A9%BF%E9%97%AE%E9%A2%98/image-20240218210704848.png" alt="image-20240218210704848"></p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
+<li>设置热点数据永不过期</li>
+<li>设置加锁队列（线程锁或分布式锁），先让一个线程去数据库查到数据，缓存到Redis中，然后其他线程再来Redis中取数据</li>
+</ol>
+<h1 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h1><h2 id="原因-1"><a href="#原因-1" class="headerlink" title="原因"></a>原因</h2><p>Redis中缓存的很多数据，在同一时刻失效，或Redis缓存服务器宕机，而导致请求全部打到MySQL上面，给MySQL造成巨大压力</p>
+<p><img data-src="/../images/Redis%E4%B8%AD%E7%9A%84%E7%A9%BF%E9%80%8F%E3%80%81%E9%9B%AA%E5%B4%A9%E3%80%81%E5%87%BB%E7%A9%BF%E9%97%AE%E9%A2%98/image-20240218204959843.png" alt="image-20240218204959843"></p>
+<h2 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
+<li>将缓存数据的过期时间设为随机，避免其都在同一时刻失效</li>
+<li>Redis的高可用，集群+哨兵</li>
+</ol>
+<h1 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h1><h2 id="原因-2"><a href="#原因-2" class="headerlink" title="原因"></a>原因</h2><p>查询的数据在数据库和缓存中都不存在，恶意请求数据，导致每次请求都要去查询数据，导致数据库压力过大或宕机</p>
+<p><img data-src="/../images/Redis%E4%B8%AD%E7%9A%84%E7%A9%BF%E9%80%8F%E3%80%81%E9%9B%AA%E5%B4%A9%E3%80%81%E5%87%BB%E7%A9%BF%E9%97%AE%E9%A2%98/image-20240218211757292.png" alt="image-20240218211757292"></p>
+<h2 id="解决方案-2"><a href="#解决方案-2" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
+<li>对请求参数进行校验（无法完全避免）</li>
+<li>将数据库中不存在的数据也缓存到Redis中，避免每次收到数据库中进行查询</li>
+<li>布隆过滤器</li>
+</ol>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Fd4y1T7pD/?share_source=copy_web&vd_source=7db57f5c954df7540610cd1c0fda8f20">1.【趣话Redis第一弹】我是Redis，MySQL大哥被我坑惨了！</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Qs4y1K7mY/?share_source=copy_web&vd_source=7db57f5c954df7540610cd1c0fda8f20">2.【阿里二面：说说你在项目中是怎么解决redis穿透、雪崩、击穿问题的？一口气说了17分钟。。】 </a></p>
+
+      
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1105,110 +1198,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/08/11/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      
-
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2022/08/10/HTTPS%E5%BB%BA%E7%AB%8B%E7%9A%84%E8%BF%87%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="muggle">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="这边风景独好">
-      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 这边风景独好">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/10/HTTPS%E5%BB%BA%E7%AB%8B%E7%9A%84%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">HTTPS建立的过程</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-08-10 15:20:25" itemprop="dateCreated datePublished" datetime="2022-08-10T15:20:25+08:00">2022-08-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-09-19 21:03:21" itemprop="dateModified" datetime="2022-09-19T21:03:21+08:00">2022-09-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="SSL-x2F-TLS协商基本流程"><a href="#SSL-x2F-TLS协商基本流程" class="headerlink" title="SSL&#x2F;TLS协商基本流程"></a>SSL&#x2F;TLS协商基本流程</h1><ol>
-<li>客户端向服务器索要并验证服务器公钥</li>
-<li>双方协商产生「对话秘钥」</li>
-<li>双方使用「会话秘钥」进行加密通信</li>
-</ol>
-<p>前面两步是SSL&#x2F;TLS的建立过程，也就是TLS握手阶段，SSL&#x2F;TLS「握手阶段」设计的四次通信，如下图所示：</p>
-<img data-src="/images/HTTPS建立的过程/23-HTTPS工作流程.png" alt="HTTPS 连接建立过程"  />
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/08/10/HTTPS%E5%BB%BA%E7%AB%8B%E7%9A%84%E8%BF%87%E7%A8%8B/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
