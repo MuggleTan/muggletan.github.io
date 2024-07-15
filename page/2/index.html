@@ -983,7 +983,39 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h1><table>
+          <h1 id="指令模式"><a href="#指令模式" class="headerlink" title="指令模式"></a>指令模式</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:q</td>
+<td>一般退出</td>
+</tr>
+<tr>
+<td>:q!</td>
+<td>强制退出不保存</td>
+</tr>
+<tr>
+<td>:wq</td>
+<td>保存退出</td>
+</tr>
+<tr>
+<td>:w fileName</td>
+<td>另存为文件名fileName</td>
+</tr>
+<tr>
+<td>:set nu</td>
+<td>显示行号</td>
+</tr>
+<tr>
+<td>:set nonu</td>
+<td>取消行号显示</td>
+</tr>
+</tbody></table>
+<h1 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h1><table>
 <thead>
 <tr>
 <th>快捷键</th>
@@ -1006,15 +1038,113 @@
 <td>dd</td>
 <td>删除当前行</td>
 </tr>
+<tr>
+<td>d$</td>
+<td>删除本行光标后面的内容</td>
+</tr>
+<tr>
+<td>d0</td>
+<td>删除本行光标前面的内容</td>
+</tr>
 </tbody></table>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/09/17/vim%E5%BF%AB%E6%8D%B7%E9%94%AE/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<h1 id="复制粘贴"><a href="#复制粘贴" class="headerlink" title="复制粘贴"></a>复制粘贴</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>yy</td>
+<td>复制当前行</td>
+</tr>
+<tr>
+<td>p（小写）</td>
+<td>在当前行之后粘贴</td>
+</tr>
+<tr>
+<td>P（大写）</td>
+<td>在当前行之前粘贴</td>
+</tr>
+</tbody></table>
+<h1 id="撤销-x2F-恢复"><a href="#撤销-x2F-恢复" class="headerlink" title="撤销&#x2F;恢复"></a>撤销&#x2F;恢复</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>u</td>
+<td>撤销</td>
+</tr>
+<tr>
+<td>ctrl+r</td>
+<td>恢复</td>
+</tr>
+</tbody></table>
+<h1 id="搜索和替换"><a href="#搜索和替换" class="headerlink" title="搜索和替换"></a>搜索和替换</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x2F;text</td>
+<td>在文档后面部分搜索text</td>
+</tr>
+<tr>
+<td>?text</td>
+<td>在文档前面部分搜索text</td>
+</tr>
+<tr>
+<td>n</td>
+<td>移动到后一个搜索结果</td>
+</tr>
+<tr>
+<td>N</td>
+<td>移动到前一个搜索结果</td>
+</tr>
+<tr>
+<td>:%s&#x2F;origin&#x2F;replace&#x2F;g</td>
+<td>将所有origin替换为replace</td>
+</tr>
+</tbody></table>
+<h1 id="光标操作"><a href="#光标操作" class="headerlink" title="光标操作"></a>光标操作</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>w</td>
+<td>以单词为间隔向后移动</td>
+</tr>
+<tr>
+<td>W</td>
+<td>以单位为间隔向后移动，并忽略标点</td>
+</tr>
+<tr>
+<td>b</td>
+<td>以单词为间隔向前移动</td>
+</tr>
+<tr>
+<td>B</td>
+<td>以单词为间隔向前移动，并忽略标点</td>
+</tr>
+<tr>
+<td>G</td>
+<td>移动到文档末尾</td>
+</tr>
+<tr>
+<td>gg</td>
+<td>移动到文档第一行</td>
+</tr>
+</tbody></table>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://3ms.huawei.com/hi/group/2036073/wiki_6478138.html">https://3ms.huawei.com/hi/group/2036073/wiki_6478138.html</a></p>
+
       
     </div>
 

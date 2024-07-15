@@ -23,12 +23,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":true,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="删除   快捷键 功能    dw 删除一个词   dgg 删除至文件开头   dG 删除至文件末尾   dd 删除当前行">
+    <meta name="description" content="指令模式   快捷键 功能    :q 一般退出   :q! 强制退出不保存   :wq 保存退出   :w fileName 另存为文件名fileName   :set nu 显示行号   :set nonu 取消行号显示   删除   快捷键 功能    dw 删除一个词   dgg 删除至文件开头   dG 删除至文件末尾   dd 删除当前行   d$ 删除本行光标后面的内容   d0 删">
 <meta property="og:type" content="article">
 <meta property="og:title" content="vim快捷键快速参考">
 <meta property="og:url" content="http://muggletan.github.io/2021/09/17/vim%E5%BF%AB%E6%8D%B7%E9%94%AE/index.html">
 <meta property="og:site_name" content="这边风景独好">
-<meta property="og:description" content="删除   快捷键 功能    dw 删除一个词   dgg 删除至文件开头   dG 删除至文件末尾   dd 删除当前行">
+<meta property="og:description" content="指令模式   快捷键 功能    :q 一般退出   :q! 强制退出不保存   :wq 保存退出   :w fileName 另存为文件名fileName   :set nu 显示行号   :set nonu 取消行号显示   删除   快捷键 功能    dw 删除一个词   dgg 删除至文件开头   dG 删除至文件末尾   dd 删除当前行   d$ 删除本行光标后面的内容   d0 删">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-09-17T07:56:29.000Z">
 <meta property="article:modified_time" content="2021-09-17T05:56:29.000Z">
@@ -148,7 +148,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-number">1.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4"><span class="nav-number">2.</span> <span class="nav-text">复制粘贴</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%92%A4%E9%94%80-x2F-%E6%81%A2%E5%A4%8D"><span class="nav-number">3.</span> <span class="nav-text">撤销&#x2F;恢复</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E5%92%8C%E6%9B%BF%E6%8D%A2"><span class="nav-number">4.</span> <span class="nav-text">搜索和替换</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">指令模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-number">2.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4"><span class="nav-number">3.</span> <span class="nav-text">复制粘贴</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%92%A4%E9%94%80-x2F-%E6%81%A2%E5%A4%8D"><span class="nav-number">4.</span> <span class="nav-text">撤销&#x2F;恢复</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E5%92%8C%E6%9B%BF%E6%8D%A2"><span class="nav-number">5.</span> <span class="nav-text">搜索和替换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%89%E6%A0%87%E6%93%8D%E4%BD%9C"><span class="nav-number">6.</span> <span class="nav-text">光标操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -290,7 +290,39 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h1><table>
+        <h1 id="指令模式"><a href="#指令模式" class="headerlink" title="指令模式"></a>指令模式</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:q</td>
+<td>一般退出</td>
+</tr>
+<tr>
+<td>:q!</td>
+<td>强制退出不保存</td>
+</tr>
+<tr>
+<td>:wq</td>
+<td>保存退出</td>
+</tr>
+<tr>
+<td>:w fileName</td>
+<td>另存为文件名fileName</td>
+</tr>
+<tr>
+<td>:set nu</td>
+<td>显示行号</td>
+</tr>
+<tr>
+<td>:set nonu</td>
+<td>取消行号显示</td>
+</tr>
+</tbody></table>
+<h1 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h1><table>
 <thead>
 <tr>
 <th>快捷键</th>
@@ -313,9 +345,15 @@
 <td>dd</td>
 <td>删除当前行</td>
 </tr>
+<tr>
+<td>d$</td>
+<td>删除本行光标后面的内容</td>
+</tr>
+<tr>
+<td>d0</td>
+<td>删除本行光标前面的内容</td>
+</tr>
 </tbody></table>
-<span id="more"></span>
-
 <h1 id="复制粘贴"><a href="#复制粘贴" class="headerlink" title="复制粘贴"></a>复制粘贴</h1><table>
 <thead>
 <tr>
@@ -380,6 +418,39 @@
 <td>将所有origin替换为replace</td>
 </tr>
 </tbody></table>
+<h1 id="光标操作"><a href="#光标操作" class="headerlink" title="光标操作"></a>光标操作</h1><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>w</td>
+<td>以单词为间隔向后移动</td>
+</tr>
+<tr>
+<td>W</td>
+<td>以单位为间隔向后移动，并忽略标点</td>
+</tr>
+<tr>
+<td>b</td>
+<td>以单词为间隔向前移动</td>
+</tr>
+<tr>
+<td>B</td>
+<td>以单词为间隔向前移动，并忽略标点</td>
+</tr>
+<tr>
+<td>G</td>
+<td>移动到文档末尾</td>
+</tr>
+<tr>
+<td>gg</td>
+<td>移动到文档第一行</td>
+</tr>
+</tbody></table>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://3ms.huawei.com/hi/group/2036073/wiki_6478138.html">https://3ms.huawei.com/hi/group/2036073/wiki_6478138.html</a></p>
 
     </div>
 
