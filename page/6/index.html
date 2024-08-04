@@ -88,7 +88,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">32</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">28</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">62</span></a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">33</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">31</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">75</span></a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -159,18 +159,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">75</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -222,7 +222,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/03/08/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%9D%97/">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -240,7 +240,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/03/08/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%9D%97/" class="post-title-link" itemprop="url">蓝桥杯单片机基本模块</a>
+          <a href="/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/" class="post-title-link" itemprop="url">Ubuntu系统Apache2部署SSL证书</a>
         </h2>
 
         <div class="post-meta-container">
@@ -251,7 +251,519 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2020-03-08 17:28:17" itemprop="dateCreated datePublished" datetime="2020-03-08T17:28:17+08:00">2020-03-08</time>
+      <time title="创建时间：2020-04-25 18:09:31" itemprop="dateCreated datePublished" datetime="2020-04-25T18:09:31+08:00">2020-04-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-16 14:45:05" itemprop="dateModified" datetime="2022-08-16T14:45:05+08:00">2022-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BB%BA%E7%AB%99/" itemprop="url" rel="index"><span itemprop="name">建站</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>本文档为您介绍了如何在Ubuntu系统以及Apache2中安装阿里云SSL证书。</p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>操作系统：Ubuntu</p>
+<p>Web服务器：Apache 2</p>
+<h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><ul>
+<li>已从<a target="_blank" rel="noopener" href="https://yundunnext.console.aliyun.com/?p=cas#/overview/cn-hangzhou">SSL证书控制台</a>下载Apache服务器证书。</li>
+<li>已安装Open SSL。</li>
+</ul>
+<h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><ol>
+<li><p>运行以下命令在apache2目录下创建ssl目录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行以下命令将下载的阿里云证书文件复制到ssl目录中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -r YourDomainName_public.crt /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -r YourDomainName_chain.crt /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -r YourDomainName.key /etc/apache2/ssl</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/04/25/Ubuntu%E7%B3%BB%E7%BB%9FApache2%E9%83%A8%E7%BD%B2SSL%E8%AF%81%E4%B9%A6/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="muggle">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="这边风景独好">
+      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 这边风景独好">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/" class="post-title-link" itemprop="url">Ubuntu中设置http强制重定向为https</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-04-25 17:54:54" itemprop="dateCreated datePublished" datetime="2020-04-25T17:54:54+08:00">2020-04-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-16 14:45:05" itemprop="dateModified" datetime="2022-08-16T14:45:05+08:00">2022-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BB%BA%E7%AB%99/" itemprop="url" rel="index"><span itemprop="name">建站</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
+<h3 id="2-设置http端口重定向"><a href="#2-设置http端口重定向" class="headerlink" title="2.设置http端口重定向"></a>2.设置http端口重定向</h3><p>将下面这段放到要重定向的站点配置文件里面，放在&lt;\VirtualHost *:80&gt;&lt;\VirtualHost&gt; 标签内的任何位置都行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RewriteEngine on</span><br><span class="line">RewriteCond  %&#123;HTTPS&#125; !=on</span><br><span class="line">RewriteRule  ^(.*)  https://%&#123;SERVER_NAME&#125;<span class="variable">$1</span> [L,R]</span><br></pre></td></tr></table></figure>
+
+<h3 id="重启apach2"><a href="#重启apach2" class="headerlink" title="重启apach2"></a>重启apach2</h3><p>service apache2 restart</p>
+
+      
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/04/15/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="muggle">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="这边风景独好">
+      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 这边风景独好">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/04/15/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/" class="post-title-link" itemprop="url">Java基础知识总结（中）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-04-15 23:08:33" itemprop="dateCreated datePublished" datetime="2020-04-15T23:08:33+08:00">2020-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-16 14:45:05" itemprop="dateModified" datetime="2022-08-16T14:45:05+08:00">2022-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="面向对象与面向过程"><a href="#面向对象与面向过程" class="headerlink" title="面向对象与面向过程"></a>面向对象与面向过程</h2><ul>
+<li><p>面向过程(POP) 与 面向对象(OOP)</p>
+<ul>
+<li><p>二者都是一种思想，面向对象是相对于面向过程而言的。面向过程，强调的 是功能行为，以函数为最小单位，考虑怎么做。面向对象，将功能封装进对 象，强调具备了功能的对象，以类&#x2F;对象为最小单位，考虑谁来做。</p>
+</li>
+<li><p>面向对象更加强调运用人类在日常的思维逻辑中采用的思想方法与原则，如 抽象、分类、继承、聚合、多态等。</p>
+<p><em>面向对象：Object Oriented Programming</em> </p>
+<p><em>面向过程：Procedure Oriented Programming</em></p>
+</li>
+</ul>
+</li>
+<li><p>面向对象的三大特征</p>
+<ul>
+<li>封装（Encapsulation）</li>
+<li>继承（Inheritance）</li>
+<li>多态（Polymorphism）</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/04/15/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%AD%EF%BC%89/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/04/15/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="muggle">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="这边风景独好">
+      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 这边风景独好">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/04/15/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/" class="post-title-link" itemprop="url">IntelliJ Idea配置类和方法的注释模板</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-04-15 22:03:41" itemprop="dateCreated datePublished" datetime="2020-04-15T22:03:41+08:00">2020-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-08-04 17:57:03" itemprop="dateModified" datetime="2024-08-04T17:57:03+08:00">2024-08-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">软件</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E4%BB%B6/%E9%85%8D%E7%BD%AE/" itemprop="url" rel="index"><span itemprop="name">配置</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="设置类的注释模板"><a href="#设置类的注释模板" class="headerlink" title="设置类的注释模板"></a>设置类的注释模板</h2><p><img data-src="/../images/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/SZLA4oF5vn3hMyG.png" alt="image.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* </span></span><br><span class="line"><span class="comment">* <span class="doctag">@author</span> $&#123;USER&#125;</span></span><br><span class="line"><span class="comment">* <span class="doctag">@since</span> $&#123;DATE&#125; $&#123;TIME&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/04/15/idea%E4%B8%AD%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%92%8C%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="muggle">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="这边风景独好">
+      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 这边风景独好">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/" class="post-title-link" itemprop="url">Java基础知识总结（上）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-04-14 20:15:55" itemprop="dateCreated datePublished" datetime="2020-04-14T20:15:55+08:00">2020-04-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-01-21 11:20:24" itemprop="dateModified" datetime="2024-01-21T11:20:24+08:00">2024-01-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>最近在重新学习Java基础，记录一下基础知识，有些不常用的点还是很容易忘的。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/04/03/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E6%8C%89%E9%94%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="muggle">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="这边风景独好">
+      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 这边风景独好">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/04/03/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E6%8C%89%E9%94%AE/" class="post-title-link" itemprop="url">蓝桥杯单片机按键</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-04-03 20:23:47" itemprop="dateCreated datePublished" datetime="2020-04-03T20:23:47+08:00">2020-04-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -284,120 +796,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="锁存器"><a href="#锁存器" class="headerlink" title="锁存器"></a>锁存器</h2><p>蓝桥杯这款单片机是用锁存器来实现引脚的复用的，所以代码写起来很麻烦，总是要开关锁存器</p>
-<p>为了偷懒，可以用宏定义来定义每个锁存器打开的代码，也可以用函数来实现</p>
-<p><strong>用宏定义：</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> Y4 P2 = (P2&amp;0x1f)|0x80;  <span class="comment">//led</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y5 P2 = (P2&amp;0x1f)|0xa0;  <span class="comment">//蜂鸣器和继电器</span></span></span><br><span class="line">P0 = <span class="number">0x40</span>; <span class="comment">//蜂鸣器</span></span><br><span class="line">P0 = <span class="number">0x10</span>；<span class="comment">//继电器</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y6 P2 = (P2&amp;0x1f)|0xc0; <span class="comment">//数码管位选</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Y7 P2 = (P2&amp;0x1f)|0xe0; <span class="comment">//数码管段选</span></span></span><br></pre></td></tr></table></figure>
-
-<p><strong>用函数：</strong></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/08/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%9D%97/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      
-
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/03/03/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%AD%E6%96%AD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="muggle">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="这边风景独好">
-      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 这边风景独好">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/03/03/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%AD%E6%96%AD/" class="post-title-link" itemprop="url">操作系统--操作系统的中断</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-03-03 17:21:39" itemprop="dateCreated datePublished" datetime="2020-03-03T17:21:39+08:00">2020-03-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-16 14:45:05" itemprop="dateModified" datetime="2022-08-16T14:45:05+08:00">2022-08-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="中断的概念"><a href="#中断的概念" class="headerlink" title="中断的概念"></a>中断的概念</h2><blockquote>
-<p>中断是指在计算机执行期间，系统内发生任何非寻常的或非预期的急需处理事件，使得CPU暂时中断当前正在执行的程序而转去执行相应的时间处理程序。待处理完毕后又返回原来被中断处继续执行或调度新的进程执行的过程。</p>
+          <blockquote>
+<p>蓝桥杯这块板子有矩阵按键和独立按键，可以根据换跳帽来切换，下面简单介绍一下这两种按键的程序和基本的原理。</p>
+<p>其他51的板子原理也基本相同，下面的代码也可以参考。</p>
 </blockquote>
-<h3 id="引入目的"><a href="#引入目的" class="headerlink" title="引入目的"></a>引入目的</h3><ol>
-<li>解决CPU和I&#x2F;O设备之间的并行工作问题</li>
-<li>实时实现控制</li>
-</ol>
-<h3 id="中断的作用"><a href="#中断的作用" class="headerlink" title="中断的作用"></a>中断的作用</h3>
+<h2 id="独立按键"><a href="#独立按键" class="headerlink" title="独立按键"></a>独立按键</h2><p>相对于矩阵按键，独立按键简单很多，就只有四个按钮，判断四个按键哪个被按下的情况较为简单</p>
+<p>独立按键的写法也不止一种，这里就介绍两种</p>
+<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a><strong>方法一：</strong></h3><p>实现比较简单，就是一个个判断，检测到为低电平的话就判断按键按下了。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/03/03/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%AD%E6%96%AD/#more" rel="contents">
+              <a class="btn" href="/2020/04/03/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E6%8C%89%E9%94%AE/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -430,7 +838,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%BB%E8%A6%81%E7%B1%BB%E5%9E%8B/">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/03/28/Java%E6%A0%87%E8%AF%86%E7%AC%A6%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -448,7 +856,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%BB%E8%A6%81%E7%B1%BB%E5%9E%8B/" class="post-title-link" itemprop="url">操作系统--操作系统主要类型</a>
+          <a href="/2020/03/28/Java%E6%A0%87%E8%AF%86%E7%AC%A6%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/" class="post-title-link" itemprop="url">Java标识符命名规范</a>
         </h2>
 
         <div class="post-meta-container">
@@ -459,7 +867,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2020-03-02 22:30:50" itemprop="dateCreated datePublished" datetime="2020-03-02T22:30:50+08:00">2020-03-02</time>
+      <time title="创建时间：2020-03-28 23:10:23" itemprop="dateCreated datePublished" datetime="2020-03-28T23:10:23+08:00">2020-03-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -478,7 +886,7 @@
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
         </span>
     </span>
 
@@ -492,127 +900,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="批处理系统"><a href="#批处理系统" class="headerlink" title="批处理系统"></a>批处理系统</h2><h3 id="单道批处理系统处理流程"><a href="#单道批处理系统处理流程" class="headerlink" title="单道批处理系统处理流程"></a>单道批处理系统处理流程</h3><img data-src="/images/操作系统主要类型/4QMJfoxRIXGiu9C.png" alt="image.png" style="zoom:67%;" />
-
-<h3 id="多道批处理操作系统处理流程"><a href="#多道批处理操作系统处理流程" class="headerlink" title="多道批处理操作系统处理流程"></a>多道批处理操作系统处理流程</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%BB%E8%A6%81%E7%B1%BB%E5%9E%8B/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      
-
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%A2%E6%88%90%E4%B8%8E%E5%8F%91%E5%B1%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="muggle">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="这边风景独好">
-      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 这边风景独好">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%A2%E6%88%90%E4%B8%8E%E5%8F%91%E5%B1%95/" class="post-title-link" itemprop="url">操作系统--操作系统的形成与发展</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-03-02 22:19:33" itemprop="dateCreated datePublished" datetime="2020-03-02T22:19:33+08:00">2020-03-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-07-15 22:48:01" itemprop="dateModified" datetime="2024-07-15T22:48:01+08:00">2024-07-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="操作系统的形成时期"><a href="#操作系统的形成时期" class="headerlink" title="操作系统的形成时期"></a>操作系统的形成时期</h2><h3 id="手动操作时期"><a href="#手动操作时期" class="headerlink" title="手动操作时期"></a>手动操作时期</h3><img data-src="/images/操作系统的形成与发展/vuMCXHTLqJBOh5t.png" alt="image.png" style="zoom:80%;" />
-
-<h4 id="存在缺点"><a href="#存在缺点" class="headerlink" title="存在缺点"></a>存在缺点</h4><ol>
-<li><p>用户独占全部计算机资源</p>
-</li>
-<li><p>CPU等待人工操作</p>
-</li>
-<li><p>CPU与I&#x2F;O设备串行操作</p>
-</li>
+          <ol>
+<li>包名：多单词组合时多有字母都小写，例如：helloworld</li>
+<li>类名和接口名：多单词组合所有单词第一个字母大写，例如：HelloWorld</li>
+<li>变量名和方法名：多单词组合时，除了第一个单词其他单词的第一个字母大写，例如：helloWorld</li>
+<li>常量名：所有字母都大写，多单词组合时下划线连接，例如：HELLO_WORLD</li>
 </ol>
-<h3 id="监控程序阶段（早起批处理阶段）"><a href="#监控程序阶段（早起批处理阶段）" class="headerlink" title="监控程序阶段（早起批处理阶段）"></a>监控程序阶段（早起批处理阶段）</h3><img data-src="/images/操作系统的形成与发展/4QMJfoxRIXGiu9C.png" alt="单道批处理系统流程图" style="zoom:67%;" />
 
-<p>单道批处理系统流程图  </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BD%A2%E6%88%90%E4%B8%8E%E5%8F%91%E5%B1%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
       
     </div>
 
@@ -640,7 +934,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%A6%82%E8%BF%B0/">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/03/28/docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -658,7 +952,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">操作系统--操作系统的概述</a>
+          <a href="/2020/03/28/docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">docker的基本使用</a>
         </h2>
 
         <div class="post-meta-container">
@@ -669,14 +963,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2020-03-02 22:04:31" itemprop="dateCreated datePublished" datetime="2020-03-02T22:04:31+08:00">2020-03-02</time>
+      <time title="创建时间：2020-03-28 15:19:10" itemprop="dateCreated datePublished" datetime="2020-03-28T15:19:10+08:00">2020-03-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-07-15 22:48:00" itemprop="dateModified" datetime="2024-07-15T22:48:00+08:00">2024-07-15</time>
+      <time title="修改时间：2022-08-16 14:45:05" itemprop="dateModified" datetime="2022-08-16T14:45:05+08:00">2022-08-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -688,7 +982,7 @@
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/docker/" itemprop="url" rel="index"><span itemprop="name">docker</span></a>
         </span>
     </span>
 
@@ -702,24 +996,24 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="计算机的组成"><a href="#计算机的组成" class="headerlink" title="计算机的组成"></a>计算机的组成</h3><p>硬件+软件</p>
-<h3 id="引入操作系统的目的"><a href="#引入操作系统的目的" class="headerlink" title="引入操作系统的目的"></a>引入操作系统的目的</h3><p>方便性、有效性、可扩充性和开放性</p>
-<h3 id="操作系统的作用"><a href="#操作系统的作用" class="headerlink" title="操作系统的作用"></a>操作系统的作用</h3><ul>
-<li>是计算机硬件和软件的管理者</li>
-<li>是用户使用计算机硬件系统的借口</li>
-<li>操作系统是扩展机&#x2F;虚拟机</li>
-</ul>
-<h3 id="操作系统的定义"><a href="#操作系统的定义" class="headerlink" title="操作系统的定义"></a>操作系统的定义</h3><p>操作系统是控制和管理计算机系统的软硬件资源、合理地组织计算机工作流程，</p>
-<p>以及方便用户的程序和数据集合。</p>
-<h4 id="单道批处理系统的特征"><a href="#单道批处理系统的特征" class="headerlink" title="单道批处理系统的特征"></a>单道批处理系统的特征</h4><ol>
-<li><p>自动性:磁带上的一批作业能自动地逐个地依次运行，无需人工干预</p>
-</li>
-<li><p>顺序性:磁带上的各道作业是顺序地进入内存，各道作业的完成顺序与他们进入内存的顺序之间，在正常情况下应完全相同</p>
-</li>
-<li><p>单道性:内存中仅有一道程序运行。仅当该程序完成或发生异常情况时才换入其后继程序进入内存运行</p>
+          <p><img data-src="/images/docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/z6JqkpsQT2orBhE.png" alt="docker.jpg"></p>
+<blockquote>
+<p>前几天学了一下docker，一方面是记录一下这些命令，另一方面为了复习一下，所以写了下面这些！有什么问题还请指正！</p>
+</blockquote>
+<h2 id="在Linux中下载docker"><a href="#在Linux中下载docker" class="headerlink" title="在Linux中下载docker"></a>在Linux中下载docker</h2><p>CentOS</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install docker</span><br></pre></td></tr></table></figure>
+
+<p>ubunte</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install docker.io</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>找不到包的话update一下</p>
+<p>CentOS<code>yum update</code></p>
+<p>Ubuntu<code>apt-get update</code></p>
+</blockquote>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%A6%82%E8%BF%B0/#more" rel="contents">
+              <a class="btn" href="/2020/03/28/docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -752,7 +1046,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/03/01/%E5%9C%A8Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql8/">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/03/15/spring-boot%E5%9C%A8IDEA%E4%B8%AD%E7%9A%84%E7%83%AD%E9%83%A8%E7%BD%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -770,7 +1064,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/03/01/%E5%9C%A8Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql8/" class="post-title-link" itemprop="url">在Ubuntu服务器上安装MySQL8</a>
+          <a href="/2020/03/15/spring-boot%E5%9C%A8IDEA%E4%B8%AD%E7%9A%84%E7%83%AD%E9%83%A8%E7%BD%B2/" class="post-title-link" itemprop="url">spring-boot在IDEA中的热部署</a>
         </h2>
 
         <div class="post-meta-container">
@@ -781,7 +1075,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2020-03-01 20:39:30" itemprop="dateCreated datePublished" datetime="2020-03-01T20:39:30+08:00">2020-03-01</time>
+      <time title="创建时间：2020-03-15 13:55:59" itemprop="dateCreated datePublished" datetime="2020-03-15T13:55:59+08:00">2020-03-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -800,7 +1094,7 @@
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E4%BB%B6/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+          <a href="/categories/%E8%BD%AF%E4%BB%B6/%E9%85%8D%E7%BD%AE/" itemprop="url" rel="index"><span itemprop="name">配置</span></a>
         </span>
     </span>
 
@@ -814,10 +1108,12 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>因为自己电脑上用的是mysql8，为了部署项目在服务器上的时候不出这方面的问题，服务器就也上mysql8，但是Ubuntu直接apt-get install mysql-server，装的是5.7的版本，所以又得折腾一番</p>
+          <blockquote>
+<p>热部署用起来真的很爽，节约了开发的时间，让开发调试事半功倍，下面就来介绍一下热部署在idea中的热部署</p>
+</blockquote>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/03/01/%E5%9C%A8Ubuntu%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85mysql8/">
+              <a class="btn" href="/2020/03/15/spring-boot%E5%9C%A8IDEA%E4%B8%AD%E7%9A%84%E7%83%AD%E9%83%A8%E7%BD%B2/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -850,7 +1146,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/03/01/hexo%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/03/14/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -868,7 +1164,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/03/01/hexo%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="post-title-link" itemprop="url">hexo一键部署到云服务器</a>
+          <a href="/2020/03/14/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">git的基本使用</a>
         </h2>
 
         <div class="post-meta-container">
@@ -879,202 +1175,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2020-03-01 20:10:22" itemprop="dateCreated datePublished" datetime="2020-03-01T20:10:22+08:00">2020-03-01</time>
+      <time title="创建时间：2020-03-14 15:20:15" itemprop="dateCreated datePublished" datetime="2020-03-14T15:20:15+08:00">2020-03-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-16 14:45:05" itemprop="dateModified" datetime="2022-08-16T14:45:05+08:00">2022-08-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BB%BA%E7%AB%99/" itemprop="url" rel="index"><span itemprop="name">建站</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>之前折腾了好久，用Rsync，ftp，stfp都试过了，都没弄成，在网上看的教程很多也是基于git的，也就是在服务器建一个git的钩子，指定一个目录作为远程仓库地址，可以通过ssh连接，然后......</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/01/hexo%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      
-
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/03/01/%E7%94%A8ssh%E5%85%AC%E9%92%A5%E9%85%8D%E5%AF%B9%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="muggle">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="这边风景独好">
-      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 这边风景独好">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/03/01/%E7%94%A8ssh%E5%85%AC%E9%92%A5%E9%85%8D%E5%AF%B9%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="post-title-link" itemprop="url">用ssh公钥配对登录服务器</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-03-01 19:35:18" itemprop="dateCreated datePublished" datetime="2020-03-01T19:35:18+08:00">2020-03-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-16 14:45:05" itemprop="dateModified" datetime="2022-08-16T14:45:05+08:00">2022-08-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BB%BA%E7%AB%99/" itemprop="url" rel="index"><span itemprop="name">建站</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>心血来潮，突然觉得用密码登录服务器不太安全，折腾了一下，用秘钥配对认证登录，并且关掉了密码登录的方式，记录一下</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/01/%E7%94%A8ssh%E5%85%AC%E9%92%A5%E9%85%8D%E5%AF%B9%E7%99%BB%E5%BD%95%E6%9C%8D%E5%8A%A1%E5%99%A8/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      
-
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/02/27/Markdown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="muggle">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="这边风景独好">
-      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 这边风景独好">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/02/27/Markdown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/" class="post-title-link" itemprop="url">markdown基本语法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-02-27 23:10:52" itemprop="dateCreated datePublished" datetime="2020-02-27T23:10:52+08:00">2020-02-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-08-26 14:40:12" itemprop="dateModified" datetime="2023-08-26T14:40:12+08:00">2023-08-26</time>
+      <time title="修改时间：2024-01-21 11:20:24" itemprop="dateModified" datetime="2024-01-21T11:20:24+08:00">2024-01-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1086,7 +1194,7 @@
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/markdown/" itemprop="url" rel="index"><span itemprop="name">markdown</span></a>
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a>
         </span>
     </span>
 
@@ -1100,108 +1208,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><h4 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一级标题</span></span><br><span class="line"><span class="comment">## 二级标题</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="comment">###### 六级标题</span></span><br></pre></td></tr></table></figure>
+          <img data-src="/images/git的基本使用/HjQNKBory3xwiJv.jpg" alt="git.jpg" style="zoom:50%;" />
 
+<blockquote>
+<p>git是一个前几年兴起的很好用的版本管理工具，用了半年多了体验还是很不错了，也是现在比较主流的版本管理工具。现在分享一下git的基操，但是最好是要理解好这些命令的作用，否则后果可能很严重（手动滑稽），我自己就有过这样的经历。另外，最好是有Linux的命令基础，没有的话理解起来很吃力。</p>
+</blockquote>
+<h2 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h2><h3 id="配置全局的邮箱和用户名"><a href="#配置全局的邮箱和用户名" class="headerlink" title="配置全局的邮箱和用户名"></a>配置全局的邮箱和用户名</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;云代码托管平台（github、gitlab或者gitee）的用户名&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;注册的邮箱&quot;</span></span><br></pre></td></tr></table></figure>
 
-
-<p><strong>注意#和标题之间要有空格才会有效果</strong>   这简直是初学者的一大坑  </p>
+<p>这个也可以在c盘用户的根目录下面打开<code>.gitconfig</code>文件进行配置</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/02/27/Markdown%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      
-
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/02/27/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="muggle">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="这边风景独好">
-      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 这边风景独好">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/02/27/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/" class="post-title-link" itemprop="url">如何利用好学生优惠</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-02-27 10:34:12" itemprop="dateCreated datePublished" datetime="2020-02-27T10:34:12+08:00">2020-02-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-07-15 22:48:03" itemprop="dateModified" datetime="2024-07-15T22:48:03+08:00">2024-07-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%BE%8A%E6%AF%9B/" itemprop="url" rel="index"><span itemprop="name">羊毛</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>本文介绍的是利用学生身份可以享受到的相关学生优惠权益，但也希望各位享受权利的同时不要忘记自己的义务，不要售卖、转手自己的学生优惠资格，使得其他同学无法受益。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/02/27/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/">
+              <a class="btn" href="/2020/03/14/git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1227,7 +1244,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 </div>
