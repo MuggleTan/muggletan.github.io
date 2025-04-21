@@ -1,0 +1,48 @@
+@media only screen and (max-width: 530px) {
+    span {
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .progress {
+        width: 70%;
+        float: right;
+        margin-right: 6%;
+        margin-top: 12px
+    }
+
+    .layui-colla-title{
+        
+        height: 60px;
+    }
+    .layui-badge{
+        margin-top: 5px;
+    }
+
+    span.icon{
+        cursor: pointer;
+    }
+
+}
+
+@media only screen and (min-width: 1200px) {
+    span {
+        font-size: 12px;
+    }
+
+    .progress {
+        width: 70%;
+        float: right;
+        margin-right: 15%;
+        margin-top: 10px
+    }
+
+    .layui-badge{
+        margin-left: 10px;
+    }
+
+    span.icon{
+        cursor: pointer;
+    }
+
+}

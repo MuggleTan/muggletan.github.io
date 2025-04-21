@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":true,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="第一题（貌似是考察方法的参数传递）12345678910111213public class Test&amp;#123;    public static void main(String[] args)&amp;#123;    int a &#x3D; 10;    int b &#x3D; 20;    method(a,b);&#x2F;&#x2F;在调用method()方法之后输出a &#x3D; 100,b &#x3D; 200    System.out.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中看似简单实际很坑的题目">
+<meta property="og:url" content="http://muggletan.github.io/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/index.html">
+<meta property="og:site_name" content="这边风景独好">
+<meta property="og:description" content="第一题（貌似是考察方法的参数传递）12345678910111213public class Test&amp;#123;    public static void main(String[] args)&amp;#123;    int a &#x3D; 10;    int b &#x3D; 20;    method(a,b);&#x2F;&#x2F;在调用method()方法之后输出a &#x3D; 100,b &#x3D; 200    System.out.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-05-04T02:48:16.000Z">
+<meta property="article:modified_time" content="2025-04-15T11:48:31.028Z">
+<meta property="article:author" content="muggle">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://muggletan.github.io/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://muggletan.github.io/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/","path":"2020/05/04/Java中看似简单实际很坑的题/","title":"Java中看似简单实际很坑的题目"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Java中看似简单实际很坑的题目 | 这边风景独好</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">这边风景独好</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Record And Share</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">33</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">31</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">79</span></a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%A2%98%EF%BC%88%E8%B2%8C%E4%BC%BC%E6%98%AF%E8%80%83%E5%AF%9F%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">第一题（貌似是考察方法的参数传递）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">方法一：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">方法二：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%A2%98%EF%BC%88%E5%BE%AE%E8%BD%AF%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">第二题（微软面试题）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">第三题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">第四题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E9%A2%98"><span class="nav-number">7.</span> <span class="nav-text">第五题</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="muggle"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">muggle</p>
+  <div class="site-description" itemprop="description">有足够的积累，又一直在路上，才会有无限的可能。</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/muggletan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;muggletan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tan_xuyang@163.com" title="E-Mail → mailto:tan_xuyang@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/muggletan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="muggle">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="这边风景独好">
+      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java中看似简单实际很坑的题目 | 这边风景独好">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java中看似简单实际很坑的题目
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-05-04 10:48:16" itemprop="dateCreated datePublished" datetime="2020-05-04T10:48:16+08:00">2020-05-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-04-15 19:48:31" itemprop="dateModified" datetime="2025-04-15T19:48:31+08:00">2025-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="第一题（貌似是考察方法的参数传递）"><a href="#第一题（貌似是考察方法的参数传递）" class="headerlink" title="第一题（貌似是考察方法的参数传递）"></a>第一题（貌似是考察方法的参数传递）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 20;</span><br><span class="line">    method(a,b);//在调用method()方法之后输出a = 100,b = 200</span><br><span class="line">    System.out.println(&quot;a = &quot; + a);</span><br><span class="line">    System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  &#125;</span><br><span class="line">  static void method(int a,int b)&#123;</span><br><span class="line">    //代码编写处</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果在method中直接写</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = 100;</span><br><span class="line">b = 200;</span><br></pre></td></tr></table></figure>
+
+<p>这个样子会直接被别人鄙视</p>
+<p>其实这是一个脑筋急转弯的题目，直接像上面这样把一个基本数据类型的变量，作为形参传入函数，等于是直接把值赋给了函数中的实参，改变函数中的实参并不会影响主函数中a和b的值，在method()方法调用完之后，方法中的实参a和b就出栈了，此时在主函数输出的仍然是10和20。</p>
+<span id="more"></span>
+
+<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h3><p>机智的方法，调用完method()方法之后就直接退出程序，不让他执行主函数中的print方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  a = 100;</span><br><span class="line">  b = 200;</span><br><span class="line">  System.out.println(&quot;a = &quot; + a);</span><br><span class="line">  System.out.println(&quot;b = &quot; + b);</span><br><span class="line">  System.exit(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">static void method(int a,int b)&#123;</span><br><span class="line">  PrintStream ps = new PrintStream(System.out)&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void println(String x)&#123;</span><br><span class="line">            if(&quot;a = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;a = 100&quot;;</span><br><span class="line">            &#125;else if(&quot;b = 10&quot;.equals(x))&#123;</span><br><span class="line">                x = &quot;b = 200&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            super.println(x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    System.setOut(ps);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方法用的是重写，当要调用println()这个方法分时候不是调用Java库中的println()方法，而是调用这里自己写的这个，就把要输出的“a &#x3D; 10”替换成了”a &#x3D; 100”。</p>
+<h3 id="第二题（微软面试题）"><a href="#第二题（微软面试题）" class="headerlink" title="第二题（微软面试题）"></a>第二题（微软面试题）</h3><blockquote>
+<p> 定义一个int型的数组: int[] arr &#x3D; new int]{12,3,3,34,56,77,432};让数组的每个位置上的值去除以首位置的元素,得到的结果,作为该位置上的新值。遍历新的数组。 </p>
+</blockquote>
+<p>这个题其实很简单，但是一不小心就会出错，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for(int i = 0;i &lt; arr.length;i++)</span><br><span class="line">  arr[i] = arr[i]/arr[0];</span><br></pre></td></tr></table></figure>
+
+<p>自己一顿操作之后以为稳了，实际上结果和原数组是一样的。这样从前面向后面遍历，数组第一个值在第一次就变成1了，之后每次除的arr[0]都是1，所以后面的值都没有发生变化。</p>
+<p>所以简单的题不要掉以轻心。</p>
+<p>正确的写法很简单也不止一种方法，可以从后向前遍历数组，也可以把数组的第一个值赋给一个临时变量，后面的数都除以这个临时变量。</p>
+<h3 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">  public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">    int[] arr1 = new int[]&#123;1,2,3&#125;;</span><br><span class="line">    System.out.println(arr1);</span><br><span class="line"></span><br><span class="line">    char[] arr2 = new char[]&#123;&#x27;a&#x27;,&#x27;b&#x27;,&#x27;c&#x27;&#125;;</span><br><span class="line">    System.out.println(arr2); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>问输出的分别是什么？</p>
+<p>正确答案是arr1输出的是地址值，arr2输出的是abc。</p>
+<p>这其实考的是一个很细的知识点，了解过后就会感觉这个题很low，简直是在是在侮辱自己的智商，不了解的话可能就认为两个都是输出一个地址值。</p>
+<p>这里涉及到了Java中方法的重载，同一个函数名，但是传的参数个数或者参数类型不同的话，他调的方法是不一样的。</p>
+<p>第一个整型的数组，传入的是object类型，调用的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void println(Object x) &#123;</span><br><span class="line">  String s = String.valueOf(x);</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(s);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二个字符型的数组，传入的是char型的数组，调用的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public void println(char x[]) &#123;</span><br><span class="line">  synchronized (this) &#123;</span><br><span class="line">    print(x);</span><br><span class="line">    newLine();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="第四题"><a href="#第四题" class="headerlink" title="第四题"></a>第四题</h3><blockquote>
+<p> 如下两个题目输出结果相同吗？各是什么： </p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Object o1 = true ? new Integer(1) : new Double(2.0);</span><br><span class="line">System.out.println(o1);</span><br><span class="line"></span><br><span class="line">Object o2;</span><br><span class="line">if (true)</span><br><span class="line">    o2 = new Integer(1);</span><br><span class="line">else</span><br><span class="line">    o2 = new Double(2.0);</span><br><span class="line">System.out.println(o2);</span><br></pre></td></tr></table></figure>
+
+<p>正确答案：</p>
+<p>o1输出的是1.0，o2输出的是1</p>
+<p>这个题是看似在考Object类中的方法，但是实际上，这里的三元运算符涉及到一个自动类型提升的问题</p>
+<p>(表达式1)?(表达式2):(表达式3)</p>
+<p>三元运算的最后结果是这三个表达式中的类型“最高”的一种，在计算的过程个中会有自动类型提升</p>
+<h3 id="第五题"><a href="#第五题" class="headerlink" title="第五题"></a>第五题</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void method1() &#123;</span><br><span class="line">  Integer i = new Integer(1);</span><br><span class="line">  Integer j = new Integer(1);</span><br><span class="line">  System.out.println(i == j);</span><br><span class="line">  Integer m = 1;</span><br><span class="line">  Integer n = 1;</span><br><span class="line">  System.out.println(m == n);//</span><br><span class="line">  Integer x = 128;</span><br><span class="line">  Integer y = 128;</span><br><span class="line">  System.out.println(x == y);//</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个输出为false，第二个输出为true，第三个输出为false。</p>
+<p>Integer内部定义了IntegerCache结构，IntegerCache中定义了Integer[],保存了从-128<del>127范围的整数。如果我们使用自动装箱的方式，给Integer赋值的范围在 -128</del>127范围内时，可以直接使用数组中的元素，不用再去new了。目的：提高效率。</p>
+<p>Integer类中的源码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">private static class IntegerCache &#123;</span><br><span class="line">  static final int low = -128;</span><br><span class="line">  static final int high;</span><br><span class="line">  static final Integer cache[];</span><br><span class="line">  static &#123;</span><br><span class="line">    // high value may be configured by property</span><br><span class="line">    int h = 127;</span><br><span class="line">    String integerCacheHighPropValue =</span><br><span class="line">      sun.misc.VM.getSavedProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);</span><br><span class="line">    if (integerCacheHighPropValue != null) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        int i = parseInt(integerCacheHighPropValue);</span><br><span class="line">        i = Math.max(i, 127);</span><br><span class="line">        // Maximum array size is Integer.MAX_VALUE</span><br><span class="line">        h = Math.min(i, Integer.MAX_VALUE - (-low) -1);</span><br><span class="line">      &#125; catch( NumberFormatException nfe) &#123;</span><br><span class="line">        // If the property cannot be parsed into an int, ignore it.</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    high = h;</span><br><span class="line"></span><br><span class="line">    cache = new Integer[(high - low) + 1];</span><br><span class="line">    int j = low;</span><br><span class="line">    for(int k = 0; k &lt; cache.length; k++)</span><br><span class="line">      cache[k] = new Integer(j++);</span><br><span class="line"></span><br><span class="line">    // range [-128, 127] must be interned (JLS7 5.1.7)</span><br><span class="line">    assert IntegerCache.high &gt;= 127;</span><br><span class="line">  &#125;</span><br><span class="line">  private IntegerCache() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我喝杯快乐水！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="muggle 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.jpg" alt="muggle 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>muggle
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://muggletan.github.io/2020/05/04/Java%E4%B8%AD%E7%9C%8B%E4%BC%BC%E7%AE%80%E5%8D%95%E5%AE%9E%E9%99%85%E5%BE%88%E5%9D%91%E7%9A%84%E9%A2%98/" title="Java中看似简单实际很坑的题目">http://muggletan.github.io/2020/05/04/Java中看似简单实际很坑的题/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/04/29/%E8%84%9A%E6%9C%AC%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2hexo/" rel="prev" title="脚本一键部署hexo">
+                  <i class="fa fa-chevron-left"></i> 脚本一键部署hexo
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/05/06/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8B%EF%BC%89/" rel="next" title="Java基础知识总结（下）">
+                  Java基础知识总结（下） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">muggle</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+
+  <script color="0, 0, 0" 
+          opacity="0.7" 
+          zIndex="-1" 
+          count="120" 
+          src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js">
+  </script>
+
+  
+  
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"neutral","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.3/mermaid.min.js","integrity":"sha256-TIYL00Rhw/8WaoUhYTLX9SKIEFdXxg+yMWSLVUbhiLg="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+ 
+
+<script>
+  var OriginTitile = document.title;
+  var titleTime;
+  //换网站的logo
+  function selfSetIcon(url){
+		var links = document.getElementsByTagName('link') 
+		for (var i = 0; i < links.length; i++) { 
+			var link = links[i]
+			var rel = link.rel; 
+            var count = 0;
+			rel = rel.toLowerCase(); 
+			if (rel.indexOf('icon') == 0) { 
+                count++;
+				link.href = url;
+                if(count == 2)
+				    break;
+			}
+		}
+	}
+  
+  document.addEventListener("visibilitychange", function() {
+    if (document.hidden) {
+      document.title = "(●—●)喔噢，崩溃了~|" + OriginTitile;
+      selfSetIcon("https://muggletan.github.io/images/failure.ico");
+      clearTimeout(titleTime);
+    } else {
+      selfSetIcon("/images/avatar.png");
+      document.title = "φ(>ω<*) 咦！又好了！|" + OriginTitile;
+      titleTime = setTimeout(function() {
+        document.title = OriginTitile;
+        
+      }, 2000);
+    }
+  });
+  
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"muggletan","repo":"gitalk-comment","client_id":"7e906c6ddcd0a9948fe9","client_secret":"5885e821d74e4f3ceaabdf6dd5c94bfca7d3aff9","admin_user":"muggletan","distraction_free_mode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"7a969f1662ae7080feb751ce89c8f975"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

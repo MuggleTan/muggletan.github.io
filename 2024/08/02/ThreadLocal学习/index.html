@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"muggletan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"gitalk","storage":true,"lazyload":true,"nav":{"gitalk":{"order":-1}},"activeClass":"gitalk"},"stickytabs":true,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="ThreadLocal简介ThreadLocal顾名思义，就是线程局部变量，也可以叫线程变量。可以让不同的线程访问自己独有的变量，而不会影响其他线程变量，实现了线程隔离级别的变量存储。 常见的使用场景包括：  会话管理：在web应用中，可以使用线程变量来存储请求中的相关信息，这样在后续处理请求的过程中都可以方便的获取到请求相关的信息，比如用户的相关信息。 数据库连接管理：在并发访问数据库的场景下，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThreadLocal学习">
+<meta property="og:url" content="http://muggletan.github.io/2024/08/02/ThreadLocal%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="这边风景独好">
+<meta property="og:description" content="ThreadLocal简介ThreadLocal顾名思义，就是线程局部变量，也可以叫线程变量。可以让不同的线程访问自己独有的变量，而不会影响其他线程变量，实现了线程隔离级别的变量存储。 常见的使用场景包括：  会话管理：在web应用中，可以使用线程变量来存储请求中的相关信息，这样在后续处理请求的过程中都可以方便的获取到请求相关的信息，比如用户的相关信息。 数据库连接管理：在并发访问数据库的场景下，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://muggletan.github.io/images/ThreadLocal%E5%AD%A6%E4%B9%A0/IMG-20240802115006316.png">
+<meta property="article:published_time" content="2024-08-02T02:55:18.000Z">
+<meta property="article:modified_time" content="2025-04-15T11:48:31.039Z">
+<meta property="article:author" content="muggle">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://muggletan.github.io/images/ThreadLocal%E5%AD%A6%E4%B9%A0/IMG-20240802115006316.png">
+
+
+<link rel="canonical" href="http://muggletan.github.io/2024/08/02/ThreadLocal%E5%AD%A6%E4%B9%A0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://muggletan.github.io/2024/08/02/ThreadLocal%E5%AD%A6%E4%B9%A0/","path":"2024/08/02/ThreadLocal学习/","title":"ThreadLocal学习"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ThreadLocal学习 | 这边风景独好</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">这边风景独好</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Record And Share</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">33</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">31</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">79</span></a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ThreadLocal%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">ThreadLocal简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">工作原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">内存泄漏问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%8D%E4%BC%9A%E5%AD%98%E5%9C%A8%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">3.1.</span> <span class="nav-text">1. 不会存在内存泄漏的情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AD%98%E5%9C%A8%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">3.2.</span> <span class="nav-text">2.存在内存泄漏的情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88key%E6%98%AF%E5%BC%B1%E5%BC%95%E7%94%A8"><span class="nav-number">3.3.</span> <span class="nav-text">为什么key是弱引用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B8%85%E7%90%86%E7%AD%96%E7%95%A5"><span class="nav-number">4.</span> <span class="nav-text">清理策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%8E%A2%E6%B5%8B%E5%BC%8F%E6%B8%85%E7%90%86"><span class="nav-number">4.1.</span> <span class="nav-text">1. 探测式清理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%90%AF%E5%8F%91%E5%BC%8F%E6%B8%85%E7%90%86"><span class="nav-number">4.2.</span> <span class="nav-text">2. 启发式清理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%93%AA%E4%BA%9B%E5%9C%B0%E6%96%B9%E4%BC%9A%E8%A7%A6%E5%8F%91%E8%BF%99%E4%B8%A4%E7%A7%8D%E6%B8%85%E7%90%86%E6%96%B9%E5%BC%8F"><span class="nav-number">4.3.</span> <span class="nav-text">3. 哪些地方会触发这两种清理方式</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="muggle"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">muggle</p>
+  <div class="site-description" itemprop="description">有足够的积累，又一直在路上，才会有无限的可能。</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/muggletan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;muggletan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tan_xuyang@163.com" title="E-Mail → mailto:tan_xuyang@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/muggletan" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://muggletan.github.io/2024/08/02/ThreadLocal%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="muggle">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="这边风景独好">
+      <meta itemprop="description" content="有足够的积累，又一直在路上，才会有无限的可能。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ThreadLocal学习 | 这边风景独好">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ThreadLocal学习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-08-02 10:55:18" itemprop="dateCreated datePublished" datetime="2024-08-02T10:55:18+08:00">2024-08-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-04-15 19:48:31" itemprop="dateModified" datetime="2025-04-15T19:48:31+08:00">2025-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="ThreadLocal简介"><a href="#ThreadLocal简介" class="headerlink" title="ThreadLocal简介"></a>ThreadLocal简介</h1><p><strong>ThreadLocal</strong>顾名思义，就是线程局部变量，也可以叫线程变量。可以让不同的线程访问自己独有的变量，而不会影响其他线程变量，实现了线程隔离级别的变量存储。</p>
+<p>常见的使用场景包括：</p>
+<ul>
+<li>会话管理：在web应用中，可以使用线程变量来存储请求中的相关信息，这样在后续处理请求的过程中都可以方便的获取到请求相关的信息，比如用户的相关信息。</li>
+<li>数据库连接管理：在并发访问数据库的场景下，使用线程变量管理数据库的连接，这样每个线程都有自己独立的数据库连接，避免线程之间数据不一致和连接冲突的问题。</li>
+</ul>
+<h1 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h1><p><img data-src="/../images/ThreadLocal%E5%AD%A6%E4%B9%A0/IMG-20240802115006316.png"></p>
+<p><code>Thread</code>类中有一个<code>threadLocals</code>的属性，这是一个<code>ThreadLocalMap</code>对象。<code>ThreadLocalMap</code>可以被看做是一个集合，其内部维护一个<code>Entry[]</code>数组，用来保存<code>ThreadLocal</code>的引用。</p>
+<span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Entry</span> <span class="keyword">extends</span> <span class="title class_">WeakReference</span>&lt;ThreadLocal&lt;?&gt;&gt; &#123;</span><br><span class="line"></span><br><span class="line">    Object value;</span><br><span class="line"></span><br><span class="line">    Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">        <span class="built_in">super</span>(k);</span><br><span class="line">        value = v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当调用<code>ThreadLocal</code>的get方法时，其实是从<code>Thread</code>类中去取<code>threadLocals</code>的值，<code>getMap</code>方法就是从当前的<code>thread</code>对象里面取出<code>threadLocals</code>，如果取出来为<code>null</code>就说说明当前线程还没有创建过<code>ThreadLocalMap</code>就会调用<code>setInitialValue</code>方法来初始化一个<code>ThreadLocalMap</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> T <span class="title function_">get</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">    <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> getMap(t);</span><br><span class="line">    <span class="keyword">if</span> (map != <span class="literal">null</span>) &#123;</span><br><span class="line">        ThreadLocalMap.<span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> map.getEntry(<span class="built_in">this</span>);</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">            <span class="type">T</span> <span class="variable">result</span> <span class="operator">=</span> (T)e.value;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> setInitialValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>总的来说，<code>ThreadLocal</code>是通过在每个线程对象的实例中都维护一个<code>threadLocalMap</code>，然后将<code>ThreadLocal</code>作为map的key（准确来说是<code>ThreadLocal</code>对象的哈希值和此时<code>Entry</code>数组的长度按位与），value就是我们set的对应值，这样每个线程都会有自己的一个map，我们也可以在这一个线程中的任意地方来获取这个map中的值，并且不同线程之间不会互相影响。</p>
+<h1 id="内存泄漏问题"><a href="#内存泄漏问题" class="headerlink" title="内存泄漏问题"></a>内存泄漏问题</h1><h2 id="1-不会存在内存泄漏的情况"><a href="#1-不会存在内存泄漏的情况" class="headerlink" title="1. 不会存在内存泄漏的情况"></a>1. 不会存在内存泄漏的情况</h2><p>不使用线程池创建而单独创建线程时，这种情况下因为<code>ThreadLocalMap</code>是<code>Thread</code>类的一个成员变量，会随着线程的消亡而消亡，即使我们不手动将value移除，<code>ThreadLocalMap</code>也不会存在，其中的Entry数组也不会存在。</p>
+<p>在实际项目中一般也不会这样去使用<code>ThreadLocal</code>，这样使用也毫无意义，并且通常情况下我们都是用线程池来创建对象，线程池中的核心线程基本会伴随着应用程序的整个生命周期。</p>
+<p>另一种情况是我们实例化的<code>ThreadLocal</code>对象是一个长生命周期的，通常就是static修饰的静态类变量，这种情况下<code>ThreadLocal</code>对象的生命周期和应用程序一样长，一般不将其人为赋值为<code>null</code>，就不会出现弱引用的情况，GC也就不会将其给回收掉。但是在我们使用完变量之后还是要将其remove掉，否则另一个用户发起会话可能会错误的读取到上一个用户的值。</p>
+<h2 id="2-存在内存泄漏的情况"><a href="#2-存在内存泄漏的情况" class="headerlink" title="2.存在内存泄漏的情况"></a>2.存在内存泄漏的情况</h2><p>当我们创建的<code>ThreadLocal</code>对象是短生命周期的，随着<code>ThreadLocal</code>对象变成<code>null</code>之后，GC会回收<code>ThreadLocalMap</code>中弱引用的<code>ThreadLocal</code>对象，而它对应的value由于是一个强引用的对象，无法被回收，这个时候value和线程的生命周期一样长，就会一直占着内存造成内存泄漏问题。</p>
+<h2 id="为什么key是弱引用"><a href="#为什么key是弱引用" class="headerlink" title="为什么key是弱引用"></a>为什么key是弱引用</h2><p>弱引用的对象拥有更短暂的生命周期。在垃圾回收器线程扫描它所管辖的内存区域的过程中，一旦发现了只具有弱引用的对象，不管当前内存空间足够与否，都会回收它的内存。不过，由于垃圾回收器是一个优先级很低的线程，因此不一定会很快发现那些只具有弱引用的对象。</p>
+<p>简单理解就是当垃圾回收时，该对象只被<code>WeakReference</code>对象的弱引用字段（T reference）所引用，而未被任何强类型的对象引用，那么，该弱引用的对象就会被回收。</p>
+<ol>
+<li>假设 Entry 的 key 是对 <code>ThreadLocal</code> 对象的强引用：这个 Entry 又持有 <code>ThreadLocal</code> 对象和 value 对象的强引用。如果在其他地方都没有对这个 <code>ThreadLocla</code> 对象的引用了，然后在使用 ThreadLocalMap 的过程中又没有正确地在用完后就调用 remove 方法，所以这个 <code>ThreadLocal</code> 对象和所关联的 value 对象就会跟随着线程一直存在，这样就会可能会造成内存泄漏问题。<br>特别是在使用线程池的时候，核心线程是会一直存在直到程序结束，如果这些线程中的 <code>ThreadLocalMap</code> 中的数据没有被及时清理，就会一直占用内存，而且在线程复用时可能会导致数据错乱的危险。</li>
+<li>Entry 的 key 是对 <code>ThreadLocal</code> 对象的弱引用：弱引用就意味着，如果没有其他引用对象的强引用关系，那么这个仅被弱引用引用着的对象在下次 GC 时就会被回收掉，这样在一定程度上降低内存泄漏的风险。但同时也引入了新的问题，key 虽然被回收了，但是 value 对象还在，我们无法获取，也无法删除，这样也会存在内存泄漏的风险。虽然 <code>ThreadLocalMap</code> 中在进行 set 和 get 操作时会进行启发式清理和探测式清理，清理一部分 key 为 null 的 Entry 对象，<strong>但是这也只是一种后备选择方案，最重要的还是开发人员在编写代码时记得在使用完数据后及时调用 remove() 方法手动清理</strong>。</li>
+</ol>
+<h1 id="清理策略"><a href="#清理策略" class="headerlink" title="清理策略"></a>清理策略</h1><p><code>ThreadLocalMap</code>一共有两种清理策略，分别是<strong>探测式清理</strong>和<strong>启发式清理</strong>。</p>
+<ul>
+<li>探测式清理：源码中的<code>expungeStaleEntry()</code>方法</li>
+<li>启发式清理：源码中的<code>cleanSomeSlots()</code>方法</li>
+</ul>
+<h2 id="1-探测式清理"><a href="#1-探测式清理" class="headerlink" title="1. 探测式清理"></a>1. 探测式清理</h2><p>探测式清理会从指定的位置（也就是<code>staleSlot</code>）开始向后探测清理过期的数据，将过期的数据，也就是<code>key==null</code>的<code>Entry</code>设置为null，沿途中碰到未过期的数据，就将此数据<code>rehash</code>后重新在table数组中定位，如果定位到的位置已经有数据了，则会依次向后遍历，将未过期的数据放到最靠近此位置并且<code>Entry==null</code>的位置，是的rehash后的Entry数据里正确的桶的位置更近一些。</p>
+<p>简单总结就是探测式清理会将<code>key==null</code>位置的Entry也置为null，不为空的则会重新计算哈希值分配位置，如果重新分配的位置上有元素了，就往后延续。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">expungeStaleEntry</span><span class="params">(<span class="type">int</span> staleSlot)</span> &#123;</span><br><span class="line">    Entry[] tab = table;</span><br><span class="line">    <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// expunge entry at staleSlot</span></span><br><span class="line">    tab[staleSlot].value = <span class="literal">null</span>;</span><br><span class="line">    tab[staleSlot] = <span class="literal">null</span>;</span><br><span class="line">    size--;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Rehash until we encounter null</span></span><br><span class="line">    Entry e;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = nextIndex(staleSlot, len);</span><br><span class="line">         (e = tab[i]) != <span class="literal">null</span>;</span><br><span class="line">         i = nextIndex(i, len)) &#123;</span><br><span class="line">        ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line">        <span class="keyword">if</span> (k == <span class="literal">null</span>) &#123;</span><br><span class="line">            e.value = <span class="literal">null</span>;</span><br><span class="line">            tab[i] = <span class="literal">null</span>;</span><br><span class="line">            size--;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">h</span> <span class="operator">=</span> k.threadLocalHashCode &amp; (len - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span> (h != i) &#123;</span><br><span class="line">                tab[i] = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Unlike Knuth 6.4 Algorithm R, we must scan until</span></span><br><span class="line">                <span class="comment">// null because multiple entries could have been stale.</span></span><br><span class="line">                <span class="keyword">while</span> (tab[h] != <span class="literal">null</span>)</span><br><span class="line">                    h = nextIndex(h, len);</span><br><span class="line">                tab[h] = e;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-启发式清理"><a href="#2-启发式清理" class="headerlink" title="2. 启发式清理"></a>2. 启发式清理</h2><p>启发式清理需要接受两个参数，分别是：</p>
+<ol>
+<li>探测式清理后返回的下标</li>
+<li>数组的总长度</li>
+</ol>
+<p>从源码可以看出，启发式清理从传入的下标<code>i</code>开始向后遍历，如果发现过期的Entry就会再次触发探测式清理，并将n重置为table长度，经过数组长度的2的整数次幂的梁旭遍历之后如果没有发现过期的Entry，就人为数组中没有过期的Entry了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">cleanSomeSlots</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">boolean</span> <span class="variable">removed</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line">    Entry[] tab = table;</span><br><span class="line">    <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> tab.length;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        i = nextIndex(i, len);</span><br><span class="line">        <span class="type">Entry</span> <span class="variable">e</span> <span class="operator">=</span> tab[i];</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="literal">null</span> &amp;&amp; e.get() == <span class="literal">null</span>) &#123;</span><br><span class="line">            n = len;</span><br><span class="line">            removed = <span class="literal">true</span>;</span><br><span class="line">            i = expungeStaleEntry(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span> ( (n &gt;&gt;&gt;= <span class="number">1</span>) != <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> removed;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-哪些地方会触发这两种清理方式"><a href="#3-哪些地方会触发这两种清理方式" class="headerlink" title="3. 哪些地方会触发这两种清理方式"></a>3. 哪些地方会触发这两种清理方式</h2><ol>
+<li>set() 方法中，遇到<code>key==null</code>的情况会触发一轮<strong>探测式清理</strong></li>
+<li>set()方法最后会执行一次<strong>启发式清理</strong></li>
+<li>rehash()方法会调用一次<strong>探测式清理</strong></li>
+<li>get()方法中入到key过期的时候也会触发一次<strong>探测式清理</strong></li>
+<li>启发式清理过程中遇到<code>key==null</code>时会触发<strong>探测式清理</strong></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我喝杯快乐水！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="muggle 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.jpg" alt="muggle 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>muggle
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://muggletan.github.io/2024/08/02/ThreadLocal%E5%AD%A6%E4%B9%A0/" title="ThreadLocal学习">http://muggletan.github.io/2024/08/02/ThreadLocal学习/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/08/01/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" rel="prev" title="原型模式">
+                  <i class="fa fa-chevron-left"></i> 原型模式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/08/04/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%9F%BA%E6%9C%AC%E8%A7%84%E5%88%99/" rel="next" title="正则表达式基本规则">
+                  正则表达式基本规则 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">muggle</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+
+  <script color="0, 0, 0" 
+          opacity="0.7" 
+          zIndex="-1" 
+          count="120" 
+          src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js">
+  </script>
+
+  
+  
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"neutral","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.3/mermaid.min.js","integrity":"sha256-TIYL00Rhw/8WaoUhYTLX9SKIEFdXxg+yMWSLVUbhiLg="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+ 
+
+<script>
+  var OriginTitile = document.title;
+  var titleTime;
+  //换网站的logo
+  function selfSetIcon(url){
+		var links = document.getElementsByTagName('link') 
+		for (var i = 0; i < links.length; i++) { 
+			var link = links[i]
+			var rel = link.rel; 
+            var count = 0;
+			rel = rel.toLowerCase(); 
+			if (rel.indexOf('icon') == 0) { 
+                count++;
+				link.href = url;
+                if(count == 2)
+				    break;
+			}
+		}
+	}
+  
+  document.addEventListener("visibilitychange", function() {
+    if (document.hidden) {
+      document.title = "(●—●)喔噢，崩溃了~|" + OriginTitile;
+      selfSetIcon("https://muggletan.github.io/images/failure.ico");
+      clearTimeout(titleTime);
+    } else {
+      selfSetIcon("/images/avatar.png");
+      document.title = "φ(>ω<*) 咦！又好了！|" + OriginTitile;
+      titleTime = setTimeout(function() {
+        document.title = OriginTitile;
+        
+      }, 2000);
+    }
+  });
+  
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"muggletan","repo":"gitalk-comment","client_id":"7e906c6ddcd0a9948fe9","client_secret":"5885e821d74e4f3ceaabdf6dd5c94bfca7d3aff9","admin_user":"muggletan","distraction_free_mode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"acdd896281325091b44190d04fa54365"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
