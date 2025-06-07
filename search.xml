@@ -34,49 +34,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Debian安装与配置Redis</title>
-    <url>/2023/08/26/Debian%E4%B8%AD%E5%AE%89%E8%A3%85Redis/</url>
-    <content><![CDATA[<h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><h2 id="1-进入Redis官网"><a href="#1-进入Redis官网" class="headerlink" title="1. 进入Redis官网"></a>1. 进入Redis<a href="https://redis.io/">官网</a></h2><p>进入下载页面，找到下载按钮，右键复制下载链接</p>
-<h2 id="2-下载Redis"><a href="#2-下载Redis" class="headerlink" title="2. 下载Redis"></a>2. 下载Redis</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/redis/redis/archive/7.2.0.tar.gz -O redis.tar.gz</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-解压压缩包"><a href="#3-解压压缩包" class="headerlink" title="3. 解压压缩包"></a>3. 解压压缩包</h2><p>解压压缩包到opt目录</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -xvf redis.tar.gz -C /opt</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="1-编译环境准备"><a href="#1-编译环境准备" class="headerlink" title="1. 编译环境准备"></a>1. 编译环境准备</h2><p>安装gcc和make：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt install gcc make</span><br></pre></td></tr></table></figure>
-
-<p>安装好之后<code>gcc -v</code>看一下是否安装成功</p>
-<h2 id="2-编译安装"><a href="#2-编译安装" class="headerlink" title="2. 编译安装"></a>2. 编译安装</h2><p>安装好后进入redis目录，执行：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-
-<p>如果没报错，并看到下图字样表示安装成功</p>
-<p><img data-src="/../images/Debian%E4%B8%AD%E5%AE%89%E8%A3%85Redis/image-20230826151045812.png" alt="image-20230826151045812"></p>
-<h2 id="3-修改配置文件"><a href="#3-修改配置文件" class="headerlink" title="3. 修改配置文件"></a>3. 修改配置文件</h2><p>编辑redis目录下面的redis.config文件：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nano redis.conf</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>绑定地址修改	</p>
-<p>默认bind 127.0.0.1       直接注释掉(默认bind 127.0.0.1只能本机访问)或改成本机IP地址，否则影响远程IP连接</p>
-</li>
-<li><p>静默启动</p>
-<p>默认daemonize no       改为 daemonize yes</p>
-</li>
-<li><p>关闭保护模式</p>
-<p>默认protected-mode yes   改为 protected-mode no</p>
-</li>
-<li><p>设置密码</p>
-<p>添加redis密码           改为 requirepass 你自己设置的密码</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>redis</tag>
-        <tag>配置</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Debian中注册自定义服务</title>
     <url>/2024/01/19/Debian%E4%B8%AD%E6%B3%A8%E5%86%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E6%9C%8D%E5%8A%A1/</url>
     <content><![CDATA[<h1 id="编辑自定义的-service文件"><a href="#编辑自定义的-service文件" class="headerlink" title="编辑自定义的.service文件"></a>编辑自定义的.service文件</h1><p>在<code>/etc/systemd/system/ </code>目录下创建自定义的<code>.service</code>文件</p>
@@ -140,6 +97,49 @@
 </li>
 </ol>
 ]]></content>
+  </entry>
+  <entry>
+    <title>Debian安装与配置Redis</title>
+    <url>/2023/08/26/Debian%E4%B8%AD%E5%AE%89%E8%A3%85Redis/</url>
+    <content><![CDATA[<h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><h2 id="1-进入Redis官网"><a href="#1-进入Redis官网" class="headerlink" title="1. 进入Redis官网"></a>1. 进入Redis<a href="https://redis.io/">官网</a></h2><p>进入下载页面，找到下载按钮，右键复制下载链接</p>
+<h2 id="2-下载Redis"><a href="#2-下载Redis" class="headerlink" title="2. 下载Redis"></a>2. 下载Redis</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/redis/redis/archive/7.2.0.tar.gz -O redis.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-解压压缩包"><a href="#3-解压压缩包" class="headerlink" title="3. 解压压缩包"></a>3. 解压压缩包</h2><p>解压压缩包到opt目录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -xvf redis.tar.gz -C /opt</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="1-编译环境准备"><a href="#1-编译环境准备" class="headerlink" title="1. 编译环境准备"></a>1. 编译环境准备</h2><p>安装gcc和make：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt install gcc make</span><br></pre></td></tr></table></figure>
+
+<p>安装好之后<code>gcc -v</code>看一下是否安装成功</p>
+<h2 id="2-编译安装"><a href="#2-编译安装" class="headerlink" title="2. 编译安装"></a>2. 编译安装</h2><p>安装好后进入redis目录，执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+
+<p>如果没报错，并看到下图字样表示安装成功</p>
+<p><img data-src="/../images/Debian%E4%B8%AD%E5%AE%89%E8%A3%85Redis/image-20230826151045812.png" alt="image-20230826151045812"></p>
+<h2 id="3-修改配置文件"><a href="#3-修改配置文件" class="headerlink" title="3. 修改配置文件"></a>3. 修改配置文件</h2><p>编辑redis目录下面的redis.config文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nano redis.conf</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>绑定地址修改	</p>
+<p>默认bind 127.0.0.1       直接注释掉(默认bind 127.0.0.1只能本机访问)或改成本机IP地址，否则影响远程IP连接</p>
+</li>
+<li><p>静默启动</p>
+<p>默认daemonize no       改为 daemonize yes</p>
+</li>
+<li><p>关闭保护模式</p>
+<p>默认protected-mode yes   改为 protected-mode no</p>
+</li>
+<li><p>设置密码</p>
+<p>添加redis密码           改为 requirepass 你自己设置的密码</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>redis</tag>
+        <tag>配置</tag>
+      </tags>
   </entry>
   <entry>
     <title>HTTPS建立的过程</title>
@@ -1409,364 +1409,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java基础知识总结（上）</title>
-    <url>/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="Java中的注释"><a href="#Java中的注释" class="headerlink" title="Java中的注释"></a>Java中的注释</h2><ol>
-<li><p>单行注释   &#x2F;&#x2F;</p>
-</li>
-<li><p>多行注释  &#x2F;*   *&#x2F;</p>
-<p>单行注释和多行注释的作用：</p>
-<p>① 对所写的程序进行解释说明，增强可读性。方便自己，方便别人</p>
-<p>② 调试所写的代码</p>
-</li>
-<li><p>文档注释  &#x2F;**   *&#x2F;</p>
-<p>注释内容可以被JDK提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档。</p>
-<hr>
-</li>
-</ol>
-<h2 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h2><ol>
-<li><p>标识符：凡是自己可以起名字的地方都叫标识符。</p>
-<p>  比如：类名、变量名、方法名、接口名、包名…</p>
-</li>
-<li><p>标识符的命名规则：–&gt; 如果不遵守如下的规则，编译不通过！</p>
-<p>① 由26个英文字母大小写，0-9 ，_或 $ 组成 </p>
-<p>②数字不可以开头。</p>
-<p>③不可以使用关键字和保留字，但能包含关键字和保留字。</p>
-<p>④Java中严格区分大小写，长度无限制。</p>
-<p>⑤标识符不能包含空格。</p>
-</li>
-<li><p>Java中的名称命名规范： —&gt;如果不遵守如下的规范，编译可以通过！</p>
-<p>包名：多单词组成时所有字母都小写：xxxyyyzzz</p>
-<p>类名、接口名：多单词组成时，所有单词的首字母大写：XxxYyyZzz</p>
-<p>变量名、方法名：多单词组成时，第一个单词首字母小写，第二个单词开始每个单词首字母大写：xxxYyyZzz</p>
-<p>常量名：所有字母都大写。多单词时每个单词用下划线连接：XXX_YYY_ZZZ</p>
-</li>
-<li><p>注意1：在起名字时，为了提高阅读性，要尽量有意义，“见名知意”。</p>
-<p>注意2：java采用unicode字符集，因此标识符也可以使用汉字声明，但是不建议使用。 </p>
-<hr>
-</li>
-</ol>
-<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><ol>
-<li><p>变量按照数据类型来分：</p>
-<p>a. 基本数据类型：</p>
-<p>   整型：byte \ short \ int \ long</p>
-<p>   浮点型：float \ double</p>
-<p>   字符型：char</p>
-<p>   布尔型：boolean</p>
-<p> b. 引用数据类型：</p>
-<p>   类(class)</p>
-<p>   接口(interface)</p>
-<p>   数组(array)</p>
-</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th align="center">类型</th>
-<th align="center">占用存储空间</th>
-<th align="center">表示数据范围</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">byte</td>
-<td align="center">1字节&#x3D;8bit</td>
-<td align="center">-128~127</td>
-</tr>
-<tr>
-<td align="center">short</td>
-<td align="center">2字节</td>
-<td align="center">$-2^{15}$ ~$2^{15} -1$</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">4字节</td>
-<td align="center">$-2^{31}$ ~ $2^{31} -1$</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">8字节</td>
-<td align="center">$-2^{63}$ ~$2^{63} -1$</td>
-</tr>
-<tr>
-<td align="center">float</td>
-<td align="center">4字节</td>
-<td align="center">-3.403E38 ~ 3.403E38</td>
-</tr>
-<tr>
-<td align="center">double</td>
-<td align="center">8字节</td>
-<td align="center">-1.798E308 ~ 1.798E308</td>
-</tr>
-</tbody></table>
-<ul>
-<li><strong>java的整型常量默认为 int 型，声明long型常量须后加‘l’或‘L’</strong> </li>
-<li><strong>java程序中变量通常声明为int型，除非不足以表示较大的数，才使用long</strong></li>
-</ul>
-<p>转义字符：</p>
-<table>
-<thead>
-<tr>
-<th>转义字符</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>\b</td>
-<td>退格符</td>
-</tr>
-<tr>
-<td>\n</td>
-<td>换行符</td>
-</tr>
-<tr>
-<td>\r</td>
-<td>回车符</td>
-</tr>
-<tr>
-<td>\t</td>
-<td>制表符</td>
-</tr>
-<tr>
-<td>\“</td>
-<td>双引号</td>
-</tr>
-<tr>
-<td>\‘</td>
-<td>单引号</td>
-</tr>
-<tr>
-<td>\\</td>
-<td>反斜线</td>
-</tr>
-</tbody></table>
-<ol start="2">
-<li><p>变量在类中声明的位置：</p>
-<p>​    成员变量 vs 局部变量</p>
-</li>
-</ol>
-<h3 id="定义格式"><a href="#定义格式" class="headerlink" title="定义格式"></a>定义格式</h3><ol>
-<li><p>java定义变量的格式：数据类型 变量名 &#x3D; 变量值;</p>
-</li>
-<li><p>说明：</p>
-<p>  ① 变量必须先声明，后使用</p>
-<p>  ② 变量都定义在其作用域内。在作用域内，它是有效的。换句话说，出了作用域，就失效了</p>
-<p>  ③ 同一个作用域内，不可以声明两个同名的变量</p>
-</li>
-</ol>
-<h3 id="运算规则"><a href="#运算规则" class="headerlink" title="运算规则"></a>运算规则</h3><p>基本数据类型之间的运算规则：</p>
-<p>前提：这里讨论只是7种基本数据类型变量间的运算。不包含boolean类型的。</p>
-<ol>
-<li><p>自动类型提升：</p>
-<p> 结论：当容量小的数据类型的变量与容量大的数据类型的变量做运算时，结果自动提升为容量大的数据类型。</p>
-</li>
-</ol>
-<pre class="mermaid">graph LR
-char --> int
-byte --> int
-short --> int --> long --> float --> double</pre>
-
-<pre><code>特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。
-</code></pre>
-<ol start="2">
-<li><p>强制类型转换：</p>
-<p>a.需要使用强转符：()</p>
-<p>b.注意点：强制类型转换，可能导致精度损失。</p>
-</li>
-<li><p>说明：此时的容量大小指的是，表示数的范围的大和小。比如：float容量要大于long的容量</p>
-</li>
-</ol>
-<h3 id="String类型变量的使用"><a href="#String类型变量的使用" class="headerlink" title="String类型变量的使用"></a>String类型变量的使用</h3><ol>
-<li><p>String属于引用数据类型,翻译为：字符串</p>
-</li>
-<li><p>声明String类型变量时，使用一对” “</p>
-</li>
-<li><p>String可以和8种基本数据类型变量做运算，且运算只能是连接运算：+</p>
-</li>
-<li><p>运算的结果仍然是String类型</p>
-<hr>
-</li>
-</ol>
-<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h3><p>太简单，不说了</p>
-<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>介绍一个特别的：instanceof</p>
-<p>作用是检查是否是类的对象，例如： “Hello” instanceof String &#x3D; true</p>
-<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;—逻辑与         | —逻辑或       ！—逻辑非 </p>
-<p>&amp;&amp; —短路与     || —短路或     ^ —逻辑异或</p>
-<ul>
-<li>“&amp;”和“&amp;&amp;”的区别： <ul>
-<li>单&amp;时，左边无论真假，右边都进行运算； </li>
-<li>双&amp;时，如果左边为真，右边参与运算，如果左边为假，那么右边不参与运算。</li>
-</ul>
-</li>
-<li>“|”和“||”的区别同理，||表示：当左边为真，右边不参与运算。</li>
-</ul>
-<h3 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符"></a>三元运算符</h3><p>格式： (表达式1)?表达式2：表达式3；</p>
-<p>若表达式1的结果为真则执行<strong>表达式2</strong>，若为假则执行<strong>表达式3</strong></p>
-<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
-<li><p>表达式1,表达式2,表达式3的类型可以不同，进行自动类型转换（提升）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="literal">true</span> ? <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1</span>) : <span class="keyword">new</span> <span class="title class_">Double</span>(<span class="number">2.0</span>);</span><br><span class="line">System.out.println(o1);<span class="comment">//1.0</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>条件表达式不能取代一般的if语句,仅当if语句中内嵌的语句为赋值语句(且两个分支都给同一变量赋值)时才能代替if语句，例如：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line"> printf(<span class="string">&quot;even/n&quot;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//不能写成</span></span><br><span class="line">(a%<span class="number">2</span>==<span class="number">0</span>)?printf(<span class="string">&quot;even/n&quot;</span>):printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//但是可以写成</span></span><br><span class="line">printf(<span class="string">&quot;%s/n&quot;</span>,(a%<span class="number">2</span>==<span class="number">0</span>?<span class="string">&quot;even&quot;</span>:<span class="string">&quot;odd&quot;</span>);</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="运算符的优先级"><a href="#运算符的优先级" class="headerlink" title="运算符的优先级"></a>运算符的优先级</h3><table>
-<thead>
-<tr>
-<th align="center">运算顺序（从左往右或从右往左）</th>
-<th align="center">运算符</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"></td>
-<td align="center">.    ()      {}      ;      ,</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">++  –  ~    !()</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">*      &#x2F;     %</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&lt;&lt;  &gt;&gt;   &gt;&gt;&gt;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&lt;  &gt;  &lt;&#x3D;  &gt;&#x3D;    instanceof</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&#x3D;&#x3D;      !&#x3D;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&amp;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">^</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">|</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">&amp;&amp;</td>
-</tr>
-<tr>
-<td align="center">L –&gt; R</td>
-<td align="center">||</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">?    :</td>
-</tr>
-<tr>
-<td align="center">R –&gt; L</td>
-<td align="center">&#x3D;    *&#x3D;    &#x2F;&#x3D;   %&#x3D;</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
-<li>数组本身是引用数据类型，而数组中的元素可以是任何数据类型，包括 基本数据类型和引用数据类型。</li>
-<li>创建数组对象会在内存中开辟一整块连续的空间，而数组名中引用的是 这块连续空间的首地址。 </li>
-<li>数组的长度一旦确定，就不能修改。 </li>
-<li>我们可以直接通过下标(或索引)的方式调用指定位置的元素，速度很快。</li>
-</ul>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h4><ol>
-<li><p>一维数组的声明</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">type <span class="keyword">var</span>[] 或 type[] <span class="keyword">var</span>；</span><br></pre></td></tr></table></figure>
-
-<p>Java语言中声明数组时不能指定其长度(数组中元素的数)， 例如： int a[5]; <strong>&#x2F;&#x2F;非法</strong></p>
-</li>
-<li><p>初始化</p>
-<ul>
-<li><p>动态初始化：数组声明且为数组元素分配空间与赋值的操作分开进行</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">3</span>];</span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">3</span>;</span><br><span class="line">arr[<span class="number">1</span>] = <span class="number">9</span>;</span><br><span class="line">arr[<span class="number">2</span>] = <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">String names[];</span><br><span class="line">names = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">3</span>];</span><br><span class="line">names[<span class="number">0</span>] = “钱学森”;</span><br><span class="line">names[<span class="number">1</span>] = “邓稼先”;</span><br><span class="line">names[<span class="number">2</span>] = “袁隆平”;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<ul>
-<li><p>静态初始化：在定义数组的同时就为数组元素分配空间并赋值。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> arr[] = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123; <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>&#125;;</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="type">int</span>[] arr = &#123;<span class="number">3</span>,<span class="number">9</span>,<span class="number">8</span>&#125;;</span><br><span class="line"></span><br><span class="line">String names[] = &#123;</span><br><span class="line">“李四光”,“茅以升”,“华罗庚”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="数组元素的默认初始化值"><a href="#数组元素的默认初始化值" class="headerlink" title="数组元素的默认初始化值"></a>数组元素的默认初始化值</h3><table>
-<thead>
-<tr>
-<th align="center">数组元素类型</th>
-<th align="center">元素默认初始值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">byte</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">short</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">0L</td>
-</tr>
-<tr>
-<td align="center">float</td>
-<td align="center">0.0F</td>
-</tr>
-<tr>
-<td align="center">double</td>
-<td align="center">0.0</td>
-</tr>
-<tr>
-<td align="center">char</td>
-<td align="center">0或‘\u0000’(表现为空)</td>
-</tr>
-<tr>
-<td align="center">boolean</td>
-<td align="center">false</td>
-</tr>
-<tr>
-<td align="center">应用类型</td>
-<td align="center">null</td>
-</tr>
-</tbody></table>
-<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><ol>
-<li><p>声明和初始化</p>
-<ul>
-<li><p>格式1（动态初始化）：int[][] arr &#x3D; new int[3][2];</p>
-<p>定义了名称为arr的二维数组 </p>
-<p>二维数组中有3个一维数组 </p>
-<p>每一个一维数组中有2个元素 一维数组的名称分别为arr[0], arr[1], arr[2] </p>
-<p>给第一个一维数组1脚标位赋值为78写法是：arr[0][1] &#x3D; 78;</p>
-</li>
-<li><p>格式2（动态初始化）：int[][] arr &#x3D; new int[3][];</p>
-<p>二维数组中有3个一维数组。 </p>
-<p>每个一维数组都是默认初始化值null (注意：区别于格式1）</p>
-<p> 可以对这个三个一维数组分别进行初始化 </p>
-<p>arr[0] &#x3D; new int[3]; arr[1] &#x3D; new int[1]; </p>
-<p>arr[2] &#x3D; new int[2];</p>
-</li>
-</ul>
-<p><strong>注： int[][]arr &#x3D; new int[][3]; &#x2F;&#x2F;非法</strong></p>
-</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java基础知识总结（下）</title>
     <url>/2020/05/06/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8B%EF%BC%89/</url>
     <content><![CDATA[<h2 id="final关键字"><a href="#final关键字" class="headerlink" title="final关键字"></a>final关键字</h2><p>在Java中声明类、变量和方法时，可使用关键字final来修饰,表示“最终的”</p>
@@ -2231,6 +1873,364 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyExpTest</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">regist</span><span class="params">(<span class="type">int</span> num)</span> <span class="keyword">throws</span> MyException &#123;</span><br><span class="line">    <span class="keyword">if</span> (num &lt; <span class="number">0</span>)</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">MyException</span>(<span class="string">&quot;人数为负值，不合理&quot;</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      System.out.println(<span class="string">&quot;登记人数&quot;</span> + num);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">manager</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      regist(<span class="number">100</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (MyException e) &#123;</span><br><span class="line">      System.out.print(<span class="string">&quot;登记失败，出错种类&quot;</span> + e.getId());</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.print(<span class="string">&quot;本次登记操作结束&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> &#123;</span><br><span class="line">    <span class="type">MyExpTest</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyExpTest</span>();</span><br><span class="line">    t.manager();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <img data-src="/images/Java基础知识总结（下）/image-20200512204401486.png" alt="image-20200512204401486" style="zoom: 67%;" />]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java基础知识总结（上）</title>
+    <url>/2020/04/14/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="Java中的注释"><a href="#Java中的注释" class="headerlink" title="Java中的注释"></a>Java中的注释</h2><ol>
+<li><p>单行注释   &#x2F;&#x2F;</p>
+</li>
+<li><p>多行注释  &#x2F;*   *&#x2F;</p>
+<p>单行注释和多行注释的作用：</p>
+<p>① 对所写的程序进行解释说明，增强可读性。方便自己，方便别人</p>
+<p>② 调试所写的代码</p>
+</li>
+<li><p>文档注释  &#x2F;**   *&#x2F;</p>
+<p>注释内容可以被JDK提供的工具 javadoc 所解析，生成一套以网页文件形式体现的该程序的说明文档。</p>
+<hr>
+</li>
+</ol>
+<h2 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h2><ol>
+<li><p>标识符：凡是自己可以起名字的地方都叫标识符。</p>
+<p>  比如：类名、变量名、方法名、接口名、包名…</p>
+</li>
+<li><p>标识符的命名规则：–&gt; 如果不遵守如下的规则，编译不通过！</p>
+<p>① 由26个英文字母大小写，0-9 ，_或 $ 组成 </p>
+<p>②数字不可以开头。</p>
+<p>③不可以使用关键字和保留字，但能包含关键字和保留字。</p>
+<p>④Java中严格区分大小写，长度无限制。</p>
+<p>⑤标识符不能包含空格。</p>
+</li>
+<li><p>Java中的名称命名规范： —&gt;如果不遵守如下的规范，编译可以通过！</p>
+<p>包名：多单词组成时所有字母都小写：xxxyyyzzz</p>
+<p>类名、接口名：多单词组成时，所有单词的首字母大写：XxxYyyZzz</p>
+<p>变量名、方法名：多单词组成时，第一个单词首字母小写，第二个单词开始每个单词首字母大写：xxxYyyZzz</p>
+<p>常量名：所有字母都大写。多单词时每个单词用下划线连接：XXX_YYY_ZZZ</p>
+</li>
+<li><p>注意1：在起名字时，为了提高阅读性，要尽量有意义，“见名知意”。</p>
+<p>注意2：java采用unicode字符集，因此标识符也可以使用汉字声明，但是不建议使用。 </p>
+<hr>
+</li>
+</ol>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><ol>
+<li><p>变量按照数据类型来分：</p>
+<p>a. 基本数据类型：</p>
+<p>   整型：byte \ short \ int \ long</p>
+<p>   浮点型：float \ double</p>
+<p>   字符型：char</p>
+<p>   布尔型：boolean</p>
+<p> b. 引用数据类型：</p>
+<p>   类(class)</p>
+<p>   接口(interface)</p>
+<p>   数组(array)</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">占用存储空间</th>
+<th align="center">表示数据范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">byte</td>
+<td align="center">1字节&#x3D;8bit</td>
+<td align="center">-128~127</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">2字节</td>
+<td align="center">$-2^{15}$ ~$2^{15} -1$</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">4字节</td>
+<td align="center">$-2^{31}$ ~ $2^{31} -1$</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">8字节</td>
+<td align="center">$-2^{63}$ ~$2^{63} -1$</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">4字节</td>
+<td align="center">-3.403E38 ~ 3.403E38</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">8字节</td>
+<td align="center">-1.798E308 ~ 1.798E308</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>java的整型常量默认为 int 型，声明long型常量须后加‘l’或‘L’</strong> </li>
+<li><strong>java程序中变量通常声明为int型，除非不足以表示较大的数，才使用long</strong></li>
+</ul>
+<p>转义字符：</p>
+<table>
+<thead>
+<tr>
+<th>转义字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\b</td>
+<td>退格符</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行符</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>回车符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>制表符</td>
+</tr>
+<tr>
+<td>\“</td>
+<td>双引号</td>
+</tr>
+<tr>
+<td>\‘</td>
+<td>单引号</td>
+</tr>
+<tr>
+<td>\\</td>
+<td>反斜线</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><p>变量在类中声明的位置：</p>
+<p>​    成员变量 vs 局部变量</p>
+</li>
+</ol>
+<h3 id="定义格式"><a href="#定义格式" class="headerlink" title="定义格式"></a>定义格式</h3><ol>
+<li><p>java定义变量的格式：数据类型 变量名 &#x3D; 变量值;</p>
+</li>
+<li><p>说明：</p>
+<p>  ① 变量必须先声明，后使用</p>
+<p>  ② 变量都定义在其作用域内。在作用域内，它是有效的。换句话说，出了作用域，就失效了</p>
+<p>  ③ 同一个作用域内，不可以声明两个同名的变量</p>
+</li>
+</ol>
+<h3 id="运算规则"><a href="#运算规则" class="headerlink" title="运算规则"></a>运算规则</h3><p>基本数据类型之间的运算规则：</p>
+<p>前提：这里讨论只是7种基本数据类型变量间的运算。不包含boolean类型的。</p>
+<ol>
+<li><p>自动类型提升：</p>
+<p> 结论：当容量小的数据类型的变量与容量大的数据类型的变量做运算时，结果自动提升为容量大的数据类型。</p>
+</li>
+</ol>
+<pre class="mermaid">graph LR
+char --> int
+byte --> int
+short --> int --> long --> float --> double</pre>
+
+<pre><code>特别的：byte,short,char之间不会相互转换，他们三者在计算时首先转换为int类型。当byte、char、short三种类型的变量做运算时，结果为int型。
+</code></pre>
+<ol start="2">
+<li><p>强制类型转换：</p>
+<p>a.需要使用强转符：()</p>
+<p>b.注意点：强制类型转换，可能导致精度损失。</p>
+</li>
+<li><p>说明：此时的容量大小指的是，表示数的范围的大和小。比如：float容量要大于long的容量</p>
+</li>
+</ol>
+<h3 id="String类型变量的使用"><a href="#String类型变量的使用" class="headerlink" title="String类型变量的使用"></a>String类型变量的使用</h3><ol>
+<li><p>String属于引用数据类型,翻译为：字符串</p>
+</li>
+<li><p>声明String类型变量时，使用一对” “</p>
+</li>
+<li><p>String可以和8种基本数据类型变量做运算，且运算只能是连接运算：+</p>
+</li>
+<li><p>运算的结果仍然是String类型</p>
+<hr>
+</li>
+</ol>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h3><p>太简单，不说了</p>
+<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p>介绍一个特别的：instanceof</p>
+<p>作用是检查是否是类的对象，例如： “Hello” instanceof String &#x3D; true</p>
+<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>&amp;—逻辑与         | —逻辑或       ！—逻辑非 </p>
+<p>&amp;&amp; —短路与     || —短路或     ^ —逻辑异或</p>
+<ul>
+<li>“&amp;”和“&amp;&amp;”的区别： <ul>
+<li>单&amp;时，左边无论真假，右边都进行运算； </li>
+<li>双&amp;时，如果左边为真，右边参与运算，如果左边为假，那么右边不参与运算。</li>
+</ul>
+</li>
+<li>“|”和“||”的区别同理，||表示：当左边为真，右边不参与运算。</li>
+</ul>
+<h3 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符"></a>三元运算符</h3><p>格式： (表达式1)?表达式2：表达式3；</p>
+<p>若表达式1的结果为真则执行<strong>表达式2</strong>，若为假则执行<strong>表达式3</strong></p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
+<li><p>表达式1,表达式2,表达式3的类型可以不同，进行自动类型转换（提升）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="literal">true</span> ? <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1</span>) : <span class="keyword">new</span> <span class="title class_">Double</span>(<span class="number">2.0</span>);</span><br><span class="line">System.out.println(o1);<span class="comment">//1.0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>条件表达式不能取代一般的if语句,仅当if语句中内嵌的语句为赋值语句(且两个分支都给同一变量赋值)时才能代替if语句，例如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(a%<span class="number">2</span>==<span class="number">0</span>)</span><br><span class="line"> printf(<span class="string">&quot;even/n&quot;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//不能写成</span></span><br><span class="line">(a%<span class="number">2</span>==<span class="number">0</span>)?printf(<span class="string">&quot;even/n&quot;</span>):printf(<span class="string">&quot;odd/n&quot;</span>);</span><br><span class="line"><span class="comment">//但是可以写成</span></span><br><span class="line">printf(<span class="string">&quot;%s/n&quot;</span>,(a%<span class="number">2</span>==<span class="number">0</span>?<span class="string">&quot;even&quot;</span>:<span class="string">&quot;odd&quot;</span>);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="运算符的优先级"><a href="#运算符的优先级" class="headerlink" title="运算符的优先级"></a>运算符的优先级</h3><table>
+<thead>
+<tr>
+<th align="center">运算顺序（从左往右或从右往左）</th>
+<th align="center">运算符</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"></td>
+<td align="center">.    ()      {}      ;      ,</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">++  –  ~    !()</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">*      &#x2F;     %</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&lt;&lt;  &gt;&gt;   &gt;&gt;&gt;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&lt;  &gt;  &lt;&#x3D;  &gt;&#x3D;    instanceof</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&#x3D;&#x3D;      !&#x3D;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&amp;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">^</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">|</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">&amp;&amp;</td>
+</tr>
+<tr>
+<td align="center">L –&gt; R</td>
+<td align="center">||</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">?    :</td>
+</tr>
+<tr>
+<td align="center">R –&gt; L</td>
+<td align="center">&#x3D;    *&#x3D;    &#x2F;&#x3D;   %&#x3D;</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
+<li>数组本身是引用数据类型，而数组中的元素可以是任何数据类型，包括 基本数据类型和引用数据类型。</li>
+<li>创建数组对象会在内存中开辟一整块连续的空间，而数组名中引用的是 这块连续空间的首地址。 </li>
+<li>数组的长度一旦确定，就不能修改。 </li>
+<li>我们可以直接通过下标(或索引)的方式调用指定位置的元素，速度很快。</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h4><ol>
+<li><p>一维数组的声明</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">type <span class="keyword">var</span>[] 或 type[] <span class="keyword">var</span>；</span><br></pre></td></tr></table></figure>
+
+<p>Java语言中声明数组时不能指定其长度(数组中元素的数)， 例如： int a[5]; <strong>&#x2F;&#x2F;非法</strong></p>
+</li>
+<li><p>初始化</p>
+<ul>
+<li><p>动态初始化：数组声明且为数组元素分配空间与赋值的操作分开进行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">3</span>];</span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">3</span>;</span><br><span class="line">arr[<span class="number">1</span>] = <span class="number">9</span>;</span><br><span class="line">arr[<span class="number">2</span>] = <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">String names[];</span><br><span class="line">names = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">3</span>];</span><br><span class="line">names[<span class="number">0</span>] = “钱学森”;</span><br><span class="line">names[<span class="number">1</span>] = “邓稼先”;</span><br><span class="line">names[<span class="number">2</span>] = “袁隆平”;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ul>
+<li><p>静态初始化：在定义数组的同时就为数组元素分配空间并赋值。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> arr[] = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123; <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>&#125;;</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="type">int</span>[] arr = &#123;<span class="number">3</span>,<span class="number">9</span>,<span class="number">8</span>&#125;;</span><br><span class="line"></span><br><span class="line">String names[] = &#123;</span><br><span class="line">“李四光”,“茅以升”,“华罗庚”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="数组元素的默认初始化值"><a href="#数组元素的默认初始化值" class="headerlink" title="数组元素的默认初始化值"></a>数组元素的默认初始化值</h3><table>
+<thead>
+<tr>
+<th align="center">数组元素类型</th>
+<th align="center">元素默认初始值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">byte</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">0L</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">0.0F</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">0.0</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">0或‘\u0000’(表现为空)</td>
+</tr>
+<tr>
+<td align="center">boolean</td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center">应用类型</td>
+<td align="center">null</td>
+</tr>
+</tbody></table>
+<h4 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h4><ol>
+<li><p>声明和初始化</p>
+<ul>
+<li><p>格式1（动态初始化）：int[][] arr &#x3D; new int[3][2];</p>
+<p>定义了名称为arr的二维数组 </p>
+<p>二维数组中有3个一维数组 </p>
+<p>每一个一维数组中有2个元素 一维数组的名称分别为arr[0], arr[1], arr[2] </p>
+<p>给第一个一维数组1脚标位赋值为78写法是：arr[0][1] &#x3D; 78;</p>
+</li>
+<li><p>格式2（动态初始化）：int[][] arr &#x3D; new int[3][];</p>
+<p>二维数组中有3个一维数组。 </p>
+<p>每个一维数组都是默认初始化值null (注意：区别于格式1）</p>
+<p> 可以对这个三个一维数组分别进行初始化 </p>
+<p>arr[0] &#x3D; new int[3]; arr[1] &#x3D; new int[1]; </p>
+<p>arr[2] &#x3D; new int[2];</p>
+</li>
+</ul>
+<p><strong>注： int[][]arr &#x3D; new int[][3]; &#x2F;&#x2F;非法</strong></p>
+</li>
+</ol>
+</li>
+</ol>
+]]></content>
       <categories>
         <category>学习笔记</category>
         <category>java</category>
@@ -3354,6 +3354,46 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>LeetCode第一天</title>
+    <url>/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/</url>
+    <content><![CDATA[<blockquote>
+<p>LeetCode第350题</p>
+<p>给定两个数组，编写一个函数来计算它们的交集。</p>
+<p>示例 1：</p>
+<p>输入：nums1 &#x3D; [1,2,2,1], nums2 &#x3D; [2,2]<br>输出：[2,2]<br>示例 2:</p>
+<p>输入：nums1 &#x3D; [4,9,5], nums2 &#x3D; [9,4,9,8,4]<br>输出：[4,9]</p>
+<p>说明：</p>
+<p>输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。<br>我们可以不考虑输出结果的顺序。</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii">https://leetcode-cn.com/problems/intersection-of-two-arrays-ii</a></p>
+</blockquote>
+<p>方法一：</p>
+<p>用哈希表映射，先把较短的那个数组遍历，存入哈希表中，键是数组中元素的值，值是数组中元素出现的次数<br>再遍历另外一个数组，从哈希表中找这个数组中的值，看是否存在，存在就将其存入新造的数组中，再将哈希表中该键对应的值减一，如果值减到了0，就将这个键移除去，否则将这个键对应的值减一，在存入哈希表中。</p>
+<span id="more"></span>
+
+<p>这个方法LeetCode上的一张图看的明明白白：</p>
+<p><img data-src="/images/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/350_fig1.gif" alt="fig1"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect1(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  <span class="keyword">if</span> (nums1.length &gt; nums2.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> intersect1(nums2, nums1);</span><br><span class="line">  &#125;</span><br><span class="line">  Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums1) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>;</span><br><span class="line">    map.put(num, count);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[nums2.length];</span><br><span class="line">  <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums2) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      arr[index++] = num;</span><br><span class="line">      <span class="keyword">if</span> (count != <span class="number">1</span>) &#123;</span><br><span class="line">        map.put(num, --count);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        map.remove(num);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法二：</p>
+<p>先对两个数组进行排序，然后设置两个指针来遍历这两个数组。将比较结果较小的那个数组的指针后移，如果两数相等，则将两个数组的指针都向后移，并将这个数存入新造好的数组。遍历直到有一个指针到了数组的结尾，结束遍历。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect2(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  Arrays.sort(nums1);</span><br><span class="line">  Arrays.sort(nums2);</span><br><span class="line">  <span class="type">int</span> <span class="variable">len1</span> <span class="operator">=</span> nums1.length, len2 = nums2.length;</span><br><span class="line">  <span class="type">int</span> <span class="variable">index1</span> <span class="operator">=</span> <span class="number">0</span>, index2 = <span class="number">0</span>, index = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[Math.min(len1, len2)];</span><br><span class="line">  <span class="keyword">while</span> (index1 &lt; len1 &amp;&amp; index2 &lt; len2) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums1[index1] &lt; nums2[index2]) &#123;</span><br><span class="line">      index1++;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums1[index1] &gt; nums2[index2]) &#123;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      arr[index++] = nums1[index1];</span><br><span class="line">      index1++;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>结语</p>
+<p>如果 nums2的元素存储在磁盘上，磁盘内存是有限的，并且你不能一次加载所有的元素到内存中。那么就无法高效地对 nums2进行排序，因此推荐使用方法一而不是方法二。在方法一中，nums2 只关系到查询操作，因此每次读取nums2中的一部分数据，并进行处理即可。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>LeetCode</tag>
+        <tag>算法</tag>
+        <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java枚举类</title>
     <url>/2020/06/16/Java%E6%9E%9A%E4%B8%BE%E7%B1%BB/</url>
     <content><![CDATA[<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><p>在JDK5.0之前需要自定义枚举类，JDK5.0中新增了enum关键字，用来定义枚举类</p>
@@ -3397,46 +3437,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       <tags>
         <tag>学习笔记</tag>
         <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode第一天</title>
-    <url>/2020/08/21/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/</url>
-    <content><![CDATA[<blockquote>
-<p>LeetCode第350题</p>
-<p>给定两个数组，编写一个函数来计算它们的交集。</p>
-<p>示例 1：</p>
-<p>输入：nums1 &#x3D; [1,2,2,1], nums2 &#x3D; [2,2]<br>输出：[2,2]<br>示例 2:</p>
-<p>输入：nums1 &#x3D; [4,9,5], nums2 &#x3D; [9,4,9,8,4]<br>输出：[4,9]</p>
-<p>说明：</p>
-<p>输出结果中每个元素出现的次数，应与元素在两个数组中出现次数的最小值一致。<br>我们可以不考虑输出结果的顺序。</p>
-<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii">https://leetcode-cn.com/problems/intersection-of-two-arrays-ii</a></p>
-</blockquote>
-<p>方法一：</p>
-<p>用哈希表映射，先把较短的那个数组遍历，存入哈希表中，键是数组中元素的值，值是数组中元素出现的次数<br>再遍历另外一个数组，从哈希表中找这个数组中的值，看是否存在，存在就将其存入新造的数组中，再将哈希表中该键对应的值减一，如果值减到了0，就将这个键移除去，否则将这个键对应的值减一，在存入哈希表中。</p>
-<span id="more"></span>
-
-<p>这个方法LeetCode上的一张图看的明明白白：</p>
-<p><img data-src="/images/LeetCode%E7%AC%AC%E4%B8%80%E5%A4%A9/350_fig1.gif" alt="fig1"></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect1(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  <span class="keyword">if</span> (nums1.length &gt; nums2.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> intersect1(nums2, nums1);</span><br><span class="line">  &#125;</span><br><span class="line">  Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums1) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>) + <span class="number">1</span>;</span><br><span class="line">    map.put(num, count);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[nums2.length];</span><br><span class="line">  <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> num : nums2) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> map.getOrDefault(num, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      arr[index++] = num;</span><br><span class="line">      <span class="keyword">if</span> (count != <span class="number">1</span>) &#123;</span><br><span class="line">        map.put(num, --count);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        map.remove(num);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>方法二：</p>
-<p>先对两个数组进行排序，然后设置两个指针来遍历这两个数组。将比较结果较小的那个数组的指针后移，如果两数相等，则将两个数组的指针都向后移，并将这个数存入新造好的数组。遍历直到有一个指针到了数组的结尾，结束遍历。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span>[] intersect2(<span class="type">int</span>[] nums1, <span class="type">int</span>[] nums2) &#123;</span><br><span class="line">  Arrays.sort(nums1);</span><br><span class="line">  Arrays.sort(nums2);</span><br><span class="line">  <span class="type">int</span> <span class="variable">len1</span> <span class="operator">=</span> nums1.length, len2 = nums2.length;</span><br><span class="line">  <span class="type">int</span> <span class="variable">index1</span> <span class="operator">=</span> <span class="number">0</span>, index2 = <span class="number">0</span>, index = <span class="number">0</span>;</span><br><span class="line">  <span class="type">int</span>[] arr = <span class="keyword">new</span> <span class="title class_">int</span>[Math.min(len1, len2)];</span><br><span class="line">  <span class="keyword">while</span> (index1 &lt; len1 &amp;&amp; index2 &lt; len2) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums1[index1] &lt; nums2[index2]) &#123;</span><br><span class="line">      index1++;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums1[index1] &gt; nums2[index2]) &#123;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      arr[index++] = nums1[index1];</span><br><span class="line">      index1++;</span><br><span class="line">      index2++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> Arrays.copyOfRange(arr, <span class="number">0</span>, index);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>结语</p>
-<p>如果 nums2的元素存储在磁盘上，磁盘内存是有限的，并且你不能一次加载所有的元素到内存中。那么就无法高效地对 nums2进行排序，因此推荐使用方法一而不是方法二。在方法一中，nums2 只关系到查询操作，因此每次读取nums2中的一部分数据，并进行处理即可。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>算法</category>
-        <category>LeetCode</category>
-      </categories>
-      <tags>
-        <tag>LeetCode</tag>
-        <tag>算法</tag>
-        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -3643,6 +3643,60 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>MySQL8安装与配置</title>
+    <url>/2020/11/23/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/</url>
+    <content><![CDATA[<h2 id="Ubuntu安装MySQL8"><a href="#Ubuntu安装MySQL8" class="headerlink" title="Ubuntu安装MySQL8"></a>Ubuntu安装MySQL8</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt install mysql-server</span><br></pre></td></tr></table></figure>
+
+<h2 id="Debian-安装MySQL8"><a href="#Debian-安装MySQL8" class="headerlink" title="Debian 安装MySQL8"></a>Debian 安装MySQL8</h2><p>因为Debian的源中没有MySQL，所以我们需要手动添加</p>
+<ol>
+<li><p>先去MySQL<a href="https://dev.mysql.com/downloads/mysql/">官网</a></p>
+<p>选择版本和系统之后，会出来下面这张图片，点击这张图片，进入到第二步</p>
+<p><img data-src="/../images/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/image-20230826144155692.png" alt="image-20230826144155692"></p>
+</li>
+<li><p>下载DEB package</p>
+<p>进入第二个页面后，点击下载按钮，之后会跳转到另外一个页面</p>
+<p><img data-src="/../images/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/image-20230826144328978.png" alt="image-20230826144328978"></p>
+<p>不需要登录，右键点击最下面的直接下载的链接，复制链接</p>
+<p><img data-src="/../images/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/image-20230826144446024.png" alt="image-20230826144446024"></p>
+<p>然后到Debian中用wget下载：</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/mysql-apt-config_0.8.26-1_all.deb</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>安装</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dpkg --install mysql-apt-xxx.deb</span><br></pre></td></tr></table></figure>
+
+<p>然后<code>apt update</code>一下，<code>apt install mysql-server</code>就可以找到MySQL的包了。</p>
+<h2 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h2><p>登录MySQL</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mysql</span><br></pre></td></tr></table></figure>
+
+<p>可以直接登录，只要输入账户密码，登录之后再改密码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">show databases;</span><br><span class="line"></span><br><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;你的新密码&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>更新域属性，’%’表示任何方式访问</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">update user set host=&#x27;%&#x27; where user =&#x27;root&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>执行以上语句之后再执行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+
+<p>再执行授权语句</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27;WITH GRANT OPTION;</span><br></pre></td></tr></table></figure>
+
+<p>Debian系统到这里一般就可以远程连接了，Ubuntu可能还需要修改配置文件，注释掉绑定地址。</p>
+<p><strong>!!! 若还是有问题，则将<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>文件中的<code>bind-address</code>注释掉。</strong></p>
+]]></content>
+      <categories>
+        <category>软件</category>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL中常用的函数</title>
     <url>/2020/04/26/MySQL%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<h2 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h2><ol>
@@ -3752,60 +3806,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>MySQL8安装与配置</title>
-    <url>/2020/11/23/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/</url>
-    <content><![CDATA[<h2 id="Ubuntu安装MySQL8"><a href="#Ubuntu安装MySQL8" class="headerlink" title="Ubuntu安装MySQL8"></a>Ubuntu安装MySQL8</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt install mysql-server</span><br></pre></td></tr></table></figure>
-
-<h2 id="Debian-安装MySQL8"><a href="#Debian-安装MySQL8" class="headerlink" title="Debian 安装MySQL8"></a>Debian 安装MySQL8</h2><p>因为Debian的源中没有MySQL，所以我们需要手动添加</p>
-<ol>
-<li><p>先去MySQL<a href="https://dev.mysql.com/downloads/mysql/">官网</a></p>
-<p>选择版本和系统之后，会出来下面这张图片，点击这张图片，进入到第二步</p>
-<p><img data-src="/../images/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/image-20230826144155692.png" alt="image-20230826144155692"></p>
-</li>
-<li><p>下载DEB package</p>
-<p>进入第二个页面后，点击下载按钮，之后会跳转到另外一个页面</p>
-<p><img data-src="/../images/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/image-20230826144328978.png" alt="image-20230826144328978"></p>
-<p>不需要登录，右键点击最下面的直接下载的链接，复制链接</p>
-<p><img data-src="/../images/MySQL8%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/image-20230826144446024.png" alt="image-20230826144446024"></p>
-<p>然后到Debian中用wget下载：</p>
-</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/mysql-apt-config_0.8.26-1_all.deb</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>安装</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dpkg --install mysql-apt-xxx.deb</span><br></pre></td></tr></table></figure>
-
-<p>然后<code>apt update</code>一下，<code>apt install mysql-server</code>就可以找到MySQL的包了。</p>
-<h2 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h2><p>登录MySQL</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mysql</span><br></pre></td></tr></table></figure>
-
-<p>可以直接登录，只要输入账户密码，登录之后再改密码</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">show databases;</span><br><span class="line"></span><br><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line">ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;你的新密码&#x27;;</span><br></pre></td></tr></table></figure>
-
-<p>更新域属性，’%’表示任何方式访问</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">update user set host=&#x27;%&#x27; where user =&#x27;root&#x27;;</span><br></pre></td></tr></table></figure>
-
-<p>执行以上语句之后再执行</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
-
-<p>再执行授权语句</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27;WITH GRANT OPTION;</span><br></pre></td></tr></table></figure>
-
-<p>Debian系统到这里一般就可以远程连接了，Ubuntu可能还需要修改配置文件，注释掉绑定地址。</p>
-<p><strong>!!! 若还是有问题，则将<code>/etc/mysql/mysql.conf.d/mysqld.cnf</code>文件中的<code>bind-address</code>注释掉。</strong></p>
-]]></content>
-      <categories>
-        <category>软件</category>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>服务器</tag>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PVE直通硬盘到TrueNAS</title>
     <url>/2022/07/16/PVE%20%E7%9B%B4%E9%80%9A%E7%A1%AC%E7%9B%98%E5%88%B0TrueNAS/</url>
     <content><![CDATA[<h1 id="1-查询所有的硬盘识别码"><a href="#1-查询所有的硬盘识别码" class="headerlink" title="1.查询所有的硬盘识别码"></a>1.查询所有的硬盘识别码</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -la /dev/disk/by-id/|grep -v dm|grep -v lvm|grep -v part</span><br></pre></td></tr></table></figure>
@@ -3819,40 +3819,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       <tags>
         <tag>配置</tag>
         <tag>PVE</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Redis底层数据结构学习</title>
-    <url>/2024/07/16/Redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="总体概述"><a href="#总体概述" class="headerlink" title="总体概述"></a>总体概述</h1><p>Redis是一种键值对形式的NoSQL数据库，它使用<strong>哈希表</strong>来保存所有的键值，哈希表可以快速的以<code>O(1)</code>的时间复杂度帮我们找到我们需要的键值对。<br>在Redis中，键是<code>String</code>类型的，而对应的值则可以是任何的Redis中的数据类型，比如<code>String</code>、<code>list</code>、<code>set</code>、<code>zset</code>、<code>hash</code>等。哈希表中并不是直接存放值本身，而是通过<code>void * key</code>和<code>void * value</code>指针，分别指向实际的键对象和值对象，所以无论值是什么类型的，都可以通过指针来找到。<br>下面是一张Redis保存键值所涉及的数据结构：</p>
-<p><img data-src="/../images/Redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AD%A6%E4%B9%A0/IMG-20240717085942125.png"></p>
-<ul>
-<li>redisDb 结构，表示 Redis 数据库的结构，结构体⾥存放了指向了 dict 结构的指针； </li>
-<li>dict 结构，结构体⾥存放了 2 个哈希表，正常情况下都是⽤哈希表1，哈希表2只有在 rehash 的时候才⽤； </li>
-<li>ditctht 结构，表示哈希表的结构，结构⾥存放了哈希表数组，数组中的每个元素都是指向⼀个哈希表 节点结构（dictEntry）的指针； </li>
-<li>dictEntry 结构，表示哈希表节点的结构，结构⾥存放了 <code>void * key</code> 和 <code>void * value</code> 指针， <code>* key</code> 指向 的是 String 对象，⽽ <code>* value</code> 则可以指向 String 对象，也可以指向集合类型的对象，⽐如 List 对 象、Hash 对象、Set 对象和 Zset 对象。<br><code>void * key</code>和<code>void * value</code>指针指向的是<strong>Redis对象</strong>，Redis中的每个对象都是由redisObject结构来表示的，具体结构如下图：<br><img data-src="/../images/Redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AD%A6%E4%B9%A0/IMG-20240717091256506.png"></li>
-</ul>
-<p>对象结构⾥包含的成员变量包括： </p>
-<ul>
-<li>type，标识该对象是什么类型的对象（String 对象、 List 对象、Hash 对象、Set 对象和 Zset 对 象）； </li>
-<li>encoding，标识该对象使⽤了哪种底层的数据结构； </li>
-<li>ptr，指向底层数据结构的指针。</li>
-</ul>
-<h1 id="数据结构实现"><a href="#数据结构实现" class="headerlink" title="数据结构实现"></a>数据结构实现</h1><h2 id="SDS-Simple-Dynamic-String"><a href="#SDS-Simple-Dynamic-String" class="headerlink" title="SDS(Simple Dynamic String)"></a>SDS(Simple Dynamic String)</h2><p><img data-src="/../images/Redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AD%A6%E4%B9%A0/IMG-20240717091159316.png"></p>
-<p>结构中的每个成员变量分别介绍下： </p>
-<ul>
-<li>len，记录了字符串⻓度。这样获取字符串⻓度的时候，只需要返回这个成员变量值就⾏，时间复杂度 只需要 <code>O(1)</code>。 </li>
-<li>alloc，分配给字符数组的空间⻓度。这样在修改字符串的时候，可以通过 &#x3D;&#x3D;<code>alloc - len</code>&#x3D;&#x3D; 计算出剩余的 空间⼤⼩，可以⽤来判断空间是否满⾜修改需求，如果不满⾜的话，就会⾃动将 SDS 的空间扩展⾄ 执⾏修改所需的⼤⼩，然后才执⾏实际的修改操作，所以使⽤ SDS 既不需要⼿动修改 SDS 的空间⼤ ⼩，也不会出现前⾯所说的缓冲区溢出的问题。 </li>
-<li>flags，⽤来表示不同类型的 SDS。⼀共设计了 5 种类型，分别是 sdshdr5、sdshdr8、sdshdr16、 sdshdr32 和 sdshdr64，分别支持不同长度的变量位数。 </li>
-<li>buf[]，字符数组，⽤来保存实际数据。不仅可以保存字符串，也可以保存⼆进制数据。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>redis</tag>
-        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -3888,6 +3854,40 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis底层数据结构学习</title>
+    <url>/2024/07/16/Redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="总体概述"><a href="#总体概述" class="headerlink" title="总体概述"></a>总体概述</h1><p>Redis是一种键值对形式的NoSQL数据库，它使用<strong>哈希表</strong>来保存所有的键值，哈希表可以快速的以<code>O(1)</code>的时间复杂度帮我们找到我们需要的键值对。<br>在Redis中，键是<code>String</code>类型的，而对应的值则可以是任何的Redis中的数据类型，比如<code>String</code>、<code>list</code>、<code>set</code>、<code>zset</code>、<code>hash</code>等。哈希表中并不是直接存放值本身，而是通过<code>void * key</code>和<code>void * value</code>指针，分别指向实际的键对象和值对象，所以无论值是什么类型的，都可以通过指针来找到。<br>下面是一张Redis保存键值所涉及的数据结构：</p>
+<p><img data-src="/../images/Redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AD%A6%E4%B9%A0/IMG-20240717085942125.png"></p>
+<ul>
+<li>redisDb 结构，表示 Redis 数据库的结构，结构体⾥存放了指向了 dict 结构的指针； </li>
+<li>dict 结构，结构体⾥存放了 2 个哈希表，正常情况下都是⽤哈希表1，哈希表2只有在 rehash 的时候才⽤； </li>
+<li>ditctht 结构，表示哈希表的结构，结构⾥存放了哈希表数组，数组中的每个元素都是指向⼀个哈希表 节点结构（dictEntry）的指针； </li>
+<li>dictEntry 结构，表示哈希表节点的结构，结构⾥存放了 <code>void * key</code> 和 <code>void * value</code> 指针， <code>* key</code> 指向 的是 String 对象，⽽ <code>* value</code> 则可以指向 String 对象，也可以指向集合类型的对象，⽐如 List 对 象、Hash 对象、Set 对象和 Zset 对象。<br><code>void * key</code>和<code>void * value</code>指针指向的是<strong>Redis对象</strong>，Redis中的每个对象都是由redisObject结构来表示的，具体结构如下图：<br><img data-src="/../images/Redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AD%A6%E4%B9%A0/IMG-20240717091256506.png"></li>
+</ul>
+<p>对象结构⾥包含的成员变量包括： </p>
+<ul>
+<li>type，标识该对象是什么类型的对象（String 对象、 List 对象、Hash 对象、Set 对象和 Zset 对 象）； </li>
+<li>encoding，标识该对象使⽤了哪种底层的数据结构； </li>
+<li>ptr，指向底层数据结构的指针。</li>
+</ul>
+<h1 id="数据结构实现"><a href="#数据结构实现" class="headerlink" title="数据结构实现"></a>数据结构实现</h1><h2 id="SDS-Simple-Dynamic-String"><a href="#SDS-Simple-Dynamic-String" class="headerlink" title="SDS(Simple Dynamic String)"></a>SDS(Simple Dynamic String)</h2><p><img data-src="/../images/Redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AD%A6%E4%B9%A0/IMG-20240717091159316.png"></p>
+<p>结构中的每个成员变量分别介绍下： </p>
+<ul>
+<li>len，记录了字符串⻓度。这样获取字符串⻓度的时候，只需要返回这个成员变量值就⾏，时间复杂度 只需要 <code>O(1)</code>。 </li>
+<li>alloc，分配给字符数组的空间⻓度。这样在修改字符串的时候，可以通过 &#x3D;&#x3D;<code>alloc - len</code>&#x3D;&#x3D; 计算出剩余的 空间⼤⼩，可以⽤来判断空间是否满⾜修改需求，如果不满⾜的话，就会⾃动将 SDS 的空间扩展⾄ 执⾏修改所需的⼤⼩，然后才执⾏实际的修改操作，所以使⽤ SDS 既不需要⼿动修改 SDS 的空间⼤ ⼩，也不会出现前⾯所说的缓冲区溢出的问题。 </li>
+<li>flags，⽤来表示不同类型的 SDS。⼀共设计了 5 种类型，分别是 sdshdr5、sdshdr8、sdshdr16、 sdshdr32 和 sdshdr64，分别支持不同长度的变量位数。 </li>
+<li>buf[]，字符数组，⽤来保存实际数据。不仅可以保存字符串，也可以保存⼆进制数据。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -4578,6 +4578,36 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>spring-boot在IDEA中的热部署</title>
+    <url>/2020/03/15/spring-boot%E5%9C%A8IDEA%E4%B8%AD%E7%9A%84%E7%83%AD%E9%83%A8%E7%BD%B2/</url>
+    <content><![CDATA[<blockquote>
+<p>热部署用起来真的很爽，节约了开发的时间，让开发调试事半功倍，下面就来介绍一下热部署在idea中的热部署</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="开启idea的自动编译"><a href="#开启idea的自动编译" class="headerlink" title="开启idea的自动编译"></a>开启idea的自动编译</h2><p>打开顶部工具栏 File -&gt; Settings -&gt; Default Settings -&gt; Build -&gt; Compiler 然后勾选 Build project automatically </p>
+<p><img data-src="https://i.loli.net/2020/04/01/VHKm5DiQIF1cwTs.png" alt="image.png"></p>
+<h2 id="开启idea的热部署策略"><a href="#开启idea的热部署策略" class="headerlink" title="开启idea的热部署策略"></a>开启idea的热部署策略</h2><p>顶部菜单- &gt;Edit Configurations-&gt;SpringBoot插件-&gt;目标项目-&gt;勾选热更新</p>
+<p><img data-src="https://i.loli.net/2020/04/01/DFohgObmEYvM8In.png" alt="image.png"></p>
+<h2 id="在项目中添加热部署插件"><a href="#在项目中添加热部署插件" class="headerlink" title="在项目中添加热部署插件"></a>在项目中添加热部署插件</h2><p>在pom文件中加入依赖：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-devtools<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>配置完之后，静态文件有改变直接在浏览器中刷新就能看见效果了，不用再等待项目的重新启动了，自从用了热部署之后就在也离不开了﻿ ε≡٩(๑&gt;₃&lt;)۶</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>软件</category>
+        <category>配置</category>
+      </categories>
+      <tags>
+        <tag>spring-boot</tag>
+        <tag>idea</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Ubuntu中设置http强制重定向为https</title>
     <url>/2020/04/25/http%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%BAhttps/</url>
     <content><![CDATA[<h3 id="1-开启重定向"><a href="#1-开启重定向" class="headerlink" title="1.开启重定向"></a>1.开启重定向</h3><p>a2enmod rewrite</p>
@@ -4633,36 +4663,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>spring-boot在IDEA中的热部署</title>
-    <url>/2020/03/15/spring-boot%E5%9C%A8IDEA%E4%B8%AD%E7%9A%84%E7%83%AD%E9%83%A8%E7%BD%B2/</url>
-    <content><![CDATA[<blockquote>
-<p>热部署用起来真的很爽，节约了开发的时间，让开发调试事半功倍，下面就来介绍一下热部署在idea中的热部署</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="开启idea的自动编译"><a href="#开启idea的自动编译" class="headerlink" title="开启idea的自动编译"></a>开启idea的自动编译</h2><p>打开顶部工具栏 File -&gt; Settings -&gt; Default Settings -&gt; Build -&gt; Compiler 然后勾选 Build project automatically </p>
-<p><img data-src="https://i.loli.net/2020/04/01/VHKm5DiQIF1cwTs.png" alt="image.png"></p>
-<h2 id="开启idea的热部署策略"><a href="#开启idea的热部署策略" class="headerlink" title="开启idea的热部署策略"></a>开启idea的热部署策略</h2><p>顶部菜单- &gt;Edit Configurations-&gt;SpringBoot插件-&gt;目标项目-&gt;勾选热更新</p>
-<p><img data-src="https://i.loli.net/2020/04/01/DFohgObmEYvM8In.png" alt="image.png"></p>
-<h2 id="在项目中添加热部署插件"><a href="#在项目中添加热部署插件" class="headerlink" title="在项目中添加热部署插件"></a>在项目中添加热部署插件</h2><p>在pom文件中加入依赖：</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-devtools<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<p>配置完之后，静态文件有改变直接在浏览器中刷新就能看见效果了，不用再等待项目的重新启动了，自从用了热部署之后就在也离不开了﻿ ε≡٩(๑&gt;₃&lt;)۶</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>软件</category>
-        <category>配置</category>
-      </categories>
-      <tags>
-        <tag>idea</tag>
-        <tag>spring-boot</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>sublime text3下载插件</title>
     <url>/2020/02/26/sublime%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6/</url>
     <content><![CDATA[<h5 id="1-在github上下载Package-Control的安装包"><a href="#1-在github上下载Package-Control的安装包" class="headerlink" title="1.在github上下载Package Control的安装包"></a>1.在github上下载Package Control的安装包</h5><p><a href="https://github.com/wbond/sublime_package_control">https://github.com/wbond/sublime_package_control</a> </p>
@@ -4682,6 +4682,21 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>软件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ubuntu安装系统后硬盘只使用一半问题</title>
+    <url>/2022/09/19/ubuntu%E5%AE%89%E8%A3%85%E7%B3%BB%E7%BB%9F%E5%90%8E%E7%A1%AC%E7%9B%98%E5%8F%AA%E4%BD%BF%E7%94%A8%E4%B8%80%E5%8D%8A%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>ubuntu server 安装时默认使用lvm进行磁盘管理，只使用磁盘空间的一半，如果要把另一半也用起来，需要如下处理:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 利用以下方式将空间全部分给这个盘</span></span><br><span class="line">sudo lvextend -l +100%FREE /dev/mapper/ubuntu–vg-ubuntu–lv</span><br><span class="line"><span class="comment"># 重新计算磁盘大小</span></span><br><span class="line">sudo resize2fs /dev/mapper/ubuntu–vg-ubuntu–lv</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>/dev/mapper/ubuntu–vg-ubuntu–lv</code>可以通过’df -h’查看</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -4858,44 +4873,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>ubuntu安装系统后硬盘只使用一半问题</title>
-    <url>/2022/09/19/ubuntu%E5%AE%89%E8%A3%85%E7%B3%BB%E7%BB%9F%E5%90%8E%E7%A1%AC%E7%9B%98%E5%8F%AA%E4%BD%BF%E7%94%A8%E4%B8%80%E5%8D%8A%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>ubuntu server 安装时默认使用lvm进行磁盘管理，只使用磁盘空间的一半，如果要把另一半也用起来，需要如下处理:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 利用以下方式将空间全部分给这个盘</span></span><br><span class="line">sudo lvextend -l +100%FREE /dev/mapper/ubuntu–vg-ubuntu–lv</span><br><span class="line"><span class="comment"># 重新计算磁盘大小</span></span><br><span class="line">sudo resize2fs /dev/mapper/ubuntu–vg-ubuntu–lv</span><br></pre></td></tr></table></figure>
-
-<p>其中<code>/dev/mapper/ubuntu–vg-ubuntu–lv</code>可以通过’df -h’查看</p>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《摔跤吧！爸爸》观后感</title>
-    <url>/2020/06/25/%E3%80%8A%E6%91%94%E8%B7%A4%E5%90%A7%EF%BC%81%E7%88%B8%E7%88%B8%E3%80%8B%E8%A7%82%E5%90%8E%E6%84%9F/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="ba6cf64838c441af18b6e167d55dfe2d151e85516310f94c9d0136fca6aa3d2b">99b23c07cf5459d82b841027c3c80769d0f7a6e686739cd75293781e6406538097982004ec16c3791d29ef42f2800f31f1795fb6981b6cfdd79ee08914a56c20e8c44b72ac4fa8153d3bd5dfab6010c9a4407f36a0eef85fc54f0dd244f64f5e9e6092ea29751a9506563679310075cf829db26ae55bd828a56af710b7df239541f513c05e4de9a86c8a28faa6af301c597f3d068da9322ca0d527447ead38d736387fd07a702391ff3e43c91a68ecf98aac99f64d15341a489c282804a9bfa0f6d84be7fe856d1d828774b4ba3b463df33b96fed6f2fcfc83a343b3eac529be0b36df2453bdb52a317377d9a082deb98a96bbe0b51544167066f97fd0a7fd505791ad295bc52faa5920c9142ecb05c7d6d4a14532df653442eb5b4a103e7b4361f5345a17d4af9f544af195fe030f4c12270dcb80f9d5844f62e655a8790e6319931f815fd3b6ce3608b85973459e6de6b0df6d113d07d445aa97b29eae21fbb48900e025cbe9ee666dcbdc7e1777e41ee4f65d707fd1504ccb96a77ad6303130dc4321dd0e3ae73857674bc77aee92d696c0b1a6a96da938aaa36558a622c629a5ceddd755011eda72c206ddb1d0892989851b6b7d640f2af4c14cccbca14df559994a0209719383e958d614edeadcbd83934597e2aee942916efb9441307035ca0510d04d793ddde1d4a66137885d3562a807de01574edcfdc24b3ca269519ea1c1ae989aa8842f6d643ced3fa16620a7618be9d7bd639916ee9dc1b871767e245f092b0c4fdf456595c19fa1f09c8120d6f684282d562915cc022907d1569af81423ca9dd37310f4aeaf9b81176f2ac8c264944102e4fbef1653ddfe36c04c25b203120819125e5b858c94e3e190dfc275cf79712ccdf229c890bf0dbeb297c04958a601dce3f191af9c954f39941d88aeeb15e76328f987911124cf0bca897d4971ef35b5c97c3515bee836d4c54b0ef7cb87b427007cd06c4cb8353cf1c3f15122ee2f3d53fbbb5f1bb2368715edb5834c17008b58214aced01c9c7093c052cdfd777593ea3e4f3d2699e8a8bd51f04aedfef23d59239fa8d3ffa172f525537c8619458dabd3cf4ea30abcc13bbb7a29e443df40b1b61eba6ab55e6f763b11970a17367d9fd663e5d37b3e7cda975414d93067717799f7d76e9aaf3e079adffc692355c1ff591ec18b077816d9235a38c98f12baba3e77f480152333dd746ff22c0b2a237c418cf267eee31e48af4faa79d9b9d82198e8ef251c7c6ee22a3b9fc3d003af258934e36668d687c9d874c7f4cfad7bd0c1e7e93555c4d8989740f5cdc3c8d83445046b50853d40a26010bab9eeeae515234d0d8f86b8a017a1d02da6ff098c332bae501e70c03a3cb0730e7b11f41f62a5ceae8ccb9eb08298f441a55c5d09da088c9c0fdc7f2b73058fe4ff7733be1e2fe10e14efa9442829b1f95a0b577c891bf18d15e33f253d8ceb221f00051da5d873136d1e2c17add037d39283db4f9b420c7fc8e71560ac6438cda3c626c6165045b350531ef014104023476a1601b4aeb3d9c556c85b09819ad4b6ccb66d9ac28c07cc532109e7104fd3fe90f4abaebbf2e838da990a1998737e51ed552714ffb6c032a989ddc8ec6a0fe8e829b5021114f8a8a59be80d26db9de5e4380e478f913fccc5f7cd6681cc59602c46f65eecdfae184c33189f269b4780dc998e244f4bca25211a58c9bfc67d4a63fb81c651365dbba961dd14f01e8e4f3fdb576c7f26a62642262402d45d82c61ccdbbb4c6c889f0c82d2bcad3666bb97044468c0930c2aa1f49b958a3d4fa9dc13e1ccf3b59435b2966b11f91857573351be91c3fa3e6aa2dcd9122e5fac87bd731fb5dd9f7ef78c3ab146861b8fe9186731556871666638718510c13e776173a8332f6cb5b1df6b2c5acbd5d09651b5052c8da155504eb0768f6be4bed43d4f33510088d9ea127c4bcdcfa6036c9200f58d69060a87a7175daf89cf0522b5e599e946f48233e5fdcf139d504942062969fbc07f6bb298e4f9864719ae0910e4d11d297321b344a0eb6d216aa81e491d27133e2a970fc93d4affcbacc1a5a38524c9cf003cb22198d0b916290eec2e94c38d249e24f9217c83d2ed45c91cfc1040dff1704c0697eee29ac59e6ce99f1898da6fa7873245e392f405606d938c257d0be62662a8bfe94d793e8552e06bb5b3cfbc5705eca37e66b6328454d105a6226acf76ebbc1d1afc4fc3e6464ccb3198c731b4a0d7978297e31333c140a497f65612f41418306dd3fc8f61f1d48f2c1046f9d966d84b755d6dd2bd89862196f6f7829625be4889bb79bee6166673bae2a9c50ac56cc5b3749585686b48f3673e309750330734de18b68f0ece7fbc38ab3c939d5e67c8a91f5c01d67f6e9f019797a0cf9ee795dab0a9c50b816c58e114243798ef2dcf98a12fd30421a3804f5e1c63710bd685dba15a58084e52ffeef41957ca1d7a06abe21a608ef1f29521a4408ac914a56395896081d75345c8e8ebccbcf8e5e29f00d2979bc6187692d6010895681ded09b42e85f8beef27ae13923928c3b5ebda5a03058088805f2544e5fc47957f8ce63505bebcab159f53eb09cd99a8eb0e468350b5112fe352d64f46cf0a9adca02cd920691b5a11bc8b46cd9fed78fd4db2663352fc90dcdaa203a1ac318e6b923683f4f89135e653f77288b47a49a84a65dd1d4670c3bda5f4db77788fe58695692ed0f07036b2525588bbabc3024ce7f72f3d17d5d8c4b849a319e0d6c577e2dab60d18a6acd34748000b790ea3e9becc813b743897e2cff6ecd9c8783553e3c442785173d05c4ec590cd81faa979c77cb204cbf2baac9acb03d79bbb2510ac69887a8ece35c3d698a0b9ff25128b09157b6e6d88275ddbc8757a780d18354039ef471549fd6ca4b44378f715b2b18a5052b1c2b9533b62c5b5ea2c6ea33af814871104657fcac8626b05c55b34abcd1aa4d5d498026cc956b8ee8332120564f9afd039642684ce51c8bcaa562e055f92abf66d0e231f974a668919c142104d6d0054fab38bc1fac2f610614545918e3429d6d0e6aeb328ced59e7b75541f7c7be9a2f19290914f1e227d38b895d44be4f1ab4a441e3c5b7a57c1324946d3bba769816a46e83d1d13524685af12bd311462cda394e4b47e335b6ebf0c5308cb7e6d359937167aeb323bc3b353a0958ff941a0e06e0907a8bd822c3227ee02e10a2e164e1337165c3d012ae63fc6783ca1672f0984e1620d16ac9206365681ed245bc0631ef692b7ea3347ffc968cfeb450bcdd2be20f431bc8f4fd18aad353929631b98a61d7e7eb2319c693ba4096ab98cb22b34cb0f2b3374eba2a6bccfc33014f8c796ae9dc697c1a32ad9835120615fa0d56e243daa79ed049facbbdc52d3c87fd7ff17940d6ca8f3c5f965071c22e198ce4c21541121f23c830c0c71d3550e110ef99d2a95c16adefb818f05ad570847cbdb835be0fbd2a639ee85d1a2ada8a522b77b481d00ffa933868e5c294d90567b53acbdaae0301e76580a586801d9221debb048e8e05e5b1a1201df70bda26a3baf6a0132c110e0c3f7529550e43dc9c52321efa8e6ccdc84652e15c75c47410c093f2868028df71de533ec8b524cfd05b28c1c27141db532a79727ba246b6897e7d1f66b14e6fdbb20c0ea677fad8c08749ce08d7c386ef657777f47f0146df5ba84cc83794f847e9208105c9daeab2eda2bacf094a1d4a1d946a7d9ccd23af8beb19c64c8befa7d4eb7fb8761a330aa39686ac4f44cfd329ac819b1d32e416e06abda042ef3c579ec2c871e0156e785547bcbdc347493d69734fe19fae407d2d502f92783a9c4874969e67229adc7322a9b0179834107c2db503c3d61aa7c4c819f9b0872b0acf1574335509d574e8a5bd24a926e516fd04f05befe30f543e93e31b1805638f0590419cd99bfbb46c48982692bca00561f921782cc964089074f3fe50a7c931652cba1b403442e31f0c4605ec4e18243f555531f06989bf30e5d6db707592da5db57dd8f9bdc654717ca0688978b61ff8e97bb70602d70998da4e8c8d6389970f59f0bfc448d1445ef54d6905cb72131ea62827c9e03a808e1b29f61b368aff3c8c5a67c8dfa364ec9d12ed8ea77bd98b8fb1e0ae80a1cb1438307f3d28efd54384ea06ce31cdd66a027ecb72b27d966a4a7fe64f2df2e08286e4105c40177b0dd1e9fd358d35d296291f0efa6c9526a77cd032c9c06dff6969e490a4c10f59e86d06a994660e932a5add3ae683b3d023b6bbed6332abf249ebd393e71272e26e78a3bbfd6c483e17a80decaf944061a9f60259241642470a03160942fbb96acc35dbfabe41559d7019ced2d95759aa31dae820288ac11e30198b798d90ed7b1cf6adc5c40c05e1ff08e7767bd8d25815144ec0d480a8c193553891acf2e8511aaec37be05c48dca000d463600a45b17d48253ce40ee426d0e0a24c78a819ce340c0a197768b5364eb2bdb82ea1347c8b94c43f3ca3e54b1bafc7d8e20664dd215fe342b9426ebb170a294b3448de9e0210ec7d0f0e691cdc777d0e50a020ebbdc549f5981930ea50a2155956db2d277fefd0c14e13b8e0c05c1c61c3e4344ed3ed78c0d845cc30e48a33d6d97a14d7690529cf6802e1bbdc8b26d7ae61692520474fc1992a1e6de664e7f72477d460377bb66944bb81bb9b0240ee297fa30b87735737dfead64f67d84954340e5c5b1618b1facd11f7ae6dda0e9c634365838c227f9843549f3d8b0505e22a5e1dc372b9d163d6cda3e1edee3c33ea96044e2bf7b2d1f534f3e30be77204b73f4cbaff8b517f94b9ff36a995f597c8dc9b76295c229095083f1751bd35260cbcb8c4cc51602f9fa9ed6efbb9c9e27a5302435d40e9e5a1a0016bb30655f5eeaf74caa200836c4f95a3935839cb4d10a13af143aaa2accecf73f0fa2c3ff695beb3e0d12ead2c63e66af5f70893295a448288f0b25f9e165cf8235e50745b5710d52bf45f9dc52b1fc5bebfbab9b380f09bfddeed4e829affab8491211805b11859069b8c9518dd5f620a0d8297ef8141f39fbfdd97215aa5ec40f6034f7de01987245147411016278d11c9358db9432b3c2bb1c3853523cb7f6336563bf9a904fb64dd0ed6d4c6276375acb94a83215996690cf52dde592dc5aa2ba0a587d6635592d826a0b13f43208a7fa046ca157145b058d406abb679f67922cf58f8d23ce3d99b6588cfbf01fd543d35319a69580d9d97f711cc1e6507413b35e9711e088e5cc0c997585d5b5845feec064dfd53600ffb177ddce4d1365d8c690abaf24a0cb2c3265a63978b9cfc94ee4ef42bdc84cfeebd03f11917da70722ef638eccdeb42f703ee5e046048c937f540cb0b284fb4b229baef1cc81bd8c231dfad1fcc471d7a34f57db15aadfaa9b39c9531fe2b0b0edc5cc02ee775c93adf35b3dd30b0611c856307a81154ff4edaa6620fdcef48b9c93da31d405756893080cf09cf5a5b95a4d4069fc583f099af96a02d4c777c150eb7eda6f4ca6b50715f3de896f40fd6d790d07ae26d7be04a8d1a99556a4f6badee77e99c39537cf141b79d0d44a982d553315871240b4d22687c4893572a6eca772f217b82c104a0d2c1b5741b21b192e9785ff9aa340580e834bfeec22ca42e47830fc9ce22eda7dbf502f91b50679a56432d152d956afc0fe7cf40950be20d2debf135913f74e52c3e6f6b8f60e8b8235fcf4f49b5ba3635bac57bdeb6c6f80f2f55a8c8f43d642925fbf5dd9062595c661002fbd32bca5ba5aa4850ddcc67762ee2e69e64ed5502f60f234d06a88d3beb10892414a47bce5b40239708d8018cf08e688e90624b4acfda12c51ac286b732b6407a1af511a984162bf67ec6d2f1948324f3f2b639cd1dfd1deeeaf406a853786b0c09878d37f45ecc0744a596e177fc03cc1a4ad9d1cf04f883c9e13fd1c1e0ba05e437bbabf796eb767d04f2409a4f040a54dfdf77baee1f1ecb174fda0556a07ac4d63c7feeb179979a2395279cad436b8b281d4d2a54fcf58ea08ad06131902a33658ccef32b16815a0624f2946aebd71459f430f31522b1d1a60a205d11719ffdf535e819c9bbfa1150f9df3ea21510d74cd8ee04256aa5f19285903b63fb247ac96215f48af31298c4348173415ca252c2102dd471c69ceaf2b65d3a44a61e4ace14a3c346e19d1005f7a58e24ac41f275c7dfbd408da1ef610c1fd05a37c7adae1e95fde580c855317e63c53b0ae02e681392e84536576250ae9eee8cad2692eddeed9c4b0dd4eca6402db6dc8b52c4754d1b73e286bb370f341b19c2610ae624647aa0354ee86819a3f5c0e40cd4aa1a0a9b5c9346785d4d2600efc7b5b19a83535609c3cf13c0f1fa205ac577857c9dcad44302f8bd9bc9d540995b1663aec92bf0440bbb942deab71f9ec5d7740299a9a672fb5b9216402f1095e2c53026d43e1abe52c183a521cb7c33116c0608f50a2d9a0aece3edc2a4c55f0942e7a5fc6a6ac97bab4796547571570f49af8f2c9424bec9e9315eb13080b534b7a888bd89f0a76be75b831cdaa402d0b9ef732deead31c5a7ff1dd4d12b227d5a72d4402821820b79d5824c5266127f287bbbf54ab92aca5ae9b2e1cfa338833d45e77b3532a55868a61e655b685dddf57da16f5aebbc833f9cadde0d301e5a8d1e9d3f8790fc8e845bf4d22ce3b981f4069481bf5a94b843be05e48b58435afa3ffb9f5f4a0bdfbdfe8e469320c94fdbbd21586addb0ef9553621af6324b08cfe45a55c61be00900594ebda72d5824a10a31160f8646fbbecdb95c318d5a5f6b56686628130bb98a971bf0b12065b6750da366057a3a4d5837ef0efdbc314bf3960b6d283d8a214d4f0027d9c2cda97ebfbd8edfe49ffd580956c27cfd7ad53360a2c4727e6d5b5ae0dd56fd81b7e58d2dfdc97dddc33bf27eb11c4097ff9b19b119c3ff9b527fb3f4e8f22a45904fc2135ccc20756513f799e7ae4ecd88638634c5e04f59ff09eadfa9fcb3425543a643a08d0f6e0b24a045d2225ac66cc5aa240d7aa33c16d3d2fa96af1773b9cc39bdc79facf49357d501f6b5ca6d6f47c33bd548108dbf1fa0f5e81f3f52f54d078d004017d9df0564ae9ed9231d26798302412b7e1aa3b6d5d0ef51945f451f0e95c157fe8b64b03a06962e5d5a397738e6b020ce9be71a5679e97940f974f0ca39b4c3ff2a81b24a9eeda9fac2e536b8c074bb289767d7d37f5faaf79e9f02304307869ed7539b2ab12bbf0906db8f890c0837b41d908d4b97e27db5ab33e7680876994641d8b44a43d4874bf239e3191575fcc6a9122370a5c1c94fb19229078317dfcddf4cb6432381d4eebd33c4fd9a007dc4b9e296411c12b768423d89c770d3905058</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">请输入密码进行查看</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <categories>
-        <category>感悟</category>
-        <category>影视</category>
-      </categories>
-      <tags>
-        <tag>感悟</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>zerotier代理局域网流量</title>
     <url>/2023/09/03/zerotier%E4%BB%A3%E7%90%86%E5%B1%80%E5%9F%9F%E7%BD%91%E6%B5%81%E9%87%8F/</url>
     <content><![CDATA[<p>在ubuntu或debian下安装zerotier，并代理局域网所有流量</p>
@@ -4946,6 +4923,29 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
 ]]></content>
       <tags>
         <tag>zerotier</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《摔跤吧！爸爸》观后感</title>
+    <url>/2020/06/25/%E3%80%8A%E6%91%94%E8%B7%A4%E5%90%A7%EF%BC%81%E7%88%B8%E7%88%B8%E3%80%8B%E8%A7%82%E5%90%8E%E6%84%9F/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="ba6cf64838c441af18b6e167d55dfe2d151e85516310f94c9d0136fca6aa3d2b">99b23c07cf5459d82b841027c3c80769d0f7a6e686739cd75293781e6406538097982004ec16c3791d29ef42f2800f31f1795fb6981b6cfdd79ee08914a56c20e8c44b72ac4fa8153d3bd5dfab6010c9a4407f36a0eef85fc54f0dd244f64f5e9e6092ea29751a9506563679310075cf829db26ae55bd828a56af710b7df239541f513c05e4de9a86c8a28faa6af301c597f3d068da9322ca0d527447ead38d736387fd07a702391ff3e43c91a68ecf98aac99f64d15341a489c282804a9bfa0f6d84be7fe856d1d828774b4ba3b463df33b96fed6f2fcfc83a343b3eac529be0b36df2453bdb52a317377d9a082deb98a96bbe0b51544167066f97fd0a7fd505791ad295bc52faa5920c9142ecb05c7d6d4a14532df653442eb5b4a103e7b4361f5345a17d4af9f544af195fe030f4c12270dcb80f9d5844f62e655a8790e6319931f815fd3b6ce3608b85973459e6de6b0df6d113d07d445aa97b29eae21fbb48900e025cbe9ee666dcbdc7e1777e41ee4f65d707fd1504ccb96a77ad6303130dc4321dd0e3ae73857674bc77aee92d696c0b1a6a96da938aaa36558a622c629a5ceddd755011eda72c206ddb1d0892989851b6b7d640f2af4c14cccbca14df559994a0209719383e958d614edeadcbd83934597e2aee942916efb9441307035ca0510d04d793ddde1d4a66137885d3562a807de01574edcfdc24b3ca269519ea1c1ae989aa8842f6d643ced3fa16620a7618be9d7bd639916ee9dc1b871767e245f092b0c4fdf456595c19fa1f09c8120d6f684282d562915cc022907d1569af81423ca9dd37310f4aeaf9b81176f2ac8c264944102e4fbef1653ddfe36c04c25b203120819125e5b858c94e3e190dfc275cf79712ccdf229c890bf0dbeb297c04958a601dce3f191af9c954f39941d88aeeb15e76328f987911124cf0bca897d4971ef35b5c97c3515bee836d4c54b0ef7cb87b427007cd06c4cb8353cf1c3f15122ee2f3d53fbbb5f1bb2368715edb5834c17008b58214aced01c9c7093c052cdfd777593ea3e4f3d2699e8a8bd51f04aedfef23d59239fa8d3ffa172f525537c8619458dabd3cf4ea30abcc13bbb7a29e443df40b1b61eba6ab55e6f763b11970a17367d9fd663e5d37b3e7cda975414d93067717799f7d76e9aaf3e079adffc692355c1ff591ec18b077816d9235a38c98f12baba3e77f480152333dd746ff22c0b2a237c418cf267eee31e48af4faa79d9b9d82198e8ef251c7c6ee22a3b9fc3d003af258934e36668d687c9d874c7f4cfad7bd0c1e7e93555c4d8989740f5cdc3c8d83445046b50853d40a26010bab9eeeae515234d0d8f86b8a017a1d02da6ff098c332bae501e70c03a3cb0730e7b11f41f62a5ceae8ccb9eb08298f441a55c5d09da088c9c0fdc7f2b73058fe4ff7733be1e2fe10e14efa9442829b1f95a0b577c891bf18d15e33f253d8ceb221f00051da5d873136d1e2c17add037d39283db4f9b420c7fc8e71560ac6438cda3c626c6165045b350531ef014104023476a1601b4aeb3d9c556c85b09819ad4b6ccb66d9ac28c07cc532109e7104fd3fe90f4abaebbf2e838da990a1998737e51ed552714ffb6c032a989ddc8ec6a0fe8e829b5021114f8a8a59be80d26db9de5e4380e478f913fccc5f7cd6681cc59602c46f65eecdfae184c33189f269b4780dc998e244f4bca25211a58c9bfc67d4a63fb81c651365dbba961dd14f01e8e4f3fdb576c7f26a62642262402d45d82c61ccdbbb4c6c889f0c82d2bcad3666bb97044468c0930c2aa1f49b958a3d4fa9dc13e1ccf3b59435b2966b11f91857573351be91c3fa3e6aa2dcd9122e5fac87bd731fb5dd9f7ef78c3ab146861b8fe9186731556871666638718510c13e776173a8332f6cb5b1df6b2c5acbd5d09651b5052c8da155504eb0768f6be4bed43d4f33510088d9ea127c4bcdcfa6036c9200f58d69060a87a7175daf89cf0522b5e599e946f48233e5fdcf139d504942062969fbc07f6bb298e4f9864719ae0910e4d11d297321b344a0eb6d216aa81e491d27133e2a970fc93d4affcbacc1a5a38524c9cf003cb22198d0b916290eec2e94c38d249e24f9217c83d2ed45c91cfc1040dff1704c0697eee29ac59e6ce99f1898da6fa7873245e392f405606d938c257d0be62662a8bfe94d793e8552e06bb5b3cfbc5705eca37e66b6328454d105a6226acf76ebbc1d1afc4fc3e6464ccb3198c731b4a0d7978297e31333c140a497f65612f41418306dd3fc8f61f1d48f2c1046f9d966d84b755d6dd2bd89862196f6f7829625be4889bb79bee6166673bae2a9c50ac56cc5b3749585686b48f3673e309750330734de18b68f0ece7fbc38ab3c939d5e67c8a91f5c01d67f6e9f019797a0cf9ee795dab0a9c50b816c58e114243798ef2dcf98a12fd30421a3804f5e1c63710bd685dba15a58084e52ffeef41957ca1d7a06abe21a608ef1f29521a4408ac914a56395896081d75345c8e8ebccbcf8e5e29f00d2979bc6187692d6010895681ded09b42e85f8beef27ae13923928c3b5ebda5a03058088805f2544e5fc47957f8ce63505bebcab159f53eb09cd99a8eb0e468350b5112fe352d64f46cf0a9adca02cd920691b5a11bc8b46cd9fed78fd4db2663352fc90dcdaa203a1ac318e6b923683f4f89135e653f77288b47a49a84a65dd1d4670c3bda5f4db77788fe58695692ed0f07036b2525588bbabc3024ce7f72f3d17d5d8c4b849a319e0d6c577e2dab60d18a6acd34748000b790ea3e9becc813b743897e2cff6ecd9c8783553e3c442785173d05c4ec590cd81faa979c77cb204cbf2baac9acb03d79bbb2510ac69887a8ece35c3d698a0b9ff25128b09157b6e6d88275ddbc8757a780d18354039ef471549fd6ca4b44378f715b2b18a5052b1c2b9533b62c5b5ea2c6ea33af814871104657fcac8626b05c55b34abcd1aa4d5d498026cc956b8ee8332120564f9afd039642684ce51c8bcaa562e055f92abf66d0e231f974a668919c142104d6d0054fab38bc1fac2f610614545918e3429d6d0e6aeb328ced59e7b75541f7c7be9a2f19290914f1e227d38b895d44be4f1ab4a441e3c5b7a57c1324946d3bba769816a46e83d1d13524685af12bd311462cda394e4b47e335b6ebf0c5308cb7e6d359937167aeb323bc3b353a0958ff941a0e06e0907a8bd822c3227ee02e10a2e164e1337165c3d012ae63fc6783ca1672f0984e1620d16ac9206365681ed245bc0631ef692b7ea3347ffc968cfeb450bcdd2be20f431bc8f4fd18aad353929631b98a61d7e7eb2319c693ba4096ab98cb22b34cb0f2b3374eba2a6bccfc33014f8c796ae9dc697c1a32ad9835120615fa0d56e243daa79ed049facbbdc52d3c87fd7ff17940d6ca8f3c5f965071c22e198ce4c21541121f23c830c0c71d3550e110ef99d2a95c16adefb818f05ad570847cbdb835be0fbd2a639ee85d1a2ada8a522b77b481d00ffa933868e5c294d90567b53acbdaae0301e76580a586801d9221debb048e8e05e5b1a1201df70bda26a3baf6a0132c110e0c3f7529550e43dc9c52321efa8e6ccdc84652e15c75c47410c093f2868028df71de533ec8b524cfd05b28c1c27141db532a79727ba246b6897e7d1f66b14e6fdbb20c0ea677fad8c08749ce08d7c386ef657777f47f0146df5ba84cc83794f847e9208105c9daeab2eda2bacf094a1d4a1d946a7d9ccd23af8beb19c64c8befa7d4eb7fb8761a330aa39686ac4f44cfd329ac819b1d32e416e06abda042ef3c579ec2c871e0156e785547bcbdc347493d69734fe19fae407d2d502f92783a9c4874969e67229adc7322a9b0179834107c2db503c3d61aa7c4c819f9b0872b0acf1574335509d574e8a5bd24a926e516fd04f05befe30f543e93e31b1805638f0590419cd99bfbb46c48982692bca00561f921782cc964089074f3fe50a7c931652cba1b403442e31f0c4605ec4e18243f555531f06989bf30e5d6db707592da5db57dd8f9bdc654717ca0688978b61ff8e97bb70602d70998da4e8c8d6389970f59f0bfc448d1445ef54d6905cb72131ea62827c9e03a808e1b29f61b368aff3c8c5a67c8dfa364ec9d12ed8ea77bd98b8fb1e0ae80a1cb1438307f3d28efd54384ea06ce31cdd66a027ecb72b27d966a4a7fe64f2df2e08286e4105c40177b0dd1e9fd358d35d296291f0efa6c9526a77cd032c9c06dff6969e490a4c10f59e86d06a994660e932a5add3ae683b3d023b6bbed6332abf249ebd393e71272e26e78a3bbfd6c483e17a80decaf944061a9f60259241642470a03160942fbb96acc35dbfabe41559d7019ced2d95759aa31dae820288ac11e30198b798d90ed7b1cf6adc5c40c05e1ff08e7767bd8d25815144ec0d480a8c193553891acf2e8511aaec37be05c48dca000d463600a45b17d48253ce40ee426d0e0a24c78a819ce340c0a197768b5364eb2bdb82ea1347c8b94c43f3ca3e54b1bafc7d8e20664dd215fe342b9426ebb170a294b3448de9e0210ec7d0f0e691cdc777d0e50a020ebbdc549f5981930ea50a2155956db2d277fefd0c14e13b8e0c05c1c61c3e4344ed3ed78c0d845cc30e48a33d6d97a14d7690529cf6802e1bbdc8b26d7ae61692520474fc1992a1e6de664e7f72477d460377bb66944bb81bb9b0240ee297fa30b87735737dfead64f67d84954340e5c5b1618b1facd11f7ae6dda0e9c634365838c227f9843549f3d8b0505e22a5e1dc372b9d163d6cda3e1edee3c33ea96044e2bf7b2d1f534f3e30be77204b73f4cbaff8b517f94b9ff36a995f597c8dc9b76295c229095083f1751bd35260cbcb8c4cc51602f9fa9ed6efbb9c9e27a5302435d40e9e5a1a0016bb30655f5eeaf74caa200836c4f95a3935839cb4d10a13af143aaa2accecf73f0fa2c3ff695beb3e0d12ead2c63e66af5f70893295a448288f0b25f9e165cf8235e50745b5710d52bf45f9dc52b1fc5bebfbab9b380f09bfddeed4e829affab8491211805b11859069b8c9518dd5f620a0d8297ef8141f39fbfdd97215aa5ec40f6034f7de01987245147411016278d11c9358db9432b3c2bb1c3853523cb7f6336563bf9a904fb64dd0ed6d4c6276375acb94a83215996690cf52dde592dc5aa2ba0a587d6635592d826a0b13f43208a7fa046ca157145b058d406abb679f67922cf58f8d23ce3d99b6588cfbf01fd543d35319a69580d9d97f711cc1e6507413b35e9711e088e5cc0c997585d5b5845feec064dfd53600ffb177ddce4d1365d8c690abaf24a0cb2c3265a63978b9cfc94ee4ef42bdc84cfeebd03f11917da70722ef638eccdeb42f703ee5e046048c937f540cb0b284fb4b229baef1cc81bd8c231dfad1fcc471d7a34f57db15aadfaa9b39c9531fe2b0b0edc5cc02ee775c93adf35b3dd30b0611c856307a81154ff4edaa6620fdcef48b9c93da31d405756893080cf09cf5a5b95a4d4069fc583f099af96a02d4c777c150eb7eda6f4ca6b50715f3de896f40fd6d790d07ae26d7be04a8d1a99556a4f6badee77e99c39537cf141b79d0d44a982d553315871240b4d22687c4893572a6eca772f217b82c104a0d2c1b5741b21b192e9785ff9aa340580e834bfeec22ca42e47830fc9ce22eda7dbf502f91b50679a56432d152d956afc0fe7cf40950be20d2debf135913f74e52c3e6f6b8f60e8b8235fcf4f49b5ba3635bac57bdeb6c6f80f2f55a8c8f43d642925fbf5dd9062595c661002fbd32bca5ba5aa4850ddcc67762ee2e69e64ed5502f60f234d06a88d3beb10892414a47bce5b40239708d8018cf08e688e90624b4acfda12c51ac286b732b6407a1af511a984162bf67ec6d2f1948324f3f2b639cd1dfd1deeeaf406a853786b0c09878d37f45ecc0744a596e177fc03cc1a4ad9d1cf04f883c9e13fd1c1e0ba05e437bbabf796eb767d04f2409a4f040a54dfdf77baee1f1ecb174fda0556a07ac4d63c7feeb179979a2395279cad436b8b281d4d2a54fcf58ea08ad06131902a33658ccef32b16815a0624f2946aebd71459f430f31522b1d1a60a205d11719ffdf535e819c9bbfa1150f9df3ea21510d74cd8ee04256aa5f19285903b63fb247ac96215f48af31298c4348173415ca252c2102dd471c69ceaf2b65d3a44a61e4ace14a3c346e19d1005f7a58e24ac41f275c7dfbd408da1ef610c1fd05a37c7adae1e95fde580c855317e63c53b0ae02e681392e84536576250ae9eee8cad2692eddeed9c4b0dd4eca6402db6dc8b52c4754d1b73e286bb370f341b19c2610ae624647aa0354ee86819a3f5c0e40cd4aa1a0a9b5c9346785d4d2600efc7b5b19a83535609c3cf13c0f1fa205ac577857c9dcad44302f8bd9bc9d540995b1663aec92bf0440bbb942deab71f9ec5d7740299a9a672fb5b9216402f1095e2c53026d43e1abe52c183a521cb7c33116c0608f50a2d9a0aece3edc2a4c55f0942e7a5fc6a6ac97bab4796547571570f49af8f2c9424bec9e9315eb13080b534b7a888bd89f0a76be75b831cdaa402d0b9ef732deead31c5a7ff1dd4d12b227d5a72d4402821820b79d5824c5266127f287bbbf54ab92aca5ae9b2e1cfa338833d45e77b3532a55868a61e655b685dddf57da16f5aebbc833f9cadde0d301e5a8d1e9d3f8790fc8e845bf4d22ce3b981f4069481bf5a94b843be05e48b58435afa3ffb9f5f4a0bdfbdfe8e469320c94fdbbd21586addb0ef9553621af6324b08cfe45a55c61be00900594ebda72d5824a10a31160f8646fbbecdb95c318d5a5f6b56686628130bb98a971bf0b12065b6750da366057a3a4d5837ef0efdbc314bf3960b6d283d8a214d4f0027d9c2cda97ebfbd8edfe49ffd580956c27cfd7ad53360a2c4727e6d5b5ae0dd56fd81b7e58d2dfdc97dddc33bf27eb11c4097ff9b19b119c3ff9b527fb3f4e8f22a45904fc2135ccc20756513f799e7ae4ecd88638634c5e04f59ff09eadfa9fcb3425543a643a08d0f6e0b24a045d2225ac66cc5aa240d7aa33c16d3d2fa96af1773b9cc39bdc79facf49357d501f6b5ca6d6f47c33bd548108dbf1fa0f5e81f3f52f54d078d004017d9df0564ae9ed9231d26798302412b7e1aa3b6d5d0ef51945f451f0e95c157fe8b64b03a06962e5d5a397738e6b020ce9be71a5679e97940f974f0ca39b4c3ff2a81b24a9eeda9fac2e536b8c074bb289767d7d37f5faaf79e9f02304307869ed7539b2ab12bbf0906db8f890c0837b41d908d4b97e27db5ab33e7680876994641d8b44a43d4874bf239e3191575fcc6a9122370a5c1c94fb19229078317dfcddf4cb6432381d4eebd33c4fd9a007dc4b9e296411c12b768423d89c770d3905058</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">请输入密码进行查看</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <categories>
+        <category>感悟</category>
+        <category>影视</category>
+      </categories>
+      <tags>
+        <tag>感悟</tag>
       </tags>
   </entry>
   <entry>
@@ -5454,89 +5454,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
-    <title>如何利用好学生优惠</title>
-    <url>/2020/02/27/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/</url>
-    <content><![CDATA[<p><img data-src="/images/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/loq428.png" alt=" loq428.png"></p>
-<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>本文介绍的是利用学生身份可以享受到的相关学生优惠权益，但也希望各位享受权利的同时不要忘记自己的义务，不要售卖、转手自己的学生优惠资格，使得其他同学无法受益。</p>
-<p><strong>欢迎提交 issue 给我们你发现的实用资源！</strong> | 本文更新于 2019 年 05 月 12 日</p>
-<p>点击 <code>watch</code> 可以得到更新信息哟！</p>
-<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><ul>
-<li>查看、利用、转载、引用本集锦请查看 <a href="https://github.com/ivmm/Student-resources/blob/master/lisence">License</a>。</li>
-<li>一切官方的助学资金等，请咨询学校领导、辅导员、班主任，请勿向陌生账户转账！</li>
-<li>校园借贷风险极高，请谨慎尝试。</li>
-<li>对需要出示身份证、手持身份证的资源请保持谨慎。</li>
-<li>保管好自己的学生证、身份证，不要随意丢弃。</li>
-</ul>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>高考已经过去，你们也将迎来不同于以往的大学生活，大学或许对之前的12年管制式生活来说是解放了，不过你也知道的，解放后面是什么，脱离了父母和老师的管束以及适当的财务自主，你的生活并不会就无比精彩。</p>
-<p>让自己的大学生活过得积极而精彩：</p>
-<ol>
-<li>多参加校级、省级、国家级的比赛，你的比较对象就不会是同班同学了而是同龄人，视野更大。</li>
-<li>多上台讲讲，第一次第二次第三次可能会小心脏砰砰跳，后面真的就见怪不怪了，会自信很多。</li>
-<li>不要再默默无闻了，让老师们注意到你，都大学了上课还不敢举个手？</li>
-<li>做点义工，为社会做点贡献，工作了就真没时间了。</li>
-<li>做人做事记得留个证据，留个发票，留个单子。</li>
-<li>多向长辈们问候问候，偶尔放个长假了就去看看。</li>
-</ol>
-<p>那么就期待着9月开启你的上当受骗之旅吧，不过可能在6月买电脑买手机的时候就已经上当受骗。（逃～）</p>
-<h1 id="学生包"><a href="#学生包" class="headerlink" title="学生包"></a>学生包</h1><p>各类学生优惠项目经过许多年的发展，很多学生包已经不单单只通过 edu 邮箱验证身份了，而且使用 @edu.cn 反而会降低申请成功率。 建议使用学生证、入学通知书等有学院官方标志和日期的工具来证明自己的身份。</p>
-<ul>
-<li>**<a href="https://education.github.com/pack">Github 学生包</a>**，高质量的开发工具集合，并提供 DIgitalocean 的 50美元代金券，免费域名一枚。</li>
-<li>**<a href="https://imagine.microsoft.com/zh-cn/catalog">Microsoft Imagine 学生包</a>**，免费使用微软的开发软件，包括 Windows Server 系统，以及 Azure 学生订阅。</li>
-<li>**<a href="https://aws.amazon.com/cn/education/awseducate/">AWS 学生包</a>**，亚马逊云计算的学生包，可以获得至少 $40 的优惠和教育培训。</li>
-<li>**<a href="http://www.autodesk.com.cn/education/home">Autodesk 学生包</a>**，旗下 AutoCAD , 3DMAX , Maya 等软件，其（教育版）免费试用期可延长至三年。</li>
-<li>**<a href="https://www.jetbrains.com/student/">JetBrains 学生包</a>**，免费使用各类开发工具和集成工具。</li>
-<li>**<a href="https://edu.google.com/products/productivity-tools/">G Suite for Education</a>**，为教育用户提供的谷歌生产力工具套件（大陆不在申请区之内）。</li>
-<li><strong><a href="http://www.lindo.com/index.php?option=com_content&view=article&id=120&Itemid=45">LINGO Educational Research License</a></strong>, LINGO 教育授权，著名线性与非线性求解器，求解优化模型的最佳选择，数学建模必备。</li>
-</ul>
-<h1 id="学生优惠"><a href="#学生优惠" class="headerlink" title="学生优惠"></a>学生优惠</h1><ul>
-<li>**<a href="https://products.office.com/en-us/student?tab=students">Office in Education</a>**，微软家提供的免费 Office 365 教育优惠，中国大多数学校无缘申请。</li>
-<li>**<a href="https://promotion.aliyun.com/ntms/act/campus2018.html?accounttraceid=22aca9b8-8f26-44f2-b514-d97cf21a6654&userCode=oitiwrd3">阿里云+云翼计划</a>**，118元&#x2F;年，阿里云ECS+OSS+域名+机器学习API+Clouder认证。  24岁以下实名认证即可获得，无需验证学生身份!!</li>
-<li>**<a href="https://www.qcloud.com/act/campus">腾讯云+校园计划</a>**，10元一个月的云服务器租用，免费域名、云储存，需要抢购。</li>
-<li>**<a href="https://developer.huaweicloud.com/campus">华为云+云创校园计划</a>**，9元&#x2F;月 24岁及以下免学生认证，实名认证即可购买，需要抢购。</li>
-<li>**<a href="https://cloud.baidu.com/campaign/campus-2018/index.html">百度云启航校园计划</a>**，云服务器半年124元</li>
-<li>**<a href="http://www.apple.com/cn-k12/shop">苹果教育商店</a>**，苹果设备优惠，Music和 Pro APP 优惠，暑假还会有学生优惠大促销。</li>
-<li>**<a href="https://www.microsoftstore.com.cn/student?Icid=StoreNavi_EDU">微软教育商店</a>**，9折购买微软旗下的各种硬件设备。</li>
-<li>**<a href="http://www.onthehub.com/">OnTheHub 教育商店</a>**，PD 和 VMware 的虚拟机优惠，以及更多软件优惠。</li>
-<li>**<a href="https://www.siteground.com/student-hosting.htm">SiteGroud 学生计划</a>**，WP 官方推荐的主机托管商提供 $1.99&#x2F;月 高性能 CP 托管。</li>
-<li>**<a href="https://www.spotify.com/hk-zh/student/">Spotify 学生优惠</a>**，Spotify Premium学生订阅半价优惠。</li>
-<li>**<a href="https://pantheon.io/edu">Pantheon 学生版</a>**，专业高性能网站托管的学生优惠。</li>
-<li>**<a href="http://coupon.dji.com/cn/edu">大疆教育优惠</a>**，大疆产品的教育折扣。</li>
-<li>**<a href="https://todoist.com/education">Todoist教育优惠</a>**，强大的任务、思路整理工具提供半价教育优惠。</li>
-<li>**<a href="https://setapp.com/educational-discount">SetAPP教育优惠</a>**，macOS 应用合集订阅包半价优惠，非常适合MAC学生党，每月4.99刀</li>
-<li><strong><a href="http://app.eagle.cool/forum/topic/5354/%E6%88%91%E6%98%AF%E5%AD%A6%E7%94%9F%E6%88%96%E6%95%99%E5%B8%88-%E6%98%AF%E5%90%A6%E4%BA%AB%E6%9C%89%E4%BC%98%E6%83%A0%E4%BB%B7%E6%A0%BC">Eagle教育优惠</a></strong>, Win&#x2F;Mac系统，设计师图片管理工具，支持试用一个月，原价199，优惠价139，需提供身份和证件信息。优秀的本地图片管理工具，搭配学生版OneDrive进行同步管理，美滋滋。（目前已支持图片、视频、字体等类型文件的管理）</li>
-</ul>
-<h1 id="实用干货"><a href="#实用干货" class="headerlink" title="实用干货"></a>实用干货</h1><ul>
-<li>**<a href="https://creativemarket.com/free-goods">CreativeMarket Free Goods</a>**，每周免费六款设计资源，电商、前端必备。</li>
-<li>**<a href="https://www.axure.com/edu">Axure</a>**， 原型设计工具，产品、运营必备，学生、教师免费。</li>
-<li>**<a href="https://www.adobe.com/cn/products/xd.html">Adobe XD</a>**，原型设计工具，<del>没想到吧我Adobe也有免费的东西啦XD</del> 官网直接提供免费版，奋起直追Mac的Sketch，Win党难得的福利。此外Adobe还提供对XD插件设计的奖励，<a href="https://www.adobe.io/apis/creativecloud/xd.html">可参与设计开发可供XD使用的插件</a>。</li>
-<li>**<a href="http://education.minecraft.net/get-started">Minecraft</a>**， 我的世界教育免费版 ，仅支持邮箱。</li>
-<li>**<a href="http://www.wolfram.com/mathematica/pricing/students-individuals.php">Mathematica</a>**， 现代科学计算软件，3折优惠 50刀，添加购物车后显示。</li>
-<li>**<a href="https://www.tableau.com/zh-cn/academic">Tableau</a>**， 数据可视化分析软件，对学生、教室以及教育组织提供免费使用。</li>
-</ul>
-<h1 id="推荐软件"><a href="#推荐软件" class="headerlink" title="推荐软件"></a>推荐软件</h1><ul>
-<li>**<a href="https://cloudconvert.com/">CloudConvert</a>**，转码神器，格式齐全的在线转码利器。</li>
-<li>**<a href="https://smallpdf.com/">Smallpdf</a>**，专业文档转PDF，PDF转文档神器。</li>
-<li>**<a href="https://github.com/drew-royster/canvasFileSync">Canvas File Sync</a>**，Syncs Canvas-LMS课程文件</li>
-</ul>
-<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><ul>
-<li><strong>少数派：</strong><a href="https://sspai.com/post/39430">在校师生福利：Apple、微软、Adobe 等产品如何通过教育优惠购买</a></li>
-<li><strong>少数派：</strong><a href="https://sspai.com/post/43533">学生专属福利，你可能还不知道这些常用服务其实可以更便宜</a></li>
-</ul>
-<h1 id="相关推荐"><a href="#相关推荐" class="headerlink" title="相关推荐"></a>相关推荐</h1><p><strong>买电脑：</strong> 学生购买电脑多为笔记本，可关注 <a href="http://tieba.baidu.com/f?kw=%E7%AC%94%E8%AE%B0%E6%9C%AC&ie=utf-8">笔记本吧</a><br>如果为台式可关注 显卡吧&#x2F;图拉丁吧&#x2F;电脑吧 等专业硬件社区，或直接关注微信公众号“笔吧评测室”，由笔记本吧吧主和吧务团队运营，质量保证。</p>
-<p><strong>如何科学提问：</strong> 《<a href="http://git.oschina.net/mifar/How-To-Ask-Questions-The-Smart-Way">提问的智慧</a>》 《<a href="https://github.com/octowhale/Stop-Ask-Questions-The-Stupid-Ways/blob/master/README.md">别像弱智一样提问</a>》</p>
-<p><strong>搜索引擎：</strong> 为了你的身体健康、事业有成，请尽量<strong>减少使用百度</strong>的频率。</p>
-<p><strong>PPT 制作：</strong>《<a href="https://www.mf8.biz/ppt-tips/">放 PPT 之前，请你注意这一些！</a>》</p>
-<p>原作者博客：<a href="https://www.mf8.biz/">https://www.mf8.biz/</a></p>
-]]></content>
-      <categories>
-        <category>羊毛</category>
-      </categories>
-      <tags>
-        <tag>羊毛</tag>
-        <tag>转载</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>工厂方法模式</title>
     <url>/2024/08/01/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h1><p>简单工厂模式的核心思想是将对象的创建封装在一个工厂类中，吧创建对象的的流程集中在这个工厂类里面。</p>
@@ -5622,6 +5539,89 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </tags>
   </entry>
   <entry>
+    <title>如何利用好学生优惠</title>
+    <url>/2020/02/27/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/</url>
+    <content><![CDATA[<p><img data-src="/images/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%A5%BD%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0/loq428.png" alt=" loq428.png"></p>
+<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>本文介绍的是利用学生身份可以享受到的相关学生优惠权益，但也希望各位享受权利的同时不要忘记自己的义务，不要售卖、转手自己的学生优惠资格，使得其他同学无法受益。</p>
+<p><strong>欢迎提交 issue 给我们你发现的实用资源！</strong> | 本文更新于 2019 年 05 月 12 日</p>
+<p>点击 <code>watch</code> 可以得到更新信息哟！</p>
+<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><ul>
+<li>查看、利用、转载、引用本集锦请查看 <a href="https://github.com/ivmm/Student-resources/blob/master/lisence">License</a>。</li>
+<li>一切官方的助学资金等，请咨询学校领导、辅导员、班主任，请勿向陌生账户转账！</li>
+<li>校园借贷风险极高，请谨慎尝试。</li>
+<li>对需要出示身份证、手持身份证的资源请保持谨慎。</li>
+<li>保管好自己的学生证、身份证，不要随意丢弃。</li>
+</ul>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>高考已经过去，你们也将迎来不同于以往的大学生活，大学或许对之前的12年管制式生活来说是解放了，不过你也知道的，解放后面是什么，脱离了父母和老师的管束以及适当的财务自主，你的生活并不会就无比精彩。</p>
+<p>让自己的大学生活过得积极而精彩：</p>
+<ol>
+<li>多参加校级、省级、国家级的比赛，你的比较对象就不会是同班同学了而是同龄人，视野更大。</li>
+<li>多上台讲讲，第一次第二次第三次可能会小心脏砰砰跳，后面真的就见怪不怪了，会自信很多。</li>
+<li>不要再默默无闻了，让老师们注意到你，都大学了上课还不敢举个手？</li>
+<li>做点义工，为社会做点贡献，工作了就真没时间了。</li>
+<li>做人做事记得留个证据，留个发票，留个单子。</li>
+<li>多向长辈们问候问候，偶尔放个长假了就去看看。</li>
+</ol>
+<p>那么就期待着9月开启你的上当受骗之旅吧，不过可能在6月买电脑买手机的时候就已经上当受骗。（逃～）</p>
+<h1 id="学生包"><a href="#学生包" class="headerlink" title="学生包"></a>学生包</h1><p>各类学生优惠项目经过许多年的发展，很多学生包已经不单单只通过 edu 邮箱验证身份了，而且使用 @edu.cn 反而会降低申请成功率。 建议使用学生证、入学通知书等有学院官方标志和日期的工具来证明自己的身份。</p>
+<ul>
+<li>**<a href="https://education.github.com/pack">Github 学生包</a>**，高质量的开发工具集合，并提供 DIgitalocean 的 50美元代金券，免费域名一枚。</li>
+<li>**<a href="https://imagine.microsoft.com/zh-cn/catalog">Microsoft Imagine 学生包</a>**，免费使用微软的开发软件，包括 Windows Server 系统，以及 Azure 学生订阅。</li>
+<li>**<a href="https://aws.amazon.com/cn/education/awseducate/">AWS 学生包</a>**，亚马逊云计算的学生包，可以获得至少 $40 的优惠和教育培训。</li>
+<li>**<a href="http://www.autodesk.com.cn/education/home">Autodesk 学生包</a>**，旗下 AutoCAD , 3DMAX , Maya 等软件，其（教育版）免费试用期可延长至三年。</li>
+<li>**<a href="https://www.jetbrains.com/student/">JetBrains 学生包</a>**，免费使用各类开发工具和集成工具。</li>
+<li>**<a href="https://edu.google.com/products/productivity-tools/">G Suite for Education</a>**，为教育用户提供的谷歌生产力工具套件（大陆不在申请区之内）。</li>
+<li><strong><a href="http://www.lindo.com/index.php?option=com_content&view=article&id=120&Itemid=45">LINGO Educational Research License</a></strong>, LINGO 教育授权，著名线性与非线性求解器，求解优化模型的最佳选择，数学建模必备。</li>
+</ul>
+<h1 id="学生优惠"><a href="#学生优惠" class="headerlink" title="学生优惠"></a>学生优惠</h1><ul>
+<li>**<a href="https://products.office.com/en-us/student?tab=students">Office in Education</a>**，微软家提供的免费 Office 365 教育优惠，中国大多数学校无缘申请。</li>
+<li>**<a href="https://promotion.aliyun.com/ntms/act/campus2018.html?accounttraceid=22aca9b8-8f26-44f2-b514-d97cf21a6654&userCode=oitiwrd3">阿里云+云翼计划</a>**，118元&#x2F;年，阿里云ECS+OSS+域名+机器学习API+Clouder认证。  24岁以下实名认证即可获得，无需验证学生身份!!</li>
+<li>**<a href="https://www.qcloud.com/act/campus">腾讯云+校园计划</a>**，10元一个月的云服务器租用，免费域名、云储存，需要抢购。</li>
+<li>**<a href="https://developer.huaweicloud.com/campus">华为云+云创校园计划</a>**，9元&#x2F;月 24岁及以下免学生认证，实名认证即可购买，需要抢购。</li>
+<li>**<a href="https://cloud.baidu.com/campaign/campus-2018/index.html">百度云启航校园计划</a>**，云服务器半年124元</li>
+<li>**<a href="http://www.apple.com/cn-k12/shop">苹果教育商店</a>**，苹果设备优惠，Music和 Pro APP 优惠，暑假还会有学生优惠大促销。</li>
+<li>**<a href="https://www.microsoftstore.com.cn/student?Icid=StoreNavi_EDU">微软教育商店</a>**，9折购买微软旗下的各种硬件设备。</li>
+<li>**<a href="http://www.onthehub.com/">OnTheHub 教育商店</a>**，PD 和 VMware 的虚拟机优惠，以及更多软件优惠。</li>
+<li>**<a href="https://www.siteground.com/student-hosting.htm">SiteGroud 学生计划</a>**，WP 官方推荐的主机托管商提供 $1.99&#x2F;月 高性能 CP 托管。</li>
+<li>**<a href="https://www.spotify.com/hk-zh/student/">Spotify 学生优惠</a>**，Spotify Premium学生订阅半价优惠。</li>
+<li>**<a href="https://pantheon.io/edu">Pantheon 学生版</a>**，专业高性能网站托管的学生优惠。</li>
+<li>**<a href="http://coupon.dji.com/cn/edu">大疆教育优惠</a>**，大疆产品的教育折扣。</li>
+<li>**<a href="https://todoist.com/education">Todoist教育优惠</a>**，强大的任务、思路整理工具提供半价教育优惠。</li>
+<li>**<a href="https://setapp.com/educational-discount">SetAPP教育优惠</a>**，macOS 应用合集订阅包半价优惠，非常适合MAC学生党，每月4.99刀</li>
+<li><strong><a href="http://app.eagle.cool/forum/topic/5354/%E6%88%91%E6%98%AF%E5%AD%A6%E7%94%9F%E6%88%96%E6%95%99%E5%B8%88-%E6%98%AF%E5%90%A6%E4%BA%AB%E6%9C%89%E4%BC%98%E6%83%A0%E4%BB%B7%E6%A0%BC">Eagle教育优惠</a></strong>, Win&#x2F;Mac系统，设计师图片管理工具，支持试用一个月，原价199，优惠价139，需提供身份和证件信息。优秀的本地图片管理工具，搭配学生版OneDrive进行同步管理，美滋滋。（目前已支持图片、视频、字体等类型文件的管理）</li>
+</ul>
+<h1 id="实用干货"><a href="#实用干货" class="headerlink" title="实用干货"></a>实用干货</h1><ul>
+<li>**<a href="https://creativemarket.com/free-goods">CreativeMarket Free Goods</a>**，每周免费六款设计资源，电商、前端必备。</li>
+<li>**<a href="https://www.axure.com/edu">Axure</a>**， 原型设计工具，产品、运营必备，学生、教师免费。</li>
+<li>**<a href="https://www.adobe.com/cn/products/xd.html">Adobe XD</a>**，原型设计工具，<del>没想到吧我Adobe也有免费的东西啦XD</del> 官网直接提供免费版，奋起直追Mac的Sketch，Win党难得的福利。此外Adobe还提供对XD插件设计的奖励，<a href="https://www.adobe.io/apis/creativecloud/xd.html">可参与设计开发可供XD使用的插件</a>。</li>
+<li>**<a href="http://education.minecraft.net/get-started">Minecraft</a>**， 我的世界教育免费版 ，仅支持邮箱。</li>
+<li>**<a href="http://www.wolfram.com/mathematica/pricing/students-individuals.php">Mathematica</a>**， 现代科学计算软件，3折优惠 50刀，添加购物车后显示。</li>
+<li>**<a href="https://www.tableau.com/zh-cn/academic">Tableau</a>**， 数据可视化分析软件，对学生、教室以及教育组织提供免费使用。</li>
+</ul>
+<h1 id="推荐软件"><a href="#推荐软件" class="headerlink" title="推荐软件"></a>推荐软件</h1><ul>
+<li>**<a href="https://cloudconvert.com/">CloudConvert</a>**，转码神器，格式齐全的在线转码利器。</li>
+<li>**<a href="https://smallpdf.com/">Smallpdf</a>**，专业文档转PDF，PDF转文档神器。</li>
+<li>**<a href="https://github.com/drew-royster/canvasFileSync">Canvas File Sync</a>**，Syncs Canvas-LMS课程文件</li>
+</ul>
+<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><ul>
+<li><strong>少数派：</strong><a href="https://sspai.com/post/39430">在校师生福利：Apple、微软、Adobe 等产品如何通过教育优惠购买</a></li>
+<li><strong>少数派：</strong><a href="https://sspai.com/post/43533">学生专属福利，你可能还不知道这些常用服务其实可以更便宜</a></li>
+</ul>
+<h1 id="相关推荐"><a href="#相关推荐" class="headerlink" title="相关推荐"></a>相关推荐</h1><p><strong>买电脑：</strong> 学生购买电脑多为笔记本，可关注 <a href="http://tieba.baidu.com/f?kw=%E7%AC%94%E8%AE%B0%E6%9C%AC&ie=utf-8">笔记本吧</a><br>如果为台式可关注 显卡吧&#x2F;图拉丁吧&#x2F;电脑吧 等专业硬件社区，或直接关注微信公众号“笔吧评测室”，由笔记本吧吧主和吧务团队运营，质量保证。</p>
+<p><strong>如何科学提问：</strong> 《<a href="http://git.oschina.net/mifar/How-To-Ask-Questions-The-Smart-Way">提问的智慧</a>》 《<a href="https://github.com/octowhale/Stop-Ask-Questions-The-Stupid-Ways/blob/master/README.md">别像弱智一样提问</a>》</p>
+<p><strong>搜索引擎：</strong> 为了你的身体健康、事业有成，请尽量<strong>减少使用百度</strong>的频率。</p>
+<p><strong>PPT 制作：</strong>《<a href="https://www.mf8.biz/ppt-tips/">放 PPT 之前，请你注意这一些！</a>》</p>
+<p>原作者博客：<a href="https://www.mf8.biz/">https://www.mf8.biz/</a></p>
+]]></content>
+      <categories>
+        <category>羊毛</category>
+      </categories>
+      <tags>
+        <tag>羊毛</tag>
+        <tag>转载</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>抽象工厂模式</title>
     <url>/2024/08/01/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h1><p>抽象工厂模式提供了一个创建一系列相关或相互依赖的对象接口，而无需指定他们的具体类。</p>
@@ -5655,79 +5655,6 @@ d --> e(通过 对象.属性 或 对象.方法 给属性赋值)</pre>
       </categories>
       <tags>
         <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>操作系统--操作系统主要类型</title>
-    <url>/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%BB%E8%A6%81%E7%B1%BB%E5%9E%8B/</url>
-    <content><![CDATA[<h2 id="批处理系统"><a href="#批处理系统" class="headerlink" title="批处理系统"></a>批处理系统</h2><h3 id="单道批处理系统处理流程"><a href="#单道批处理系统处理流程" class="headerlink" title="单道批处理系统处理流程"></a>单道批处理系统处理流程</h3><img data-src="/images/操作系统主要类型/4QMJfoxRIXGiu9C.png" alt="image.png" style="zoom:67%;" />
-
-<h3 id="多道批处理操作系统处理流程"><a href="#多道批处理操作系统处理流程" class="headerlink" title="多道批处理操作系统处理流程"></a>多道批处理操作系统处理流程</h3><span id="more"></span>
-
-<img data-src="/images/操作系统主要类型/shlfUxnFIu23wdZ.png" alt="image.png" style="zoom:67%;" />
-
-<h2 id="分时系统"><a href="#分时系统" class="headerlink" title="分时系统"></a>分时系统</h2><p><strong>工作方式：</strong></p>
-<p><img data-src="/images/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%BB%E8%A6%81%E7%B1%BB%E5%9E%8B/clip_image001.png"></p>
-<p>特性：</p>
-<ol>
-<li>独立性   2. 同时性   3. 交互性   4.及时性</li>
-</ol>
-<h3 id="分时操作系统和批处理操作系统的区别"><a href="#分时操作系统和批处理操作系统的区别" class="headerlink" title="分时操作系统和批处理操作系统的区别"></a>分时操作系统和批处理操作系统的区别</h3><h4 id="1-追求目标不同"><a href="#1-追求目标不同" class="headerlink" title="1.追求目标不同"></a>1.追求目标不同</h4><p>批处理操作系统一提高系统利用率和吞吐量为主要目标</p>
-<p>分时操作系统是为了满足人机交互的需求，方便用户使用</p>
-<h4 id="2-使用作业不同"><a href="#2-使用作业不同" class="headerlink" title="2.使用作业不同"></a>2.使用作业不同</h4><p>批处理操作系统适合非交互性的大型作业</p>
-<p>分时系统适合交互性的小型作业</p>
-<h4 id="3-作业的控制方式不同"><a href="#3-作业的控制方式不同" class="headerlink" title="3.作业的控制方式不同"></a>3.作业的控制方式不同</h4><p>批处理系统是由用户利用作业控制语言，书写作业用户说明书，并预先提交给系统 属于脱机工作</p>
-<p>分时系统是由用户直接从键盘敲入命令，来控制作业 属于联机工作</p>
-<h4 id="4-资源利用率不同"><a href="#4-资源利用率不同" class="headerlink" title="4.资源利用率不同"></a>4.资源利用率不同</h4><p>批处理操作系统可以合理安排不同负载的作业，使得各种资源均匀工作，利用率高</p>
-<p>分时操作系统，只有当多个终端作业使用同类型编译程序和公共子程序，且这些公共子程序是可重用代码的时候系统开销才会比较小</p>
-<h2 id="实时操作系统"><a href="#实时操作系统" class="headerlink" title="实时操作系统"></a>实时操作系统</h2><p><strong>主要功能和特征：</strong></p>
-<ol>
-<li>实时时钟管理</li>
-<li>过载保护</li>
-<li>高可靠性和安全性</li>
-</ol>
-<h3 id="分时操作系统和实时操作系统区别"><a href="#分时操作系统和实时操作系统区别" class="headerlink" title="分时操作系统和实时操作系统区别"></a>分时操作系统和实时操作系统区别</h3><h4 id="1-设计目标不同"><a href="#1-设计目标不同" class="headerlink" title="1.设计目标不同"></a>1.设计目标不同</h4><p>分时操作系统为用户提供一个通用的交互方式</p>
-<p>实时操作系统则是为特殊用途提供的专用操作系统</p>
-<h4 id="2-交互性强弱不同"><a href="#2-交互性强弱不同" class="headerlink" title="2.交互性强弱不同"></a>2.交互性强弱不同</h4><p>分时操作系统交互性强</p>
-<p>实时操作系统交互性弱</p>
-<h4 id="3-响应时间要求不同"><a href="#3-响应时间要求不同" class="headerlink" title="3.响应时间要求不同"></a>3.响应时间要求不同</h4><p>分时操作系统以用户能接受的响应时间为标准</p>
-<p>实时操作系统与受控对象及应用场合有关，响应时间变化范围大</p>
-<h2 id="微机操作系统"><a href="#微机操作系统" class="headerlink" title="微机操作系统"></a>微机操作系统</h2><p>1.单用户单任务（MS DOS）</p>
-<p>2.单用户多任务（Windows）</p>
-<p>3.多用户多任务</p>
-<h2 id="网络操作系统"><a href="#网络操作系统" class="headerlink" title="网络操作系统"></a>网络操作系统</h2><h3 id="工作模式："><a href="#工作模式：" class="headerlink" title="工作模式："></a>工作模式：</h3><ol>
-<li><p>客户服务器模式（client&#x2F;server，C&#x2F;S）模式</p>
-</li>
-<li><p>对等（Peer-to-Peer）模式</p>
-</li>
-</ol>
-<h3 id="功能："><a href="#功能：" class="headerlink" title="功能："></a>功能：</h3><ol>
-<li>网络通信</li>
-<li>资源管理</li>
-<li>网络服务（SMTP）</li>
-<li>网络管理</li>
-<li>互操作能力（NFS）</li>
-</ol>
-<h2 id="多CPU操作系统"><a href="#多CPU操作系统" class="headerlink" title="多CPU操作系统"></a>多CPU操作系统</h2><h3 id="功能：-1"><a href="#功能：-1" class="headerlink" title="功能："></a>功能：</h3><ol>
-<li>分布式进程通信</li>
-<li>分布式文件系统</li>
-<li>分布式进程迁移</li>
-<li>分布式进程同步</li>
-<li>分布式进程死锁</li>
-</ol>
-<h2 id="嵌入式操作系统"><a href="#嵌入式操作系统" class="headerlink" title="嵌入式操作系统"></a>嵌入式操作系统</h2><h3 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h3><ol>
-<li>微型化</li>
-<li>可定制化</li>
-<li>实时性</li>
-<li>易移植性</li>
-</ol>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>学习笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -5853,6 +5780,79 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
 <img data-src="/images/操作系统的形成与发展/vrjo1l8dPaFKY7c.png" alt="image.png" style="zoom:67%;" />
 
 <h2 id="进一步发展时期"><a href="#进一步发展时期" class="headerlink" title="进一步发展时期"></a>进一步发展时期</h2>]]></content>
+      <categories>
+        <category>学习笔记</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统--操作系统主要类型</title>
+    <url>/2020/03/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%BB%E8%A6%81%E7%B1%BB%E5%9E%8B/</url>
+    <content><![CDATA[<h2 id="批处理系统"><a href="#批处理系统" class="headerlink" title="批处理系统"></a>批处理系统</h2><h3 id="单道批处理系统处理流程"><a href="#单道批处理系统处理流程" class="headerlink" title="单道批处理系统处理流程"></a>单道批处理系统处理流程</h3><img data-src="/images/操作系统主要类型/4QMJfoxRIXGiu9C.png" alt="image.png" style="zoom:67%;" />
+
+<h3 id="多道批处理操作系统处理流程"><a href="#多道批处理操作系统处理流程" class="headerlink" title="多道批处理操作系统处理流程"></a>多道批处理操作系统处理流程</h3><span id="more"></span>
+
+<img data-src="/images/操作系统主要类型/shlfUxnFIu23wdZ.png" alt="image.png" style="zoom:67%;" />
+
+<h2 id="分时系统"><a href="#分时系统" class="headerlink" title="分时系统"></a>分时系统</h2><p><strong>工作方式：</strong></p>
+<p><img data-src="/images/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%BB%E8%A6%81%E7%B1%BB%E5%9E%8B/clip_image001.png"></p>
+<p>特性：</p>
+<ol>
+<li>独立性   2. 同时性   3. 交互性   4.及时性</li>
+</ol>
+<h3 id="分时操作系统和批处理操作系统的区别"><a href="#分时操作系统和批处理操作系统的区别" class="headerlink" title="分时操作系统和批处理操作系统的区别"></a>分时操作系统和批处理操作系统的区别</h3><h4 id="1-追求目标不同"><a href="#1-追求目标不同" class="headerlink" title="1.追求目标不同"></a>1.追求目标不同</h4><p>批处理操作系统一提高系统利用率和吞吐量为主要目标</p>
+<p>分时操作系统是为了满足人机交互的需求，方便用户使用</p>
+<h4 id="2-使用作业不同"><a href="#2-使用作业不同" class="headerlink" title="2.使用作业不同"></a>2.使用作业不同</h4><p>批处理操作系统适合非交互性的大型作业</p>
+<p>分时系统适合交互性的小型作业</p>
+<h4 id="3-作业的控制方式不同"><a href="#3-作业的控制方式不同" class="headerlink" title="3.作业的控制方式不同"></a>3.作业的控制方式不同</h4><p>批处理系统是由用户利用作业控制语言，书写作业用户说明书，并预先提交给系统 属于脱机工作</p>
+<p>分时系统是由用户直接从键盘敲入命令，来控制作业 属于联机工作</p>
+<h4 id="4-资源利用率不同"><a href="#4-资源利用率不同" class="headerlink" title="4.资源利用率不同"></a>4.资源利用率不同</h4><p>批处理操作系统可以合理安排不同负载的作业，使得各种资源均匀工作，利用率高</p>
+<p>分时操作系统，只有当多个终端作业使用同类型编译程序和公共子程序，且这些公共子程序是可重用代码的时候系统开销才会比较小</p>
+<h2 id="实时操作系统"><a href="#实时操作系统" class="headerlink" title="实时操作系统"></a>实时操作系统</h2><p><strong>主要功能和特征：</strong></p>
+<ol>
+<li>实时时钟管理</li>
+<li>过载保护</li>
+<li>高可靠性和安全性</li>
+</ol>
+<h3 id="分时操作系统和实时操作系统区别"><a href="#分时操作系统和实时操作系统区别" class="headerlink" title="分时操作系统和实时操作系统区别"></a>分时操作系统和实时操作系统区别</h3><h4 id="1-设计目标不同"><a href="#1-设计目标不同" class="headerlink" title="1.设计目标不同"></a>1.设计目标不同</h4><p>分时操作系统为用户提供一个通用的交互方式</p>
+<p>实时操作系统则是为特殊用途提供的专用操作系统</p>
+<h4 id="2-交互性强弱不同"><a href="#2-交互性强弱不同" class="headerlink" title="2.交互性强弱不同"></a>2.交互性强弱不同</h4><p>分时操作系统交互性强</p>
+<p>实时操作系统交互性弱</p>
+<h4 id="3-响应时间要求不同"><a href="#3-响应时间要求不同" class="headerlink" title="3.响应时间要求不同"></a>3.响应时间要求不同</h4><p>分时操作系统以用户能接受的响应时间为标准</p>
+<p>实时操作系统与受控对象及应用场合有关，响应时间变化范围大</p>
+<h2 id="微机操作系统"><a href="#微机操作系统" class="headerlink" title="微机操作系统"></a>微机操作系统</h2><p>1.单用户单任务（MS DOS）</p>
+<p>2.单用户多任务（Windows）</p>
+<p>3.多用户多任务</p>
+<h2 id="网络操作系统"><a href="#网络操作系统" class="headerlink" title="网络操作系统"></a>网络操作系统</h2><h3 id="工作模式："><a href="#工作模式：" class="headerlink" title="工作模式："></a>工作模式：</h3><ol>
+<li><p>客户服务器模式（client&#x2F;server，C&#x2F;S）模式</p>
+</li>
+<li><p>对等（Peer-to-Peer）模式</p>
+</li>
+</ol>
+<h3 id="功能："><a href="#功能：" class="headerlink" title="功能："></a>功能：</h3><ol>
+<li>网络通信</li>
+<li>资源管理</li>
+<li>网络服务（SMTP）</li>
+<li>网络管理</li>
+<li>互操作能力（NFS）</li>
+</ol>
+<h2 id="多CPU操作系统"><a href="#多CPU操作系统" class="headerlink" title="多CPU操作系统"></a>多CPU操作系统</h2><h3 id="功能：-1"><a href="#功能：-1" class="headerlink" title="功能："></a>功能：</h3><ol>
+<li>分布式进程通信</li>
+<li>分布式文件系统</li>
+<li>分布式进程迁移</li>
+<li>分布式进程同步</li>
+<li>分布式进程死锁</li>
+</ol>
+<h2 id="嵌入式操作系统"><a href="#嵌入式操作系统" class="headerlink" title="嵌入式操作系统"></a>嵌入式操作系统</h2><h3 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h3><ol>
+<li>微型化</li>
+<li>可定制化</li>
+<li>实时性</li>
+<li>易移植性</li>
+</ol>
+]]></content>
       <categories>
         <category>学习笔记</category>
         <category>操作系统</category>
@@ -6183,6 +6183,35 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
 <script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
   </entry>
   <entry>
+    <title>策略模式</title>
+    <url>/2024/08/06/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h1><p>策略模式是一种行为型设计模式，他定义了一系列算法来使用不同的策略完成同一件工作，并将每个算法封装起来，使他们可以相互替换，而算法的变化不影响算法的使用。</p>
+<p>比如电商网站对于商品的折扣策略会有不同的算法，比如新用户满减优惠，不同等级会员的折扣情况也不同，这种情况下会有大量的<code>if-else</code>，如果修改优惠政策，还要修改原来的代码，不符合开闭原则。</p>
+<p>于是可以将不同的优惠算法封装成独立的类来避免大量的条件语句，如果新增优惠算法，也只需要添加新的策略类来实现，不需要修改原来的代码，调用的时候直接用不同的类来选择不同的优惠策略；</p>
+<p><img data-src="/../images/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/IMG-20240806101212873.png"></p>
+<h1 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h1><p>策略模式包含一下几个结构：</p>
+<ul>
+<li>策略接口<code>Strategy</code>：定义了所有支持的算法的各个接口</li>
+<li>具体策略类<code>ConcreteStrategy</code>：实现了策略接口，提供具体的算法实现</li>
+<li>上下文类<code>Context</code>：包含一个策略实例，并在需要的时候可以调用策略对象的方法</li>
+</ul>
+<span id="more"></span>
+<h1 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1. 抽象策略抽象类</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="comment">// 抽象方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">algorithmInterface</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 具体策略类1</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConcreteStrategyA</span> <span class="keyword">extends</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">algorithmInterface</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Strategy A&quot;</span>);</span><br><span class="line">        <span class="comment">// 具体的策略1执行逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 具体策略类2</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConcreteStrategyB</span> <span class="keyword">extends</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">algorithmInterface</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Strategy B&quot;</span>);</span><br><span class="line">        <span class="comment">// 具体的策略2执行逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 上下文类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Context</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Strategy strategy;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置具体的策略</span></span><br><span class="line">     <span class="keyword">public</span> <span class="title function_">Context</span><span class="params">(Strategy strategy)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.strategy = strategy;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 执行策略</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">contextInterface</span><span class="params">()</span> &#123;</span><br><span class="line">        strategy.algorithmlnterface();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 5. 客户端代码</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 创建上下文对象，并设置具体的策略</span></span><br><span class="line">        <span class="type">Context</span> <span class="variable">contextA</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Context</span>(<span class="keyword">new</span> <span class="title class_">ConcreteStrategyA</span>());</span><br><span class="line">        <span class="comment">// 执行策略</span></span><br><span class="line">        contextA.contextInterface();</span><br><span class="line"></span><br><span class="line">        <span class="type">Context</span> <span class="variable">contextB</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Context</span>(<span class="keyword">new</span> <span class="title class_">ConcreteStrategyB</span>());</span><br><span class="line">        contextB.contextInterface();u</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><ul>
+<li>当一个系统根据业务场景需要动态地在集中算法中选择一种的时候，可以采用策略模式，例如根据用户的行为选择不同的计费策略。</li>
+<li>代码中存在大量条件判断，条件判断的区别仅仅在于行为，也可以通过策略模式来消除这些条件语句。</li>
+</ul>
+<p>在已有的工具库中，Java 标准库中的 <code>Comparator</code> 接口就使用了策略模式，通过实现这个接口，可以创建不同的比较器（指定不同的排序策略）来满足不同的排序需求。</p>
+]]></content>
+      <categories>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>蓝桥杯单片机基本模块</title>
     <url>/2020/03/08/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%9D%97/</url>
     <content><![CDATA[<h2 id="锁存器"><a href="#锁存器" class="headerlink" title="锁存器"></a>锁存器</h2><p>蓝桥杯这款单片机是用锁存器来实现引脚的复用的，所以代码写起来很麻烦，总是要开关锁存器</p>
@@ -6201,6 +6230,44 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
 
 <p>上面的代码是直接在Typora上面写的，没有编译，应该没有很大问题（手动滑稽）</p>
 <p>这样写要改变数码管的值只要改变数组smgbuf[]中的值就行了0-9的数字是和编号一一对应的，其他的特殊符号可以自己手动加。</p>
+]]></content>
+      <categories>
+        <category>备赛</category>
+        <category>蓝桥杯</category>
+      </categories>
+      <tags>
+        <tag>蓝桥杯</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>蓝桥杯单片机按键</title>
+    <url>/2020/04/03/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E6%8C%89%E9%94%AE/</url>
+    <content><![CDATA[<blockquote>
+<p>蓝桥杯这块板子有矩阵按键和独立按键，可以根据换跳帽来切换，下面简单介绍一下这两种按键的程序和基本的原理。</p>
+<p>其他51的板子原理也基本相同，下面的代码也可以参考。</p>
+</blockquote>
+<h2 id="独立按键"><a href="#独立按键" class="headerlink" title="独立按键"></a>独立按键</h2><p>相对于矩阵按键，独立按键简单很多，就只有四个按钮，判断四个按键哪个被按下的情况较为简单</p>
+<p>独立按键的写法也不止一种，这里就介绍两种</p>
+<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a><strong>方法一：</strong></h3><p>实现比较简单，就是一个个判断，检测到为低电平的话就判断按键按下了。</p>
+<span id="more"></span>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//先对每个按键进行位定义</span></span><br><span class="line">sbit S7  = P3^<span class="number">0</span>;</span><br><span class="line">sbit S6  = P3^<span class="number">1</span>;</span><br><span class="line">sbit S5  = P3^<span class="number">2</span>;</span><br><span class="line">sbit S4  = P3^<span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">key_scan</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">//然后逐一判断哪个按键被按下</span></span><br><span class="line">  <span class="keyword">if</span>(S4 == <span class="number">0</span>)<span class="comment">//按键按下之后会检测到低电平，所以对应引脚检测到低电平就视为按键被按下了</span></span><br><span class="line">  &#123;</span><br><span class="line">    delay(<span class="number">5</span>);<span class="comment">//延时消抖</span></span><br><span class="line">    <span class="keyword">if</span>(S4 == <span class="number">0</span>)<span class="comment">//再次检测电平信号</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">//按键具体功能的实现</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(S5 == <span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    delay(<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">if</span>(S5 == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">//按键具体功能的实现</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(S6 == <span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    delay(<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">if</span>(S6 == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">//按键具体功能的实现</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(S7 == <span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    delay(<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">if</span>(S7 == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">//按键具体功能的实现</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a><strong>方法二：</strong></h3><p>检测P3口的低四位，若S4被按下，则第四位P3^3为0，所以P3&amp;0xf的值为0x07，其他三个按键也以此类推。这种方法把按键的检测程序和功能程序分开了，如果不想要按下按键后按键里面的功能一直执行的话，按键功能每次执行完要把按键的值归零，否则单片机会一直执行那个按键里面的功能。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">char</span> press_flag = <span class="number">0</span>,key_value = <span class="number">0</span>;<span class="comment">//按下标志</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">key_scan</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>((P3&amp;<span class="number">0x0f</span>) != <span class="number">0x0f</span>&amp;&amp;!press_flag)</span><br><span class="line">	&#123;</span><br><span class="line">    delay(<span class="number">50</span>);</span><br><span class="line">    <span class="keyword">if</span>((P3&amp;<span class="number">0x0f</span>) != <span class="number">0x0f</span>&amp;&amp;!press_flag)</span><br><span class="line">    &#123;</span><br><span class="line">      press_flag = <span class="number">1</span>;<span class="comment">//按键被按下过后将按下标志置为1</span></span><br><span class="line">      <span class="keyword">switch</span>(P3&amp;<span class="number">0x0f</span>)<span class="comment">//按下的按键对应的为0，与0x0f相与可以判断哪个按键被按下</span></span><br><span class="line">      &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x07</span>: key_value = <span class="number">4</span>; <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x0b</span>: key_value = <span class="number">5</span>; <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x0d</span>: key_value = <span class="number">6</span>; <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x0e</span>: key_value = <span class="number">7</span>; <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>((P3&amp;<span class="number">0x0f</span>) == <span class="number">0x0f</span>&amp;&amp;press_flag)<span class="comment">//当没有按键按下但是按下标志为1的时候，要将按下标志置为0</span></span><br><span class="line">		press_flag = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">key_func</span><span class="params">()</span><span class="comment">//按键的功能函数</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(key_value)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: <span class="comment">/*按键具体功能*/</span> key_value = <span class="number">0</span>; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: <span class="comment">/*按键具体功能*/</span> key_value = <span class="number">0</span>; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: <span class="comment">/*按键具体功能*/</span> key_value = <span class="number">0</span>; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: <span class="comment">/*按键具体功能*/</span> key_value = <span class="number">0</span>; <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="矩阵按键"><a href="#矩阵按键" class="headerlink" title="矩阵按键"></a>矩阵按键</h2><p>相对于独立按键来说，矩阵按键相对是要复杂一点，这里就介绍一种方法</p>
+<h3 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h3><p>这个方法和上面独立按键的方法2实现的思路差不多。因为51单片机的资源很有限，所以这里用了八个引脚来实现一个4×4的矩阵按键。这里对照一下原理图：</p>
+<img data-src="/images/蓝桥杯单片机按键/OlN6gpyH14z89KR.png" alt="image.png" style="zoom: 67%;" />
+
+<p>第一步：列扫描，先将P3的低四位置为0，高四位置为1，但是这款单片机的P36和P37被P42和P44代替了，所以P42和P44要单独位定义，然后将其置为1。初始值设置完之后就要进行检测了，因为P3的低四位为0，所以当按键按下时接到对应列的那条线会被拉到低电平P44对应的是第一列，其他参照上面的原理图以此类推。</p>
+<p>第二部：行扫描，反过来，将P3的低四位置为1，高两位以及P42和P44置为0，哪一行的按键被按下对应行的值会被置为0，这一步和上面独立按键的扫描相似。</p>
+<p>经过行和列的扫描就可以确定下来是那个一个按键被按下了，行和列就可以看成是横坐标和纵坐标，这里是先确定纵坐标，再确定横坐标，通过这样的一个坐标就可以确定被按下按键的位置。</p>
+<h3 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">sfr P3 = <span class="number">0xc0</span>;</span><br><span class="line">sbit P42 = P4^<span class="number">2</span>;</span><br><span class="line">sbit P44 = P4^<span class="number">4</span>;</span><br><span class="line">sbit P34 = P3^<span class="number">4</span>;</span><br><span class="line">sbit P35 = P3^<span class="number">5</span>;</span><br><span class="line"><span class="type">char</span> key_value = <span class="number">0</span>,key_past = <span class="number">0</span>,key_now = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">key_scan</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  P3 = <span class="number">0xf0</span>;<span class="comment">//将低四位置为0，高四位和P42、P44置为1</span></span><br><span class="line">	P42 = <span class="number">1</span>;</span><br><span class="line">	P44 = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span>(P42 != <span class="number">1</span>||P44 != <span class="number">1</span>||P34 != <span class="number">1</span>||P35 != <span class="number">1</span>)<span class="comment">//如果有按键被按下对应引脚会被置为0</span></span><br><span class="line">	&#123;</span><br><span class="line">		key_past = key_now;</span><br><span class="line">		key_now = <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">if</span>(!(key_past == <span class="number">1</span>&amp;&amp;key_now == <span class="number">1</span>))<span class="comment">//按键的松手检测</span></span><br><span class="line">			delay(<span class="number">5</span>);</span><br><span class="line">		<span class="keyword">if</span>((P42 != <span class="number">1</span>||P44 != <span class="number">1</span>||P34 != <span class="number">1</span>||P35 != <span class="number">1</span>)&amp;&amp;!(key_past == <span class="number">1</span>&amp;&amp;key_now == <span class="number">1</span>))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(P44 == <span class="number">0</span>) key_value = <span class="number">4</span>;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(P42 == <span class="number">0</span>) key_value = <span class="number">8</span>;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(P35 == <span class="number">0</span>) key_value = <span class="number">12</span>;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(P34 == <span class="number">0</span>) key_value = <span class="number">16</span>;</span><br><span class="line">			P3 = <span class="number">0x0f</span>;</span><br><span class="line">			P42 = <span class="number">0</span>;</span><br><span class="line">			P44 = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">switch</span>(P3&amp;<span class="number">0x0f</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">0x07</span>: key_value += <span class="number">0</span>; <span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">0x0b</span>: key_value += <span class="number">1</span>; <span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">0x0d</span>: key_value += <span class="number">2</span>; <span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">0x0e</span>: key_value += <span class="number">3</span>; <span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		key_past = key_now;</span><br><span class="line">		key_now = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里没有写按键的功能函数，这个就和独立按键的第二种方法类似，传入key_value的值然后执行对应的功能函数，执行完一次之后如果不想要一直执行的话就在执行完之前将key_value的值归零。</p>
 ]]></content>
       <categories>
         <category>备赛</category>
@@ -6243,73 +6310,6 @@ I-->J[恢复CPU的状态信息]-->K[恢复中断钱的PWS,PC和CS]</pre>
       <tags>
         <tag>服务器</tag>
         <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>策略模式</title>
-    <url>/2024/08/06/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h1><p>策略模式是一种行为型设计模式，他定义了一系列算法来使用不同的策略完成同一件工作，并将每个算法封装起来，使他们可以相互替换，而算法的变化不影响算法的使用。</p>
-<p>比如电商网站对于商品的折扣策略会有不同的算法，比如新用户满减优惠，不同等级会员的折扣情况也不同，这种情况下会有大量的<code>if-else</code>，如果修改优惠政策，还要修改原来的代码，不符合开闭原则。</p>
-<p>于是可以将不同的优惠算法封装成独立的类来避免大量的条件语句，如果新增优惠算法，也只需要添加新的策略类来实现，不需要修改原来的代码，调用的时候直接用不同的类来选择不同的优惠策略；</p>
-<p><img data-src="/../images/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/IMG-20240806101212873.png"></p>
-<h1 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h1><p>策略模式包含一下几个结构：</p>
-<ul>
-<li>策略接口<code>Strategy</code>：定义了所有支持的算法的各个接口</li>
-<li>具体策略类<code>ConcreteStrategy</code>：实现了策略接口，提供具体的算法实现</li>
-<li>上下文类<code>Context</code>：包含一个策略实例，并在需要的时候可以调用策略对象的方法</li>
-</ul>
-<span id="more"></span>
-<h1 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1. 抽象策略抽象类</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="comment">// 抽象方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">algorithmInterface</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 具体策略类1</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConcreteStrategyA</span> <span class="keyword">extends</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">algorithmInterface</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Strategy A&quot;</span>);</span><br><span class="line">        <span class="comment">// 具体的策略1执行逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 具体策略类2</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConcreteStrategyB</span> <span class="keyword">extends</span> <span class="title class_">Strategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">algorithmInterface</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Strategy B&quot;</span>);</span><br><span class="line">        <span class="comment">// 具体的策略2执行逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 上下文类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Context</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Strategy strategy;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置具体的策略</span></span><br><span class="line">     <span class="keyword">public</span> <span class="title function_">Context</span><span class="params">(Strategy strategy)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.strategy = strategy;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 执行策略</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">contextInterface</span><span class="params">()</span> &#123;</span><br><span class="line">        strategy.algorithmlnterface();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 5. 客户端代码</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 创建上下文对象，并设置具体的策略</span></span><br><span class="line">        <span class="type">Context</span> <span class="variable">contextA</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Context</span>(<span class="keyword">new</span> <span class="title class_">ConcreteStrategyA</span>());</span><br><span class="line">        <span class="comment">// 执行策略</span></span><br><span class="line">        contextA.contextInterface();</span><br><span class="line"></span><br><span class="line">        <span class="type">Context</span> <span class="variable">contextB</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Context</span>(<span class="keyword">new</span> <span class="title class_">ConcreteStrategyB</span>());</span><br><span class="line">        contextB.contextInterface();u</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><ul>
-<li>当一个系统根据业务场景需要动态地在集中算法中选择一种的时候，可以采用策略模式，例如根据用户的行为选择不同的计费策略。</li>
-<li>代码中存在大量条件判断，条件判断的区别仅仅在于行为，也可以通过策略模式来消除这些条件语句。</li>
-</ul>
-<p>在已有的工具库中，Java 标准库中的 <code>Comparator</code> 接口就使用了策略模式，通过实现这个接口，可以创建不同的比较器（指定不同的排序策略）来满足不同的排序需求。</p>
-]]></content>
-      <categories>
-        <category>设计模式</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>蓝桥杯单片机按键</title>
-    <url>/2020/04/03/%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%8D%95%E7%89%87%E6%9C%BA%E6%8C%89%E9%94%AE/</url>
-    <content><![CDATA[<blockquote>
-<p>蓝桥杯这块板子有矩阵按键和独立按键，可以根据换跳帽来切换，下面简单介绍一下这两种按键的程序和基本的原理。</p>
-<p>其他51的板子原理也基本相同，下面的代码也可以参考。</p>
-</blockquote>
-<h2 id="独立按键"><a href="#独立按键" class="headerlink" title="独立按键"></a>独立按键</h2><p>相对于矩阵按键，独立按键简单很多，就只有四个按钮，判断四个按键哪个被按下的情况较为简单</p>
-<p>独立按键的写法也不止一种，这里就介绍两种</p>
-<h3 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a><strong>方法一：</strong></h3><p>实现比较简单，就是一个个判断，检测到为低电平的话就判断按键按下了。</p>
-<span id="more"></span>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//先对每个按键进行位定义</span></span><br><span class="line">sbit S7  = P3^<span class="number">0</span>;</span><br><span class="line">sbit S6  = P3^<span class="number">1</span>;</span><br><span class="line">sbit S5  = P3^<span class="number">2</span>;</span><br><span class="line">sbit S4  = P3^<span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">key_scan</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">//然后逐一判断哪个按键被按下</span></span><br><span class="line">  <span class="keyword">if</span>(S4 == <span class="number">0</span>)<span class="comment">//按键按下之后会检测到低电平，所以对应引脚检测到低电平就视为按键被按下了</span></span><br><span class="line">  &#123;</span><br><span class="line">    delay(<span class="number">5</span>);<span class="comment">//延时消抖</span></span><br><span class="line">    <span class="keyword">if</span>(S4 == <span class="number">0</span>)<span class="comment">//再次检测电平信号</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">//按键具体功能的实现</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(S5 == <span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    delay(<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">if</span>(S5 == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">//按键具体功能的实现</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(S6 == <span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    delay(<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">if</span>(S6 == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">//按键具体功能的实现</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(S7 == <span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    delay(<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">if</span>(S7 == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">//按键具体功能的实现</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a><strong>方法二：</strong></h3><p>检测P3口的低四位，若S4被按下，则第四位P3^3为0，所以P3&amp;0xf的值为0x07，其他三个按键也以此类推。这种方法把按键的检测程序和功能程序分开了，如果不想要按下按键后按键里面的功能一直执行的话，按键功能每次执行完要把按键的值归零，否则单片机会一直执行那个按键里面的功能。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">char</span> press_flag = <span class="number">0</span>,key_value = <span class="number">0</span>;<span class="comment">//按下标志</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">key_scan</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>((P3&amp;<span class="number">0x0f</span>) != <span class="number">0x0f</span>&amp;&amp;!press_flag)</span><br><span class="line">	&#123;</span><br><span class="line">    delay(<span class="number">50</span>);</span><br><span class="line">    <span class="keyword">if</span>((P3&amp;<span class="number">0x0f</span>) != <span class="number">0x0f</span>&amp;&amp;!press_flag)</span><br><span class="line">    &#123;</span><br><span class="line">      press_flag = <span class="number">1</span>;<span class="comment">//按键被按下过后将按下标志置为1</span></span><br><span class="line">      <span class="keyword">switch</span>(P3&amp;<span class="number">0x0f</span>)<span class="comment">//按下的按键对应的为0，与0x0f相与可以判断哪个按键被按下</span></span><br><span class="line">      &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x07</span>: key_value = <span class="number">4</span>; <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x0b</span>: key_value = <span class="number">5</span>; <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x0d</span>: key_value = <span class="number">6</span>; <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0x0e</span>: key_value = <span class="number">7</span>; <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>((P3&amp;<span class="number">0x0f</span>) == <span class="number">0x0f</span>&amp;&amp;press_flag)<span class="comment">//当没有按键按下但是按下标志为1的时候，要将按下标志置为0</span></span><br><span class="line">		press_flag = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">key_func</span><span class="params">()</span><span class="comment">//按键的功能函数</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">switch</span>(key_value)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: <span class="comment">/*按键具体功能*/</span> key_value = <span class="number">0</span>; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">5</span>: <span class="comment">/*按键具体功能*/</span> key_value = <span class="number">0</span>; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">6</span>: <span class="comment">/*按键具体功能*/</span> key_value = <span class="number">0</span>; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">7</span>: <span class="comment">/*按键具体功能*/</span> key_value = <span class="number">0</span>; <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="矩阵按键"><a href="#矩阵按键" class="headerlink" title="矩阵按键"></a>矩阵按键</h2><p>相对于独立按键来说，矩阵按键相对是要复杂一点，这里就介绍一种方法</p>
-<h3 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h3><p>这个方法和上面独立按键的方法2实现的思路差不多。因为51单片机的资源很有限，所以这里用了八个引脚来实现一个4×4的矩阵按键。这里对照一下原理图：</p>
-<img data-src="/images/蓝桥杯单片机按键/OlN6gpyH14z89KR.png" alt="image.png" style="zoom: 67%;" />
-
-<p>第一步：列扫描，先将P3的低四位置为0，高四位置为1，但是这款单片机的P36和P37被P42和P44代替了，所以P42和P44要单独位定义，然后将其置为1。初始值设置完之后就要进行检测了，因为P3的低四位为0，所以当按键按下时接到对应列的那条线会被拉到低电平P44对应的是第一列，其他参照上面的原理图以此类推。</p>
-<p>第二部：行扫描，反过来，将P3的低四位置为1，高两位以及P42和P44置为0，哪一行的按键被按下对应行的值会被置为0，这一步和上面独立按键的扫描相似。</p>
-<p>经过行和列的扫描就可以确定下来是那个一个按键被按下了，行和列就可以看成是横坐标和纵坐标，这里是先确定纵坐标，再确定横坐标，通过这样的一个坐标就可以确定被按下按键的位置。</p>
-<h3 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">sfr P3 = <span class="number">0xc0</span>;</span><br><span class="line">sbit P42 = P4^<span class="number">2</span>;</span><br><span class="line">sbit P44 = P4^<span class="number">4</span>;</span><br><span class="line">sbit P34 = P3^<span class="number">4</span>;</span><br><span class="line">sbit P35 = P3^<span class="number">5</span>;</span><br><span class="line"><span class="type">char</span> key_value = <span class="number">0</span>,key_past = <span class="number">0</span>,key_now = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">key_scan</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  P3 = <span class="number">0xf0</span>;<span class="comment">//将低四位置为0，高四位和P42、P44置为1</span></span><br><span class="line">	P42 = <span class="number">1</span>;</span><br><span class="line">	P44 = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span>(P42 != <span class="number">1</span>||P44 != <span class="number">1</span>||P34 != <span class="number">1</span>||P35 != <span class="number">1</span>)<span class="comment">//如果有按键被按下对应引脚会被置为0</span></span><br><span class="line">	&#123;</span><br><span class="line">		key_past = key_now;</span><br><span class="line">		key_now = <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">if</span>(!(key_past == <span class="number">1</span>&amp;&amp;key_now == <span class="number">1</span>))<span class="comment">//按键的松手检测</span></span><br><span class="line">			delay(<span class="number">5</span>);</span><br><span class="line">		<span class="keyword">if</span>((P42 != <span class="number">1</span>||P44 != <span class="number">1</span>||P34 != <span class="number">1</span>||P35 != <span class="number">1</span>)&amp;&amp;!(key_past == <span class="number">1</span>&amp;&amp;key_now == <span class="number">1</span>))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(P44 == <span class="number">0</span>) key_value = <span class="number">4</span>;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(P42 == <span class="number">0</span>) key_value = <span class="number">8</span>;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(P35 == <span class="number">0</span>) key_value = <span class="number">12</span>;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(P34 == <span class="number">0</span>) key_value = <span class="number">16</span>;</span><br><span class="line">			P3 = <span class="number">0x0f</span>;</span><br><span class="line">			P42 = <span class="number">0</span>;</span><br><span class="line">			P44 = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">switch</span>(P3&amp;<span class="number">0x0f</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">0x07</span>: key_value += <span class="number">0</span>; <span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">0x0b</span>: key_value += <span class="number">1</span>; <span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">0x0d</span>: key_value += <span class="number">2</span>; <span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">case</span> <span class="number">0x0e</span>: key_value += <span class="number">3</span>; <span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		key_past = key_now;</span><br><span class="line">		key_now = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里没有写按键的功能函数，这个就和独立按键的第二种方法类似，传入key_value的值然后执行对应的功能函数，执行完一次之后如果不想要一直执行的话就在执行完之前将key_value的值归零。</p>
-]]></content>
-      <categories>
-        <category>备赛</category>
-        <category>蓝桥杯</category>
-      </categories>
-      <tags>
-        <tag>蓝桥杯</tag>
       </tags>
   </entry>
   <entry>
